@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Name=imdb-plus
+Comment=A bold re-imagining of the imdb vote history
+GenericName=imdb-plus movie ratings statistics
+Terminal=false
+Icon=imdb-plus
+Type=Application
+Exec=/usr/bin/imdb-plus
+Categories=Utility;
+Name[C]=imdb-plus

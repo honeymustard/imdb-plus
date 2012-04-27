@@ -1,0 +1,18 @@
+TODO for project imdb+:
+
+ -> CONSIDER THIS:
+
+  * secondary sorting. pros) easy to implement, cons) negligible value
+  * add 'List stats' tab. pros) This would take minutes
+  * add 'Comparison' tab. compare MyMovies <-> MyLists -> vs IMDB
+  * add 'Other stats' tab. lists contain additional statistically significant information..
+
+ -> TO BE FIXED:
+
+  * put some statuses into statusbar.. it doesn't do anything.
+  * build.sh: make sure correct files are copied, and that install paths work
+  * allow/disallow hidden columns in table widget..
+
+  * progress bar on windows doesn't update. thoughts: none.
+    update labels.. fix or remove entirely.
+

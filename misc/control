@@ -1,0 +1,15 @@
+Source: imdb-plus
+Section: utils
+Priority: extra
+Maintainer: Adrian Solumsmo <adrian.solumsmo@gmail.com>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.9.1
+Homepage: http://www.sourceforge.net/projects/imdb-plus
+#Vcs-Git: git://git.debian.org/collab-maint/imdb-plus.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/imdb-plus.git;a=summary
+
+Package: imdb-plus
+Architecture: any 
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: A bold re-imagining of the imdb
+ imdb-plus is a graphical tool for viewing imdb vote history statistics
