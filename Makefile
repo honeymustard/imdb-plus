@@ -18,7 +18,7 @@
 #############################################################################
 
 EXECUTE = imdb-plus
-VERSION = 0.0.4
+VERSION = 0.0.5
 OBJECTS = main.o read_file.o regex.o free_memory.o strnatcmp.o
 SOURCES = Makefile main.c master.h lib res misc
 CFLAGS  = -c -Wall
@@ -37,7 +37,7 @@ all: CURL = -lcurl
 all: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 all: CFLAGS += -O2 $(GTK2) $(CURL)
 all: $(OBJECTS) GTK_CUSTOM_TABLE
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) gtk_custom_table*.o $(GTK2) $(CURL)
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) gtk_custom_table*.o $(GTK2) $(CURL) -DINSTALL
 
 
 install:
@@ -47,10 +47,9 @@ install:
 	-@mkdir $(DESTDIR)/usr/share/applications
 	-@mkdir $(DESTDIR)/usr/share/pixmaps
 	-@mkdir $(DESTDIR)/usr/share/$(EXECUTE)
-	-@mkdir $(DESTDIR)/usr/share/$(EXECUTE)/$(VERSION)
 	-@mkdir $(DESTDIR)/usr/share/man
 	-@mkdir $(DESTDIR)/usr/share/man/man1
-	-@cp -R res $(DESTDIR)/usr/share/$(EXECUTE)/$(VERSION)
+	-@cp -R res $(DESTDIR)/usr/share/$(EXECUTE)
 	-@cp ./misc/$(EXECUTE).desktop $(DESTDIR)/usr/share/applications
 	-@cp ./misc/$(EXECUTE).1.gz $(DESTDIR)/usr/share/man/man1
 	-@cp ./res/graphics/$(EXECUTE).png $(DESTDIR)/usr/share/pixmaps
@@ -158,9 +157,9 @@ mingw32: $(OBJECTS) GTK_CUSTOM_TABLE
 
 # Win32 debug build with MinGW..
 mingw32-debug: WINGUI = 
-mingw32-debug: make mingw32 
+mingw32-debug: mingw32
 
-# MinGW clean, remove o's exe's and those fracking vim tilde's..
+# MinGW clean, remove o's exe's..
 mingw32-clean:
 	del *.o $(EXECUTE).exe
 
@@ -181,7 +180,7 @@ resfile.o:
 ###############################################################################
 
 main.o:
-	gcc $(CFLAGS) main.c
+	gcc -DAPP_VERS=\"$(VERSION)\" $(CFLAGS) main.c 
 
 read_file.o:
 	gcc $(CFLAGS) lib/read_file.c

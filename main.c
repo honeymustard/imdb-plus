@@ -29,11 +29,13 @@
 #include "lib/gtk_custom_table/gtk_custom_table.h"
 
 
+/* these functions exist somewhere.. */
 extern int read_file(char *filename, int *cols, int *rows, char ****results);
 extern int regex_to_csv(char *filename, char *out_file, char *pattern);
 extern int free_memory(char ***results, int cols, int rows);
 
 
+/* main window events, I might use these.. */
 static gboolean delete_event(GtkWidget *widget, GdkEvent *event, gpointer data) {
 
     return FALSE;
@@ -45,29 +47,24 @@ static void destroy(GtkWidget *widget, gpointer data) {
 }
 
 
+/* callback function for downloads, update progressbar */
 int update_progress(void *pbar, double dt, double dn, double ut, double un) {
 
   gdk_threads_enter();
-  gtk_progress_set_value(GTK_PROGRESS(pbar), (dn * 100.0) / (dt * 3));
+  gtk_progress_set_value(GTK_PROGRESS(pbar), (dn * 100.0) / dt);
   gdk_threads_leave();
 
   return 0;
 }
-
-struct download {
-    
-    char *url;
-    char *saveas;
-};
 
 
 /**
  * download web pages from internet..
  * @param char *url       url to read from
  * @param char *saveas    name of file to save as
- * @return                1 on success, else 0
+ * @return                NULL
  */
-void *download_ptr(void *download) {
+void *download(void *download) {
 
     CURL *curl;
     CURLcode curl_res;
@@ -82,10 +79,15 @@ void *download_ptr(void *download) {
 
     curl = curl_easy_init();
     curl_easy_setopt(curl, CURLOPT_URL, down->url);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA,  tmp);
-    curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
-    curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, update_progress);
-    curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, bar);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, tmp);
+    
+    /* progress-bar specific curl functions */
+    if(down->pbar != NULL) {
+
+        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
+        curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, update_progress);
+        curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, down->pbar);
+    }
 
     curl_res = curl_easy_perform(curl);
 
@@ -101,21 +103,23 @@ void *download_ptr(void *download) {
 }
 
 
-
+/* convenience function to add one value from one table to another */
 void set_imdb_rating(int index, int row, GtkWidget *copy, GtkWidget *paste) {
 
-    if(index >= 0) {
-        
-        char *table_row[gtk_custom_table_get_rows(copy)];
-
-        gtk_custom_table_get_row(copy, index, table_row);
-
-        gtk_custom_table_set_cell_text(paste, 1, row, table_row[1]);
-        gtk_custom_table_set_cell_color(paste, 1, row, 
-            colors[atoi(table_row[1]) - 1]);
+    if(index < 0) {
+        return;
     }
+        
+    char *table_row[gtk_custom_table_get_rows(copy)];
+    gtk_custom_table_get_row(copy, index, table_row);
+
+    gtk_custom_table_set_cell_text(paste, 1, row, table_row[1]);
+    gtk_custom_table_set_cell_color(paste, 1, row, 
+        colors[atoi(table_row[1]) - 1]);
 }
 
+
+/* parse new lists */
 void menu_signal_update_parse(GtkWidget *widget) {
 
     int i = 0;
@@ -285,14 +289,16 @@ void menu_signal_update_parse(GtkWidget *widget) {
         }
     }
 
-    gdk_window_invalidate_rect(GDK_WINDOW(window->window), NULL, TRUE);
+    gtk_custom_table_refresh(window);
 }
 
+
+/* update lists from interwebs */
 void menu_signal_update(GtkWidget *widget, gpointer data) {
     
-    GtkWidget *dialog_up, *content_up;
+    GtkWidget *dialog, *content;
 
-    dialog_up = gtk_dialog_new_with_buttons(
+    dialog = gtk_dialog_new_with_buttons(
         "Update Lists", 
         GTK_WINDOW(widget->parent), 
         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, 
@@ -303,53 +309,58 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         NULL
     );
     
-    gtk_window_set_position(GTK_WINDOW(dialog_up), GTK_WIN_POS_CENTER);
+    gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
 
-    content_up = gtk_dialog_get_content_area(GTK_DIALOG(dialog_up));
+    content = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 
-    GtkAdjustment *adj = (GtkAdjustment*)gtk_adjustment_new(0, 0, 120, 0, 0, 0);
-    bar = gtk_progress_bar_new_with_adjustment(adj);
+    GtkAdjustment *adj = (GtkAdjustment*)gtk_adjustment_new(5, 0, 120, 0, 0, 0);
+    GtkWidget *pbar = gtk_progress_bar_new_with_adjustment(adj);
+    GtkWidget *label = gtk_label_new("Download new lists?\n");
 
-    gtk_container_add(GTK_CONTAINER(content_up), 
-        gtk_label_new("Download new lists?\n"));
+    gtk_container_add(GTK_CONTAINER(content), label);
+    gtk_container_add(GTK_CONTAINER(content), pbar);
 
-    gtk_container_add(GTK_CONTAINER(content_up), bar);
+    gtk_container_set_border_width(GTK_CONTAINER(content->parent), 30);
+    gtk_window_set_icon_from_file(GTK_WINDOW(dialog), APP_ICON, NULL);
+    gtk_widget_show_all(GTK_WIDGET(dialog));
 
-    gtk_container_set_border_width(GTK_CONTAINER(content_up->parent), 30);
-    gtk_window_set_icon_from_file(GTK_WINDOW(dialog_up), APP_ICON, NULL);
-    gtk_widget_show_all(GTK_WIDGET(dialog_up));
-
-    int ret = gtk_dialog_run(GTK_DIALOG(dialog_up));
+    int ret = gtk_dialog_run(GTK_DIALOG(dialog));
 
     GThread *thread1, *thread2, *thread3;
 
     if(ret == GTK_RESPONSE_ACCEPT) {
 
+        /* download top250 list */
         struct download *dl_top = malloc(sizeof (struct download));
         dl_top->url = CONST_TOP;
         dl_top->saveas = CONST_TOP_SAV;
+        dl_top->pbar = pbar;
 
-        thread1 = g_thread_create(&download_ptr, dl_top, TRUE, NULL);
+        /* download bottom100 list */
+        struct download *dl_bot = malloc(sizeof (struct download));
+        dl_bot->url = CONST_BOT;
+        dl_bot->saveas = CONST_BOT_SAV;
+        dl_bot->pbar = pbar;
+
+        /* download boxoffice list */
+        struct download *dl_box = malloc(sizeof (struct download));
+        dl_box->url = CONST_BOX;
+        dl_box->saveas = CONST_BOX_SAV;
+        dl_box->pbar = pbar;
+
+        thread1 = g_thread_create(&download, dl_top, TRUE, NULL);
 
         if(thread1 == 0) {
             g_warning("can't create the thread");
         }
 
-        struct download *dl_bot = malloc(sizeof (struct download));
-        dl_bot->url = CONST_BOT;
-        dl_bot->saveas = CONST_BOT_SAV;
-
-        thread2 = g_thread_create(&download_ptr, dl_bot, TRUE, NULL);
+        thread2 = g_thread_create(&download, dl_bot, TRUE, NULL);
 
         if (thread2 == 0) {
             g_warning("can't create the thread");
         }
 
-        struct download *dl_box = malloc(sizeof (struct download));
-        dl_box->url = CONST_BOX;
-        dl_box->saveas = CONST_BOX_SAV;
-
-        thread3 = g_thread_create(&download_ptr, dl_box, TRUE, NULL);
+        thread3 = g_thread_create(&download, dl_box, TRUE, NULL);
 
         if(thread3 == 0) {
             g_warning("can't create the thread");
@@ -359,6 +370,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         g_thread_join(thread2);
         g_thread_join(thread3);
 
+        /* all threads have finished, free memory and parse updates */
         free(dl_top);
         free(dl_bot);
         free(dl_box);
@@ -366,7 +378,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         menu_signal_update_parse(widget);
     }
     
-    gtk_widget_destroy(dialog_up);
+    gtk_widget_destroy(dialog);
 }
 
 
@@ -522,20 +534,19 @@ int menu_open_ratings(char *filename) {
             sprintf(temp, "%d", i);
 
             gtk_custom_table_set_cell_text(nb_tab_lists, 0, j, temp);
-
-            if(results[i][8] != NULL) {
-                gtk_custom_table_set_cell_text(nb_tab_lists, 1, j, results[i][8]);
-                gtk_custom_table_set_cell_color(nb_tab_lists, 1, j, 
-                    colors[(int)atoi(results[i][8]) - 1]);
-            }
-            else {
-                gtk_custom_table_set_cell_text(nb_tab_lists, 1, j, "0");
-            }
-
+            gtk_custom_table_set_cell_text(nb_tab_lists, 1, j, results[i][8]); 
             gtk_custom_table_set_cell_text(nb_tab_lists, 2, j, "0");
             gtk_custom_table_set_cell_text(nb_tab_lists, 3, j, results[i][1]);
             gtk_custom_table_set_cell_text(nb_tab_lists, 4, j, results[i][5]);
             gtk_custom_table_set_cell_text(nb_tab_lists, 5, j, results[i][10]);
+            
+            /* make sure value falls within color range.. */
+            int cell_to_color = (int)atoi(results[i][8]) - 1;
+
+            if(cell_to_color < 10 && cell_to_color >= 0) {
+                gtk_custom_table_set_cell_color(nb_tab_lists, 1, j, 
+                    colors[(int)atoi(results[i][8]) - 1]);
+            }
 
             /* add 'my rating' to lists tab if applicable */
             int index_lst = gtk_custom_table_get_indexof(nb_tab_mymovies, 
@@ -553,17 +564,18 @@ int menu_open_ratings(char *filename) {
                     colors[atoi(table_row[2]) - 1]);
             }
 
-            if(results[i][8] != NULL) {
-                /* add imdb-rating to boxoffice tab if applicable */
-                int index_box = gtk_custom_table_get_indexof(nb_tab_boxoffice, 
+            /* add imdb-rating to boxoffice tab if applicable */
+            int index_box = gtk_custom_table_get_indexof(nb_tab_boxoffice, 
+                results[i][8]);
+
+            if(index_box >= 0) {
+
+                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, index_box, 
                     results[i][8]);
 
-                if(index_box >= 0) {
-
-                    gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, index_box, 
-                        results[i][8]);
-                    gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, index_box, 
-                        colors[(int)atoi(results[i][8]) - 1]);
+                if(cell_to_color < 10 && cell_to_color >= 0) {
+                    gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, 
+                        index_box, colors[(int)atoi(results[i][8]) - 1]);
                 }
             }
         }
@@ -574,48 +586,67 @@ int menu_open_ratings(char *filename) {
         free_memory(results, cols, rows);
     }
 
-    gdk_window_invalidate_rect(GDK_WINDOW(window->window), NULL, TRUE);
+    gtk_custom_table_refresh(window);
 
     return 1;
 }
 
 
+/* download new ratings file */
 void menu_signal_new_download() {
 
+    /* copy entered text */
     char entered[100];
     strcpy(entered, gtk_entry_get_text(GTK_ENTRY(entry)));
 
+    /* number should presumably be larger than this */
     if(strlen(entered) <= 6) {
         return;
     }
 
+    /* download from this url.. */
     char load[100];
     strcpy(load, CONST_URL);
     strcat(load, entered);
 
+    /* save to this path.. */
     char save[100];
     strcpy(save, CONST_PREFIX);
     strcat(save, entered);
     strcat(save, ".csv");
 
-    /*
-    if(download(load, save)) {
-        if(!menu_open_ratings(save)) {
+    /* download new file */
+    struct download *dl = malloc(sizeof (struct download));
+    dl->url = load;
+    dl->saveas = save;
+    dl->pbar = FALSE;
 
-            if(remove(save) != 0) {
-                printf("error: can't remove %s\n", save);
-            }
-        }
+    GThread *thread = g_thread_create(&download, dl, TRUE, NULL);
+
+    if(thread == 0) {
+        g_warning("can't create the thread");
     }
-    */
+
+    g_thread_join(thread);
+
+    free(dl);
+
+    /* open fresh ratings */
+    if(!menu_open_ratings(save)) {
+        remove(save);
+    }
 }
 
+
+/* new download dialog enter event handler */
 static gboolean menu_signal_new_enter(GtkWidget *widget, GdkEventKey *event) {
 
     if(event->type == GDK_KEY_PRESS) {
 
+        /* looking for enter key */
         if(event->keyval == GDK_Return) {
 
+            /* download and destroy */
             menu_signal_new_download();        
             gtk_widget_destroy(widget);
 
@@ -626,6 +657,8 @@ static gboolean menu_signal_new_enter(GtkWidget *widget, GdkEventKey *event) {
     return FALSE;
 }
 
+
+/* open new ratings download dialog */
 void menu_signal_new(GtkWidget *widget, gpointer data) {
     
     dialog = gtk_dialog_new_with_buttons(
@@ -642,7 +675,6 @@ void menu_signal_new(GtkWidget *widget, gpointer data) {
     gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
 
     content = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-
     entry = gtk_entry_new();
 
     gtk_container_add(GTK_CONTAINER(content), 
@@ -655,16 +687,20 @@ void menu_signal_new(GtkWidget *widget, gpointer data) {
     g_signal_connect(dialog, "key-press-event", 
             G_CALLBACK(menu_signal_new_enter), NULL);
 
-    int ret = gtk_dialog_run(GTK_DIALOG(dialog));
+    /* run dialog */
+    if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
 
-    if(ret == GTK_RESPONSE_ACCEPT) {
         menu_signal_new_download();
+        gtk_widget_destroy(dialog);
     }
-
-    gtk_widget_destroy(dialog);
+        
+    if(GTK_IS_WIDGET(dialog)) {
+        gtk_widget_destroy(dialog);
+    }
 }
 
 
+/* open a ratings/list file from dialog */
 void menu_signal_open(GtkWidget *widget, gpointer data) {
 
     GtkWidget *dialog;
@@ -683,16 +719,12 @@ void menu_signal_open(GtkWidget *widget, gpointer data) {
     char *file_name;
 
     if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
+
         file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-    }
-    else {
-        gtk_widget_destroy(dialog);
-        return;
+        menu_open_ratings(file_name);
     }
 
     gtk_widget_destroy(dialog);
-
-    menu_open_ratings(file_name);
 }
 
 
@@ -704,13 +736,20 @@ void menu_signal_about(GtkWidget *widget, gpointer data) {
     GtkWidget *dialog = gtk_about_dialog_new();
 
     /* show some interesting factoids */
-    gtk_about_dialog_set_name(GTK_ABOUT_DIALOG(dialog), APP_NAME);
-    gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), APP_VERS); 
-    gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog), APP_COPY);
-    gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog), APP_DESC);
-    gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG(dialog), APP_AUTH);
-    gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), APP_LICN);
-    gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), APP_HOME);
+    gtk_about_dialog_set_name(GTK_ABOUT_DIALOG(dialog), 
+        APP_NAME);
+    gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), 
+        APP_VERS); 
+    gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog), 
+        APP_COPY);
+    gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog), 
+        APP_DESC);
+    gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG(dialog), 
+        APP_AUTH);
+    gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), 
+        APP_LICN);
+    gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), 
+        APP_HOME);
 
     GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(APP_ICON, NULL);
     gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog), pixbuf);
@@ -723,6 +762,7 @@ void menu_signal_about(GtkWidget *widget, gpointer data) {
 
     gtk_widget_destroy(dialog);
 }
+
 
 
 /**
@@ -740,6 +780,7 @@ int main(int argc, char *argv[]) {
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), APP_TITL);
+    gtk_window_set_icon_from_file(GTK_WINDOW(window), APP_ICON, NULL);
 
     /* connect window signals to callbacks */
     g_signal_connect(window, "delete-event", 
@@ -1242,10 +1283,8 @@ int main(int argc, char *argv[]) {
 
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
-    gtk_window_set_default_size(GTK_WINDOW(window), 740, 395);
+    gtk_window_set_default_size(GTK_WINDOW(window), 740, 440);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-    gtk_window_set_icon(GTK_WINDOW(window), 
-        gdk_pixbuf_new_from_file(APP_ICON, NULL));
 
     gtk_widget_show_all(window);
 

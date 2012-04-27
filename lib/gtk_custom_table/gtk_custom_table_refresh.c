@@ -21,15 +21,11 @@
 
 
 /**
- * force repaint of table widget if already realized
+ * minor convenience function to force repaint of widget..
  * @param GtkWidget *table    table widget to refresh
  */
-void gtk_custom_table_refresh(GtkWidget *table) {
+void gtk_custom_table_refresh(GtkWidget *widget) {
 
-    /* table might not yet have been exposed */
-    if(GTK_WIDGET_REALIZED(table)) {
-
-        gtk_custom_table_paint(table, NULL, TRUE);
-    }
+    gdk_window_invalidate_rect(GDK_WINDOW(widget->window), NULL, TRUE);
 }
 

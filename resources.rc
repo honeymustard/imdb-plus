@@ -1,1 +1,1 @@
-APP_ICON ICON "icon.ico"
+APP_ICON ICON "./res/graphics/imdb-plus.ico"

@@ -21,12 +21,12 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile=C:\Users\adrias\Documents\Software\C\imdb+\COPYING.txt
+LicenseFile=COPYING
 OutputDir=../
 OutputBaseFilename={#MyAppName}-{#MyAppVersion}-setup
 Compression=lzma
 SolidCompression=yes
-SetupIconFile=icon.ico
+SetupIconFile=res\graphics\imdb-plus.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

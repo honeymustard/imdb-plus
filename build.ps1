@@ -89,7 +89,8 @@ function build-runable
     $newdir = "$($copydir)\run"
     new-item $newdir -type directory | out-null
 
-    copy-item *.dll, "$($program).exe", *.txt $newdir
+    copy-item *.dll, "$($program).exe" $newdir -force
+    copy-item COPYING $newdir -force
 
     new-item "$($newdir)\lib" -type directory | out-null
 
@@ -99,7 +100,8 @@ function build-runable
     copy-item share $newdir -recurse
 
     # remove any lingering data files..
-    remove-item "$($newdir)\res\data\*" -recurse -force
+    remove-item "$($newdir)\res\*.html" -recurse -force
+    remove-item "$($newdir)\res\*.csv" -recurse -forc
 
     # build archive using 7-zip command line utility (7za must be in PATH)
     &'7za' a -t7z "$($builddir)\$($bname)-win32.7z" "$($newdir)\*"
@@ -115,25 +117,23 @@ function build-source
     $newdir = "$($copydir)\source"
     new-item $newdir -type directory | out-null
 
-    copy-item *c, *.h, *.rc, *.ps1, *.iss, Makefile $newdir
-
     # recursively copy required dirs..
     copy-item lib $newdir -recurse
+    copy-item misc $newdir -recurse
     copy-item res $newdir -recurse
     copy-item share $newdir -recurse
 
     # remove any lingering data files..
-    remove-item "$($newdir)\res\data\*" -recurse -force
+    remove-item "$($newdir)\res\*.html" -recurse -force
+    remove-item "$($newdir)\res\*.csv" -recurse -force
     remove-item "$($newdir)\lib\gtk-2.0" -recurse -force
-
 
     # remove .swp, .swo and temp ~ and binary files..
     get-childitem $newdir -include *.swp, *.swo, *~ -recurse |
         foreach-object {remove-item $_.fullname -force}
 
-    copy-item *c, *.h, *.rc, *.ps1, *.iss, Makefile $newdir
-
-    $var = $null
+    copy-item *c, *.h, *.sh, *.rc, *.ps1, *.iss, Makefile $newdir -force
+    copy-item TODO, COPYING $newdir -force
 
     # build archive using 7-zip command line utility (7za must be in PATH)
     &'7za' a -t7z "$($builddir)\$($bname)-win32-src.7z" "$($newdir)\*"
@@ -149,7 +149,7 @@ function build-installer
     $newdir = "$($copydir)\installer"
     new-item $newdir -type directory | out-null
 
-    copy-item setup.iss, *.ico, *.txt, *.dll, "$($program).exe" $newdir
+    copy-item setup.iss, *.ico, COPYING, *.dll, "$($program).exe" $newdir
 
     new-item "$($newdir)\lib" -type directory | out-null
 
@@ -159,7 +159,8 @@ function build-installer
     copy-item share $newdir -recurse
 
     # remove any lingering data files..
-    remove-item "$($newdir)\res\data\*" -recurse -force
+    remove-item "$($newdir)\res\*.html" -recurse -force
+    remove-item "$($newdir)\res\*.csv" -recurse -force
     remove-item "$($newdir)\lib\gtk-2.0" -recurse -force
 
     iscc "$($newdir)\setup.iss" /dMyAppVersion=$($version)

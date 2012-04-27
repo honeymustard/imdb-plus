@@ -22,26 +22,31 @@
 #include <stdlib.h>
 
 
+/* function of minor convenience */
 int is_0_to_9(char byte) {
     
-    int temp  = byte - 0x30;
-
-    return temp >= 0 && temp < 10;
+    return byte >= '0' && byte <= '9';
 }
 
+/* function of minor convenience */
 int is_a_to_f(char byte) {
     
-    int temp  = byte - 0x41;
-
-    return temp >= 0 && temp < 6;
+    return byte >= 'A' && byte <= 'F';
 }
 
+/* function of minor convenience */
 int is_0_to_f(char byte) {
 
    return is_0_to_9(byte) || is_a_to_f(byte);
 }
 
 
+/**
+ * decode entity in buffer at index i, return offset
+ * @param char *buffer   string buffer with entity
+ * @param int i          start index..
+ * @return               returns string offset
+ */
 int entities_decode(char *buffer, int i) {
 
     if(buffer[i++] != '&') {
@@ -117,11 +122,12 @@ int entities_decode(char *buffer, int i) {
     return 0;
 }
 
+
 /**
  * parse a csv line and add values to buffer
- * @param char container[]    array big enough to contain parsed values
+ * @param char **container    array big enough to contain parsed values
  * @param char *buffer        line to be parsed
- * @return int                returns 1 on success
+ * @return int                returns 1
  */
 int parse_line(char **container, char *buffer) {
 
@@ -139,7 +145,8 @@ int parse_line(char **container, char *buffer) {
 
             /* check for null indices */
             if(buffer[++i] == '"') {
-                container[values_parsed++] = NULL;
+                container[values_parsed] = malloc(2);
+                strcpy(container[values_parsed++], "-");
                 i++;
                 continue;
             }
@@ -166,8 +173,9 @@ int parse_line(char **container, char *buffer) {
     return 1;
 }
 
+
 /**
- * attempt to calculate amount of comma separated values..
+ * calculate number of comma separated values..
  * @param char *buffer    string to check..
  */
 int calc_cols(char *buffer) {
@@ -227,6 +235,8 @@ int read_file(char *filename, int *cols, int *rows, char ****results) {
     }
 
     if(*cols < 2) {
+
+        fclose(fp);
         return 0;
     }
 

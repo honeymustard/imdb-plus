@@ -19,7 +19,6 @@
 
 
 GtkWidget *window, *status, *vbox, *hbox;
-GtkWidget *bar;
 GtkWidget *dialog, *content, *entry;
 
 /* tabs widget hierarchy */

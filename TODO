@@ -13,6 +13,5 @@ TODO for project imdb+:
   * build.sh: make sure correct files are copied, and that install paths work
   * allow/disallow hidden columns in table widget..
 
-  * progress bar on windows doesn't update. thoughts: none.
-    update labels.. fix or remove entirely.
+  * progress-bar doesn't work. it did, but now it doesn't. thoughts: none.
 

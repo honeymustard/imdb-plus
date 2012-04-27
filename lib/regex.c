@@ -42,9 +42,14 @@ int regex_to_csv(char *filename, char *out_file, char *pattern) {
     fseek(fp, 0, SEEK_END);
     long len = ftell(fp);
     fseek(fp, 0, SEEK_SET);
-    char *buffer = malloc(len);
+
+    char *buffer = malloc((int)len + 1);
+    memset(buffer, '\0', len+1);
+
     const char *p = buffer;
     fread(buffer, 1, len, fp);
+
+    fclose(fp);
 
     regex_t re;
     regmatch_t match[10];
@@ -88,9 +93,8 @@ int regex_to_csv(char *filename, char *out_file, char *pattern) {
         p += match[0].rm_eo;
     }
 
-    /* close fp's and free memory */
+    /* close out_file and free memory */
     fclose(out_file_fp);
-    fclose(fp);
 
     free(buffer);
     regfree(&re);
