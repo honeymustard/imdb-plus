@@ -19,7 +19,7 @@
 
 EXECUTE = imdb-plus
 VERSION = 0.0.5
-OBJECTS = main.o read_file.o regex.o free_memory.o strnatcmp.o
+OBJECTS = main.o read_file.o regex.o free_memory.o strnatcmp.o download.o
 SOURCES = Makefile main.c master.h patterns.h widgets.h tables.h lib res misc
 CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
@@ -196,12 +196,13 @@ regex.o:
 free_memory.o:
 	gcc $(CFLAGS) lib/free_memory.c
 
-
-.PHONY : GTK_CUSTOM_TABLE
-GTK_CUSTOM_TABLE:
-	gcc $(CFLAGS) $(TABLE_SOURCES)
+download.o:
+	gcc $(CFLAGS) lib/download.c
 
 strnatcmp.o:
 	gcc $(CFLAGS) lib/gtk_custom_table/strnatcmp/strnatcmp.c
 
+.PHONY : GTK_CUSTOM_TABLE
+GTK_CUSTOM_TABLE:
+	gcc $(CFLAGS) $(TABLE_SOURCES)
 
