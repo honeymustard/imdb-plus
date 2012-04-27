@@ -101,13 +101,5 @@ double graph_bg[3] = {
 };
 
 
-/* struct for file downloads */
-struct download {
-    
-    char *url;
-    char *saveas;
-    GtkWidget *pbar;
-};
-
 #endif
 
