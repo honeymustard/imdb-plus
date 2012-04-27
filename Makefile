@@ -48,7 +48,8 @@ install:
 	-@mkdir $(DESTDIR)/usr/share/$(EXECUTE)
 	-@mkdir $(DESTDIR)/usr/share/man
 	-@mkdir $(DESTDIR)/usr/share/man/man1
-	-@cp -R res $(DESTDIR)/usr/share/$(EXECUTE)
+	-@mkdir $(DESTDIR)/usr/share/$(EXECUTE)/res
+	-@cp -R ./res/graphics $(DESTDIR)/usr/share/$(EXECUTE)/res
 	-@cp ./misc/$(EXECUTE).desktop $(DESTDIR)/usr/share/applications
 	-@cp ./misc/$(EXECUTE).1.gz $(DESTDIR)/usr/share/man/man1
 	-@cp ./res/graphics/$(EXECUTE).png $(DESTDIR)/usr/share/pixmaps
@@ -69,6 +70,11 @@ debug: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 debug: CFLAGS += -g $(GTK2) $(CURL)
 debug: $(OBJECTS) GTK_CUSTOM_TABLE
 	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) gtk_custom_table*.o $(GTK2) $(CURL)
+
+
+.PHONY : dist-clean
+dist-clean:
+	-@rm -Rf ./build/$(EXECUTE)-$(VERSION)/$(EXECUTE)-$(VERSION)-deb
 
 .PHONY : dist
 dist:
