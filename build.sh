@@ -86,3 +86,5 @@ rm ./debian/docs
 # build package(s)
 debuild
 
+# do some cleaning.. keep ./debian for manual inspection.
+ls | grep -v debian | xargs rm -Rf
