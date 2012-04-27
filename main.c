@@ -27,6 +27,7 @@
 #include "tables.h"
 #include "widgets.h"
 #include "lib/gtk_custom_table/gtk_custom_table.h"
+#include "lib/download.h"
 
 
 /* these functions exist somewhere.. */
@@ -44,62 +45,6 @@ static gboolean delete_event(GtkWidget *widget, GdkEvent *event, gpointer data) 
 static void destroy(GtkWidget *widget, gpointer data) {
     
     gtk_main_quit();
-}
-
-
-/* callback function for downloads, update progressbar */
-int update_progress(void *pbar, double dt, double dn, double ut, double un) {
-
-  gdk_threads_enter();
-  gtk_progress_set_value(GTK_PROGRESS(pbar), (dn * 100.0) / dt);
-  gdk_threads_leave();
-
-  return 0;
-}
-
-
-/**
- * download web pages from internet..
- * @param char *url       url to read from
- * @param char *saveas    name of file to save as
- * @return                NULL
- */
-void *download(void *download) {
-
-    CURL *curl;
-    CURLcode curl_res;
-
-    struct download *down = (struct download *)download;
-    
-    FILE *tmp = fopen(down->saveas, "w");
-
-    if(tmp == NULL) {
-        return 0;
-    }
-
-    curl = curl_easy_init();
-    curl_easy_setopt(curl, CURLOPT_URL, down->url);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, tmp);
-    
-    /* progress-bar specific curl functions */
-    if(down->pbar != NULL) {
-
-        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
-        curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, update_progress);
-        curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, down->pbar);
-    }
-
-    curl_res = curl_easy_perform(curl);
-
-    fclose(tmp);
-    curl_easy_cleanup(curl);
-
-    /* file could not be downloaded.. */
-    if(curl_res != 0) {
-        return NULL;
-    }
-
-    return NULL;
 }
 
 
@@ -330,23 +275,15 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
 
     if(ret == GTK_RESPONSE_ACCEPT) {
 
+        gtk_label_set_text(GTK_LABEL(label), "Downloading lists..");
+        gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Top 250");
+
+        while(gtk_events_pending()) gtk_main_iteration();
+
         /* download top250 list */
         struct download *dl_top = malloc(sizeof (struct download));
         dl_top->url = CONST_TOP;
         dl_top->saveas = CONST_TOP_SAV;
-        dl_top->pbar = pbar;
-
-        /* download bottom100 list */
-        struct download *dl_bot = malloc(sizeof (struct download));
-        dl_bot->url = CONST_BOT;
-        dl_bot->saveas = CONST_BOT_SAV;
-        dl_bot->pbar = pbar;
-
-        /* download boxoffice list */
-        struct download *dl_box = malloc(sizeof (struct download));
-        dl_box->url = CONST_BOX;
-        dl_box->saveas = CONST_BOX_SAV;
-        dl_box->pbar = pbar;
 
         thread1 = g_thread_create(&download, dl_top, TRUE, NULL);
 
@@ -354,11 +291,33 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
             g_warning("can't create the thread");
         }
 
+        g_thread_join(thread1);
+
+        gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Bottom 100");
+        gtk_adjustment_set_value(adj, 40);
+        while(gtk_events_pending()) gtk_main_iteration();
+
+        /* download bottom100 list */
+        struct download *dl_bot = malloc(sizeof (struct download));
+        dl_bot->url = CONST_BOT;
+        dl_bot->saveas = CONST_BOT_SAV;
+
         thread2 = g_thread_create(&download, dl_bot, TRUE, NULL);
 
         if (thread2 == 0) {
             g_warning("can't create the thread");
         }
+
+        g_thread_join(thread2);
+
+        gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "All-time Boxoffice");
+        gtk_adjustment_set_value(adj, 80);
+        while(gtk_events_pending()) gtk_main_iteration();
+
+        /* download boxoffice list */
+        struct download *dl_box = malloc(sizeof (struct download));
+        dl_box->url = CONST_BOX;
+        dl_box->saveas = CONST_BOX_SAV;
 
         thread3 = g_thread_create(&download, dl_box, TRUE, NULL);
 
@@ -366,9 +325,11 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
             g_warning("can't create the thread");
         }
 
-        g_thread_join(thread1);
-        g_thread_join(thread2);
         g_thread_join(thread3);
+
+        gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Finished");
+        gtk_adjustment_set_value(adj, 120);
+        while(gtk_events_pending()) gtk_main_iteration();
 
         /* all threads have finished, free memory and parse updates */
         free(dl_top);
@@ -619,7 +580,6 @@ void menu_signal_new_download() {
     struct download *dl = malloc(sizeof (struct download));
     dl->url = load;
     dl->saveas = save;
-    dl->pbar = FALSE;
 
     GThread *thread = g_thread_create(&download, dl, TRUE, NULL);
 
@@ -773,10 +733,10 @@ int main(int argc, char *argv[]) {
     curl_global_init(CURL_GLOBAL_ALL);
     g_thread_init(NULL);
 
+    gtk_init(&argc, &argv);
+
     int i = 0;
     int j = 0;
-
-    gtk_init(&argc, &argv);
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), APP_TITL);
