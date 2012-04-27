@@ -20,7 +20,7 @@
 EXECUTE = imdb-plus
 VERSION = 0.0.5
 OBJECTS = main.o read_file.o regex.o free_memory.o strnatcmp.o
-SOURCES = Makefile main.c master.h lib res misc
+SOURCES = Makefile main.c master.h patterns.h widgets.h tables.h lib res misc
 CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
 WINGUI  = -mwindows
@@ -35,10 +35,9 @@ TABLE_SOURCES = $(wildcard ./lib/gtk_custom_table/*.c)
 
 all: CURL = -lcurl
 all: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
-all: CFLAGS += -O2 $(GTK2) $(CURL)
+all: CFLAGS += -O2 $(GTK2) $(CURL) -DINSTALL
 all: $(OBJECTS) GTK_CUSTOM_TABLE
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) gtk_custom_table*.o $(GTK2) $(CURL) -DINSTALL
-
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) gtk_custom_table*.o $(GTK2) $(CURL) 
 
 install:
 	-@mkdir $(DESTDIR)/usr

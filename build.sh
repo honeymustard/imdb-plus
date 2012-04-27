@@ -19,6 +19,14 @@
 #
 #############################################################################
 
+######################################################
+#
+# Make linux deb/src builds:
+#
+# This script is run by Makefile. make, make build.
+#
+######################################################
+
 # export credentials to match my gpg key..
 DEBEMAIL="adrian.solumsmo@gmail.com"
 DEBFULLNAME="Adrian Solumsmo"
