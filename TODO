@@ -9,8 +9,8 @@ TODO for project imdb+:
 
  -> TO BE FIXED:
 
+  * build.sh: remove binary data from /usr/share/res/. do i need to move icons?
   * put some statuses into statusbar.. it doesn't do anything.
-  * build.sh: make sure correct files are copied, and that install paths work
   * allow/disallow hidden columns in table widget..
 
   * progress-bar doesn't work. it did, but now it doesn't. thoughts: none.
