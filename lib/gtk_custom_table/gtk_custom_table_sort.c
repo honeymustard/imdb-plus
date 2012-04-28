@@ -70,6 +70,7 @@ void gtk_custom_table_sort(GtkWidget *table, int col, int orient) {
 
     /* only sort if table is sortable */
     if(priv->table_is_sortable == FALSE) {
+        g_warning("table is not sortable");
         return; 
     }
 
