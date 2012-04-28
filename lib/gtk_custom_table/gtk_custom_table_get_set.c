@@ -35,8 +35,7 @@ void gtk_custom_table_set_head_foot_text(GtkWidget *table, int col,
 
     /* detect table overflow */
     if(col >= priv->table_x) {
-        g_print("error: table overflow\n");
-        exit(0);
+        g_error("table overflow");
     }
 
     struct table_cell **table_row;
@@ -76,8 +75,7 @@ int gtk_custom_table_get_indexof(GtkWidget *table, char *text) {
 
     /* check if table is primed */
     if(!priv->table_has_primary) {
-        printf("error: table widget does not have a primary index\n");
-        exit(0);
+        g_error("table does not have a primary index");
     }
 
     gtk_custom_table_tree_get_recurse(priv, priv->table_tree, text, 
@@ -105,14 +103,12 @@ void gtk_custom_table_set_cell_text(GtkWidget *table, int col, int row,
 
     /* we can't allow this.. */
     if(text == NULL) {
-        printf("error: add to cell, text was null!\n");
-        exit(0);
+        g_error("add to cell, text was null!");
     }
 
     /* detect table overflow, crash and burn */
     if((col >= priv->table_x) || (row >= priv->table_y)) {
-        g_print("error: table overflow\n");
-        exit(0);
+        g_error("table overflow");
     }
 
 
@@ -246,8 +242,7 @@ void gtk_custom_table_get_row(GtkWidget *table, int index, char **container) {
     priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
 
     if(index >= priv->table_y) {
-        printf("error: get row index out of bounds!\n");    
-        exit(0);
+        g_error("can't get row, index out of bounds");    
     }
 
     int i = 0;
