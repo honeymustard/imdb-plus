@@ -28,7 +28,7 @@
 ###########################################
 # required program(s): 
 #
-# powershell.exe  : iwith admin privileges
+# powershell.exe  : with admin privileges
 # 7za.exe         : 7-zip cmdline version in path
 # ISCC.exe        : Inno Setup 5 version in path
 #
