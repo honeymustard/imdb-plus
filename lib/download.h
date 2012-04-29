@@ -18,11 +18,16 @@
 *****************************************************************************/
 
 
+/* download statuses */
+#define DL_STATUS_OK 1
+#define DL_STATUS_NB 0
+
 /* struct for file downloads */
 struct download {
     
     char *url;
     char *saveas;
+    int status;
 };
 
 void *download(void *download);
