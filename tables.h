@@ -17,6 +17,10 @@
 *
 *****************************************************************************/
 
+
+#ifndef _TABLES_
+#define _TABLES_
+
 #define TABLE_STATS_COLS 5
 #define TABLE_MYMOV_COLS 6
 #define TABLE_MYLST_COLS 6
@@ -84,5 +88,7 @@ char *nb_tab_mymovies_headers[TABLE_MYMOV_COLS] = {
     "Title", 
     "Year", 
 };
+
+#endif
 
 
