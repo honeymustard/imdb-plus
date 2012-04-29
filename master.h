@@ -19,8 +19,8 @@
 
 /* project started december 27th 2011 */
 
-#ifndef MASTER 
-#define MASTER
+#ifndef _MASTER_
+#define _MASTER_
 
 #define APP_NAME "imdb-plus"
 
@@ -52,54 +52,15 @@
 #define CONST_BOX_SAV CONST_PREFIX"boxoffice.html"
 #define CONST_BOX_CSV CONST_PREFIX"boxoffice.csv" 
 
+const char *APP_AUTH[3];
+const char *APP_LICN;
 
-/* credits aka self-praise */
-const char *APP_AUTH[3] = {
-    "Adrian Solumsmo <adrian.solumsmo@gmail.com>\n",
-    "Thanks to:\n\nThe GnuWin32 project (pcre)\nMartin Pool (natcmpsort)",
-    NULL,
-};
+/* these functions exist somewhere.. */
+extern int read_file(char *filename, int *cols, int *rows, char ****results);
+extern int regex_to_csv(char *filename, char *out_file, char *pattern);
+extern int free_memory(char ***results, int cols, int rows);
 
-/* default license */
-const char *APP_LICN = "\
-Copyright (C) imdb-plus  Adrian Solumsmo\n\
-\n\
-imdb-plus program is free software: you can redistribute it and/or modify\n\
-it under the terms of the GNU General Public License as published by\n\
-the Free Software Foundation, either version 3 of the License, or\n\
-(at your option) any later version.\n\
-\n\
-imdb-plus program is distributed in the hope that it will be useful,\n\
-but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
-GNU General Public License for more details.\n\
-\n\
-You should have received a copy of the GNU General Public License\n\
-along with this program.  If not, see <http://www.gnu.org/licenses/>.";
-
-
-/* solid green to solid red, for ratings */
-double colors[10][3] = {
-    {1.00, 0.00, 0.00}, 
-    {1.00, 0.15, 0.00}, 
-    {1.00, 0.35, 0.00}, 
-    {1.00, 0.55, 0.00}, 
-    {1.00, 0.75, 0.00}, 
-    {1.00, 0.95, 0.00}, 
-    {0.85, 1.00, 0.00}, 
-    {0.65, 1.00, 0.00}, 
-    {0.35, 1.00, 0.00}, 
-    {0.00, 1.00, 0.00}, 
-};
-
-
-/* graph background colors */
-double graph_bg[3] = {
-    0.90, 
-    0.90, 
-    1.00,
-};
-
+double colors[10][3];
 
 #endif
 
