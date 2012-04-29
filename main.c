@@ -281,8 +281,9 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
     if(ret == GTK_RESPONSE_ACCEPT) {
 
         gtk_label_set_text(GTK_LABEL(label), "Downloading lists..");
-        gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Top 250");
 
+        /* begin thread 1 */
+        gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Top 250");
         while(gtk_events_pending()) gtk_main_iteration();
 
         /* download top250 list */
@@ -298,6 +299,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
 
         g_thread_join(thread1);
 
+        /* begin thread 2 */
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Bottom 100");
         gtk_adjustment_set_value(adj, 40);
         while(gtk_events_pending()) gtk_main_iteration();
@@ -315,6 +317,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
 
         g_thread_join(thread2);
 
+        /* begin thread 3 */
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "All-time Boxoffice");
         gtk_adjustment_set_value(adj, 80);
         while(gtk_events_pending()) gtk_main_iteration();
@@ -389,6 +392,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         free(dl_bot);
         free(dl_box);
 
+        /* set new statusbar message */
         char *temp = malloc(strlen(format) + strlen(topstat) + 
             strlen(botstat) + strlen(boxstat) + 1);
 
@@ -504,35 +508,41 @@ int menu_open_ratings(char *filename) {
             gtk_custom_table_set_cell_text(nb_tab_mymovies, 5, j, results[i][11]);
 
             /* add 'my rating' to top250 tab if applicable */
-            int index_top = gtk_custom_table_get_indexof(nb_tab_top250, results[i][1]);
+            int index_top = gtk_custom_table_get_indexof(nb_tab_top250, 
+                results[i][1]);
 
             if(index_top >= 0) {
 
-                gtk_custom_table_set_cell_text(nb_tab_top250, 2, index_top, results[i][8]);
+                gtk_custom_table_set_cell_text(nb_tab_top250, 2, index_top, 
+                    results[i][8]);
                 gtk_custom_table_set_cell_color(nb_tab_top250, 2, index_top, 
                     colors[atoi(results[i][8]) - 1]);
             }
 
             /* add 'my rating' to boxoffice tab if applicable */
-            int index_box = gtk_custom_table_get_indexof(nb_tab_boxoffice, results[i][1]);
+            int index_box = gtk_custom_table_get_indexof(nb_tab_boxoffice, 
+                results[i][1]);
 
             if(index_box >= 0) {
 
-                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, index_box, results[i][9]);
+                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, index_box, 
+                    results[i][9]);
                 gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, index_box, 
                     colors[atoi(results[i][9]) - 1]);
-
-                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, index_box, results[i][8]);
+                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, index_box, 
+                    results[i][8]);
                 gtk_custom_table_set_cell_color(nb_tab_boxoffice, 2, index_box, 
                     colors[atoi(results[i][8]) - 1]);
             }
 
             /* add 'my rating' to lists tab if applicable */
-            int index_lst = gtk_custom_table_get_indexof(nb_tab_lists, results[i][1]);
+            int index_lst = gtk_custom_table_get_indexof(nb_tab_lists, 
+                results[i][1]);
 
             if(index_lst >= 0) {
 
-                gtk_custom_table_set_cell_text(nb_tab_lists, 2, index_lst, results[i][8]);
+                gtk_custom_table_set_cell_text(nb_tab_lists, 2, index_lst, 
+                    results[i][8]);
                 gtk_custom_table_set_cell_color(nb_tab_lists, 2, index_lst, 
                     colors[atoi(results[i][8]) - 1]);
             }
@@ -674,6 +684,7 @@ void menu_signal_new(GtkWidget *widget, gpointer data) {
         strcat(save, entered);
         strcat(save, ".csv");
 
+        /* set this progressbar message */
         char pbar_text[50];
         strcpy(pbar_text, "Downloading: ");
         strcat(pbar_text, entered);
