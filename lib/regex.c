@@ -62,10 +62,15 @@ int regex_to_csv(char *filename, char *out_file, char *pattern) {
     int i = 0;
     int j = 0;
 
-    /* open output file */
-    FILE *out_file_fp = fopen(out_file, "wb");
+    /* open temporary output file */
+    char *ext_temp = ".tmp";
+    char *out_temp = malloc(strlen(out_file) + strlen(ext_temp) + 1);
+    strcpy(out_temp, out_file);
+    strcat(out_temp, ext_temp);
+
+    FILE *out_file_tmp = fopen(out_temp, "wb");
     
-    if(out_file_fp == NULL) {
+    if(out_file_tmp == NULL) {
         return 0;
     }
 
@@ -86,7 +91,7 @@ int regex_to_csv(char *filename, char *out_file, char *pattern) {
             }
 
             /* last submatch in match, add end-of-line character */
-            fprintf(out_file_fp, array[(j == (re.re_nsub - 1))], 
+            fprintf(out_file_tmp, array[(j == (re.re_nsub - 1))], 
                 match[j].rm_eo - match[j].rm_so, &p[match[j].rm_so]);
         }
 
@@ -94,11 +99,23 @@ int regex_to_csv(char *filename, char *out_file, char *pattern) {
     }
 
     /* close out_file and free memory */
-    fclose(out_file_fp);
+    fclose(out_file_tmp);
 
     free(buffer);
     regfree(&re);
 
-    return i;    
+    /* if there were results, remove old .csv and replace with new */
+    if(i > 1) {
+
+        remove(out_file);
+        rename(out_temp, out_file);
+
+        return i;
+    }
+
+    /* no results, remove tmp file */
+    remove(out_temp);
+
+    return 0;    
 }
 
