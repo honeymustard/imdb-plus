@@ -38,22 +38,27 @@ void *download(void *download) {
     FILE *tmp = fopen(down->saveas, "w");
 
     if(tmp == NULL) {
+        down->status = DL_STATUS_NB;
         return NULL;
     }
 
     curl = curl_easy_init();
 
-    if(!curl) {
-        return NULL;
+    if(curl) {
+
+        curl_easy_setopt(curl, CURLOPT_URL, down->url);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, tmp);
+        
+        curl_res = curl_easy_perform(curl);
+
+        fclose(tmp);
+        curl_easy_cleanup(curl);
+
+        down->status = DL_STATUS_OK;
     }
-
-    curl_easy_setopt(curl, CURLOPT_URL, down->url);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, tmp);
-    
-    curl_res = curl_easy_perform(curl);
-
-    fclose(tmp);
-    curl_easy_cleanup(curl);
+    else {
+        down->status = DL_STATUS_NB;
+    }
 
     return NULL;
 }
