@@ -19,14 +19,15 @@
 
 EXECUTE = imdb-plus
 VERSION = 0.0.5
-OBJECTS = main.o read_file.o regex.o free_memory.o strnatcmp.o download.o
-SOURCES = Makefile main.c master.h patterns.h widgets.h tables.h lib res misc
+OBJECTS = main.o readfile.o regex.o download.o strnatcmp.o 
+SOURCES = Makefile main.c master.h widgets.h tables.h lib res misc
 CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
 WINGUI  = -mwindows
 
 
 TABLE_SOURCES = $(wildcard ./lib/gtk_custom_table/*.c)
+EVENT_SOURCES = $(wildcard ./lib/events/*.c)
 
 ###############################################################################
 # Standard linux build..
@@ -36,8 +37,8 @@ TABLE_SOURCES = $(wildcard ./lib/gtk_custom_table/*.c)
 all: CURL = -lcurl
 all: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 all: CFLAGS += -O2 $(GTK2) $(CURL) -DINSTALL
-all: $(OBJECTS) GTK_CUSTOM_TABLE
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) gtk_custom_table*.o $(GTK2) $(CURL) 
+all: $(OBJECTS) GTK_CUSTOM_TABLE GTK_EVENTS
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) gtk_custom_table*.o event_*.o $(GTK2) $(CURL) 
 
 install:
 	-@mkdir $(DESTDIR)/usr
@@ -68,8 +69,8 @@ uninstall:
 debug: CURL = -lcurl
 debug: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 debug: CFLAGS += -g $(GTK2) $(CURL)
-debug: $(OBJECTS) GTK_CUSTOM_TABLE
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) gtk_custom_table*.o $(GTK2) $(CURL)
+debug: $(OBJECTS) GTK_CUSTOM_TABLE GTK_EVENTS
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) gtk_custom_table*.o event_*.o $(GTK2) $(CURL)
 
 
 .PHONY : dist-clean
@@ -157,8 +158,8 @@ mingw32: GTK2 = -mms-bitfields \
 # Win32 release build with MinGW..
 mingw32: CFLAGS += -O2 $(GTK2) $(CURL) $(PCRE)
 mingw32: resfile.o
-mingw32: $(OBJECTS) GTK_CUSTOM_TABLE
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) gtk_custom_table*.o resfile.o $(GTK2) $(CURL) $(PCRE) $(WINGUI)
+mingw32: $(OBJECTS) GTK_CUSTOM_TABLE GTK_EVENTS
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) gtk_custom_table*.o event_*.o resfile.o $(GTK2) $(CURL) $(PCRE) $(WINGUI)
 
 # Win32 debug build with MinGW..
 mingw32-debug: WINGUI = 
@@ -187,14 +188,11 @@ resfile.o:
 main.o:
 	gcc -DAPP_VERS=\"$(VERSION)\" $(CFLAGS) main.c 
 
-read_file.o:
-	gcc $(CFLAGS) lib/read_file.c
+readfile.o:
+	gcc $(CFLAGS) lib/readfile.c
 
 regex.o:
 	gcc $(CFLAGS) lib/regex.c
-
-free_memory.o:
-	gcc $(CFLAGS) lib/free_memory.c
 
 download.o:
 	gcc $(CFLAGS) lib/download.c
@@ -205,4 +203,8 @@ strnatcmp.o:
 .PHONY : GTK_CUSTOM_TABLE
 GTK_CUSTOM_TABLE:
 	gcc $(CFLAGS) $(TABLE_SOURCES)
+
+.PHONY : GTK_EVENTS
+GTK_EVENTS:
+	gcc -DAPP_VERS=\"$(VERSION)\" $(CFLAGS) $(EVENT_SOURCES)
 
