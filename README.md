@@ -1,4 +1,4 @@
 ## README for imdb-plus
 
-![My image](honeymustard.github.com/repository/local/ss-linux-2.png)
+![imdb-plus on debian](https://github.com/honeymustard/imdb-plus/local/ss-linux-2.png)
 
