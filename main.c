@@ -64,177 +64,179 @@ void set_imdb_rating(int index, int row, GtkWidget *copy, GtkWidget *paste) {
 }
 
 
-/* parse new lists */
-void menu_signal_update_parse(GtkWidget *widget) {
+/* parse new top 250 list */
+int menu_signal_update_top() {
 
     int i = 0;
+    int cols = 0;
+    int rows = 0;
 
-    if(regex_to_csv(CONST_TOP_SAV, CONST_TOP_CSV, pattern_top250)) {
+    char ***results;
+    
+    if(read_file(CONST_TOP_CSV, &cols, &rows, &results) && cols == 6) {
 
-        int cols = 0;
-        int rows = 0;
+        for(i = 0; i < gtk_custom_table_get_rows(nb_tab_top250); i++) {
 
-        char ***results;
-        
-        if(read_file(CONST_TOP_CSV, &cols, &rows, &results)) {
+            gtk_custom_table_set_cell_text(nb_tab_top250, 0, i, results[i][0]);
+            gtk_custom_table_set_cell_text(nb_tab_top250, 1, i, results[i][1]);
+            gtk_custom_table_set_cell_text(nb_tab_top250, 2, i, "0");
+            gtk_custom_table_set_cell_text(nb_tab_top250, 3, i, results[i][2]);
+            gtk_custom_table_set_cell_text(nb_tab_top250, 4, i, results[i][3]);
+            gtk_custom_table_set_cell_text(nb_tab_top250, 5, i, results[i][4]);
+            gtk_custom_table_set_cell_text(nb_tab_top250, 6, i, results[i][5]);
 
-            for(i = 0; i < rows; i++) {
+            gtk_custom_table_set_cell_color_enable(nb_tab_top250, 2, i, FALSE);
 
-                gtk_custom_table_set_cell_text(nb_tab_top250, 0, i, results[i][0]);
-                gtk_custom_table_set_cell_text(nb_tab_top250, 1, i, results[i][1]);
-                gtk_custom_table_set_cell_text(nb_tab_top250, 2, i, "0");
-                gtk_custom_table_set_cell_text(nb_tab_top250, 3, i, results[i][2]);
-                gtk_custom_table_set_cell_text(nb_tab_top250, 4, i, results[i][3]);
-                gtk_custom_table_set_cell_text(nb_tab_top250, 5, i, results[i][4]);
-                gtk_custom_table_set_cell_text(nb_tab_top250, 6, i, results[i][5]);
+            gtk_custom_table_set_cell_color(nb_tab_top250, 1, i, 
+                colors[(int)atof(results[i][1])]); 
 
-                gtk_custom_table_set_cell_color_enable(nb_tab_top250, 2, i, FALSE);
+            /* add 'my rating' to top250 tab if applicable */
+            int index_lst = gtk_custom_table_get_indexof(nb_tab_mymovies, results[i][2]);
 
-                gtk_custom_table_set_cell_color(nb_tab_top250, 1, i, 
-                    colors[(int)atof(results[i][1])]); 
-
-                /* add 'my rating' to top250 tab if applicable */
-                int index_lst = gtk_custom_table_get_indexof(nb_tab_mymovies, results[i][2]);
-
-                if(index_lst >= 0) {
-                    
-                    char *table_row[gtk_custom_table_get_rows(nb_tab_mymovies)];
-
-                    gtk_custom_table_get_row(nb_tab_mymovies, index_lst, table_row);
-
-                    gtk_custom_table_set_cell_text(nb_tab_top250, 2, i, 
-                        table_row[2]);
-
-                    gtk_custom_table_set_cell_color(nb_tab_top250, 2, i, 
-                        colors[atoi(table_row[2]) - 1]);
-                }
-            }
-
-            remove(CONST_TOP_SAV);
-
-            free_memory(results, cols, rows);
-
-            gtk_custom_table_set_sortable(nb_tab_top250, TRUE);
-            gtk_custom_table_sort(nb_tab_top250, 0, GTK_CUSTOM_TABLE_ASC);
-        }
-    }
-
-    if(regex_to_csv(CONST_BOT_SAV, CONST_BOT_CSV, pattern_bot100)) {
-
-        int cols = 0;
-        int rows = 0;
-
-        char ***results;
-        
-        if(read_file(CONST_BOT_CSV, &cols, &rows, &results)) {
-
-            for(i = 0; i < rows; i++) {
-
-                gtk_custom_table_set_cell_text(nb_tab_bot100, 0, i, results[i][0]);
-                gtk_custom_table_set_cell_text(nb_tab_bot100, 1, i, results[i][1]);
-                gtk_custom_table_set_cell_text(nb_tab_bot100, 2, i, "0");
-                gtk_custom_table_set_cell_text(nb_tab_bot100, 3, i, results[i][2]);
-                gtk_custom_table_set_cell_text(nb_tab_bot100, 4, i, results[i][3]);
-                gtk_custom_table_set_cell_text(nb_tab_bot100, 5, i, results[i][4]);
-                gtk_custom_table_set_cell_text(nb_tab_bot100, 6, i, results[i][5]);
-
-                gtk_custom_table_set_cell_color_enable(nb_tab_bot100, 2, i, FALSE);
-
-                gtk_custom_table_set_cell_color(nb_tab_bot100, 1, i, 
-                    colors[(int)atof(results[i][1])]); 
-
-                /* add 'my rating' to bot100 tab if applicable */
-                int index_lst = gtk_custom_table_get_indexof(nb_tab_mymovies, results[i][2]);
-
-                if(index_lst >= 0) {
-                    
-                    char *table_row[gtk_custom_table_get_rows(nb_tab_mymovies)];
-
-                    gtk_custom_table_get_row(nb_tab_mymovies, index_lst, table_row);
-
-                    gtk_custom_table_set_cell_text(nb_tab_bot100, 2, i, 
-                        table_row[2]);
-
-                    gtk_custom_table_set_cell_color(nb_tab_bot100, 2, i, 
-                        colors[atoi(table_row[2]) - 1]);
-                }
-            }
-
-            remove(CONST_BOT_SAV);
-
-            free_memory(results, cols, rows);
-
-            gtk_custom_table_set_sortable(nb_tab_bot100, TRUE);
-            gtk_custom_table_sort(nb_tab_bot100, 0, GTK_CUSTOM_TABLE_ASC);
-        }
-    }
-
-    int regex = regex_to_csv(CONST_BOX_SAV, CONST_BOX_CSV, 
-        pattern_boxoffice);
-
-    if(regex || 
-       regex_to_csv(CONST_BOX_SAV, CONST_BOX_CSV, pattern_boxoffice_win)) {
-
-        int cols = 0;
-        int rows = 0;
-        
-        char ***results;
-        
-        if(read_file(CONST_BOX_CSV, &cols, &rows, &results)) {
-
-            /* update boxoffice tab size */
-            gtk_custom_table_resize(nb_tab_boxoffice, -1, rows);
-
-            for(i = 0; i < rows; i++) {
-
-                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 0, i, results[i][0]);
-                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, "0.0");
-                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, "0");
-                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 3, i, results[i][1]);
-                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 4, i, results[i][2]);
-                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 5, i, results[i][3]);
-                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 6, i, results[i][4]);
-
-                gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 1, i, FALSE);
-                gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 2, i, FALSE);
-
-                /* add 'my rating' to boxoffice tab if applicable */
-                int index_lst = gtk_custom_table_get_indexof(nb_tab_mymovies, results[i][1]);
-
-                if(index_lst >= 0) {
-                    
-                    char *table_row[gtk_custom_table_get_rows(nb_tab_mymovies)];
-
-                    gtk_custom_table_get_row(nb_tab_mymovies, index_lst, table_row);
-
-                    gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
-                        table_row[2]);
-                    gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
-                        colors[atoi(table_row[2]) - 1]);
-                }
+            if(index_lst >= 0) {
                 
-                /* find imdb ratings and insert them into boxoffice.. */
-                int index1 = gtk_custom_table_get_indexof(nb_tab_mymovies, results[i][1]);
-                int index2 = gtk_custom_table_get_indexof(nb_tab_top250, results[i][1]);
-                int index3 = gtk_custom_table_get_indexof(nb_tab_bot100, results[i][1]);
-                int index4 = gtk_custom_table_get_indexof(nb_tab_lists, results[i][1]);
+                char *table_row[gtk_custom_table_get_rows(nb_tab_mymovies)];
 
-                set_imdb_rating(index1, i, nb_tab_mymovies, nb_tab_boxoffice);
-                set_imdb_rating(index2, i, nb_tab_top250, nb_tab_boxoffice);
-                set_imdb_rating(index3, i, nb_tab_bot100, nb_tab_boxoffice);
-                set_imdb_rating(index4, i, nb_tab_lists, nb_tab_boxoffice);
+                gtk_custom_table_get_row(nb_tab_mymovies, index_lst, table_row);
+
+                gtk_custom_table_set_cell_text(nb_tab_top250, 2, i, 
+                    table_row[2]);
+
+                gtk_custom_table_set_cell_color(nb_tab_top250, 2, i, 
+                    colors[atoi(table_row[2]) - 1]);
             }
-
-            remove(CONST_BOX_SAV);
-
-            free_memory(results, cols, rows);
-
-            gtk_custom_table_set_sortable(nb_tab_boxoffice, TRUE);
-            gtk_custom_table_sort(nb_tab_boxoffice, 0, GTK_CUSTOM_TABLE_ASC);
         }
+
+        free_memory(results, cols, rows);
+
+        gtk_custom_table_set_sortable(nb_tab_top250, TRUE);
+        gtk_custom_table_sort(nb_tab_top250, 0, GTK_CUSTOM_TABLE_ASC);
+
+        return 1;
     }
 
-    gtk_custom_table_refresh(window);
+    return 0;
+}
+
+
+/* parse new bottom 100 list */
+int menu_signal_update_bot() {
+
+    int i = 0;
+    int cols = 0;
+    int rows = 0;
+
+    char ***results;
+    
+    if(read_file(CONST_BOT_CSV, &cols, &rows, &results) && cols == 6) {
+
+        for(i = 0; i < gtk_custom_table_get_rows(nb_tab_bot100); i++) {
+
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 0, i, results[i][0]);
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 1, i, results[i][1]);
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 2, i, "0");
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 3, i, results[i][2]);
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 4, i, results[i][3]);
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 5, i, results[i][4]);
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 6, i, results[i][5]);
+
+            gtk_custom_table_set_cell_color_enable(nb_tab_bot100, 2, i, FALSE);
+
+            gtk_custom_table_set_cell_color(nb_tab_bot100, 1, i, 
+                colors[(int)atof(results[i][1])]); 
+
+            /* add 'my rating' to bot100 tab if applicable */
+            int index_lst = gtk_custom_table_get_indexof(nb_tab_mymovies, results[i][2]);
+
+            if(index_lst >= 0) {
+                
+                char *table_row[gtk_custom_table_get_rows(nb_tab_mymovies)];
+
+                gtk_custom_table_get_row(nb_tab_mymovies, index_lst, table_row);
+
+                gtk_custom_table_set_cell_text(nb_tab_bot100, 2, i, 
+                    table_row[2]);
+
+                gtk_custom_table_set_cell_color(nb_tab_bot100, 2, i, 
+                    colors[atoi(table_row[2]) - 1]);
+            }
+        }
+
+        free_memory(results, cols, rows);
+
+        gtk_custom_table_set_sortable(nb_tab_bot100, TRUE);
+        gtk_custom_table_sort(nb_tab_bot100, 0, GTK_CUSTOM_TABLE_ASC);
+
+        return 1;
+    }
+
+    return 0;
+}
+
+
+/* parse new boxoffice list */
+int menu_signal_update_box() {
+
+    int i = 0;
+    int cols = 0;
+    int rows = 0;
+    
+    char ***results;
+    
+    if(read_file(CONST_BOX_CSV, &cols, &rows, &results) && cols == 5) {
+
+        /* update boxoffice tab size */
+        gtk_custom_table_resize(nb_tab_boxoffice, -1, rows);
+
+        for(i = 0; i < gtk_custom_table_get_rows(nb_tab_boxoffice); i++) {
+
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 0, i, results[i][0]);
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, "0.0");
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, "0");
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 3, i, results[i][1]);
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 4, i, results[i][2]);
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 5, i, results[i][3]);
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 6, i, results[i][4]);
+
+            gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 1, i, FALSE);
+            gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 2, i, FALSE);
+
+            /* add 'my rating' to boxoffice tab if applicable */
+            int index_lst = gtk_custom_table_get_indexof(nb_tab_mymovies, results[i][1]);
+
+            if(index_lst >= 0) {
+                
+                char *table_row[gtk_custom_table_get_rows(nb_tab_mymovies)];
+
+                gtk_custom_table_get_row(nb_tab_mymovies, index_lst, table_row);
+
+                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
+                    table_row[2]);
+                gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
+                    colors[atoi(table_row[2]) - 1]);
+            }
+            
+            /* find imdb ratings and insert them into boxoffice.. */
+            int index1 = gtk_custom_table_get_indexof(nb_tab_mymovies, results[i][1]);
+            int index2 = gtk_custom_table_get_indexof(nb_tab_top250, results[i][1]);
+            int index3 = gtk_custom_table_get_indexof(nb_tab_bot100, results[i][1]);
+            int index4 = gtk_custom_table_get_indexof(nb_tab_lists, results[i][1]);
+
+            set_imdb_rating(index1, i, nb_tab_mymovies, nb_tab_boxoffice);
+            set_imdb_rating(index2, i, nb_tab_top250, nb_tab_boxoffice);
+            set_imdb_rating(index3, i, nb_tab_bot100, nb_tab_boxoffice);
+            set_imdb_rating(index4, i, nb_tab_lists, nb_tab_boxoffice);
+        }
+
+        free_memory(results, cols, rows);
+
+        gtk_custom_table_set_sortable(nb_tab_boxoffice, TRUE);
+        gtk_custom_table_sort(nb_tab_boxoffice, 0, GTK_CUSTOM_TABLE_ASC);
+
+        return 1;
+    }
+
+    return 0;
 }
 
 
@@ -262,6 +264,8 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
     GtkWidget *pbar = gtk_progress_bar_new_with_adjustment(adj);
     GtkWidget *label = gtk_label_new("Download new lists?\n");
 
+    gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Waiting..");
+
     gtk_container_add(GTK_CONTAINER(content), label);
     gtk_container_add(GTK_CONTAINER(content), pbar);
 
@@ -273,6 +277,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
 
     GThread *thread1, *thread2, *thread3;
 
+    /* someone press OK.. download some files */
     if(ret == GTK_RESPONSE_ACCEPT) {
 
         gtk_label_set_text(GTK_LABEL(label), "Downloading lists..");
@@ -331,12 +336,66 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         gtk_adjustment_set_value(adj, 120);
         while(gtk_events_pending()) gtk_main_iteration();
 
-        /* all threads have finished, free memory and parse updates */
+        /* all threads have finished, do something with results */
+
+        char *topstat = "ERR";
+        char *botstat = "ERR";
+        char *boxstat = "ERR";
+
+        char *format = "DL Stats: Top 250: %s | Bottom 100: %s | Boxoffice: %s";
+
+        /* attempt to parse top 250 list */
+        if(dl_top->status == DL_STATUS_OK) {
+
+            if(regex_to_csv(CONST_TOP_SAV, CONST_TOP_CSV, pattern_top250)) {
+                
+                if(menu_signal_update_top()) {
+                    topstat = "OK";
+                }
+            }
+        
+            remove(CONST_TOP_SAV);
+        }
+
+        /* attempt to parse bot 100 list */
+        if(dl_bot->status == DL_STATUS_OK) {
+
+            if(regex_to_csv(CONST_BOT_SAV, CONST_BOT_CSV, pattern_bot100)) {
+
+                if(menu_signal_update_bot()) {
+                    botstat = "OK";
+                }
+            }
+            
+            remove(CONST_BOT_SAV);
+        }
+
+        /* attempt to parse boxoffice list */
+        if(dl_box->status == DL_STATUS_OK) {
+
+            if(regex_to_csv(CONST_BOX_SAV, CONST_BOX_CSV, pattern_boxoffice) || 
+               regex_to_csv(CONST_BOX_SAV, CONST_BOX_CSV, pattern_boxoffice_win)) {
+
+                if(menu_signal_update_box()) {
+                    boxstat = "OK";
+                }
+            }
+            
+            remove(CONST_BOX_SAV);
+        }
+
+        /* free memory */
         free(dl_top);
         free(dl_bot);
         free(dl_box);
 
-        menu_signal_update_parse(widget);
+        char *temp = malloc(strlen(format) + strlen(topstat) + 
+            strlen(botstat) + strlen(boxstat) + 1);
+
+        sprintf(temp, format, topstat, botstat, boxstat);
+        gtk_statusbar_push(GTK_STATUSBAR(status), 1, temp);
+
+        gtk_custom_table_refresh(window);
     }
     
     gtk_widget_destroy(dialog);
@@ -553,71 +612,6 @@ int menu_open_ratings(char *filename) {
 }
 
 
-/* download new ratings file */
-void menu_signal_new_download() {
-
-    /* copy entered text */
-    char entered[100];
-    strcpy(entered, gtk_entry_get_text(GTK_ENTRY(entry)));
-
-    /* number should presumably be larger than this */
-    if(strlen(entered) <= 6) {
-        return;
-    }
-
-    /* download from this url.. */
-    char load[100];
-    strcpy(load, CONST_URL);
-    strcat(load, entered);
-
-    /* save to this path.. */
-    char save[100];
-    strcpy(save, CONST_PREFIX);
-    strcat(save, entered);
-    strcat(save, ".csv");
-
-    /* download new file */
-    struct download *dl = malloc(sizeof (struct download));
-    dl->url = load;
-    dl->saveas = save;
-
-    GThread *thread = g_thread_create(&download, dl, TRUE, NULL);
-
-    if(thread == 0) {
-        g_warning("can't create the thread");
-    }
-
-    g_thread_join(thread);
-
-    free(dl);
-
-    /* open fresh ratings */
-    if(!menu_open_ratings(save)) {
-        remove(save);
-    }
-}
-
-
-/* new download dialog enter event handler */
-static gboolean menu_signal_new_enter(GtkWidget *widget, GdkEventKey *event) {
-
-    if(event->type == GDK_KEY_PRESS) {
-
-        /* looking for enter key */
-        if(event->keyval == GDK_Return) {
-
-            /* download and destroy */
-            menu_signal_new_download();        
-            gtk_widget_destroy(widget);
-
-            return TRUE;
-        }
-    }
-
-    return FALSE;
-}
-
-
 /* open new ratings download dialog */
 void menu_signal_new(GtkWidget *widget, gpointer data) {
     
@@ -632,25 +626,111 @@ void menu_signal_new(GtkWidget *widget, gpointer data) {
         NULL
     );
     
+    GtkAdjustment *adj = (GtkAdjustment*)gtk_adjustment_new(5, 0, 120, 0, 0, 0);
+    GtkWidget *vbox = gtk_vbox_new(FALSE, 5);
+
+    GtkWidget *pbar = gtk_progress_bar_new_with_adjustment(adj);
+    gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Waiting..");
+
     gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
 
     content = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
     entry = gtk_entry_new();
 
-    gtk_container_add(GTK_CONTAINER(content), 
-        gtk_label_new(" Enter unique IMDb ID i.e. 4854451\n"));
-    gtk_container_add(GTK_CONTAINER(content), entry);
+    GtkWidget *label = gtk_label_new(" Enter unique IMDb ID i.e. 4854451\n");
+    gtk_container_add(GTK_CONTAINER(content), label);
+
+    gtk_box_pack_start(GTK_BOX(vbox), entry, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), pbar, TRUE, TRUE, 0);
+
+    gtk_container_add(GTK_CONTAINER(content), vbox);
+
     gtk_container_set_border_width(GTK_CONTAINER(content->parent), 30);
     gtk_window_set_icon_from_file(GTK_WINDOW(dialog), APP_ICON, NULL);
     gtk_widget_show_all(GTK_WIDGET(dialog));
 
-    g_signal_connect(dialog, "key-press-event", 
-            G_CALLBACK(menu_signal_new_enter), NULL);
-
     /* run dialog */
     if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
 
-        menu_signal_new_download();
+        /* copy entered text */
+        char entered[100];
+        strcpy(entered, gtk_entry_get_text(GTK_ENTRY(entry)));
+
+        /* number should presumably be larger or smaller than this */
+        int enter_len = strlen(entered);
+
+        if(enter_len <= 6 || enter_len >= 20) {
+            return;
+        }
+
+        /* download from this url.. */
+        char load[100];
+        strcpy(load, CONST_URL);
+        strcat(load, entered);
+
+        /* save to this path.. */
+        char save[100];
+        strcpy(save, CONST_PREFIX);
+        strcat(save, entered);
+        strcat(save, ".csv");
+
+        char pbar_text[50];
+        strcpy(pbar_text, "Downloading: ");
+        strcat(pbar_text, entered);
+        strcat(pbar_text, ".csv..");
+
+        gtk_label_set_text(GTK_LABEL(label), "Downloading ratings..");
+        gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), pbar_text);
+        gtk_adjustment_set_value(adj, 20);
+        while(gtk_events_pending()) gtk_main_iteration();
+
+        /* download new file */
+        struct download *dl = malloc(sizeof (struct download));
+        dl->url = load;
+        dl->saveas = save;
+
+        GThread *thread = g_thread_create(&download, dl, TRUE, NULL);
+
+        if(thread == 0) {
+            g_warning("can't create the thread");
+        }
+
+        g_thread_join(thread);
+
+        free(dl);
+
+        char *temp = NULL;
+        char *stat = NULL;
+        char *info = NULL;
+        int adjustment = 0;
+
+        /* open fresh ratings */
+        if(menu_open_ratings(save)) {
+
+            stat = "Opened ratings file: ";
+            info = "finished";
+            adjustment = 120;
+        }
+        else {
+            
+            stat = "Could not open file: ";
+            info = "Waiting..";
+            adjustment = 5;
+                  
+            remove(save);
+        }
+
+        gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), info);
+        gtk_adjustment_set_value(adj, adjustment);
+
+        temp = malloc(strlen(stat) + strlen(save) + 1);
+        strcpy(temp, stat),
+        strcat(temp, save);
+            
+        gtk_statusbar_push(GTK_STATUSBAR(status), 1, temp);
+
+        while(gtk_events_pending()) gtk_main_iteration();
+
         gtk_widget_destroy(dialog);
     }
         
@@ -676,12 +756,28 @@ void menu_signal_open(GtkWidget *widget, gpointer data) {
     gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
     gtk_window_set_icon_from_file(GTK_WINDOW(dialog), APP_ICON, NULL);
 
-    char *file_name;
-
     if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
 
-        file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-        menu_open_ratings(file_name);
+        char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+        
+        char *temp = NULL;
+        char *stat = NULL;
+
+        /* attempt to open ratings file */
+        if(menu_open_ratings(filename)) {
+            stat = "Opened ratings file: ";
+        }
+        else {
+            stat = "Unable to open file: ";
+        }
+
+        temp = malloc(strlen(stat) + strlen(filename) + 1);
+        strcpy(temp, stat),
+        strcat(temp, filename);
+            
+        gtk_statusbar_push(GTK_STATUSBAR(status), 1, temp);
+
+        free(temp);
     }
 
     gtk_widget_destroy(dialog);
@@ -848,9 +944,9 @@ int main(int argc, char *argv[]) {
 
         char ***results;
 
-        if(read_file(CONST_TOP_CSV, &cols, &rows, &results)) {
+        if(read_file(CONST_TOP_CSV, &cols, &rows, &results) && cols == 6) {
 
-            for(i = 0; i < rows; i++) {
+            for(i = 0; i < gtk_custom_table_get_rows(nb_tab_top250); i++) {
 
                 gtk_custom_table_set_cell_text(nb_tab_top250, 0, i, 
                     results[i][0]);
@@ -910,9 +1006,9 @@ int main(int argc, char *argv[]) {
 
         char ***results;
 
-        if(read_file(CONST_BOT_CSV, &cols, &rows, &results)) {
+        if(read_file(CONST_BOT_CSV, &cols, &rows, &results) && cols == 6) {
 
-            for(i = 0; i < rows; i++) {
+            for(i = 0; i < gtk_custom_table_get_rows(nb_tab_bot100); i++) {
 
                 gtk_custom_table_set_cell_text(nb_tab_bot100, 0, i, 
                     results[i][0]);
@@ -972,12 +1068,12 @@ int main(int argc, char *argv[]) {
 
         char ***results;
 
-        if(read_file(CONST_BOX_CSV, &cols, &rows, &results)) {
+        if(read_file(CONST_BOX_CSV, &cols, &rows, &results) && cols == 5) {
 
             /* update boxoffice tab size */
             gtk_custom_table_resize(nb_tab_boxoffice, -1, rows);
 
-            for(i = 0; i < rows; i++) {
+            for(i = 0; i < gtk_custom_table_get_rows(nb_tab_boxoffice); i++) {
 
                 gtk_custom_table_set_cell_text(nb_tab_boxoffice, 0, i, 
                     results[i][0]);
@@ -1176,18 +1272,22 @@ int main(int argc, char *argv[]) {
     menu_edit = gtk_menu_new();
     menu_help = gtk_menu_new();
 
+    /* create accelerator groups */
     GtkAccelGroup *group_file = gtk_accel_group_new();
     GtkAccelGroup *group_edit = gtk_accel_group_new();
     GtkAccelGroup *group_help = gtk_accel_group_new();
 
+    /* add accelerator groups */
     gtk_window_add_accel_group(GTK_WINDOW(window), group_file);
     gtk_window_add_accel_group(GTK_WINDOW(window), group_edit);
     gtk_window_add_accel_group(GTK_WINDOW(window), group_help);
 
+    /* set accelerator groups */
     gtk_menu_set_accel_group(GTK_MENU(menu_file), group_file);
     gtk_menu_set_accel_group(GTK_MENU(menu_edit), group_edit);
     gtk_menu_set_accel_group(GTK_MENU(menu_help), group_help);
 
+    /* add accelerator keys to menu */
     gtk_widget_add_accelerator(menu_file_item_open, "activate", 
         group_file, GDK_O, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(menu_file_item_new, "activate", 
@@ -1199,6 +1299,7 @@ int main(int argc, char *argv[]) {
     gtk_widget_add_accelerator(menu_help_item_about, "activate", 
         group_help, GDK_A, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 
+    /* append menu items to menus */
     gtk_menu_append(GTK_MENU(menu_file), menu_file_item_open);
     gtk_menu_append(GTK_MENU(menu_file), menu_file_item_new);
     gtk_menu_append(GTK_MENU(menu_file), menu_file_item_space);
