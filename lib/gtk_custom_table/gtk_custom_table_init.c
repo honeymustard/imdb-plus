@@ -19,6 +19,7 @@
 
 #include "gtk_custom_table.h"
 
+
 static void gtk_custom_table_class_init(GtkCustomTableClass *class);
 static void gtk_custom_table_init(GtkCustomTable *table);
 
