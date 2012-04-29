@@ -18,8 +18,10 @@
 *****************************************************************************/
 
 
+#ifndef _WIDGETS_
+#define _WIDGETS_
+
 GtkWidget *window, *status, *vbox, *hbox;
-GtkWidget *dialog, *content, *entry;
 
 /* tabs widget hierarchy */
 GtkWidget *nb, 
@@ -63,5 +65,8 @@ GtkWidget *menubar,
     *menu_help,
         *menu_help_item, 
             *menu_help_item_about;
+
+
+#endif
 
 
