@@ -20,7 +20,8 @@
 EXECUTE = imdb-plus
 VERSION = 0.0.5
 OBJECTS = main.o readfile.o regex.o download.o strnatcmp.o 
-SOURCES = Makefile main.c master.h widgets.h tables.h lib res misc
+SOURCES = *.c *.h Makefile COPYING TODO *.md build.ps1 *.sh *.iss *.rc
+FOLDERS = lib res misc
 CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
 WINGUI  = -mwindows
@@ -28,6 +29,8 @@ WINGUI  = -mwindows
 
 TABLE_SOURCES = $(wildcard ./lib/gtk_custom_table/*.c)
 EVENT_SOURCES = $(wildcard ./lib/events/*.c)
+OTHER_OBJECTS = gtk_custom_table*.o event_*.o
+
 
 ###############################################################################
 # Standard linux build..
@@ -38,7 +41,7 @@ all: CURL = -lcurl
 all: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 all: CFLAGS += -O2 $(GTK2) $(CURL) -DINSTALL
 all: $(OBJECTS) GTK_CUSTOM_TABLE GTK_EVENTS
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) gtk_custom_table*.o event_*.o $(GTK2) $(CURL) 
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(OTHER_OBJECTS) $(GTK2) $(CURL) 
 
 install:
 	-@mkdir $(DESTDIR)/usr
@@ -46,9 +49,9 @@ install:
 	-@mkdir $(DESTDIR)/usr/share
 	-@mkdir $(DESTDIR)/usr/share/applications
 	-@mkdir $(DESTDIR)/usr/share/pixmaps
-	-@mkdir $(DESTDIR)/usr/share/$(EXECUTE)
 	-@mkdir $(DESTDIR)/usr/share/man
 	-@mkdir $(DESTDIR)/usr/share/man/man1
+	-@mkdir $(DESTDIR)/usr/share/$(EXECUTE)
 	-@mkdir $(DESTDIR)/usr/share/$(EXECUTE)/res
 	-@cp -R ./res/graphics $(DESTDIR)/usr/share/$(EXECUTE)/res
 	-@cp ./misc/$(EXECUTE).desktop $(DESTDIR)/usr/share/applications
@@ -56,6 +59,8 @@ install:
 	-@cp ./res/graphics/$(EXECUTE).png $(DESTDIR)/usr/share/pixmaps
 	-@cp $(EXECUTE) $(DESTDIR)/usr/bin
 	-@echo "$(EXECUTE) was installed successfully"
+	chmod a+rwx $(DESTDIR)/usr/share/$(EXECUTE)/res
+
 
 uninstall:
 	-@rm -f /usr/share/man/man1/$(EXECUTE).1.gz
@@ -65,12 +70,11 @@ uninstall:
 	-@rm -f /usr/bin/$(EXECUTE)
 	-@echo "$(EXECUTE) uninstalled successfully"
 
-
 debug: CURL = -lcurl
 debug: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 debug: CFLAGS += -g $(GTK2) $(CURL)
 debug: $(OBJECTS) GTK_CUSTOM_TABLE GTK_EVENTS
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) gtk_custom_table*.o event_*.o $(GTK2) $(CURL)
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(OTHER_OBJECTS) $(GTK2) $(CURL)
 
 
 .PHONY : dist-clean
@@ -80,7 +84,7 @@ dist-clean:
 .PHONY : dist
 dist:
 	cd misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz && cd ..
-	tar -zcf $(EXECUTE)-$(VERSION).tar.gz $(SOURCES)
+	tar -zcf $(EXECUTE)-$(VERSION).tar.gz --exclude='*.csv' --exclude='*.swo' --exclude='*.swp' --exclude='*.o' --exclude='*~' $(SOURCES) $(FOLDERS)
 
 .PHONY : build
 build:
@@ -159,7 +163,7 @@ mingw32: GTK2 = -mms-bitfields \
 mingw32: CFLAGS += -O2 $(GTK2) $(CURL) $(PCRE)
 mingw32: resfile.o
 mingw32: $(OBJECTS) GTK_CUSTOM_TABLE GTK_EVENTS
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) gtk_custom_table*.o event_*.o resfile.o $(GTK2) $(CURL) $(PCRE) $(WINGUI)
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(OTHER_OBJECTS) resfile.o $(GTK2) $(CURL) $(PCRE) $(WINGUI)
 
 # Win32 debug build with MinGW..
 mingw32-debug: WINGUI = 
