@@ -26,11 +26,21 @@ CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
 WINGUI  = -mwindows
 
-
+# Other libs..
 TABLE_SOURCES = $(wildcard ./lib/gtk_custom_table/*.c)
 EVENT_SOURCES = $(wildcard ./lib/events/*.c)
 OTHER_OBJECTS = gtk_custom_table*.o event_*.o
 
+# Install paths..
+DIR_USR = $(DESTDIR)/usr
+DIR_BIN = $(DESTDIR)/usr/bin
+DIR_SHR = $(DESTDIR)/usr/share
+DIR_APP = $(DESTDIR)/usr/share/applications
+DIR_PIX = $(DESTDIR)/usr/share/pixmaps
+DIR_MAN = $(DESTDIR)/usr/share/man
+DIR_MNP = $(DESTDIR)/usr/share/man/man1
+DIR_EXE = $(DESTDIR)/usr/share/$(EXECUTE)
+DIR_DAT = $(DESTDIR)/usr/share/$(EXECUTE)/res
 
 ###############################################################################
 # Standard linux build..
@@ -44,23 +54,22 @@ all: $(OBJECTS) GTK_CUSTOM_TABLE GTK_EVENTS
 	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(OTHER_OBJECTS) $(GTK2) $(CURL) 
 
 install:
-	-@mkdir $(DESTDIR)/usr
-	-@mkdir $(DESTDIR)/usr/bin
-	-@mkdir $(DESTDIR)/usr/share
-	-@mkdir $(DESTDIR)/usr/share/applications
-	-@mkdir $(DESTDIR)/usr/share/pixmaps
-	-@mkdir $(DESTDIR)/usr/share/man
-	-@mkdir $(DESTDIR)/usr/share/man/man1
-	-@mkdir $(DESTDIR)/usr/share/$(EXECUTE)
-	-@mkdir $(DESTDIR)/usr/share/$(EXECUTE)/res
-	-@cp -R ./res/graphics $(DESTDIR)/usr/share/$(EXECUTE)/res
-	-@cp ./misc/$(EXECUTE).desktop $(DESTDIR)/usr/share/applications
-	-@cp ./misc/$(EXECUTE).1.gz $(DESTDIR)/usr/share/man/man1
-	-@cp ./res/graphics/$(EXECUTE).png $(DESTDIR)/usr/share/pixmaps
-	-@cp $(EXECUTE) $(DESTDIR)/usr/bin
+	-@test -d $(DIR_USR) || mkdir $(DIR_USR)
+	-@test -d $(DIR_BIN) || mkdir $(DIR_BIN)
+	-@test -d $(DIR_SHR) || mkdir $(DIR_SHR)
+	-@test -d $(DIR_APP) || mkdir $(DIR_APP)
+	-@test -d $(DIR_PIX) || mkdir $(DIR_PIX)
+	-@test -d $(DIR_MAN) || mkdir $(DIR_MAN)
+	-@test -d $(DIR_MNP) || mkdir $(DIR_MNP)
+	-@test -d $(DIR_EXE) || mkdir $(DIR_EXE)
+	-@test -d $(DIR_DAT) || mkdir $(DIR_DAT)
+	-@cp -R ./res/graphics $(DIR_DAT)
+	-@cp ./misc/$(EXECUTE).desktop $(DIR_APP)
+	-@cp ./misc/$(EXECUTE).1.gz $(DIR_MNP)
+	-@cp ./res/graphics/$(EXECUTE).png $(DIR_PIX)
+	-@cp $(EXECUTE) $(DIR_BIN)
 	-@echo "$(EXECUTE) was installed successfully"
-	chmod a+rwx $(DESTDIR)/usr/share/$(EXECUTE)/res
-
+	-@chmod a+rwx $(DIR_DAT)
 
 uninstall:
 	-@rm -f /usr/share/man/man1/$(EXECUTE).1.gz
