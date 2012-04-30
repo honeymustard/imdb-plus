@@ -1,0 +1,15 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+binary: build
+	dh binary --until dh_fixperms
+	# dh_fixperms has run, now override it for one program
+	chmod a+rwx -R debian/imdb-plus/usr/share/imdb-plus/res
+	# and continue
+	dh binary
+
+%:
+	dh $@ 
