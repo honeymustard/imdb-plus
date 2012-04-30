@@ -79,6 +79,7 @@ cd ..
 cp ../../../../misc/control ./debian/control
 cp ../../../../misc/copyright ./debian/copyright
 cp ../../../../misc/changelog ./debian/changelog
+cp ../../../../misc/rules ./debian/rules
 rm ./debian/README.Debian
 rm ./debian/README.source
 rm ./debian/docs
@@ -88,3 +89,5 @@ debuild
 
 # do some cleaning.. keep ./debian for manual inspection.
 ls | grep -v debian | xargs rm -Rf
+
+
