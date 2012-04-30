@@ -18,8 +18,8 @@
 *****************************************************************************/
 
 
-#ifndef _PATTERNS_
-#define _PATTERNS_
+#ifndef _REGEX_
+#define _REGEX_
 
 /* top250 regex pattern */
 char *pattern_top250 = "<tr bgcolor=\"#.{6}\" valign=\"top\"><td align=\"right\">\
@@ -28,7 +28,8 @@ b></font></td><td align=\"center\"><font face=\"Arial, Helvetica, sans-ser\
 if\" size=\"-1\">([0-9]{1,2}\\.[0-9]{1,2})</font></td><td><font face=\"Arial\
 , Helvetica, sans-serif\" size=\"-1\"><a href=\"/title/(tt[0-9]{1,10})/\"\
 >(.{0,100})</a> \\(([0-9]{4})\\)</font></td><td align=\"right\"><font face=\"\
-Arial, Helvetica, sans-serif\" size=\"-1\">(([0-9]{1,4},[0-9]{1,4}))</font></td></tr>";
+Arial, Helvetica, sans-serif\" size=\"-1\">(([0-9]{1,4},[0-9]{1,4}))</font></td>\
+</tr>";
 
 /* bottom100 regex pattern */
 char *pattern_bot100 = "<font face=\"Arial, Helvetica, sans-serif\" \
