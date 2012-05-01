@@ -20,11 +20,13 @@ they might not be entirely up to speed, which is to say that **it might be compl
     
 **Windows:**
 
-    # Note: Requires MinGW, GTK+, GnuWin32 PCRE, Libcurl, 7-zip (7za.exe). See Makefile.
+    # Note: Requires MinGW, GTK+, GnuWin32 PCRE, Libcurl. See Makefile.
     
     $ mingw32-make mingw32        # builds imdb-plus.exe
     
     or 
+    
+    # Note: Requires Inno Setup 5, 7-zip command-line version (7za.exe). See Makefile
     
     $ mingw32-make mingw32        # builds imdb-plus.exe
     $ mingw32-make mingw32-build  # builds src, dist, and setup archives..
