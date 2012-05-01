@@ -2,10 +2,10 @@
 
 **imdb-plus** is currently under development, and as such only provides limited functionality.
 
-This means that if you were to attempt to compile the sources at any given point in time, <br />
+This means that if you were to attempt to compile the sources at any given point in time <br />
 they might not be entirely up to speed, which is to say that **it might be complete bunk**. <br />
 
-## COMPILATION
+## Compilation instructions
 
 **Linux:**
 
@@ -29,7 +29,7 @@ they might not be entirely up to speed, which is to say that **it might be compl
     $ mingw32-make mingw32        # builds imdb-plus.exe
     $ mingw32-make mingw32-build  # builds src, dist, and setup archives..
 
-## SCREENS
+## Screenshots
 
 <table>
  <tr>
