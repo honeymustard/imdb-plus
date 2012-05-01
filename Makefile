@@ -17,6 +17,7 @@
 #
 #############################################################################
 
+
 EXECUTE = imdb-plus
 VERSION = 0.0.5
 OBJECTS = main.o readfile.o regex.o download.o strnatcmp.o 
@@ -68,8 +69,8 @@ install:
 	-@cp ./misc/$(EXECUTE).1.gz $(DIR_MNP)
 	-@cp ./res/graphics/$(EXECUTE).png $(DIR_PIX)
 	-@cp $(EXECUTE) $(DIR_BIN)
-	-@echo "$(EXECUTE) was installed successfully"
 	-@chmod a+rwx $(DIR_DAT)
+	-@echo "$(EXECUTE) was installed successfully"
 
 uninstall:
 	-@rm -f /usr/share/man/man1/$(EXECUTE).1.gz
@@ -198,26 +199,26 @@ resfile.o:
 #
 ###############################################################################
 
-main.o:
+main.o: main.c
 	gcc -DAPP_VERS=\"$(VERSION)\" $(CFLAGS) main.c 
 
-readfile.o:
+readfile.o: lib/readfile.c
 	gcc $(CFLAGS) lib/readfile.c
 
-regex.o:
+regex.o: lib/regex.c
 	gcc $(CFLAGS) lib/regex.c
 
-download.o:
+download.o: lib/download.c
 	gcc $(CFLAGS) lib/download.c
 
-strnatcmp.o:
+strnatcmp.o: lib/gtk_custom_table/strnatcmp/strnatcmp.c
 	gcc $(CFLAGS) lib/gtk_custom_table/strnatcmp/strnatcmp.c
 
 .PHONY : GTK_CUSTOM_TABLE
-GTK_CUSTOM_TABLE:
+GTK_CUSTOM_TABLE: $(TABLE_SOURCES)
 	gcc $(CFLAGS) $(TABLE_SOURCES)
 
 .PHONY : GTK_EVENTS
-GTK_EVENTS:
+GTK_EVENTS: $(EVENT_SOURCES)
 	gcc -DAPP_VERS=\"$(VERSION)\" $(CFLAGS) $(EVENT_SOURCES)
 
