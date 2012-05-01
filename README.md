@@ -1,9 +1,16 @@
-## README for imdb-plus
+## Readme for imdb-plus
 
 **imdb-plus** is currently under development, and as such only provides limited functionality.
 
 This means that if you were to attempt to compile the sources at any given point in time <br />
 they might not be entirely up to speed, which is to say that **it might be complete bunk**. <br />
+
+## Features
+
+* Download and view personal vote history, and statistics.
+* Download official IMDb lists such as Top 250, Bottom 100, All-Time Boxoffice.
+* Compare personal vote history to IMDb lists and track your viewing progress.
+
 
 ## Compilation instructions
 
@@ -53,3 +60,8 @@ they might not be entirely up to speed, which is to say that **it might be compl
   </td>
  </tr>
 </table>
+
+## Copyright
+
+Copyright &copy; 2011-2012 Adrian Solumsmo. See [COPYING](https://github.com/honeymustard/imdb-plus/blob/master/COPYING) for details.
+
