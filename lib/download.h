@@ -28,6 +28,8 @@ struct download {
     char *url;
     char *saveas;
     int status;
+    long http_code;
+    double length;
 };
 
 void *download(void *download);
