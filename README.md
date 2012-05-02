@@ -44,17 +44,24 @@ they might not be entirely up to speed, which is to say that **it might be compl
  <tr>
   <td><b>imdb-plus on debian 1</b></td>
   <td><b>imdb-plus on debian 2</b></td>
+  <td><b>imdb-plus on windows 1</b></td>
  </tr>
  <tr>
   <td>
-   <img width="280" height="200" 
+   <img width="260" height="200" 
     src="https://github.com/honeymustard/imdb-plus/raw/master/local/ss-linux-1.png" 
     alt="imdb-plus on debian"
    />
   </td>
   <td>
-   <img width="280" height="200" 
+   <img width="260" height="200" 
     src="https://github.com/honeymustard/imdb-plus/raw/master/local/ss-linux-2.png" 
+    alt="imdb-plus on debian"
+   />
+  </td>
+  <td>
+   <img width="260" height="200" 
+    src="https://github.com/honeymustard/imdb-plus/raw/master/local/ss-win-1.png" 
     alt="imdb-plus on debian"
    />
   </td>
