@@ -80,6 +80,7 @@ cp ../../../../misc/control ./debian/control
 cp ../../../../misc/copyright ./debian/copyright
 cp ../../../../misc/changelog ./debian/changelog
 cp ../../../../misc/rules ./debian/rules
+cp ../../../../misc/postinst ./debian/postinst
 rm ./debian/README.Debian
 rm ./debian/README.source
 rm ./debian/docs
