@@ -104,7 +104,7 @@ function build-runable
     remove-item "$($newdir)\res\*.csv" -recurse -forc
 
     # build archive using 7-zip command line utility (7za must be in PATH)
-    &'7za' a -t7z "$($builddir)\$($bname)-win32.7z" "$($newdir)\*"
+    &'7za' a -t7z "$($builddir)\$($bname)-win64.7z" "$($newdir)\*"
 
     remove-item $newdir -recurse -force
 }
@@ -136,7 +136,7 @@ function build-source
     copy-item TODO, COPYING $newdir -force
 
     # build archive using 7-zip command line utility (7za must be in PATH)
-    &'7za' a -t7z "$($builddir)\$($bname)-win32-src.7z" "$($newdir)\*"
+    &'7za' a -t7z "$($builddir)\$($bname)-win64-src.7z" "$($newdir)\*"
 
     remove-item $newdir -recurse -force
 }
@@ -166,7 +166,7 @@ function build-installer
     iscc "$($newdir)\setup.iss" /dMyAppVersion=$($version)
 
     # build archive using 7-zip command line utility (7za must be in PATH)
-    &'7za' a -t7z "$($builddir)\$($bname)-win32-installer.7z" `
+    &'7za' a -t7z "$($builddir)\$($bname)-win64-installer.7z" `
         "$($builddir)\$($bname)\$($bname)-setup.exe"
 
     remove-item "$($builddir)\$($bname)\$($bname)-setup.exe" -force
