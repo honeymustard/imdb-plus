@@ -22,7 +22,7 @@ EXECUTE = imdb-plus
 VERSION = 0.0.5
 OBJECTS = main.o readfile.o regex.o download.o strnatcmp.o 
 SOURCES = *.c *.h Makefile COPYING TODO *.md build.ps1 *.sh *.iss *.rc
-FOLDERS = lib res misc
+FOLDERS = lib res misc share
 CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
 WINGUI  = -mwindows
@@ -94,7 +94,7 @@ dist-clean:
 .PHONY : dist
 dist:
 	cd misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz && cd ..
-	tar -zcf $(EXECUTE)-$(VERSION).tar.gz --exclude='*.csv' --exclude='*.swo' --exclude='*.swp' --exclude='*.o' --exclude='*~' $(SOURCES) $(FOLDERS)
+	tar -zcf $(EXECUTE)-$(VERSION).tar.gz --exclude='*.csv' --exclude='*.swo' --exclude='*.swp' --exclude='*.dll' --exclude='*.o' --exclude='*~' $(SOURCES) $(FOLDERS)
 
 .PHONY : build
 build:
