@@ -91,39 +91,70 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
 
     int adjustment = 0;
 
-    /* attempt to open fresh ratings */
-    if(dl->status == DL_STATUS_OK && menu_open_ratings(save)) {
+    int opened_file = 0;
 
-        stat = "Opened ratings file: ";
+    /* attempt to open fresh ratings */
+    if(dl->status == DL_STATUS_OK && (opened_file = menu_open_ratings(save))) {
+
         info = "finished";
         adjustment = 120;
+
+        stat = "DL OK: Opened ratings file: ";
+
+        temp = malloc(strlen(stat) + strlen(save) + 1);
+        strcpy(temp, stat),
+        strcat(temp, save);
     }
     else {
-
-        /* could not download file */
-        if(dl->status == DL_STATUS_NB) {
-            stat = "Could not download file: ";
-        }
-        /* could not open ratings */
-        else {
-            stat = "Could not open file: ";
-        }
 
         info = "failed..";
         adjustment = 5;
               
         remove(save);
+
+        /* download failed, could not download file */
+        if(dl->status == DL_STATUS_NB) {
+
+            stat = "DL ERR: Unable to download file";
+
+            temp = malloc(strlen(stat) + 1);
+            strcpy(temp, stat);
+        }
+        /* download succeeded, but with an error code */
+        else if(dl->http_code > 0) {
+
+            stat = "DL ERR: Unable to download file: ";
+
+            char error[20];
+            sprintf(error, "%ld", dl->http_code);
+
+            temp = malloc(strlen(stat) + strlen(error) + 1);
+            strcpy(temp, stat);
+            strcat(temp, error);
+        }
+        /* download succeeded, but could not open ratings */
+        else if(!opened_file) {
+
+            stat = "DL ERR: Unable to open file: ";
+
+            temp = malloc(strlen(stat) + strlen(save) + 1);
+            strcpy(temp, stat);
+            strcpy(temp, save);
+        }
+        /* download succeeded, but an unknown error occured */
+        else {
+
+            stat = "DL ERR: Unknown error";
+
+            temp = malloc(strlen(stat) + 1);
+            strcpy(temp, stat);
+        }
     }
 
     /* set progressbar text and adjustment accordingly */
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), info);
     gtk_adjustment_set_value(adj, adjustment);
 
-    /* allocate new statusbar message */
-    temp = malloc(strlen(stat) + strlen(save) + 1);
-    strcpy(temp, stat),
-    strcat(temp, save);
-    
     /* push and update statusbar */
     gtk_statusbar_push(GTK_STATUSBAR(status), 1, temp);
     while(gtk_events_pending()) gtk_main_iteration();
