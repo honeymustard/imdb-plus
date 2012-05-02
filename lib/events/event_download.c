@@ -85,15 +85,14 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
 
     g_thread_join(thread);
 
-    free(dl);
-
     char *temp = NULL;
     char *stat = NULL;
     char *info = NULL;
+
     int adjustment = 0;
 
-    /* open fresh ratings */
-    if(menu_open_ratings(save)) {
+    /* attempt to open fresh ratings */
+    if(dl->status == DL_STATUS_OK && menu_open_ratings(save)) {
 
         stat = "Opened ratings file: ";
         info = "finished";
@@ -101,26 +100,38 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
     }
     else {
 
-        stat = "Could not open file: ";
+        /* could not download file */
+        if(dl->status == DL_STATUS_NB) {
+            stat = "Could not download file: ";
+        }
+        /* could not open ratings */
+        else {
+            stat = "Could not open file: ";
+        }
+
         info = "failed..";
         adjustment = 5;
               
         remove(save);
     }
 
-    gtk_label_set_text(GTK_LABEL(label), 
-        "No dice. Is list set as public?\n");
+    /* set progressbar text and adjustment accordingly */
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), info);
     gtk_adjustment_set_value(adj, adjustment);
 
+    /* allocate new statusbar message */
     temp = malloc(strlen(stat) + strlen(save) + 1);
     strcpy(temp, stat),
     strcat(temp, save);
-        
+    
+    /* push and update statusbar */
     gtk_statusbar_push(GTK_STATUSBAR(status), 1, temp);
     while(gtk_events_pending()) gtk_main_iteration();
 
     free(temp);
+    free(dl);
+
+    gtk_widget_destroy(dialog);
 }
 
 
