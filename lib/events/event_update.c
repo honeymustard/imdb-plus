@@ -334,8 +334,6 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
                     topstat = "OK";
                 }
             }
-        
-            remove(CONST_TOP_SAV);
         }
 
         /* attempt to parse bot 100 list */
@@ -347,8 +345,6 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
                     botstat = "OK";
                 }
             }
-            
-            remove(CONST_BOT_SAV);
         }
 
         /* attempt to parse boxoffice list */
@@ -361,9 +357,12 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
                     boxstat = "OK";
                 }
             }
-            
-            remove(CONST_BOX_SAV);
         }
+
+        /* remove temp files */
+        remove(CONST_BOT_SAV);
+        remove(CONST_BOX_SAV);
+        remove(CONST_TOP_SAV);
 
         /* free memory */
         free(dl_top);
