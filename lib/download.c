@@ -34,11 +34,11 @@ void *download(void *download) {
     CURLcode curl_res;
 
     struct download *down = (struct download *)download;
+    down->status = DL_STATUS_NB;
     
     FILE *tmp = fopen(down->saveas, "w");
 
     if(tmp == NULL) {
-        down->status = DL_STATUS_NB;
         return NULL;
     }
 
@@ -51,13 +51,16 @@ void *download(void *download) {
         
         curl_res = curl_easy_perform(curl);
 
+        if(curl_res == 0) {
+            down->status = DL_STATUS_OK;
+        }
+
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &down->http_code);
+        curl_easy_getinfo(curl, CURLINFO_SIZE_DOWNLOAD, &down->length);
+
         fclose(tmp);
         curl_easy_cleanup(curl);
 
-        down->status = DL_STATUS_OK;
-    }
-    else {
-        down->status = DL_STATUS_NB;
     }
 
     return NULL;
