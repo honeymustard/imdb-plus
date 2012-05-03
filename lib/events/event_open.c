@@ -46,41 +46,50 @@ int menu_open_ratings(char *filename) {
 
     if(strcmp("IMDb Rating", results[0][9]) == 0) {
 
-        double stats[10][4] = {{0}};
+        gtk_custom_table_sort(nb_tab_statistics, 0, GTK_CUSTOM_TABLE_DESC);
+
+        double stats[10][5];
+        memset(stats, '\0', sizeof(stats));
 
         int graph_apex = 0;
         int year_average = 0;
         int vote_average = 0;
+        double imdb_average = 0;
 
         for(i = 1; i < rows; i++) {
 
-            /* add up amount of votes per rating */
+            /* add up totals per rating */
             stats[atoi(results[i][8])-1][2] += 1;
-            /* add up year average per rating */
-            stats[atoi(results[i][8])-1][3] += atoi(results[i][11]);
+            stats[atoi(results[i][8])-1][3] += atoi(results[i][9]);
+            stats[atoi(results[i][8])-1][4] += atoi(results[i][11]);
 
-            /* add up total vote and year averages */
+            /* add up totals for vote averages */
             vote_average += atoi(results[i][8]);
+            imdb_average += atoi(results[i][9]);
             year_average += atoi(results[i][11]);
         }
 
         for(i = 0; i < 10; i++) {
 
-            /* calculate year averages for each rating */
-            stats[i][3] = stats[i][2] != 0 ? stats[i][3] / stats[i][2] : 0;
-            /* calculate percentage for each rating */
-            stats[i][1] = stats[i][2] != 0 ? (stats[i][2] / rows) * 100: 0;
             /* find graph apex, i.e. the longest bar on screen */
             graph_apex = stats[i][2] > graph_apex ? stats[i][2]: graph_apex;
+        } 
+
+        for(i = 0; i < 10; i++) {
+ 
+            /* calculate graph value from vote amounts, graph is 0-100 */
+            stats[i][0] = stats[i][2] != 0 ? 100 / (graph_apex / stats[i][2]) : 0;
+            /* calculate percentage for each rating */
+            stats[i][1] = stats[i][2] != 0 ? (stats[i][2] / rows) * 100: 0;
+            /* calculate imdb averages for each rating */
+            stats[i][3] = stats[i][2] != 0 ? stats[i][3] / stats[i][2] : 0;
+            /* calculate year averages for each rating */
+            stats[i][4] = stats[i][2] != 0 ? stats[i][4] / stats[i][2] : 0;
         }
 
         /* add statistics to widget table */
         for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
             
-            /* calculate graph value from vote amounts, graph is 0-100 */
-            stats[i][0] = stats[i][2] != 0 ? 100 / (graph_apex / stats[i][2]) : 0;
-
-            /* add statistics to table row */
             sprintf(temp, "%1.0f", stats[i][0]);
             gtk_custom_table_set_cell_text(nb_tab_statistics, 1, j, temp);
             sprintf(temp, "%3.2f %%", stats[i][1]);
@@ -89,10 +98,20 @@ int menu_open_ratings(char *filename) {
             gtk_custom_table_set_cell_text(nb_tab_statistics, 3, j, temp);
             sprintf(temp, "%1.2f", stats[i][3]);
             gtk_custom_table_set_cell_text(nb_tab_statistics, 4, j, temp);
+            sprintf(temp, "%1.2f", stats[i][4]);
+            gtk_custom_table_set_cell_text(nb_tab_statistics, 5, j, temp);
+
+            /* make sure value falls within color range.. */
+            int cell_to_color = (int)stats[i][3] - 1;
+
+            if(cell_to_color < 10 && cell_to_color >= 0) {
+                gtk_custom_table_set_cell_color(nb_tab_statistics, 4, j, 
+                    colors[(int)stats[i][3] - 1]);
+            }
         }
 
         /* add statistics footer */
-        sprintf(temp, "%1.1f", (double)vote_average / (rows -1));
+        sprintf(temp, "%2.2f", (double)vote_average / (rows -1));
         gtk_custom_table_set_foot_text(nb_tab_statistics, 0, temp);
         sprintf(temp, "You have rated %d, on average %1.2f", 
             (rows - 1), (double)vote_average / (rows - 1));
@@ -100,14 +119,17 @@ int menu_open_ratings(char *filename) {
         gtk_custom_table_set_foot_text(nb_tab_statistics, 2, "100.00 %");
         sprintf(temp, "%d", (rows - 1));
         gtk_custom_table_set_foot_text(nb_tab_statistics, 3, temp);
-        sprintf(temp, "%4.2f", (double)year_average / (rows - 1));
+        sprintf(temp, "%2.2f", (double)imdb_average / (rows - 1));
         gtk_custom_table_set_foot_text(nb_tab_statistics, 4, temp);
+        sprintf(temp, "%4.2f", (double)year_average / (rows - 1));
+        gtk_custom_table_set_foot_text(nb_tab_statistics, 5, temp);
 
+        gtk_custom_table_set_sortable(nb_tab_statistics, TRUE);
         gtk_custom_table_set_sortable(nb_tab_statistics, TRUE);
 
         /* update mymovies tab with new data */
         gtk_custom_table_resize(nb_tab_mymovies, -1, (rows - 1));
-        
+
         /* add text to widget table */
         for(i = 1, j = 0; i < rows; i++, j++) {
 
