@@ -145,18 +145,21 @@ int main(int argc, char *argv[]) {
         gtk_custom_table_set_cell_text(nb_tab_statistics, 2, i, "0.00 %");
         gtk_custom_table_set_cell_text(nb_tab_statistics, 3, i, "0");
         gtk_custom_table_set_cell_text(nb_tab_statistics, 4, i, "0.00");
+        gtk_custom_table_set_cell_text(nb_tab_statistics, 5, i, "0.00");
 
         gtk_custom_table_set_cell_color(nb_tab_statistics, 0, i, colors[j]);
         gtk_custom_table_set_cell_color(nb_tab_statistics, 1, i, graph_bg);
         gtk_custom_table_set_cell_color(nb_tab_statistics, 4, i, colors[j]);
+        gtk_custom_table_set_cell_color(nb_tab_statistics, 5, i, colors[j]);
     }
     
     /* statistics footer */
-    gtk_custom_table_set_foot_text(nb_tab_statistics, 0, "0");
+    gtk_custom_table_set_foot_text(nb_tab_statistics, 0, "0.00");
     gtk_custom_table_set_foot_text(nb_tab_statistics, 1, "");
     gtk_custom_table_set_foot_text(nb_tab_statistics, 2, "0.00 %");
     gtk_custom_table_set_foot_text(nb_tab_statistics, 3, "0");
     gtk_custom_table_set_foot_text(nb_tab_statistics, 4, "0.00");
+    gtk_custom_table_set_foot_text(nb_tab_statistics, 5, "0.00");
 
 
     int no_results = 1;
