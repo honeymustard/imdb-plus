@@ -149,19 +149,18 @@ function build-installer
     $newdir = "$($copydir)\installer"
     new-item $newdir -type directory | out-null
 
-    copy-item setup.iss, *.ico, COPYING, *.dll, "$($program).exe" $newdir
+    copy-item setup.iss, COPYING, *.dll, "$($program).exe" $newdir
 
     new-item "$($newdir)\lib" -type directory | out-null
 
     # recursively copy required dirs..
-    copy-item lib\gtk-2.0 "$($newdir)\lib" -recurse
+    copy-item "lib\gtk-2.0" "$($newdir)\lib" -recurse
     copy-item res $newdir -recurse
     copy-item share $newdir -recurse
 
     # remove any lingering data files..
     remove-item "$($newdir)\res\*.html" -recurse -force
     remove-item "$($newdir)\res\*.csv" -recurse -force
-    remove-item "$($newdir)\lib\gtk-2.0" -recurse -force
 
     iscc "$($newdir)\setup.iss" /dMyAppVersion=$($version)
 
