@@ -112,6 +112,16 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event, gboolean re
                 cairo_set_source_rgb(cr, 0.7, 0.7, 0.7);
                 cairo_fill(cr); 
             }
+            /* add default background color */
+            else {
+                
+                cairo_set_source_rgb(cr, 0, 0, 0);
+                cairo_rectangle(cr, priv->table_column_offset_temp[i] + 0.5, 1, 
+                    priv->table_column_widths_temp[i], priv->table_row_height - 1.5);
+                cairo_stroke_preserve(cr);
+                cairo_set_source_rgb(cr, 0.8, 0.8, 0.8);
+                cairo_fill(cr); 
+            }
 
             cairo_set_source_rgb(cr, 0, 0, 0);
             cairo_move_to(cr, 10.0 + priv->table_column_offset_temp[i], 16);
@@ -260,6 +270,13 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event, gboolean re
             if(priv->table_column_hidden[i] == TRUE) {
                 continue;
             }
+                
+            /* draw footer background color */
+            cairo_set_source_rgb(cr, 0, 0, 0);
+            cairo_rectangle(cr, priv->table_column_offset_temp[i] + 0.5, table_height, 
+                priv->table_column_widths_temp[i], priv->table_row_height - 1.5);
+            cairo_set_source_rgb(cr, 0.8, 0.8, 0.8);
+            cairo_fill(cr); 
 
             cairo_set_source_rgb(cr, 0, 0, 0);
             cairo_move_to(cr, 10.0 + priv->table_column_offset_temp[i], 
