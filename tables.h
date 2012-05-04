@@ -31,7 +31,7 @@
 
 /* table column width descriptions */
 int nb_tab_statistics_cols[TABLE_STATS_COLS] = {
-    55, 55, 55, -1, 75, 75, 75, 75
+    45, 55, 55, -1, 75, 75, 75, 75
 };
 
 int nb_tab_top250_cols[TABLE_TP250_COLS] = {
