@@ -19,11 +19,6 @@
 
 
 #include "events.h"
-#include "../../master.h"
-#include "../../widgets.h"
-#include "../gtk_custom_table/gtk_custom_table.h"
-#include "../download.h"
-#include "../regex.h"
 
 
 /* convenience function to add one value from one table to another */
