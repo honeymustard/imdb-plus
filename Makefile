@@ -219,6 +219,6 @@ GTK_CUSTOM_TABLE: $(TABLE_SOURCES) lib/gtk_custom_table/gtk_custom_table.h
 	gcc $(CFLAGS) $(TABLE_SOURCES)
 
 .PHONY : GTK_EVENTS
-GTK_EVENTS: $(EVENT_SOURCES) lib/events/events.h lib/events/events_inc.h 
+GTK_EVENTS: $(EVENT_SOURCES) lib/events/events.h
 	gcc -DAPP_VERS=\"$(VERSION)\" $(CFLAGS) $(EVENT_SOURCES)
 
