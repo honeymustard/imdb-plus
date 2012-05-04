@@ -25,6 +25,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* include external headers */
+#include "../../master.h"
+#include "../../widgets.h"
+#include "../gtk_custom_table/gtk_custom_table.h"
+#include "../download.h"
+#include "../regex.h"
+
 extern int menu_open_ratings(char *filename);
 extern void set_imdb_rating(int index, int row, GtkWidget *copy, GtkWidget *paste);
 
