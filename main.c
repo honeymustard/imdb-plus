@@ -134,7 +134,7 @@ int main(int argc, char *argv[]) {
 
     int vote_counter = 10;
 
-    gtk_custom_table_set_column_graph(nb_tab_statistics, 2, TRUE);
+    gtk_custom_table_set_column_graph(nb_tab_statistics, 3, TRUE);
 
     /* statistics main rows */
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
@@ -142,25 +142,28 @@ int main(int argc, char *argv[]) {
         sprintf(temp, "%d", vote_counter--);
         gtk_custom_table_set_cell_text(nb_tab_statistics, 0, i, temp);
         gtk_custom_table_set_cell_text(nb_tab_statistics, 1, i, "0.00");
-        gtk_custom_table_set_cell_text(nb_tab_statistics, 2, i, "2");
-        gtk_custom_table_set_cell_text(nb_tab_statistics, 3, i, "0.00 %");
-        gtk_custom_table_set_cell_text(nb_tab_statistics, 4, i, "0");
+        gtk_custom_table_set_cell_text(nb_tab_statistics, 2, i, "0.00");
+        gtk_custom_table_set_cell_text(nb_tab_statistics, 3, i, "2");
+        gtk_custom_table_set_cell_text(nb_tab_statistics, 4, i, "0.00 %");
         gtk_custom_table_set_cell_text(nb_tab_statistics, 5, i, "0");
-        gtk_custom_table_set_cell_text(nb_tab_statistics, 6, i, "0.00");
+        gtk_custom_table_set_cell_text(nb_tab_statistics, 6, i, "0");
+        gtk_custom_table_set_cell_text(nb_tab_statistics, 7, i, "0.00");
 
         gtk_custom_table_set_cell_color(nb_tab_statistics, 0, i, colors[j]);
         gtk_custom_table_set_cell_color(nb_tab_statistics, 1, i, colors[j]);
         gtk_custom_table_set_cell_color(nb_tab_statistics, 2, i, graph_bg);
+        gtk_custom_table_set_cell_color(nb_tab_statistics, 3, i, graph_bg);
     }
     
     /* statistics footer */
     gtk_custom_table_set_foot_text(nb_tab_statistics, 0, "0");
     gtk_custom_table_set_foot_text(nb_tab_statistics, 1, "0.00");
-    gtk_custom_table_set_foot_text(nb_tab_statistics, 2, "");
-    gtk_custom_table_set_foot_text(nb_tab_statistics, 3, "0.00 %");
-    gtk_custom_table_set_foot_text(nb_tab_statistics, 4, "0");
+    gtk_custom_table_set_foot_text(nb_tab_statistics, 2, "0.00");
+    gtk_custom_table_set_foot_text(nb_tab_statistics, 3, "");
+    gtk_custom_table_set_foot_text(nb_tab_statistics, 4, "0.00 %");
     gtk_custom_table_set_foot_text(nb_tab_statistics, 5, "0");
-    gtk_custom_table_set_foot_text(nb_tab_statistics, 6, "0.00");
+    gtk_custom_table_set_foot_text(nb_tab_statistics, 6, "0");
+    gtk_custom_table_set_foot_text(nb_tab_statistics, 7, "0.00");
 
 
     int no_results = 1;
@@ -579,7 +582,7 @@ int main(int argc, char *argv[]) {
 
     /* last steps, show window */
     gtk_container_add(GTK_CONTAINER(window), vbox);
-    gtk_window_set_default_size(GTK_WINDOW(window), 740, 440);
+    gtk_window_set_default_size(GTK_WINDOW(window), 800, 440);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_widget_show_all(window);
 
