@@ -19,7 +19,6 @@
 
 
 #include "events.h"
-#include "../../master.h"
 
 
 /* credits aka self-praise */
