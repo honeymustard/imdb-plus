@@ -18,6 +18,9 @@
 *****************************************************************************/
 
 
+#ifndef _DOWNLOAD_
+#define _DOWNLOAD_
+
 /* download statuses */
 #define DL_STATUS_OK 1
 #define DL_STATUS_NB 0
@@ -33,4 +36,6 @@ struct download {
 };
 
 void *download(void *download);
+
+#endif
 
