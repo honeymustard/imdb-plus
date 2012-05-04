@@ -12,5 +12,4 @@ TODO for project imdb-plus:
   * allow/disallow hidden columns in table widget.. i might need this..
   * make update get MyRatings if they are available..
   * make open dialog default to current/install directory..
-  * Header footer text bleeds into other columns..
 
