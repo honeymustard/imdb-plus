@@ -19,9 +19,7 @@
 
 
 #include "events.h"
-#include "../download.h"
-#include "../../master.h"
-#include "../../widgets.h"
+
 
 GtkAdjustment *adj;
 GtkWidget *pbar, *label, *entry;
