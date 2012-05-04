@@ -199,26 +199,26 @@ resfile.o:
 #
 ###############################################################################
 
-main.o: main.c
+main.o: main.c master.h tables.h widgets.h lib/events/events.h
 	gcc -DAPP_VERS=\"$(VERSION)\" $(CFLAGS) main.c 
 
-readfile.o: lib/readfile.c
+readfile.o: lib/readfile.c lib/readfile.h
 	gcc $(CFLAGS) lib/readfile.c
 
-regex.o: lib/regex.c
+regex.o: lib/regex.c lib/regex.h
 	gcc $(CFLAGS) lib/regex.c
 
-download.o: lib/download.c
+download.o: lib/download.c lib/download.h
 	gcc $(CFLAGS) lib/download.c
 
-strnatcmp.o: lib/gtk_custom_table/strnatcmp/strnatcmp.c
+strnatcmp.o: lib/gtk_custom_table/strnatcmp/strnatcmp.c lib/gtk_custom_table/strnatcmp/strnatcmp.h
 	gcc $(CFLAGS) lib/gtk_custom_table/strnatcmp/strnatcmp.c
 
 .PHONY : GTK_CUSTOM_TABLE
-GTK_CUSTOM_TABLE: $(TABLE_SOURCES)
+GTK_CUSTOM_TABLE: $(TABLE_SOURCES) lib/gtk_custom_table/gtk_custom_table.h
 	gcc $(CFLAGS) $(TABLE_SOURCES)
 
 .PHONY : GTK_EVENTS
-GTK_EVENTS: $(EVENT_SOURCES)
+GTK_EVENTS: $(EVENT_SOURCES) lib/events/events.h lib/events/events_inc.h 
 	gcc -DAPP_VERS=\"$(VERSION)\" $(CFLAGS) $(EVENT_SOURCES)
 
