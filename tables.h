@@ -21,7 +21,7 @@
 #ifndef _TABLES_
 #define _TABLES_
 
-#define TABLE_STATS_COLS 7
+#define TABLE_STATS_COLS 8
 #define TABLE_MYMOV_COLS 6
 #define TABLE_MYLST_COLS 6
 #define TABLE_TP250_COLS 7
@@ -31,7 +31,7 @@
 
 /* table column width descriptions */
 int nb_tab_statistics_cols[TABLE_STATS_COLS] = {
-    45, 55, -1, 75, 75, 75, 75
+    45, 55, 55, -1, 75, 75, 75, 75
 };
 
 int nb_tab_top250_cols[TABLE_TP250_COLS] = {
@@ -55,6 +55,7 @@ int nb_tab_mymovies_cols[TABLE_MYMOV_COLS] = {
 char *nb_tab_statistics_headers[TABLE_STATS_COLS] = {
     "Vote", 
     "IMDb", 
+    "Flux", 
     "Your Rating", 
     "Percent", 
     "Votes", 
