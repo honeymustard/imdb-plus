@@ -53,6 +53,7 @@ int menu_open_ratings(char *filename) {
         int vote_average = 0;
         int time_average = 0;
         double imdb_average = 0;
+        double flux_average = 0;
 
         for(i = 1; i < rows; i++) {
 
@@ -67,6 +68,8 @@ int menu_open_ratings(char *filename) {
             imdb_average += atoi(results[i][9]);
             time_average += atoi(results[i][10]);
             year_average += atoi(results[i][11]);
+
+            flux_average += atoi(results[i][8]) - atoi(results[i][9]);
         }
 
         for(i = 0; i < 10; i++) {
@@ -75,7 +78,7 @@ int menu_open_ratings(char *filename) {
             graph_apex = stats[i][2] > graph_apex ? stats[i][2]: graph_apex;
         } 
 
-        for(i = 0; i < 10; i++) {
+        for(i = 0, j = 10; i < 10 && j > 0; i++, j++) {
  
             /* calculate graph value from vote amounts, graph is 0-100 */
             stats[i][0] = stats[i][2] != 0 ? 100 / (graph_apex / stats[i][2]) : 0;
@@ -94,16 +97,18 @@ int menu_open_ratings(char *filename) {
             
             sprintf(temp, "%1.2f", stats[i][3]);
             gtk_custom_table_set_cell_text(nb_tab_statistics, 1, j, temp);
-            sprintf(temp, "%1.0f", stats[i][0]);
+            sprintf(temp, "%+1.2f", stats[i][2] > 0 ? (i + 1) - stats[i][3] : 0.00);
             gtk_custom_table_set_cell_text(nb_tab_statistics, 2, j, temp);
-            sprintf(temp, "%2.2f %%", stats[i][1]);
+            sprintf(temp, "%1.0f", stats[i][0]);
             gtk_custom_table_set_cell_text(nb_tab_statistics, 3, j, temp);
-            sprintf(temp, "%1.0f", stats[i][2]);
+            sprintf(temp, "%2.2f %%", stats[i][1]);
             gtk_custom_table_set_cell_text(nb_tab_statistics, 4, j, temp);
-            sprintf(temp, "%1.2f", stats[i][4]);
+            sprintf(temp, "%1.0f", stats[i][2]);
             gtk_custom_table_set_cell_text(nb_tab_statistics, 5, j, temp);
-            sprintf(temp, "%1.2f", stats[i][5]);
+            sprintf(temp, "%1.2f", stats[i][4]);
             gtk_custom_table_set_cell_text(nb_tab_statistics, 6, j, temp);
+            sprintf(temp, "%1.2f", stats[i][5]);
+            gtk_custom_table_set_cell_text(nb_tab_statistics, 7, j, temp);
 
             /* make sure value falls within color range.. */
             int cell_to_color = (int)stats[i][3] - 1;
@@ -112,6 +117,23 @@ int menu_open_ratings(char *filename) {
                 gtk_custom_table_set_cell_color(nb_tab_statistics, 1, j, 
                     colors[(int)stats[i][3] - 1]);
             }
+
+            /* reset background color */
+            gtk_custom_table_set_cell_color(nb_tab_statistics, 2, j, 
+                graph_bg);
+
+            /* add new background color to flux */
+            if(stats[i][2] > 0) {
+
+                if(((i + 1) - stats[i][3]) >= 0) {
+                    gtk_custom_table_set_cell_color(nb_tab_statistics, 2, j, 
+                        colors[8]);
+                }
+                else {
+                     gtk_custom_table_set_cell_color(nb_tab_statistics, 2, j, 
+                        colors[1]);
+                }
+            }
         }
 
         /* add statistics footer */
@@ -119,16 +141,18 @@ int menu_open_ratings(char *filename) {
         gtk_custom_table_set_foot_text(nb_tab_statistics, 0, temp);
         sprintf(temp, "%2.2f", (double)imdb_average / (rows - 1));
         gtk_custom_table_set_foot_text(nb_tab_statistics, 1, temp);
+        sprintf(temp, "%+2.2f", (double)flux_average / (rows - 1));
+        gtk_custom_table_set_foot_text(nb_tab_statistics, 2, temp);
         sprintf(temp, "You have rated %d, on average %1.2f", 
             (rows - 1), (double)vote_average / (rows - 1));
-        gtk_custom_table_set_foot_text(nb_tab_statistics, 2, temp);
-        gtk_custom_table_set_foot_text(nb_tab_statistics, 3, "100.00 %");
+        gtk_custom_table_set_foot_text(nb_tab_statistics, 3, temp);
+        gtk_custom_table_set_foot_text(nb_tab_statistics, 4, "100.00 %");
         sprintf(temp, "%d", (rows - 1));
-        gtk_custom_table_set_foot_text(nb_tab_statistics, 4, temp);
-        sprintf(temp, "%4.2f", (double)time_average / (rows - 1));
         gtk_custom_table_set_foot_text(nb_tab_statistics, 5, temp);
-        sprintf(temp, "%4.2f", (double)year_average / (rows - 1));
+        sprintf(temp, "%4.2f", (double)time_average / (rows - 1));
         gtk_custom_table_set_foot_text(nb_tab_statistics, 6, temp);
+        sprintf(temp, "%4.2f", (double)year_average / (rows - 1));
+        gtk_custom_table_set_foot_text(nb_tab_statistics, 7, temp);
 
         gtk_custom_table_set_sortable(nb_tab_statistics, TRUE);
 
