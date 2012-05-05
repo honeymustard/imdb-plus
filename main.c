@@ -48,7 +48,7 @@ double colors[10][3] = {
 double graph_bg[3] = {
     0.90, 
     0.90, 
-    1.00,
+    0.90,
 };
 
 
@@ -150,8 +150,6 @@ int main(int argc, char *argv[]) {
         gtk_custom_table_set_cell_text(nb_tab_statistics, 7, i, "0.00");
 
         gtk_custom_table_set_cell_color(nb_tab_statistics, 0, i, colors[j]);
-        gtk_custom_table_set_cell_color(nb_tab_statistics, 1, i, colors[j]);
-        gtk_custom_table_set_cell_color(nb_tab_statistics, 2, i, graph_bg);
         gtk_custom_table_set_cell_color(nb_tab_statistics, 3, i, graph_bg);
     }
     
