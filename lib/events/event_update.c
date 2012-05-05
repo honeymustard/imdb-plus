@@ -63,21 +63,6 @@ int menu_signal_update_top() {
             gtk_custom_table_set_cell_color(nb_tab_top250, 1, i, 
                 colors[(int)atof(results[i][1])]); 
 
-            /* add 'my rating' to top250 tab if applicable */
-            int index_lst = gtk_custom_table_get_indexof(nb_tab_mymovies, results[i][2]);
-
-            if(index_lst >= 0) {
-                
-                char *table_row[gtk_custom_table_get_rows(nb_tab_mymovies)];
-
-                gtk_custom_table_get_row(nb_tab_mymovies, index_lst, table_row);
-
-                gtk_custom_table_set_cell_text(nb_tab_top250, 2, i, 
-                    table_row[2]);
-
-                gtk_custom_table_set_cell_color(nb_tab_top250, 2, i, 
-                    colors[atoi(table_row[2]) - 1]);
-            }
         }
 
         free_memory(results, cols, rows);
@@ -117,22 +102,6 @@ int menu_signal_update_bot() {
 
             gtk_custom_table_set_cell_color(nb_tab_bot100, 1, i, 
                 colors[(int)atof(results[i][1])]); 
-
-            /* add 'my rating' to bot100 tab if applicable */
-            int index_lst = gtk_custom_table_get_indexof(nb_tab_mymovies, results[i][2]);
-
-            if(index_lst >= 0) {
-                
-                char *table_row[gtk_custom_table_get_rows(nb_tab_mymovies)];
-
-                gtk_custom_table_get_row(nb_tab_mymovies, index_lst, table_row);
-
-                gtk_custom_table_set_cell_text(nb_tab_bot100, 2, i, 
-                    table_row[2]);
-
-                gtk_custom_table_set_cell_color(nb_tab_bot100, 2, i, 
-                    colors[atoi(table_row[2]) - 1]);
-            }
         }
 
         free_memory(results, cols, rows);
@@ -173,22 +142,7 @@ int menu_signal_update_box() {
 
             gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 1, i, FALSE);
             gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 2, i, FALSE);
-
-            /* add 'my rating' to boxoffice tab if applicable */
-            int index_lst = gtk_custom_table_get_indexof(nb_tab_mymovies, results[i][1]);
-
-            if(index_lst >= 0) {
-                
-                char *table_row[gtk_custom_table_get_rows(nb_tab_mymovies)];
-
-                gtk_custom_table_get_row(nb_tab_mymovies, index_lst, table_row);
-
-                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
-                    table_row[2]);
-                gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
-                    colors[atoi(table_row[2]) - 1]);
-            }
-            
+ 
             /* find imdb ratings and insert them into boxoffice.. */
             int index1 = gtk_custom_table_get_indexof(nb_tab_mymovies, results[i][1]);
             int index2 = gtk_custom_table_get_indexof(nb_tab_top250, results[i][1]);
@@ -363,6 +317,10 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         free(dl_top);
         free(dl_bot);
         free(dl_box);
+
+        if(current_open_file != NULL) {
+            menu_open_ratings(current_open_file);
+        }
 
         /* set new statusbar message */
         char *temp = malloc(strlen(format) + strlen(topstat) + 
