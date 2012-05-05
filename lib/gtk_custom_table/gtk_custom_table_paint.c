@@ -147,7 +147,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event, gboolean re
             meta = priv->table_rows[i]->cell[j]->meta;
 
             /* draw cell background-color */
-            if(meta != NULL) {
+            if(meta != NULL && meta->has_bg_color) {
 
                 cairo_set_source_rgb(cr, meta->color[0], meta->color[1], 
                     meta->color[2]);
