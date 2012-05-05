@@ -10,7 +10,7 @@ they might not be entirely up to speed, which is to say that **it might be compl
 * Download and view personal vote history, and statistics.
 * Download official IMDb lists such as Top 250, Bottom 100, All-Time Boxoffice.
 * Compare personal vote history to IMDb lists and track your viewing progress.
-
+* Supports vote histories with north of 100 000 votes..
 
 ## Compilation instructions
 
