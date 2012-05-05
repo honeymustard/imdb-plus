@@ -21,6 +21,8 @@
 #include "events.h"
 
 
+char *current_open_file = NULL;
+
 /**
  * read and parse a ratings file or list..
  * @param char *filename    file to open..
@@ -39,30 +41,41 @@ int menu_open_ratings(char *filename) {
     int i = 0;
     int j = 0;
 
-    /* remove previous MyRating and associated color from lists */
-    for(i = 0; i < gtk_custom_table_get_rows(nb_tab_lists); i++) {
-        
-        gtk_custom_table_set_cell_text(nb_tab_lists, 2, i, "0");
-        gtk_custom_table_set_cell_color_enable(nb_tab_lists, 2, i, FALSE);
-    }
-
-    /* remove previous MyRating and associated color from top250 */
-    for(i = 0; i < gtk_custom_table_get_rows(nb_tab_top250); i++) {
-        
-        gtk_custom_table_set_cell_text(nb_tab_top250, 2, i, "0");
-        gtk_custom_table_set_cell_color_enable(nb_tab_top250, 2, i, FALSE);
-    }
-
-    /* remove previous MyRating and associated color from boxoffice */
-    for(i = 0; i < gtk_custom_table_get_rows(nb_tab_boxoffice); i++) {
-        
-        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, "0");
-        gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 2, i, FALSE);
-    }
-
     char temp[100];
 
     if(strcmp("IMDb Rating", results[0][9]) == 0) {
+
+        /* remove previous MyRating and associated color from lists */
+        for(i = 0; i < gtk_custom_table_get_rows(nb_tab_lists); i++) {
+            
+            gtk_custom_table_set_cell_text(nb_tab_lists, 2, i, "0");
+            gtk_custom_table_set_cell_color_enable(nb_tab_lists, 2, i, 
+                FALSE);
+        }
+
+        /* remove previous MyRating and associated color from top250 */
+        for(i = 0; i < gtk_custom_table_get_rows(nb_tab_top250); i++) {
+            
+            gtk_custom_table_set_cell_text(nb_tab_top250, 2, i, "0");
+            gtk_custom_table_set_cell_color_enable(nb_tab_top250, 2, i, 
+                FALSE);
+        }
+
+        /* remove previous MyRating and associated color from boxoffice */
+        for(i = 0; i < gtk_custom_table_get_rows(nb_tab_boxoffice); i++) {
+            
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, "0");
+            gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 2, i, 
+                FALSE);
+        }
+
+        if(current_open_file == NULL) {
+            free(current_open_file);    
+        }
+
+        /* remember filename */
+        current_open_file = malloc(strlen(filename) + 1);
+        strcpy(current_open_file, filename);
 
         gtk_custom_table_sort(nb_tab_statistics, 0, GTK_CUSTOM_TABLE_DESC);
 
