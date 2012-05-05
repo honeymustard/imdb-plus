@@ -76,9 +76,14 @@ rm *.ex *EX
 cd ..
 
 # copy pre-made relevant files from top dir..
+cp ../../../../misc/changelog ./debian/changelog
+
+# copy version number into changelog..
+sed "s/imdb-plus (0\.0\.0-1)/imdb-plus ($2-1)/" <./debian/changelog >./debian/clog
+cat ./debian/clog > ./debian/changelog && rm ./debian/clog
+
 cp ../../../../misc/control ./debian/control
 cp ../../../../misc/copyright ./debian/copyright
-cp ../../../../misc/changelog ./debian/changelog
 cp ../../../../misc/rules ./debian/rules
 cp ../../../../misc/postinst ./debian/postinst
 rm ./debian/README.Debian
