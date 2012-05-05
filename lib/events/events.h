@@ -34,6 +34,7 @@
 
 extern int menu_open_ratings(char *filename);
 extern void set_imdb_rating(int index, int row, GtkWidget *copy, GtkWidget *paste);
+extern char *current_open_file;
 
 /* main window events */
 void menu_signal_about(GtkWidget *widget, gpointer data);
