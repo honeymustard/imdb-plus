@@ -61,7 +61,6 @@ extern int regex_to_csv(char *filename, char *out_file, char *pattern);
 extern int free_memory(char ***results, int cols, int rows);
 
 double colors[10][3];
-double graph_bg[3];
 
 #endif
 
