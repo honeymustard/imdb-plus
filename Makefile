@@ -1,4 +1,4 @@
-#############################################################################
+###############################################################################
 #
 # Copyright (C) 2011-2012  Adrian Solumsmo
 # 
@@ -15,22 +15,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#############################################################################
+###############################################################################
 
-
+# Main program variables..
 EXECUTE = imdb-plus
-VERSION = 0.0.5
+VERSION = 0.0.6
 OBJECTS = main.o readfile.o regex.o download.o strnatcmp.o 
 SOURCES = *.c *.h Makefile COPYING TODO *.md build.ps1 *.sh *.iss *.rc
 FOLDERS = lib res misc share
 CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
-WINGUI  = -mwindows
+WINDOWS = -mwindows
 
 # Other libs..
-TABLE_SOURCES = $(wildcard ./lib/gtk_custom_table/*.c)
-EVENT_SOURCES = $(wildcard ./lib/events/*.c)
-OTHER_OBJECTS = gtk_custom_table*.o event_*.o
+OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/gtk_custom_table/*.c))
+OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/events/*.c))
 
 # Install paths..
 DIR_USR = $(DESTDIR)/usr
@@ -48,12 +47,17 @@ DIR_DAT = $(DESTDIR)/usr/share/$(EXECUTE)/res
 #
 ###############################################################################
 
+# Standard make for install..
+.PHONY : all
 all: CURL = -lcurl
 all: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 all: CFLAGS += -O2 $(GTK2) $(CURL) -DINSTALL
-all: $(OBJECTS) GTK_CUSTOM_TABLE GTK_EVENTS
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(OTHER_OBJECTS) $(GTK2) $(CURL) 
+all: $(OBJECTS)
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL) 
 
+# Make install..
+.PHONY : install
+install: all
 install:
 	-@test -d $(DIR_USR) || mkdir $(DIR_USR)
 	-@test -d $(DIR_BIN) || mkdir $(DIR_BIN)
@@ -72,6 +76,8 @@ install:
 	-@chmod a+rwx $(DIR_DAT)
 	-@echo "$(EXECUTE) was installed successfully"
 
+# Make uninstall..
+.PHONY : uninstall
 uninstall:
 	-@rm -f /usr/share/man/man1/$(EXECUTE).1.gz
 	-@rm -f /usr/share/applications/$(EXECUTE).desktop
@@ -80,30 +86,44 @@ uninstall:
 	-@rm -f /usr/bin/$(EXECUTE)
 	-@echo "$(EXECUTE) uninstalled successfully"
 
+# Make run-in-place debug..
+.PHONY : debug
 debug: CURL = -lcurl
 debug: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 debug: CFLAGS += -g $(GTK2) $(CURL)
-debug: $(OBJECTS) GTK_CUSTOM_TABLE GTK_EVENTS
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(OTHER_OBJECTS) $(GTK2) $(CURL)
+debug: $(OBJECTS)
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL)
 
-
+# Make clean..
 .PHONY : dist-clean
 dist-clean:
 	-@rm -Rf ./build/$(EXECUTE)-$(VERSION)/$(EXECUTE)-$(VERSION)-deb
 
+# Make dist archive..
 .PHONY : dist
 dist:
 	cd misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz && cd ..
-	tar -zcf $(EXECUTE)-$(VERSION).tar.gz --exclude='*.csv' --exclude='*.swo' --exclude='*.swp' --exclude='*.dll' --exclude='*.o' --exclude='*~' $(SOURCES) $(FOLDERS)
+	tar -zcf $(EXECUTE)-$(VERSION).tar.gz \
+    --exclude='*.csv' \
+    --exclude='*.swo' \
+    --exclude='*.swp' \
+    --exclude='*.dll' \
+    --exclude='*.o' \
+    --exclude='*~' \
+    $(SOURCES) $(FOLDERS)
 
+# Make build..
 .PHONY : build
+build: dist
 build:
-	make dist
 	sh build.sh $(EXECUTE) $(VERSION)
 
+# Make clean..
 .PHONY : clean
 clean:
-	-@rm *.o $(EXECUTE) 2>/dev/null && echo "it's clean" || echo "it's already clean"
+	-@rm $(OBJECTS) $(EXECUTE) 2>/dev/null && \
+    echo "it's clean" || \
+    echo "it's already clean"
 
 
 ###############################################################################
@@ -169,29 +189,28 @@ mingw32: GTK2 = -mms-bitfields \
                 -lintl
 
 
-# Win32 release build with MinGW..
+# MinGW run-in-place build..
+.PHONY : mingw32
 mingw32: CFLAGS += -O2 $(GTK2) $(CURL) $(PCRE)
-mingw32: resfile.o
-mingw32: $(OBJECTS) GTK_CUSTOM_TABLE GTK_EVENTS
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(OTHER_OBJECTS) resfile.o $(GTK2) $(CURL) $(PCRE) $(WINGUI)
+mingw32: OBJECTS += resfile.o
+mingw32: $(OBJECTS)
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL) $(PCRE) $(WINDOWS)
 
-# Win32 debug build with MinGW..
-mingw32-debug: WINGUI = 
+# MinGW debug build..
+.PHONY : mingw32-debug
+mingw32-debug: WINDOWS = 
 mingw32-debug: mingw32
 
 # MinGW clean, remove o's exe's..
+.PHONY : mingw32-clean
 mingw32-clean:
-	del *.o $(EXECUTE).exe
+	del $(OBJECTS) $(EXECUTE).exe
 
 # MinGW build requires that powershell & 7zip (7za.exe) are in PATH..
 .PHONY : mingw32-build
 mingw32-build:
 	powershell -command "& {Set-ExecutionPolicy RemoteSigned}"
 	powershell .\build.ps1 $(EXECUTE) $(VERSION) --nogui
-
-# Compile resource file, to get a nice icon..
-resfile.o:
-	windres -o resfile.o resources.rc
 
 
 ###############################################################################
@@ -214,11 +233,12 @@ download.o: lib/download.c lib/download.h
 strnatcmp.o: lib/gtk_custom_table/strnatcmp/strnatcmp.c lib/gtk_custom_table/strnatcmp/strnatcmp.h
 	gcc $(CFLAGS) lib/gtk_custom_table/strnatcmp/strnatcmp.c
 
-.PHONY : GTK_CUSTOM_TABLE
-GTK_CUSTOM_TABLE: $(TABLE_SOURCES) lib/gtk_custom_table/gtk_custom_table.h
-	gcc $(CFLAGS) $(TABLE_SOURCES)
+gtk_custom_table_%.o: gtk_custom_table_%.c lib/gtk_custom_table/gtk_custom_table.h
+	gcc $(CFLAGS) $< -o $@
 
-.PHONY : GTK_EVENTS
-GTK_EVENTS: $(EVENT_SOURCES) lib/events/events.h
-	gcc -DAPP_VERS=\"$(VERSION)\" $(CFLAGS) $(EVENT_SOURCES)
+event_%.o: event_%.c lib/events/events.h
+	gcc -DAPP_VERS=\"$(VERSION)\" $(CFLAGS) $< -o $@
+
+resfile.o:
+	windres -o resfile.o resources.rc
 
