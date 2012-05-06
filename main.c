@@ -64,6 +64,7 @@ int main(int argc, char *argv[]) {
     int i = 0;
     int j = 0;
 
+    /* create a new window, set title and icon */
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), APP_TITL);
     gtk_window_set_icon_from_file(GTK_WINDOW(window), APP_ICON, NULL);
@@ -74,11 +75,11 @@ int main(int argc, char *argv[]) {
 
     gtk_container_set_border_width(GTK_CONTAINER(window), 0);
 
+    /* create notebook, statusbar and containers */
+    nb = gtk_notebook_new();
     status = gtk_statusbar_new();
     vbox = gtk_vbox_new(FALSE, 5);
     hbox = gtk_hbox_new(FALSE, 5);
-
-    nb = gtk_notebook_new();
 
     /* initialize new table widgets */
     nb_tab_statistics = gtk_custom_table_new(TABLE_STATS_COLS, 
@@ -137,13 +138,15 @@ int main(int argc, char *argv[]) {
             nb_tab_mymovies_headers[i]);
     }
 
+    /* set automatic numbering columns and a graph column */
     gtk_custom_table_set_column_index(nb_tab_mymovies, 0, TRUE);
     gtk_custom_table_set_column_index(nb_tab_lists, 0, TRUE);
     gtk_custom_table_set_column_graph(nb_tab_statistics, 3, TRUE);
 
+
     char temp[10];
 
-    /* statistics main rows */
+    /* set statistics table values */
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
 
         sprintf(temp, "%d", (j + 1));
@@ -173,7 +176,7 @@ int main(int argc, char *argv[]) {
 
     int no_results = 1;
 
-    /* check for pre-parsed top250 csv file.. */
+    /* set top 250 table values */
     FILE *fp_top250 = fopen(CONST_TOP_CSV, "rb");
 
     if(fp_top250 != NULL) {
@@ -235,7 +238,7 @@ int main(int argc, char *argv[]) {
 
     no_results = 1;
 
-    /* check for pre-parsed bot100 csv file.. */
+    /* set bottom 100 table values */
     FILE *fp_bot100 = fopen(CONST_BOT_CSV, "rb");
 
     if(fp_bot100 != NULL) {
@@ -297,6 +300,7 @@ int main(int argc, char *argv[]) {
 
     no_results = 1;
 
+    /* set all-time boxoffice table values */
     FILE *fp_boxoffice = fopen(CONST_BOX_CSV, "rb");
 
     if(fp_boxoffice != NULL) {
@@ -331,7 +335,7 @@ int main(int argc, char *argv[]) {
                 gtk_custom_table_set_cell_text(nb_tab_boxoffice, 6, i, 
                     results[i][4]);
  
-                /* find imdb ratings and insert them into boxoffice.. */
+                /* search for current film's imdb rating in other tables */
                 int index1 = gtk_custom_table_get_indexof(nb_tab_mymovies, 
                     results[i][1]);
                 int index2 = gtk_custom_table_get_indexof(nb_tab_top250, 
@@ -341,11 +345,11 @@ int main(int argc, char *argv[]) {
                 int index4 = gtk_custom_table_get_indexof(nb_tab_lists, 
                     results[i][1]);
 
+                /* copy imdb ratings from other tabs to box office tab */
                 set_imdb_rating(index1, i, nb_tab_mymovies, nb_tab_boxoffice);
                 set_imdb_rating(index2, i, nb_tab_top250, nb_tab_boxoffice);
                 set_imdb_rating(index3, i, nb_tab_bot100, nb_tab_boxoffice);
                 set_imdb_rating(index4, i, nb_tab_lists, nb_tab_boxoffice);
-
             }
 
             free_memory(results, cols, rows);
