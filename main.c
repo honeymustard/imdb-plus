@@ -17,10 +17,10 @@
 *
 *****************************************************************************/
 
+
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
-#include <curl/curl.h>
 #include <gdk/gdkkeysyms.h>
 #include "master.h"
 #include "tables.h"
@@ -57,7 +57,6 @@ double graph_bg[3] = {
  */
 int main(int argc, char *argv[]) {
 
-    curl_global_init(CURL_GLOBAL_ALL);
     g_thread_init(NULL);
 
     gtk_init(&argc, &argv);
@@ -81,19 +80,19 @@ int main(int argc, char *argv[]) {
 
     nb = gtk_notebook_new();
 
-    /* initialize new drawingarea widgets */
-    nb_tab_statistics = gtk_custom_table_new(TABLE_STATS_COLS, 10, 500, 500, 
-        nb_tab_statistics_cols);
-    nb_tab_top250 = gtk_custom_table_new(TABLE_TP250_COLS, 250, 500, 500, 
-        nb_tab_top250_cols);
-    nb_tab_bot100 = gtk_custom_table_new(TABLE_BT100_COLS, 100, 500, 500, 
-        nb_tab_bot100_cols);
-    nb_tab_boxoffice = gtk_custom_table_new(TABLE_BOXOF_COLS, 50, 500, 500, 
-        nb_tab_boxoffice_cols);
-    nb_tab_mymovies = gtk_custom_table_new(TABLE_MYMOV_COLS, 50, 500, 500, 
-        nb_tab_mymovies_cols);
-    nb_tab_lists = gtk_custom_table_new(TABLE_MYLST_COLS, 50, 500, 500, 
-        nb_tab_mymovies_cols);
+    /* initialize new table widgets */
+    nb_tab_statistics = gtk_custom_table_new(TABLE_STATS_COLS, 
+        10, 500, 500, nb_tab_statistics_cols);
+    nb_tab_top250 = gtk_custom_table_new(TABLE_TP250_COLS, 
+        250, 500, 500, nb_tab_top250_cols);
+    nb_tab_bot100 = gtk_custom_table_new(TABLE_BT100_COLS, 
+        100, 500, 500, nb_tab_bot100_cols);
+    nb_tab_boxoffice = gtk_custom_table_new(TABLE_BOXOF_COLS, 
+        50, 500, 500, nb_tab_boxoffice_cols);
+    nb_tab_mymovies = gtk_custom_table_new(TABLE_MYMOV_COLS, 
+        50, 500, 500, nb_tab_mymovies_cols);
+    nb_tab_lists = gtk_custom_table_new(TABLE_MYLST_COLS, 
+        50, 500, 500, nb_tab_mymovies_cols);
 
     /* set primary columns to enable quick searches */
     gtk_custom_table_set_column_prime(nb_tab_top250, 3, TRUE);
@@ -102,48 +101,56 @@ int main(int argc, char *argv[]) {
     gtk_custom_table_set_column_prime(nb_tab_mymovies, 3, TRUE);
     gtk_custom_table_set_column_prime(nb_tab_lists, 3, TRUE);
 
-    /* set header text */
+    /* set statistics headers */
     for(i = 0; i < TABLE_STATS_COLS; i++) {
         gtk_custom_table_set_head_text(nb_tab_statistics, i, 
             nb_tab_statistics_headers[i]);
     }
 
+    /* set top 250 headers */
     for(i = 0; i < TABLE_TP250_COLS; i++) {
         gtk_custom_table_set_head_text(nb_tab_top250, i, 
             nb_tab_top250_headers[i]);
+    }
+
+    /* set bottom 100 headers */
+    for(i = 0; i < TABLE_TP250_COLS; i++) {
         gtk_custom_table_set_head_text(nb_tab_bot100, i, 
             nb_tab_top250_headers[i]);
     }
 
+    /* set boxoffice headers */
     for(i = 0; i < TABLE_BOXOF_COLS; i++) {
         gtk_custom_table_set_head_text(nb_tab_boxoffice, i, 
             nb_tab_boxoffice_headers[i]);
     }
 
+    /* set my-movies headers */
     for(i = 0; i < TABLE_MYMOV_COLS; i++) {
         gtk_custom_table_set_head_text(nb_tab_mymovies, i, 
             nb_tab_mymovies_headers[i]);
+    }
+
+    /* set my-lists headers */
+    for(i = 0; i < TABLE_MYMOV_COLS; i++) {
         gtk_custom_table_set_head_text(nb_tab_lists, i, 
             nb_tab_mymovies_headers[i]);
     }
 
     gtk_custom_table_set_column_index(nb_tab_mymovies, 0, TRUE);
     gtk_custom_table_set_column_index(nb_tab_lists, 0, TRUE);
+    gtk_custom_table_set_column_graph(nb_tab_statistics, 3, TRUE);
 
     char temp[10];
-
-    int vote_counter = 10;
-
-    gtk_custom_table_set_column_graph(nb_tab_statistics, 3, TRUE);
 
     /* statistics main rows */
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
 
-        sprintf(temp, "%d", vote_counter--);
+        sprintf(temp, "%d", (j + 1));
         gtk_custom_table_set_cell_text(nb_tab_statistics, 0, i, temp);
         gtk_custom_table_set_cell_text(nb_tab_statistics, 1, i, "0.00");
         gtk_custom_table_set_cell_text(nb_tab_statistics, 2, i, "0.00");
-        gtk_custom_table_set_cell_text(nb_tab_statistics, 3, i, "2");
+        gtk_custom_table_set_cell_text(nb_tab_statistics, 3, i, "3");
         gtk_custom_table_set_cell_text(nb_tab_statistics, 4, i, "0.00 %");
         gtk_custom_table_set_cell_text(nb_tab_statistics, 5, i, "0");
         gtk_custom_table_set_cell_text(nb_tab_statistics, 6, i, "0");
@@ -325,10 +332,14 @@ int main(int argc, char *argv[]) {
                     results[i][4]);
  
                 /* find imdb ratings and insert them into boxoffice.. */
-                int index1 = gtk_custom_table_get_indexof(nb_tab_mymovies, results[i][1]);
-                int index2 = gtk_custom_table_get_indexof(nb_tab_top250, results[i][1]);
-                int index3 = gtk_custom_table_get_indexof(nb_tab_bot100, results[i][1]);
-                int index4 = gtk_custom_table_get_indexof(nb_tab_lists, results[i][1]);
+                int index1 = gtk_custom_table_get_indexof(nb_tab_mymovies, 
+                    results[i][1]);
+                int index2 = gtk_custom_table_get_indexof(nb_tab_top250, 
+                    results[i][1]);
+                int index3 = gtk_custom_table_get_indexof(nb_tab_bot100, 
+                    results[i][1]);
+                int index4 = gtk_custom_table_get_indexof(nb_tab_lists, 
+                    results[i][1]);
 
                 set_imdb_rating(index1, i, nb_tab_mymovies, nb_tab_boxoffice);
                 set_imdb_rating(index2, i, nb_tab_top250, nb_tab_boxoffice);
@@ -362,6 +373,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    /* set default my-movies values */
     for(i = 0; i < 50; i++) {
 
         sprintf(temp, "%d.", i+1);
@@ -475,18 +487,18 @@ int main(int argc, char *argv[]) {
         nb_lists_scroll, TRUE, TRUE, 0);
 
     /* append notebook tabs */
-    gtk_notebook_append_page(GTK_NOTEBOOK(nb), nb_tab_statistics_vbox, 
-        gtk_label_new("Movies Stats"));
-    gtk_notebook_append_page(GTK_NOTEBOOK(nb), nb_tab_mymovies_vbox, 
-        gtk_label_new("My Movies"));
-    gtk_notebook_append_page(GTK_NOTEBOOK(nb), nb_tab_lists_vbox, 
-        gtk_label_new("My Lists"));
-    gtk_notebook_append_page(GTK_NOTEBOOK(nb), nb_tab_top250_vbox, 
-        gtk_label_new("Top 250"));
-    gtk_notebook_append_page(GTK_NOTEBOOK(nb), nb_tab_bot100_vbox, 
-        gtk_label_new("Bottom 100"));
-    gtk_notebook_append_page(GTK_NOTEBOOK(nb), nb_tab_boxoffice_vbox, 
-        gtk_label_new("Box Office"));
+    gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
+        nb_tab_statistics_vbox, gtk_label_new("Movies Stats"));
+    gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
+        nb_tab_mymovies_vbox, gtk_label_new("My Movies"));
+    gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
+        nb_tab_lists_vbox, gtk_label_new("My Lists"));
+    gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
+        nb_tab_top250_vbox, gtk_label_new("Top 250"));
+    gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
+        nb_tab_bot100_vbox, gtk_label_new("Bottom 100"));
+    gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
+        nb_tab_boxoffice_vbox, gtk_label_new("Box Office"));
 
     /* notebook setup */
     gtk_notebook_set_tab_pos(GTK_NOTEBOOK(nb), GTK_POS_TOP);
@@ -543,16 +555,16 @@ int main(int argc, char *argv[]) {
     gtk_menu_append(GTK_MENU(menu_help), menu_help_item_about);
 
     /* attach callback functions to menu-items */
-    gtk_signal_connect_object(GTK_OBJECT(menu_file_item_open), "activate", 
-        GTK_SIGNAL_FUNC(menu_signal_open), (gpointer)window);
-    gtk_signal_connect_object(GTK_OBJECT(menu_file_item_new), "activate", 
-        GTK_SIGNAL_FUNC(menu_signal_new), (gpointer)window);
-    gtk_signal_connect_object(GTK_OBJECT(menu_file_item_exit), "activate", 
-        GTK_SIGNAL_FUNC(menu_signal_quit), (gpointer)window);
-    gtk_signal_connect_object(GTK_OBJECT(menu_edit_item_update), "activate", 
-        GTK_SIGNAL_FUNC(menu_signal_update), (gpointer)window);
-    gtk_signal_connect_object(GTK_OBJECT(menu_help_item_about), "activate", 
-        GTK_SIGNAL_FUNC(menu_signal_about), (gpointer)window);
+    gtk_signal_connect_object(GTK_OBJECT(menu_file_item_open), 
+        "activate", GTK_SIGNAL_FUNC(menu_signal_open), (gpointer)window);
+    gtk_signal_connect_object(GTK_OBJECT(menu_file_item_new), 
+        "activate", GTK_SIGNAL_FUNC(menu_signal_new), (gpointer)window);
+    gtk_signal_connect_object(GTK_OBJECT(menu_file_item_exit), 
+        "activate", GTK_SIGNAL_FUNC(menu_signal_quit), (gpointer)window);
+    gtk_signal_connect_object(GTK_OBJECT(menu_edit_item_update), 
+        "activate", GTK_SIGNAL_FUNC(menu_signal_update), (gpointer)window);
+    gtk_signal_connect_object(GTK_OBJECT(menu_help_item_about), 
+        "activate", GTK_SIGNAL_FUNC(menu_signal_about), (gpointer)window);
 
     /* create menu items */
     menu_file_item = gtk_menu_item_new_with_mnemonic("_File");
@@ -580,7 +592,7 @@ int main(int argc, char *argv[]) {
 
     /* last steps, show window */
     gtk_container_add(GTK_CONTAINER(window), vbox);
-    gtk_window_set_default_size(GTK_WINDOW(window), 800, 440);
+    gtk_window_set_default_size(GTK_WINDOW(window), 880, 460);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_widget_show_all(window);
 
