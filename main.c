@@ -449,32 +449,32 @@ int main(int argc, char *argv[]) {
         nb_tab_lists);
 
     /* disable viewport shadows */
-    gtk_viewport_set_shadow_type(GTK_VIEWPORT(
-        nb_statistics_view), GTK_SHADOW_NONE);
-    gtk_viewport_set_shadow_type(GTK_VIEWPORT(
-        nb_top250_view), GTK_SHADOW_NONE);
-    gtk_viewport_set_shadow_type(GTK_VIEWPORT(
-        nb_bot100_view), GTK_SHADOW_NONE);
-    gtk_viewport_set_shadow_type(GTK_VIEWPORT(
-        nb_boxoffice_view), GTK_SHADOW_NONE);
-    gtk_viewport_set_shadow_type(GTK_VIEWPORT(
-        nb_mymovies_view), GTK_SHADOW_NONE);
-    gtk_viewport_set_shadow_type(GTK_VIEWPORT(
-        nb_lists_view), GTK_SHADOW_NONE);
+    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_statistics_view), 
+        GTK_SHADOW_NONE);
+    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_top250_view), 
+        GTK_SHADOW_NONE);
+    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_bot100_view), 
+        GTK_SHADOW_NONE);
+    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_boxoffice_view), 
+        GTK_SHADOW_NONE);
+    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_mymovies_view), 
+        GTK_SHADOW_NONE);
+    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_lists_view), 
+        GTK_SHADOW_NONE);
 
     /* add viewports to scrollwindows */
-    gtk_container_add(GTK_CONTAINER(
-        nb_statistics_scroll), nb_statistics_view); 
-    gtk_container_add(GTK_CONTAINER(
-        nb_top250_scroll), nb_top250_view); 
-    gtk_container_add(GTK_CONTAINER(
-        nb_bot100_scroll), nb_bot100_view); 
-    gtk_container_add(GTK_CONTAINER(
-        nb_boxoffice_scroll), nb_boxoffice_view); 
-    gtk_container_add(GTK_CONTAINER(
-        nb_mymovies_scroll), nb_mymovies_view); 
-    gtk_container_add(GTK_CONTAINER(
-        nb_lists_scroll), nb_lists_view); 
+    gtk_container_add(GTK_CONTAINER(nb_statistics_scroll), 
+        nb_statistics_view); 
+    gtk_container_add(GTK_CONTAINER(nb_top250_scroll), 
+        nb_top250_view); 
+    gtk_container_add(GTK_CONTAINER(nb_bot100_scroll), 
+        nb_bot100_view); 
+    gtk_container_add(GTK_CONTAINER(nb_boxoffice_scroll), 
+        nb_boxoffice_view); 
+    gtk_container_add(GTK_CONTAINER(nb_mymovies_scroll), 
+        nb_mymovies_view); 
+    gtk_container_add(GTK_CONTAINER(nb_lists_scroll), 
+        nb_lists_view); 
 
     /* pack scrolled widgets into vboxes */
     gtk_box_pack_start(GTK_BOX(nb_tab_statistics_vbox), 
