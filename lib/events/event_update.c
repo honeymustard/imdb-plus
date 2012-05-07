@@ -31,7 +31,8 @@ void set_imdb_rating(int index, int row, GtkWidget *copy, GtkWidget *paste) {
     char *table_row[gtk_custom_table_get_rows(copy)];
     gtk_custom_table_get_row(copy, index, table_row);
 
-    gtk_custom_table_set_cell_text(paste, 1, row, table_row[1]);
+    gtk_custom_table_set_cell_text(paste, 1, row, 
+        table_row[1]);
     gtk_custom_table_set_cell_color(paste, 1, row, 
         colors[atoi(table_row[1]) - 1]);
 }
@@ -50,15 +51,24 @@ int menu_signal_update_top() {
 
         for(i = 0; i < gtk_custom_table_get_rows(nb_tab_top250); i++) {
 
-            gtk_custom_table_set_cell_text(nb_tab_top250, 0, i, results[i][0]);
-            gtk_custom_table_set_cell_text(nb_tab_top250, 1, i, results[i][1]);
-            gtk_custom_table_set_cell_text(nb_tab_top250, 2, i, "0");
-            gtk_custom_table_set_cell_text(nb_tab_top250, 3, i, results[i][2]);
-            gtk_custom_table_set_cell_text(nb_tab_top250, 4, i, results[i][3]);
-            gtk_custom_table_set_cell_text(nb_tab_top250, 5, i, results[i][4]);
-            gtk_custom_table_set_cell_text(nb_tab_top250, 6, i, results[i][5]);
+            gtk_custom_table_set_cell_text(nb_tab_top250, 0, i, 
+                results[i][0]);
+            gtk_custom_table_set_cell_text(nb_tab_top250, 1, i, 
+                results[i][1]);
+            gtk_custom_table_set_cell_text(nb_tab_top250, 2, i, 
+                "0");
+            gtk_custom_table_set_cell_text(nb_tab_top250, 3, i, 
+                results[i][2]);
+            gtk_custom_table_set_cell_text(nb_tab_top250, 4, i, 
+                results[i][3]);
+            gtk_custom_table_set_cell_text(nb_tab_top250, 5, i, 
+                results[i][4]);
+            gtk_custom_table_set_cell_text(nb_tab_top250, 6, i, 
+                results[i][5]);
 
-            gtk_custom_table_set_cell_color_enable(nb_tab_top250, 2, i, FALSE);
+            /* clear cell color */
+            gtk_custom_table_set_cell_color_enable(nb_tab_top250, 2, i, 
+                FALSE);
 
             gtk_custom_table_set_cell_color(nb_tab_top250, 1, i, 
                 colors[(int)atof(results[i][1])]); 
@@ -90,15 +100,24 @@ int menu_signal_update_bot() {
 
         for(i = 0; i < gtk_custom_table_get_rows(nb_tab_bot100); i++) {
 
-            gtk_custom_table_set_cell_text(nb_tab_bot100, 0, i, results[i][0]);
-            gtk_custom_table_set_cell_text(nb_tab_bot100, 1, i, results[i][1]);
-            gtk_custom_table_set_cell_text(nb_tab_bot100, 2, i, "0");
-            gtk_custom_table_set_cell_text(nb_tab_bot100, 3, i, results[i][2]);
-            gtk_custom_table_set_cell_text(nb_tab_bot100, 4, i, results[i][3]);
-            gtk_custom_table_set_cell_text(nb_tab_bot100, 5, i, results[i][4]);
-            gtk_custom_table_set_cell_text(nb_tab_bot100, 6, i, results[i][5]);
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 0, i, 
+                results[i][0]);
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 1, i, 
+                results[i][1]);
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 2, i, 
+                "0");
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 3, i, 
+                results[i][2]);
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 4, i, 
+                results[i][3]);
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 5, i, 
+                results[i][4]);
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 6, i, 
+                results[i][5]);
 
-            gtk_custom_table_set_cell_color_enable(nb_tab_bot100, 2, i, FALSE);
+            /* clear cell color */
+            gtk_custom_table_set_cell_color_enable(nb_tab_bot100, 2, i, 
+                FALSE);
 
             gtk_custom_table_set_cell_color(nb_tab_bot100, 1, i, 
                 colors[(int)atof(results[i][1])]); 
@@ -132,27 +151,46 @@ int menu_signal_update_box() {
 
         for(i = 0; i < gtk_custom_table_get_rows(nb_tab_boxoffice); i++) {
 
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 0, i, results[i][0]);
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, "0.0");
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, "0");
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 3, i, results[i][1]);
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 4, i, results[i][2]);
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 5, i, results[i][3]);
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 6, i, results[i][4]);
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 0, i, 
+                results[i][0]);
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
+                "0.0");
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, 
+                "0");
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 3, i, 
+                results[i][1]);
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 4, i, 
+                results[i][2]);
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 5, i, 
+                results[i][3]);
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 6, i, 
+                results[i][4]);
 
-            gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 1, i, FALSE);
-            gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 2, i, FALSE);
+            /* clear cell color */
+            gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 1, i, 
+                FALSE);
+            gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 2, i, 
+                FALSE);
  
-            /* find imdb ratings and insert them into boxoffice.. */
-            int index1 = gtk_custom_table_get_indexof(nb_tab_mymovies, results[i][1]);
-            int index2 = gtk_custom_table_get_indexof(nb_tab_top250, results[i][1]);
-            int index3 = gtk_custom_table_get_indexof(nb_tab_bot100, results[i][1]);
-            int index4 = gtk_custom_table_get_indexof(nb_tab_lists, results[i][1]);
-
-            set_imdb_rating(index1, i, nb_tab_mymovies, nb_tab_boxoffice);
-            set_imdb_rating(index2, i, nb_tab_top250, nb_tab_boxoffice);
-            set_imdb_rating(index3, i, nb_tab_bot100, nb_tab_boxoffice);
-            set_imdb_rating(index4, i, nb_tab_lists, nb_tab_boxoffice);
+            /* find imdb ratings in other tables */
+            int index1 = gtk_custom_table_get_indexof(nb_tab_mymovies, 
+                results[i][1]);
+            int index2 = gtk_custom_table_get_indexof(nb_tab_top250, 
+                results[i][1]);
+            int index3 = gtk_custom_table_get_indexof(nb_tab_bot100, 
+                results[i][1]);
+            int index4 = gtk_custom_table_get_indexof(nb_tab_lists, 
+                results[i][1]);
+            
+            /* copy them into boxoffice table */
+            set_imdb_rating(index1, i, nb_tab_mymovies, 
+                nb_tab_boxoffice);
+            set_imdb_rating(index2, i, nb_tab_top250, 
+                nb_tab_boxoffice);
+            set_imdb_rating(index3, i, nb_tab_bot100, 
+                nb_tab_boxoffice);
+            set_imdb_rating(index4, i, nb_tab_lists, 
+                nb_tab_boxoffice);
         }
 
         free_memory(results, cols, rows);
@@ -187,25 +225,26 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
 
     content = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 
+    /* create dialog widgets */
     GtkAdjustment *adj = (GtkAdjustment*)gtk_adjustment_new(5, 0, 120, 0, 0, 0);
     GtkWidget *pbar = gtk_progress_bar_new_with_adjustment(adj);
     GtkWidget *label = gtk_label_new("Download new lists?\n");
 
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Waiting..");
 
+    /* add widgets to dialog */
     gtk_container_add(GTK_CONTAINER(content), label);
     gtk_container_add(GTK_CONTAINER(content), pbar);
 
     gtk_container_set_border_width(GTK_CONTAINER(content->parent), 20);
     gtk_window_set_icon_from_file(GTK_WINDOW(dialog), APP_ICON, NULL);
-    gtk_widget_show_all(GTK_WIDGET(dialog));
 
-    int ret = gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_show_all(GTK_WIDGET(dialog));
 
     GThread *thread1, *thread2, *thread3;
 
     /* someone pressed OK.. download some files */
-    if(ret == GTK_RESPONSE_ACCEPT) {
+    if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
 
         gtk_label_set_text(GTK_LABEL(label), "Downloading lists..\n");
 
