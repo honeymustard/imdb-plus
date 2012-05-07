@@ -287,12 +287,15 @@ int menu_open_ratings(char *filename) {
 
             if(index >= 0) {
 
+                /* set cell values */
                 gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, 
                     index, results[i][9]);
-                gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, 
-                    index, colors[atoi(results[i][9]) - 1]);
                 gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, 
                     index, results[i][8]);
+
+                /* set cell colors */
+                gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, 
+                    index, colors[atoi(results[i][9]) - 1]);
                 gtk_custom_table_set_cell_color(nb_tab_boxoffice, 2, 
                     index, colors[atoi(results[i][8]) - 1]);
             }
