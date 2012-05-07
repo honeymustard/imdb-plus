@@ -147,19 +147,19 @@ clean:
 ###############################################################################
 
 # Requires local copy of pcre3.dll..
-mingw32: PCRE = -I"C:\MinGW\GnuWin32\include" \
+windows: PCRE = -I"C:\MinGW\GnuWin32\include" \
                 -I"C:\MinGW\GnuWin32\bin" \
                 -L"C:\MinGW\GnuWin32\lib" \
                 -lpcre
 
 # Requires local copy of libcurl.dll..
-mingw32: CURL = -I"C:\MinGW\curl\include" \
+windows: CURL = -I"C:\MinGW\curl\include" \
                 -I"C:\MinGW\curl\bin" \
                 -L"C:\MinGW\curl\lib" \
                 -lcurl
 
 # Result from "pkg-config --libs --cflags gtk+-win32-2.0" in GTK\bin
-mingw32: GTK2 = -mms-bitfields \
+windows: GTK2 = -mms-bitfields \
                 -IC:/GTK+/include/gtk-2.0 \
                 -IC:/GTK+/lib/gtk-2.0/include \
                 -IC:/GTK+/include/atk-1.0 \
@@ -189,22 +189,28 @@ mingw32: GTK2 = -mms-bitfields \
                 -lintl
 
 
+# MinGW convenience..
+.PHONY : windows
+windows: CFLAGS += $(GTK2) $(CURL) $(PCRE)
+windows: OBJECTS += resfile.o
+windows: resfile.o $(OBJECTS)
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL) $(PCRE) $(WINDOWS)
+
 # MinGW run-in-place build..
 .PHONY : mingw32
-mingw32: CFLAGS += -O2 $(GTK2) $(CURL) $(PCRE)
-mingw32: OBJECTS += resfile.o
-mingw32: $(OBJECTS)
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL) $(PCRE) $(WINDOWS)
+mingw32: CFLAGS += -O2 
+mingw32: windows
 
 # MinGW debug build..
 .PHONY : mingw32-debug
 mingw32-debug: WINDOWS = 
-mingw32-debug: mingw32
+mingw32-debug: CFLAGS += -g
+mingw32-debug: windows
 
 # MinGW clean, remove o's exe's..
 .PHONY : mingw32-clean
 mingw32-clean:
-	del $(OBJECTS) $(EXECUTE).exe
+	del *.o lib\events\*.o lib\gtk_custom_table\*.o $(EXECUTE).exe
 
 # MinGW build requires that powershell & 7zip (7za.exe) are in PATH..
 .PHONY : mingw32-build
