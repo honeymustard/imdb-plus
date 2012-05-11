@@ -256,6 +256,25 @@ void gtk_custom_table_get_row(GtkWidget *table, int index, char **container) {
 }
 
 
+/**
+ * get the text value of a specific table cell..
+ * @param GtkWidget *table    current table
+ * @param int col             col value
+ * @param int row             row value
+ */
+char* gtk_custom_table_get_cell_value(GtkWidget *table, int col, int row) {
+    
+    GtkCustomTablePrivate *priv;
+    priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
+
+    if(row >= priv->table_y || col >= priv->table_x) {
+        g_error("can't get cell, coordinates were out of bounds");    
+    }
+
+    return priv->table_rows[row]->cell[col]->text;
+}
+
+
 int gtk_custom_table_get_rows(GtkWidget *table) {
 
     return GTK_CUSTOM_TABLE_GET_PRIVATE(table)->table_y;   

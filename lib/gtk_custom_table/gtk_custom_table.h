@@ -185,6 +185,8 @@
     int gtk_custom_table_get_indexof(GtkWidget *table, char *value);
     int gtk_custom_table_set_cell_color_enable(GtkWidget *table, int col, int row, 
         gboolean value);
+    char* gtk_custom_table_get_cell_value(GtkWidget *table, int col, int row);
+
 
 #endif /* __GTKCUSTOMTABLE_H__*/
 
