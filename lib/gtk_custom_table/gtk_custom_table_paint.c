@@ -42,7 +42,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event, gboolean re
         priv->table_max_width = table->allocation.width < priv->table_min_width ? 
             priv->table_min_width: table->allocation.width;
 
-        table_calc_dimensions(priv);
+        gtk_custom_table_calc(priv);
     }
 
     GtkAdjustment *adjust = gtk_viewport_get_vadjustment(GTK_VIEWPORT(table->parent));
@@ -72,6 +72,8 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event, gboolean re
     else {
         cr = gdk_cairo_create(table->window);
     }
+
+    int table_width = priv->table_column_offset_temp[priv->table_x];
  
     /* set font */
     cairo_set_source_rgb(cr, 0, 0, 0);
@@ -89,11 +91,18 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event, gboolean re
     /* draw header row */    
     if((scroll_beg_row == 0) && priv->table_has_header) {
 
+        /* draw horizontal lines in header.. */
+        cairo_set_source_rgb(cr, 0, 0, 0);
+        cairo_set_line_width(cr, 1.0);
+        cairo_move_to(cr, 1, 1); 
+        cairo_line_to(cr, table_width, 1);
+        cairo_stroke(cr);
+
+        /* draw row background color */
         cairo_set_source_rgb(cr, 0, 0, 0);
         cairo_rectangle(cr, 1, 1, 
-            table->allocation.width, priv->table_row_height - 1.5);
+            table_width - 1, priv->table_row_height - 1.5);
         cairo_stroke_preserve(cr);
-        cairo_set_source_rgb(cr, 0.8, 0.8, 0.8);
         cairo_fill(cr);
 
         for(i = 0; i < priv->table_x; i++) {
@@ -118,7 +127,6 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event, gboolean re
                 cairo_set_source_rgb(cr, 0, 0, 0);
                 cairo_rectangle(cr, priv->table_column_offset_temp[i] + 0.5, 1, 
                     priv->table_column_widths_temp[i], priv->table_row_height - 1.5);
-                cairo_stroke_preserve(cr);
                 cairo_set_source_rgb(cr, 0.8, 0.8, 0.8);
                 cairo_fill(cr); 
             }
@@ -237,7 +245,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event, gboolean re
         cairo_set_source_rgb(cr, 0, 0, 0);
         cairo_set_line_width(cr, 0.5);
         cairo_move_to(cr, 1, temp_height); 
-        cairo_line_to(cr, table->allocation.width, temp_height);
+        cairo_line_to(cr, table_width, temp_height);
         cairo_stroke(cr);
     }
 
@@ -249,16 +257,16 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event, gboolean re
 
         /* draw horizontal lines in footer.. */
         int temp_height = ((((priv->table_y + 1 + priv->table_has_header)) * 
-                    priv->table_row_height) + 0.5);
+            priv->table_row_height) + 0.5);
 
         cairo_set_source_rgb(cr, 0, 0, 0);
         cairo_set_line_width(cr, 1.0);
         cairo_move_to(cr, 1, temp_height); 
-        cairo_line_to(cr, table->allocation.width, temp_height);
+        cairo_line_to(cr, table_width, temp_height);
         cairo_stroke(cr);
 
         /* draw footer background color */
-        cairo_rectangle(cr, 1, table_height, table->allocation.width, 
+        cairo_rectangle(cr, 1, table_height, table_width - 1, 
             priv->table_row_height);
         cairo_stroke_preserve(cr);
         cairo_set_source_rgb(cr, 0.8, 0.8, 0.8);
