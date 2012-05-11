@@ -389,14 +389,46 @@ int main(int argc, char *argv[]) {
                     results[i][1]);
 
                 /* copy imdb ratings from other tabs to box office tab */
-                set_imdb_rating(index1, i, nb_tab_mymovies, 
-                    nb_tab_boxoffice);
-                set_imdb_rating(index2, i, nb_tab_top250, 
-                    nb_tab_boxoffice);
-                set_imdb_rating(index3, i, nb_tab_bot100, 
-                    nb_tab_boxoffice);
-                set_imdb_rating(index4, i, nb_tab_lists, 
-                    nb_tab_boxoffice);
+                char *rating1 = index1 >= 0 ? 
+                    gtk_custom_table_get_cell_value(nb_tab_mymovies, 1, index1) : "0";
+                char *rating2 = index2 >= 0 ? 
+                    gtk_custom_table_get_cell_value(nb_tab_top250, 1, index2) : "0";
+                char *rating3 = index3 >= 0 ? 
+                    gtk_custom_table_get_cell_value(nb_tab_bot100, 1, index3) : "0";
+                char *rating4 = index4 >= 0 ? 
+                    gtk_custom_table_get_cell_value(nb_tab_lists, 1, index4) : "0";
+
+                /* translate ratings */
+                int num1 = atoi(rating1);
+                int num2 = atoi(rating2);
+                int num3 = atoi(rating3);
+                int num4 = atoi(rating4);
+
+                /* apply first discovered value to table */
+                if (num1 > 0) {
+                    gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
+                        rating1);
+                    gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
+                        colors[num1 - 1]);
+                }
+                else if(num2 > 0) {
+                    gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
+                        rating2);
+                    gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
+                        colors[num2 - 1]);
+                }
+                else if(num3 > 0) {
+                    gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
+                        rating3);
+                    gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
+                        colors[num3 - 1]);
+                }
+                else if(num4 > 0) {
+                    gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
+                        rating4);
+                    gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
+                        colors[num4 - 1]);
+                }
             }
 
             free_memory(results, cols, rows);
