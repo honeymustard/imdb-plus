@@ -138,7 +138,7 @@
 
     /* widget private functions */
     void gtk_custom_table_resize(GtkWidget *table, int cols, int rows);
-    void table_calc_dimensions(GtkCustomTablePrivate *table);
+    void gtk_custom_table_calc(GtkCustomTablePrivate *table);
     void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event, 
         gboolean refresh);
     void gtk_custom_table_tree_free(struct table_tree *tree);
@@ -164,7 +164,6 @@
     void gtk_custom_table_refresh(GtkWidget *table);
     void gtk_custom_table_sort(GtkWidget *table, int col, int orientation);
     void gtk_custom_table_resize(GtkWidget *table, int cols, int rows);
-
 
     /* public getters and setters */
     void gtk_custom_table_set_cell_color(GtkWidget *table, int col, int row, 

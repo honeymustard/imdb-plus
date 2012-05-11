@@ -17,6 +17,7 @@
 *
 *****************************************************************************/
 
+
 #include "gtk_custom_table.h"
 
 
@@ -24,7 +25,7 @@
  * calculate current table column widths and offsets
  * @param GtkCustomTablePrivate *table    current table..
  */
-void table_calc_dimensions(GtkCustomTablePrivate *table) {
+void gtk_custom_table_calc(GtkCustomTablePrivate *table) {
 
     int i = 0;
 
