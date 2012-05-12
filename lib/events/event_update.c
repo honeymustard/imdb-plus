@@ -19,6 +19,7 @@
 
 
 #include "events.h"
+#include "../gtk_custom_table/gtk_custom_table.h"
 
 
 /* parse new top 250 list */
@@ -374,7 +375,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         free(dl_box);
 
         if(current_open_file != NULL) {
-            menu_open_ratings(current_open_file);
+            open_file(current_open_file);
         }
 
         /* set new statusbar message */
