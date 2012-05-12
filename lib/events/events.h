@@ -31,6 +31,7 @@
 #include "../openfile.h"
 #include "../download.h"
 #include "../regex.h"
+#include "../colors.h"
 
 /* main window events */
 void menu_signal_about(GtkWidget *widget, gpointer data);
