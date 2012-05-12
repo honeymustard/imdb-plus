@@ -18,11 +18,11 @@
 *****************************************************************************/
 
 
+#include "colors.h"
 #include "openfile.h"
 #include "readfile.h"
 #include "gtk_custom_table/gtk_custom_table.h"
 #include "../widgets.h"
-#include "../master.h"
 
 
 char *current_open_file = NULL;
