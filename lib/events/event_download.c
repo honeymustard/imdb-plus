@@ -92,7 +92,7 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
     int opened_file = 0;
 
     /* attempt to open fresh ratings */
-    if(dl->status == DL_STATUS_OK && (opened_file = menu_open_ratings(save))) {
+    if(dl->status == DL_STATUS_OK && (opened_file = open_file(save))) {
 
         info = "finished";
         adjustment = 120;
