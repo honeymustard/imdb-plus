@@ -18,6 +18,14 @@
 *****************************************************************************/
 
 
+#ifndef _READFILE_
+#define _READFILE_
+
 #define HEX_D_OFF 0x30
 #define HEX_C_OFF 0x41
+
+int read_file(char *filename, int *cols, int *rows, char ****results);
+int free_memory(char ***results, int cols, int rows);
+
+#endif
 
