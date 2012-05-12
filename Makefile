@@ -21,7 +21,7 @@
 # Main program variables..
 EXECUTE = imdb-plus
 VERSION = 0.0.6
-OBJECTS = main.o readfile.o openfile.o regex.o download.o strnatcmp.o 
+OBJECTS = main.o readfile.o openfile.o regex.o download.o colors.o strnatcmp.o 
 SOURCES = *.c *.h Makefile COPYING TODO *.md build.ps1 *.sh *.iss *.rc
 FOLDERS = lib res misc share
 CFLAGS  = -c -Wall
@@ -239,6 +239,9 @@ regex.o: lib/regex.c lib/regex.h
 
 download.o: lib/download.c lib/download.h
 	gcc $(CFLAGS) lib/download.c
+
+colors.o: lib/colors.c lib/colors.h
+	gcc $(CFLAGS) lib/colors.c
 
 strnatcmp.o: lib/gtk_custom_table/strnatcmp/strnatcmp.c lib/gtk_custom_table/strnatcmp/strnatcmp.h
 	gcc $(CFLAGS) lib/gtk_custom_table/strnatcmp/strnatcmp.c
