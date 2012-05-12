@@ -28,12 +28,9 @@
 /* include external headers */
 #include "../../master.h"
 #include "../../widgets.h"
-#include "../gtk_custom_table/gtk_custom_table.h"
+#include "../openfile.h"
 #include "../download.h"
 #include "../regex.h"
-
-extern int menu_open_ratings(char *filename);
-extern char *current_open_file;
 
 /* main window events */
 void menu_signal_about(GtkWidget *widget, gpointer data);
