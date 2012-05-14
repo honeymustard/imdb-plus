@@ -26,6 +26,7 @@
 #include "tables.h"
 #include "widgets.h"
 #include "lib/colors.h"
+#include "lib/readfile.h"
 #include "lib/events/events.h"
 #include "lib/gtk_custom_table/gtk_custom_table.h"
 
