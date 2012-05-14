@@ -28,9 +28,10 @@
 /* include external headers */
 #include "../../master.h"
 #include "../../widgets.h"
+#include "../readfile.h"
 #include "../openfile.h"
 #include "../download.h"
-#include "../regex.h"
+#include "../parsefile.h"
 #include "../colors.h"
 
 /* main window events */
