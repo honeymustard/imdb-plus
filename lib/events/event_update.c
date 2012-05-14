@@ -19,6 +19,7 @@
 
 
 #include "events.h"
+#include "../patterns.h"
 #include "../gtk_custom_table/gtk_custom_table.h"
 
 
@@ -333,7 +334,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         /* attempt to parse top 250 list */
         if(dl_top->status == DL_STATUS_OK) {
 
-            if(regex_to_csv(CONST_TOP_SAV, CONST_TOP_CSV, pattern_top250)) {
+            if(parse_file(CONST_TOP_SAV, CONST_TOP_CSV, pattern_top250)) {
                 
                 if(menu_signal_update_top()) {
                     topstat = "OK";
@@ -344,7 +345,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         /* attempt to parse bot 100 list */
         if(dl_bot->status == DL_STATUS_OK) {
 
-            if(regex_to_csv(CONST_BOT_SAV, CONST_BOT_CSV, pattern_bot100)) {
+            if(parse_file(CONST_BOT_SAV, CONST_BOT_CSV, pattern_bot100)) {
 
                 if(menu_signal_update_bot()) {
                     botstat = "OK";
@@ -355,8 +356,8 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         /* attempt to parse boxoffice list */
         if(dl_box->status == DL_STATUS_OK) {
 
-            if(regex_to_csv(CONST_BOX_SAV, CONST_BOX_CSV, pattern_boxoffice) || 
-               regex_to_csv(CONST_BOX_SAV, CONST_BOX_CSV, pattern_boxoffice_win)) {
+            if(parse_file(CONST_BOX_SAV, CONST_BOX_CSV, pattern_boxoffice) || 
+               parse_file(CONST_BOX_SAV, CONST_BOX_CSV, pattern_boxoffice_win)) {
 
                 if(menu_signal_update_box()) {
                     boxstat = "OK";
