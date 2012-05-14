@@ -17,10 +17,11 @@
 *
 *****************************************************************************/
 
-/* project started december 27th 2011 */
 
 #ifndef _MASTER_
 #define _MASTER_
+
+/* project started december 27th 2011 */
 
 #define APP_NAME "imdb-plus"
 
@@ -51,16 +52,6 @@
 #define CONST_BOT_CSV CONST_PREFIX"bottom100.csv"
 #define CONST_BOX_SAV CONST_PREFIX"boxoffice.html"
 #define CONST_BOX_CSV CONST_PREFIX"boxoffice.csv" 
-
-const char *APP_AUTH[3];
-const char *APP_LICN;
-
-/* these functions exist somewhere.. */
-extern int read_file(char *filename, int *cols, int *rows, char ****results);
-extern int regex_to_csv(char *filename, char *out_file, char *pattern);
-extern int free_memory(char ***results, int cols, int rows);
-
-double colors[10][3];
 
 #endif
 
