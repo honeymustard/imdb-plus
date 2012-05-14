@@ -17,56 +17,21 @@
 *
 *****************************************************************************/
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <regex.h>
 
 
-/* top250 regex pattern */
-char *pattern_top250 = "<tr bgcolor=\"#.{6}\" valign=\"top\"><td align=\"right\">\
-<font face=\"Arial, Helvetica, sans-serif\" size=\"-1\"><b>([0-9]{1,3})\\.</\
-b></font></td><td align=\"center\"><font face=\"Arial, Helvetica, sans-ser\
-if\" size=\"-1\">([0-9]{1,2}\\.[0-9]{1,2})</font></td><td><font face=\"Arial\
-, Helvetica, sans-serif\" size=\"-1\"><a href=\"/title/(tt[0-9]{1,10})/\"\
->(.{0,100})</a> \\(([0-9]{4})\\)</font></td><td align=\"right\"><font face=\"\
-Arial, Helvetica, sans-serif\" size=\"-1\">(([0-9]{1,4},[0-9]{1,4}))</font></td>\
-</tr>";
-
-/* bottom100 regex pattern */
-char *pattern_bot100 = "<font face=\"Arial, Helvetica, sans-serif\" \
-size=\"-1\"><b>([0-9]{1,3})\\.</b></font></td><td align=\"center\">\
-<font face=\"Arial, Helvetica, sans-serif\" size=\"-1\">([0-9]{1,2}\\.[0-9]{1,2})\
-</font></td><td><font face=\"Arial, Helvetica, sans-serif\" size=\"-1\">\
-<a href=\"/title/(tt[0-9]{1,10})/\">(.{0,100})</a> \\(([0-9]{4})\\)</font>\
-</td><td align=\"right\"><font face=\"Arial, Helvetica, sans-serif\" \
-size=\"-1\">(([0-9]{1,4},[0-9]{1,4}))</font></td></tr>";
-
-/* boxoffice regex pattern */
-char *pattern_boxoffice = "\
-<td align=right><b>([0-9]{1,3}).</b></td>\n\
-<td><a href=\"/title/(tt[0-9]{1,10})/\">(.{0,100})</a>\
- \\(([0-9]{4}).{0,2}\\)</td>\n\
-<td align=right>([0-9,\\$]{1,20})</(td)>\n\
-</tr>\n";
-
-/* boxoffice regex pattern with windows line-breaks */
-char *pattern_boxoffice_win = "\
-<td align=right><b>([0-9]{1,3}).</b></td>\r\n\
-<td><a href=\"/title/(tt[0-9]{1,10})/\">(.{0,100})</a>\
- \\(([0-9]{4}).{0,2}\\)</td>\r\n\
-<td align=right>([0-9,\\$]{1,20})</(td)>\r\n\
-</tr>\r\n";
-
-
 /**
- * perform regex on *filename with *pattern and save to disk as .csv
+ * parse 'filename' with 'pattern' to 'out_file'..
  * @param char *filename    source filename..
  * @param char *out_file    output filename..
  * @param char *pattern     pattern to use for regex matching..
  * @return                  1 on success, else 0
  */
-int regex_to_csv(char *filename, char *out_file, char *pattern) {
+int parse_file(char *filename, char *out_file, char *pattern) {
 
     FILE *fp = fopen(filename, "rb");
 
@@ -115,7 +80,6 @@ int regex_to_csv(char *filename, char *out_file, char *pattern) {
         "\"%.*s\",", 
         "\"%.*s\"\n"
     };
-
 
     /* keep going while pattern has more matches */
     for(i = 0; (regexec(&re, p, re.re_nsub, match, 0) == 0); i++) {
