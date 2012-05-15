@@ -17,16 +17,17 @@
 *
 *****************************************************************************/
 
+
 #ifndef __GTKCUSTOMTABLE_H__
 #define __GTKCUSTOMTABLE_H__
 
-    #include <gtk/gtk.h>
     #include <cairo.h>
-    #include "strnatcmp/strnatcmp.h"
+    #include <gtk/gtk.h>
     #include <string.h>
     #include <stdlib.h>
     #include <ctype.h>
     #include <unistd.h>
+    #include "strnatcmp/strnatcmp.h"
 
     typedef struct _GtkCustomTable GtkCustomTable;
     typedef struct _GtkCustomTableClass GtkCustomTableClass;
@@ -188,5 +189,4 @@
 
 
 #endif /* __GTKCUSTOMTABLE_H__*/
-
 

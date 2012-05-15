@@ -206,6 +206,7 @@ void gtk_custom_table_set_cell_color(GtkWidget *table, int col, int row,
     meta->has_bg_color = TRUE;
 }
 
+
 /**
  * enable or disable table cell background color..
  * @param GtkWidget *table    current table
