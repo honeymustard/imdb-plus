@@ -17,6 +17,7 @@
 *
 *****************************************************************************/
 
+
 #include <stdlib.h>
 #include <curl/curl.h>
 #include "download.h"
@@ -34,6 +35,8 @@ void *download(void *download) {
     CURLcode curl_res;
 
     struct download *down = (struct download *)download;
+
+    /* set default status to failed */
     down->status = DL_STATUS_NB;
     
     FILE *tmp = fopen(down->saveas, "w");
@@ -51,10 +54,13 @@ void *download(void *download) {
         
         curl_res = curl_easy_perform(curl);
 
+        /* we've downloaded something, set status ok */
         if(curl_res == 0) {
+
             down->status = DL_STATUS_OK;
         }
 
+        /* add http-code and size of file to download struct */
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &down->http_code);
         curl_easy_getinfo(curl, CURLINFO_SIZE_DOWNLOAD, &down->length);
 
