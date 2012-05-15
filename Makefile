@@ -227,7 +227,7 @@ mingw32-build:
 ###############################################################################
 
 main.o: main.c master.h tables.h widgets.h lib/events/events.h
-	gcc -DAPP_VERS=\"$(VERSION)\" $(CFLAGS) main.c 
+	gcc $(CFLAGS) main.c -DAPP_VERS=\"$(VERSION)\"
 
 readfile.o: lib/readfile.c lib/readfile.h
 	gcc $(CFLAGS) lib/readfile.c
@@ -254,7 +254,7 @@ gtk_custom_table_%.o: gtk_custom_table_%.c lib/gtk_custom_table/gtk_custom_table
 	gcc $(CFLAGS) $< -o $@
 
 event_%.o: event_%.c lib/events/events.h
-	gcc -DAPP_VERS=\"$(VERSION)\" $(CFLAGS) $< -o $@
+	gcc $(CFLAGS) $< -o $@ -DAPP_VERS=\"$(VERSION)\"
 
 resfile.o:
 	windres -o resfile.o resources.rc
