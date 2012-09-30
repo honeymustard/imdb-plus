@@ -73,6 +73,8 @@ int main(int argc, char *argv[]) {
         50, 500, 500, nb_tab_mymovies_cols);
     nb_tab_lists = gtk_custom_table_new(TABLE_MYLST_COLS, 
         50, 500, 500, nb_tab_mymovies_cols);
+    nb_tab_lists_stats = gtk_custom_table_new(TABLE_STATS_COLS, 
+        10, 500, 500, nb_tab_statistics_cols);
 
     /* set primary columns to enable quick searches */
     gtk_custom_table_set_column_prime(nb_tab_top250, 3, 
@@ -89,6 +91,12 @@ int main(int argc, char *argv[]) {
     /* set statistics headers */
     for(i = 0; i < TABLE_STATS_COLS; i++) {
         gtk_custom_table_set_head_text(nb_tab_statistics, i, 
+            nb_tab_statistics_headers[i]);
+    }
+
+    /* set lists statistics headers */
+    for(i = 0; i < TABLE_STATS_COLS; i++) {
+        gtk_custom_table_set_head_text(nb_tab_lists_stats, i, 
             nb_tab_statistics_headers[i]);
     }
 
@@ -128,6 +136,8 @@ int main(int argc, char *argv[]) {
     gtk_custom_table_set_column_index(nb_tab_lists, 0, 
         TRUE);
     gtk_custom_table_set_column_graph(nb_tab_statistics, 3, 
+        TRUE);
+    gtk_custom_table_set_column_graph(nb_tab_lists_stats, 3, 
         TRUE);
 
     char temp[10];
@@ -179,6 +189,58 @@ int main(int argc, char *argv[]) {
     gtk_custom_table_set_foot_text(nb_tab_statistics, 7, 
         "0.00");
 
+    gtk_custom_table_set_graph_color(nb_tab_statistics, 3, 
+        graph_fg1);
+
+    /* set lists statistics table values */
+    for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
+
+        sprintf(temp, "%d", (j + 1));
+
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 0, i, 
+            temp);
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 1, i, 
+            "0.00");
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 2, i, 
+            "0.00");
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 3, i, 
+            "3");
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 4, i, 
+            "0.00 %");
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 5, i, 
+            "0");
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 6, i, 
+            "0");
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 7, i, 
+            "0.00");
+
+        /* set cell colors */
+        gtk_custom_table_set_cell_color(nb_tab_lists_stats, 0, i, 
+            colors[j]);
+        gtk_custom_table_set_cell_color(nb_tab_lists_stats, 3, i, 
+            graph_bg);
+    }
+    
+    /* lists statistics footer */
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 0, 
+        "0");
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 1, 
+        "0.00");
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 2, 
+        "0.00");
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 3, 
+        "");
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 4, 
+        "0.00 %");
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 5, 
+        "0");
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 6, 
+        "0");
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 7, 
+        "0.00");
+
+    gtk_custom_table_set_graph_color(nb_tab_lists_stats, 3, 
+        graph_fg2);
 
     int no_results = 1;
 
@@ -194,7 +256,8 @@ int main(int argc, char *argv[]) {
 
         char ***results;
 
-        if(read_file(CONST_TOP_CSV, &cols, &rows, &results) && cols == 6) {
+        if(read_file(CONST_TOP_CSV, &cols, &rows, &results) 
+            && rows == 250 && cols == 6) {
 
             for(i = 0; i < gtk_custom_table_get_rows(nb_tab_top250); i++) {
 
@@ -482,6 +545,7 @@ int main(int argc, char *argv[]) {
     nb_tab_boxoffice_vbox = gtk_vbox_new(FALSE, 0);
     nb_tab_mymovies_vbox = gtk_vbox_new(FALSE, 0);
     nb_tab_lists_vbox = gtk_vbox_new(FALSE, 0);
+    nb_tab_lists_stats_vbox = gtk_vbox_new(FALSE, 0);
 
     /* initialize scrolled windows */
     nb_statistics_scroll = gtk_scrolled_window_new(NULL, NULL);
@@ -490,6 +554,7 @@ int main(int argc, char *argv[]) {
     nb_boxoffice_scroll = gtk_scrolled_window_new(NULL, NULL);
     nb_mymovies_scroll = gtk_scrolled_window_new(NULL, NULL);
     nb_lists_scroll = gtk_scrolled_window_new(NULL, NULL);
+    nb_lists_stats_scroll = gtk_scrolled_window_new(NULL, NULL);
 
     /* set scrolled window policies */
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_statistics_scroll), 
@@ -504,6 +569,8 @@ int main(int argc, char *argv[]) {
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_lists_scroll), 
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_lists_stats_scroll), 
+        GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
     /* create viewports */
     nb_statistics_view = gtk_viewport_new(NULL, NULL);
@@ -512,6 +579,7 @@ int main(int argc, char *argv[]) {
     nb_boxoffice_view = gtk_viewport_new(NULL, NULL);
     nb_mymovies_view = gtk_viewport_new(NULL, NULL);
     nb_lists_view = gtk_viewport_new(NULL, NULL);
+    nb_lists_stats_view = gtk_viewport_new(NULL, NULL);
 
     /* add widgets to viewports */
     gtk_container_add(GTK_CONTAINER(nb_statistics_view), 
@@ -526,6 +594,8 @@ int main(int argc, char *argv[]) {
         nb_tab_mymovies);
     gtk_container_add(GTK_CONTAINER(nb_lists_view), 
         nb_tab_lists);
+    gtk_container_add(GTK_CONTAINER(nb_lists_stats_view), 
+        nb_tab_lists_stats);
 
     /* disable viewport shadows */
     gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_statistics_view), 
@@ -540,7 +610,9 @@ int main(int argc, char *argv[]) {
         GTK_SHADOW_NONE);
     gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_lists_view), 
         GTK_SHADOW_NONE);
-
+    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_lists_stats_view), 
+        GTK_SHADOW_NONE);
+ 
     /* add viewports to scrollwindows */
     gtk_container_add(GTK_CONTAINER(nb_statistics_scroll), 
         nb_statistics_view); 
@@ -554,6 +626,8 @@ int main(int argc, char *argv[]) {
         nb_mymovies_view); 
     gtk_container_add(GTK_CONTAINER(nb_lists_scroll), 
         nb_lists_view); 
+    gtk_container_add(GTK_CONTAINER(nb_lists_stats_scroll), 
+        nb_lists_stats_view); 
 
     /* pack scrolled widgets into vboxes */
     gtk_box_pack_start(GTK_BOX(nb_tab_statistics_vbox), 
@@ -568,12 +642,16 @@ int main(int argc, char *argv[]) {
         nb_mymovies_scroll, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(nb_tab_lists_vbox), 
         nb_lists_scroll, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(nb_tab_lists_stats_vbox), 
+        nb_lists_stats_scroll, TRUE, TRUE, 0);
 
     /* append notebook tabs */
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
         nb_tab_statistics_vbox, gtk_label_new("Movies Stats"));
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
         nb_tab_mymovies_vbox, gtk_label_new("My Movies"));
+    gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
+        nb_tab_lists_stats_vbox, gtk_label_new("Lists Stats")); 
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
         nb_tab_lists_vbox, gtk_label_new("My Lists"));
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
