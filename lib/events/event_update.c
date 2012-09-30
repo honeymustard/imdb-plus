@@ -32,7 +32,8 @@ int menu_signal_update_top() {
 
     char ***results;
     
-    if(read_file(CONST_TOP_CSV, &cols, &rows, &results) && cols == 6) {
+    if(read_file(CONST_TOP_CSV, &cols, &rows, &results) 
+        && rows == 250 && cols == 6) {
 
         for(i = 0; i < gtk_custom_table_get_rows(nb_tab_top250); i++) {
 
