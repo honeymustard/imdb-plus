@@ -48,7 +48,11 @@ GtkWidget *nb,
     *nb_tab_lists_vbox, 
         *nb_lists_scroll, 
             *nb_lists_view, 
-                *nb_tab_lists;
+                *nb_tab_lists, 
+    *nb_tab_lists_stats_vbox, 
+        *nb_lists_stats_scroll, 
+            *nb_lists_stats_view, 
+                *nb_tab_lists_stats;
 
 
 /* menubar hierarchy */
@@ -65,7 +69,6 @@ GtkWidget *menubar,
     *menu_help,
         *menu_help_item, 
             *menu_help_item_about;
-
 
 #endif
 
