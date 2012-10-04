@@ -19,13 +19,13 @@
 #
 #############################################################################
 
-######################################################
+########################################################
 #
 # Make linux deb/src builds:
 #
-# This script is run by Makefile. make, make build.
+# This script is run by Makefile. make build-deb.
 #
-######################################################
+########################################################
 
 # export credentials to match my gpg key..
 DEBEMAIL="adrian.solumsmo@gmail.com"
@@ -46,7 +46,7 @@ fi
 
 cd ./$1-$2
 
-# make deb dir so not to interfere with win builds..
+# make deb dir so not to interfere with other builds..
 if [ ! -d "$1-$2-deb" ]; then
     mkdir $1-$2-deb
 fi
@@ -55,17 +55,16 @@ cd $1-$2-deb
 
 # remove existing folder if necessary..
 if [ -d "$1-$2" ]; then
-    rm -R $1-$2
+    rm -Rf $1-$2
 fi
 
 # dist tar was made by make. move it here.
 mv ../../../$1-$2.tar.gz .
 
-mkdir $1-$2
-cd $1-$2
-
 # extract that bad-boy.. zing.
-tar -zxf ../$1-$2.tar.gz 
+tar -zxf ./$1-$2.tar.gz 
+
+cd $1-$2
 
 # do dh_make to setup deb package structure..
 dh_make --single --copyright gpl3 -f ../$1-$2.tar.gz
@@ -90,10 +89,12 @@ rm ./debian/README.Debian
 rm ./debian/README.source
 rm ./debian/docs
 
-# build package(s)
+# build packages
 debuild
 
-# do some cleaning.. keep ./debian for manual inspection.
-ls | grep -v debian | xargs rm -Rf
+# do some cleaning..
+cd ..
+rm -Rf ./$1-$2
 
+echo "$1-$2.deb: build completed"
 

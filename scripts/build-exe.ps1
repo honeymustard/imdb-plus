@@ -59,8 +59,8 @@ if (!(test-path "$($args[0]).exe"))
 $program = $args[0]
 $version = $args[1]
 $bname = "$($args[0])-$($args[1])"
-$builddir = ".\build\$($bname)"
-$copydir = ".\build\$($bname)\$($bname)"
+$builddir = "..\build\$($bname)"
+$copydir = "..\build\$($bname)\$($bname)"
 
 
 # make build/copy directory if necessary..
