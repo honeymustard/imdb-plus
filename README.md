@@ -23,7 +23,8 @@ they might not be entirely up to speed, which is to say that **it might be compl
     
     or
     
-    $ make build                  # builds src/.deb packages
+    $ make build-deb              # builds .deb package
+    $ make build-rpm              # builds .rpm package
     
 **Windows:**
 
