@@ -23,8 +23,8 @@ EXECUTE = imdb-plus
 VERSION = 0.0.6
 OBJECTS = main.o readfile.o openfile.o parsefile.o download.o \
           patterns.o colors.o strnatcmp.o 
-SOURCES = *.c *.h Makefile COPYING TODO *.md build.ps1 *.sh *.iss *.rc
-FOLDERS = lib res misc share
+SOURCES = *.c *.h Makefile COPYING TODO *.md *.iss *.rc
+FOLDERS = lib res misc share scripts
 CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
 WINDOWS = -mwindows
@@ -55,21 +55,21 @@ all: CURL = -lcurl
 all: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 all: CFLAGS += -O2 $(GTK2) $(CURL) -DINSTALL
 all: $(OBJECTS)
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL) 
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL) -lgthread-2.0
 
 # Make install..
 .PHONY : install
 install: all
 install:
-	-@test -d $(DIR_USR) || mkdir $(DIR_USR)
-	-@test -d $(DIR_BIN) || mkdir $(DIR_BIN)
-	-@test -d $(DIR_SHR) || mkdir $(DIR_SHR)
-	-@test -d $(DIR_APP) || mkdir $(DIR_APP)
-	-@test -d $(DIR_PIX) || mkdir $(DIR_PIX)
-	-@test -d $(DIR_MAN) || mkdir $(DIR_MAN)
-	-@test -d $(DIR_MNP) || mkdir $(DIR_MNP)
-	-@test -d $(DIR_EXE) || mkdir $(DIR_EXE)
-	-@test -d $(DIR_DAT) || mkdir $(DIR_DAT)
+	-@test -d $(DIR_USR) || mkdir -p $(DIR_USR)
+	-@test -d $(DIR_BIN) || mkdir -p $(DIR_BIN)
+	-@test -d $(DIR_SHR) || mkdir -p $(DIR_SHR)
+	-@test -d $(DIR_APP) || mkdir -p $(DIR_APP)
+	-@test -d $(DIR_PIX) || mkdir -p $(DIR_PIX)
+	-@test -d $(DIR_MAN) || mkdir -p $(DIR_MAN)
+	-@test -d $(DIR_MNP) || mkdir -p $(DIR_MNP)
+	-@test -d $(DIR_EXE) || mkdir -p $(DIR_EXE)
+	-@test -d $(DIR_DAT) || mkdir -p $(DIR_DAT)
 	-@cp -R ./res/graphics $(DIR_DAT)
 	-@cp ./misc/$(EXECUTE).desktop $(DIR_APP)
 	-@cp ./misc/$(EXECUTE).1.gz $(DIR_MNP)
@@ -94,17 +94,20 @@ debug: CURL = -lcurl
 debug: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 debug: CFLAGS += -g $(GTK2) $(CURL)
 debug: $(OBJECTS)
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL)
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL) -lgthread-2.0
 
 # Make clean..
 .PHONY : dist-clean
 dist-clean:
 	-@rm -Rf ./build/$(EXECUTE)-$(VERSION)/$(EXECUTE)-$(VERSION)-deb
+	-@rm -Rf ./build/$(EXECUTE)-$(VERSION)/$(EXECUTE)-$(VERSION)-rpm
 
 # Make dist archive..
 .PHONY : dist
 dist:
 	cd misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz && cd ..
+	-@test -d $(EXECUTE)-$(VERSION) || mkdir -p $(EXECUTE)-$(VERSION)
+	cp -R $(SOURCES) $(FOLDERS) -t $(EXECUTE)-$(VERSION)
 	tar -zcf $(EXECUTE)-$(VERSION).tar.gz \
     --exclude='*.csv' \
     --exclude='*.swo' \
@@ -112,13 +115,28 @@ dist:
     --exclude='*.dll' \
     --exclude='*.o' \
     --exclude='*~' \
-    $(SOURCES) $(FOLDERS)
+    --exclude='*.fuse' \
+    $(EXECUTE)-$(VERSION)
+	rm -Rf $(EXECUTE)-$(VERSION)
 
 # Make build..
 .PHONY : build
-build: dist
 build:
-	sh build.sh $(EXECUTE) $(VERSION)
+	@echo "Choose a specific linux build.."
+	@echo "- make build-deb (for DEB based distros)"
+	@echo "- make build-rpm (for RPM based distros)"
+
+# Make .DEB package..
+.PHONY : build-deb
+build-deb: dist
+build-deb:
+	sh ./scripts/build-deb.sh $(EXECUTE) $(VERSION)
+
+# Make .RPM package..
+.PHONY : build-rpm
+build-rpm: dist
+build-rpm:
+	sh ./scripts/build-rpm.sh $(EXECUTE) $(VERSION)
 
 # Make clean..
 .PHONY : clean
@@ -218,7 +236,7 @@ mingw32-clean:
 .PHONY : mingw32-build
 mingw32-build:
 	powershell -command "& {Set-ExecutionPolicy RemoteSigned}"
-	powershell .\build.ps1 $(EXECUTE) $(VERSION) --nogui
+	powershell .\scripts\build-exe.ps1 $(EXECUTE) $(VERSION) --nogui
 
 
 ###############################################################################
