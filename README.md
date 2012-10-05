@@ -43,27 +43,27 @@ they might not be entirely up to speed, which is to say that **it might be compl
 
 <table>
  <tr>
-  <td><b>imdb-plus on debian 1</b></td>
-  <td><b>imdb-plus on debian 2</b></td>
-  <td><b>imdb-plus on windows 1</b></td>
+  <td><b>imdb-plus on debian</b></td>
+  <td><b>imdb-plus on fedora</b></td>
+  <td><b>imdb-plus on windows</b></td>
  </tr>
  <tr>
   <td>
    <img width="260" height="200" 
-    src="https://github.com/honeymustard/imdb-plus/raw/master/local/ss-linux-1.png" 
+    src="https://github.com/honeymustard/imdb-plus/raw/master/local/ss-debian.png" 
     alt="imdb-plus on debian"
    />
   </td>
   <td>
    <img width="260" height="200" 
-    src="https://github.com/honeymustard/imdb-plus/raw/master/local/ss-linux-2.png" 
-    alt="imdb-plus on debian"
+    src="https://github.com/honeymustard/imdb-plus/raw/master/local/ss-fedora.png" 
+    alt="imdb-plus on fedora"
    />
   </td>
   <td>
    <img width="260" height="200" 
-    src="https://github.com/honeymustard/imdb-plus/raw/master/local/ss-win-1.png" 
-    alt="imdb-plus on debian"
+    src="https://github.com/honeymustard/imdb-plus/raw/master/local/ss-windows.png" 
+    alt="imdb-plus on windows"
    />
   </td>
  </tr>
