@@ -234,9 +234,11 @@ mingw32-clean:
 
 # MinGW build requires that powershell & 7zip (7za.exe) are in PATH..
 .PHONY : mingw32-build
+mingw32-build: mingw32
 mingw32-build:
 	powershell -command "& {Set-ExecutionPolicy RemoteSigned}"
-	powershell .\scripts\build-exe.ps1 $(EXECUTE) $(VERSION) --nogui
+	powershell -command "& .\scripts\build-exe.ps1 \
+		$(EXECUTE) $(VERSION) '$(SOURCES)' '$(FOLDERS)' build-win"
 
 
 ###############################################################################
