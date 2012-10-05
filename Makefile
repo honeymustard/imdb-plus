@@ -130,13 +130,13 @@ build:
 .PHONY : build-deb
 build-deb: dist
 build-deb:
-	sh ./scripts/build-deb.sh $(EXECUTE) $(VERSION)
+	sh ./scripts/build-deb.sh $(EXECUTE) $(VERSION) build-deb
 
 # Make .RPM package..
 .PHONY : build-rpm
 build-rpm: dist
 build-rpm:
-	sh ./scripts/build-rpm.sh $(EXECUTE) $(VERSION)
+	sh ./scripts/build-rpm.sh $(EXECUTE) $(VERSION) build-rpm
 
 # Make clean..
 .PHONY : clean
