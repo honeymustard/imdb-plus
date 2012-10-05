@@ -17,309 +17,162 @@
 #
 #############################################################################
 
-###########################################
-# powershell build-script for imdb-plus
+###############################################################
 #
-# @param program-name
-# @param program-version
-# 
-# @usage .\build.ps1 name version [--nogui]
+# Make windows exe/src builds:
 #
-###########################################
-# required program(s): 
+# This script is run by Makefile. mingw32-make mingw32-build.
+#
+###############################################################
+
+###############################################################
+# required programs that must be in path
 #
 # powershell.exe  : with admin privileges
-# 7za.exe         : 7-zip cmdline version in path
-# ISCC.exe        : Inno Setup 5 version in path
+# 7za.exe         : 7-zip cmdline version
+# ISCC.exe        : InnoSetup 5
 #
-###########################################
-#
-# @written by     : Adrian Solumsmo
-# @email          : adrian.solumsmo@gmail.com
-#
-###########################################
+###############################################################
 
-if ($args.length -lt 2)
+
+# make sure script is run from toplevel makefile only..
+if ($args.length -lt 5)
 {
-    write-output "build.ps1: expected 2 arguments. ex. .\build.ps1 'program-name' 'version'"
+    write-output "Error: Script expected more arguments!"
     exit
 }
 
-if (!(test-path "$($args[0]).exe")) 
+if ($args[4] -ne "build-win")
 {
-    write-output "build.ps1: expected .exe file. have you buildt project?"
+    write-output "Error: Script should be run by toplevel Makefile!"
     exit
 }
 
 
-###########################################
-# create build environment
-###########################################
-
+# variables from makefile..
 $program = $args[0]
 $version = $args[1]
-$bname = "$($args[0])-$($args[1])"
-$builddir = "..\build\$($bname)"
-$copydir = "..\build\$($bname)\$($bname)"
+$sources = $args[2].split(" ")
+$folders = $args[3].split(" ")
+
+# temporary locations..
+$tmpdir = ".\$($program)-$($version)-win"
+$tmpzip = ".\$($program)-$($version)-win.7z"
+
+$execute = "$($program)-$($version)"
+$builddir = ".\build\$($execute)"
+$copydir = ".\build\$($execute)\$($execute)-exe"
+$instdir = "$($copydir)\installer"
 
 
-# make build/copy directory if necessary..
-if (!(test-path -path $builddir))
-{
-    new-item $builddir -type directory | out-null
-}
-else 
-{
-    remove-item "$($builddir)\*" -recurse -force
-}
+###########################################
+# make source package
+###########################################
 
-new-item $copydir -type directory | out-null
-
-
-
-# load winforms assemblies..
-[reflection.assembly]::loadwithpartialname("system.windows.forms") | out-null
-
-
-# build ready to run archive..
-function build-runable
+function build-src 
 {
 
-    # copy main program files..
-    $newdir = "$($copydir)\run"
-    new-item $newdir -type directory | out-null
-
-    copy-item *.dll, "$($program).exe" $newdir -force
-    copy-item COPYING $newdir -force
-
-    new-item "$($newdir)\lib" -type directory | out-null
-
-    # recursively copy required dirs..
-    copy-item lib\gtk-2.0 "$($newdir)\lib" -recurse
-    copy-item res $newdir -recurse
-    copy-item share $newdir -recurse
-
-    # remove any lingering data files..
-    remove-item "$($newdir)\res\*.html" -recurse -force
-    remove-item "$($newdir)\res\*.csv" -recurse -forc
-
-    # build archive using 7-zip command line utility (7za must be in PATH)
-    &'7za' a -t7z "$($builddir)\$($bname)-win64.7z" "$($newdir)\*"
-
-    remove-item $newdir -recurse -force
-}
-
-
-# build project source code archive..
-function build-source
-{
-
-    $newdir = "$($copydir)\source"
-    new-item $newdir -type directory | out-null
-
-    # recursively copy required dirs..
-    copy-item lib $newdir -recurse
-    copy-item misc $newdir -recurse
-    copy-item res $newdir -recurse
-    copy-item share $newdir -recurse
-
-    # remove any lingering data files..
-    remove-item "$($newdir)\res\*.html" -recurse -force
-    remove-item "$($newdir)\res\*.csv" -recurse -force
-    remove-item "$($newdir)\lib\gtk-2.0" -recurse -force
-
-    # remove .swp, .swo and temp ~ and binary files..
-    get-childitem $newdir -include *.swp, *.swo, *~ -recurse |
-        foreach-object {remove-item $_.fullname -force}
-
-    copy-item *c, *.h, *.sh, *.rc, *.ps1, *.iss, Makefile $newdir -force
-    copy-item TODO, COPYING $newdir -force
-
-    # build archive using 7-zip command line utility (7za must be in PATH)
-    &'7za' a -t7z "$($builddir)\$($bname)-win64-src.7z" "$($newdir)\*"
-
-    remove-item $newdir -recurse -force
-}
-
-
-# build project auto installing archive..
-function build-installer
-{
-
-    $newdir = "$($copydir)\installer"
-    new-item $newdir -type directory | out-null
-
-    copy-item setup.iss, COPYING, *.dll, "$($program).exe" $newdir
-
-    new-item "$($newdir)\lib" -type directory | out-null
-
-    # recursively copy required dirs..
-    copy-item "lib\gtk-2.0" "$($newdir)\lib" -recurse
-    copy-item res $newdir -recurse
-    copy-item share $newdir -recurse
-
-    # remove any lingering data files..
-    remove-item "$($newdir)\res\*.html" -recurse -force
-    remove-item "$($newdir)\res\*.csv" -recurse -force
-
-    iscc "$($newdir)\setup.iss" /dMyAppVersion=$($version)
-
-    # build archive using 7-zip command line utility (7za must be in PATH)
-    &'7za' a -t7z "$($builddir)\$($bname)-win64-installer.7z" `
-        "$($builddir)\$($bname)\$($bname)-setup.exe"
-
-    remove-item "$($builddir)\$($bname)\$($bname)-setup.exe" -force
-
-    remove-item $newdir -recurse -force
-
-}
-
-
-# build project based on checkbox values..
-function build-project
-{
-    $button2.enabled = $false
-
-    $selected = 0
-
-    # check for checkboxes..
-    for($i = 0; $i -lt 3; $i++)
-    {
-        if($check[$i].checked)
-        {
-            $rtextbox.text += "selected: " + $options[$i] + "`n"
-            $selected++
-        }
+    # Make dist folder..
+    if (test-path -path $tmpdir) 
+    { 
+        remove-item $tmpdir -recurse -force
+    }
+    else {
+        new-item $tmpdir -type directory | out-null
     }
 
-    # at least one option was selected..
-    if($selected -gt 0)
+    # copy sources and folders to our temp dir..
+    copy-item $sources $tmpdir -recurse
+    copy-item $folders $tmpdir -recurse
+
+    # remove all non-source files..
+    get-childitem $tmpdir -include *.csv, *.swo, *.swp, `
+        *.dll, *.o, *~, *.fuse -recurse |
+        foreach-object { remove-item $_.fullname -force }
+
+    # remove existing archive is necessary..
+    if (test-path -path $tmpzip) 
     {
-
-        # run selected build(s)..
-        if($check[0].checked)
-        {
-
-            build-runable | foreach-object {$rtextbox.text += "$($_)`n"}
-        }
-
-        if($check[1].checked)
-        {
-
-            build-source | foreach-object {$rtextbox.text += "$($_)`n"}
-
-        }
-
-        if($check[2].checked)
-        {
-
-            build-source | foreach-object {$rtextbox.text += "$($_)`n"}
-        }    
-
-
-        # remove temporary build directory..
-        remove-item "$($builddir)\$($bname)" -recurse -force
-
-        # view contents of builddir..
-        get-childitem $builddir
-
-    }
-    else
-    {
-        $rtextbox.text += "You need to select one mode`n"
+        remove-item $tmpzip -force 
     }
 
-    $button2.enabled = $true
+    # zip entire *-win folder..
+    &'7za' a -t7z $tmpzip $tmpdir
+
+    remove-item $tmpdir -recurse -force
 }
 
 
-
 ###########################################
-# Run buildscript without gui..
+# make build environment
 ###########################################
 
-if(($args.length -eq 3) -and ($args[2] -eq "--nogui"))
+function build-env
 {
 
-    # build all targets..
-    build-runable
-    build-source
-    build-installer
+    # make build directory..
+    if (!(test-path -path $builddir))
+    {
+        new-item $builddir -type directory | out-null
+    }
 
-    remove-item "$($builddir)\$($bname)" -recurse -force
+    # make copy directory..
+    if (!(test-path -path $copydir))
+    {
+        new-item $copydir -type directory | out-null
+    }
+    else 
+    {
+        remove-item "$($copydir)\*" -recurse -force
+    }
 
-    # view contents of builddir..
-    get-childitem $builddir
-
-    exit
+    new-item $instdir -type directory | out-null
 }
 
 
-
 ###########################################
-# Run buildscript with gui..
+# make executable package
 ###########################################
 
-$options = @(
-        "runnable package", 
-        "source package", 
-        "auto-installer package"
-        )
-
-$form = new-object windows.forms.form
-
-$form.text = "BUILD:"
-
-$label = new-object windows.forms.label
-$label.location = new-object drawing.point 10, 5 
-$label.size = new-object drawing.point 200, 25
-$label.text = "Select which targets to build:"
-
-$form.controls.add($label)
-
-$check = @()
-
-for($i = 0; $i -lt 3; $i++)
+function build-exe
 {
-    $check += ,(new-object windows.forms.checkbox)
-    $check[$i].location = new-object drawing.point 10, (($i * 25) + 40)
-    $check[$i].size = new-object drawing.point 15, 15
-    $check[$i].checked = $true
 
-    $label = new-object windows.forms.label
-    $label.location = new-object drawing.point 30, (($i * 25) + 40)
-    $label.size = new-object drawing.point 300, 25
-    $label.text = $options[$i]
+    # extract source package..
+    &'7za' x $tmpzip "-o$($instdir)"
+    move-item "$($instdir)\$($execute)-win\*" $instdir
+    remove-item "$($instdir)\$($execute)-win" -force
 
-    $form.controls.add($check[$i])
-    $form.controls.add($label)
+    # copy relevant binaries..
+    copy-item "$($program).exe" $instdir
+    copy-item "lib\gtk-2.0" "$($instdir)\lib" -recurse -force
+    copy-item res $instdir -recurse -force
+    copy-item *.dll $instdir -recurse -force
+
+    # run setup script..
+    iscc "$($instdir)\setup.iss" /dMyAppVersion=$($version)
+
+    # build archive..
+    &'7za' a -t7z "$($copydir)\$($execute)-exe.7z" `
+        "$($copydir)\$($execute)-setup.exe"
+
+    # cleanup..
+    remove-item "$($copydir)\$($execute)-setup.exe" -force
+    remove-item $instdir -recurse -force
 }
 
-$rtextbox = new-object windows.forms.richtextbox
-$rtextbox.location = new-object drawing.point 10, (($i++ * 25) + 40)
-$rtextbox.size = new-object drawing.point 600, 180
-$rtextbox.readonly = $true
-$rtextbox.text = "Ready to build project..`n"
 
-$form.controls.add($rtextbox)
+###########################################
+# make all targets
+###########################################
 
-$button1 = new-object windows.forms.button
-$button1.location = new-object drawing.point 10, (($i * 25) + 40 + 160)
-$button1.size = new-object drawing.point 60, 25
-$button1.text = "close"
-$button1.add_click({$form.close()})
+build-src
+build-env
+build-exe
 
-$button2 = new-object windows.forms.button
-$button2.location = new-object drawing.point 75, (($i++ * 25) + 40 + 160)
-$button2.size = new-object drawing.point 60, 25
-$button2.text = "build"
-$button2.add_click({build-project})
+copy-item $tmpzip $copydir
 
-$form.controls.add($button1)
-$form.controls.add($button2)
+# view contents of builddir..
+get-childitem $copydir
 
-$form.size = new-object drawing.point 635, 370
-
-$form.showdialog()
-
+write-output "$($execute).exe: build completed"
 
