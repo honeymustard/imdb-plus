@@ -27,6 +27,13 @@
 #
 ########################################################
 
+
+# make sure script is run from toplevel only..
+if [ "$3" != "build-rpm" ]; then 
+    echo "Error: script must be run from toplevel Makefile!"
+    exit
+fi
+
 rpmdev-setuptree
 
 # copy relevant files to build folder..

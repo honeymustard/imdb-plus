@@ -27,6 +27,13 @@
 #
 ########################################################
 
+
+# make sure script is run from toplevel only..
+if [ "$3" != "build-deb" ]; then 
+    echo "Error: script must be run from toplevel Makefile!"
+    exit
+fi
+
 # export credentials to match my gpg key..
 DEBEMAIL="adrian.solumsmo@gmail.com"
 DEBFULLNAME="Adrian Solumsmo"
