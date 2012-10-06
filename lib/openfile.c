@@ -74,8 +74,8 @@ int open_file(char *filename) {
                 FALSE);
         }
 
-        if(current_open_file == NULL) {
-            free(current_open_file);    
+        if(current_open_file != NULL) {
+            free(current_open_file);
         }
 
         /* remember filename */

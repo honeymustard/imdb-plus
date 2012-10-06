@@ -20,12 +20,15 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include "master.h"
 #include "tables.h"
 #include "widgets.h"
 #include "lib/colors.h"
+#include "lib/globals.h"
 #include "lib/readfile.h"
 #include "lib/events/events.h"
 #include "lib/gtk_custom_table/gtk_custom_table.h"
@@ -39,6 +42,51 @@ int main(int argc, char *argv[]) {
     g_thread_init(NULL);
 
     gtk_init(&argc, &argv);
+
+    /* create home directory */
+    if(strcmp(OS, "WINDOWS") != 0) { 
+
+        char *home = getenv("HOME");
+        char *path = malloc(strlen(home) + strlen(APP_DIRE) + 3);
+
+        strcpy(path, home);
+        strcat(path, "/");
+        strcat(path, APP_DIRE);
+        strcat(path, "/");
+
+        set_global(CONST_HOME, path);
+
+        mkdir(path, S_IRWXU);
+
+        /* path constants */
+        char *top_tmp = malloc(strlen(path) + strlen(TOP_TMP) + 1);
+        char *top_csv = malloc(strlen(path) + strlen(TOP_CSV) + 1);
+        char *bot_tmp = malloc(strlen(path) + strlen(BOT_TMP) + 1);
+        char *bot_csv = malloc(strlen(path) + strlen(BOT_CSV) + 1);
+        char *box_tmp = malloc(strlen(path) + strlen(BOX_TMP) + 1);
+        char *box_csv = malloc(strlen(path) + strlen(BOX_CSV) + 1);
+
+        strcpy(top_tmp, path);
+        strcpy(top_csv, path);
+        strcpy(bot_tmp, path);
+        strcpy(bot_csv, path);
+        strcpy(box_tmp, path);
+        strcpy(box_csv, path);
+
+        strcat(top_tmp, TOP_TMP);
+        strcat(top_csv, TOP_CSV);
+        strcat(bot_tmp, BOT_TMP);
+        strcat(bot_csv, BOT_CSV);
+        strcat(box_tmp, BOX_TMP);
+        strcat(box_csv, BOX_CSV);
+
+        set_global(CONST_TOP_TMP, top_tmp);
+        set_global(CONST_TOP_CSV, top_csv);
+        set_global(CONST_BOT_TMP, bot_tmp);
+        set_global(CONST_BOT_CSV, bot_csv);
+        set_global(CONST_BOX_TMP, box_tmp);
+        set_global(CONST_BOX_CSV, box_csv);
+    }
 
     int i = 0;
     int j = 0;
@@ -245,7 +293,7 @@ int main(int argc, char *argv[]) {
     int no_results = 1;
 
     /* set top 250 table values */
-    FILE *fp_top250 = fopen(CONST_TOP_CSV, "rb");
+    FILE *fp_top250 = fopen(get_global(CONST_TOP_CSV), "rb");
 
     if(fp_top250 != NULL) {
 
@@ -256,7 +304,7 @@ int main(int argc, char *argv[]) {
 
         char ***results;
 
-        if(read_file(CONST_TOP_CSV, &cols, &rows, &results) 
+        if(read_file(get_global(CONST_TOP_CSV), &cols, &rows, &results) 
             && rows == 250 && cols == 6) {
 
             for(i = 0; i < gtk_custom_table_get_rows(nb_tab_top250); i++) {
@@ -316,7 +364,7 @@ int main(int argc, char *argv[]) {
     no_results = 1;
 
     /* set bottom 100 table values */
-    FILE *fp_bot100 = fopen(CONST_BOT_CSV, "rb");
+    FILE *fp_bot100 = fopen(get_global(CONST_BOT_CSV), "rb");
 
     if(fp_bot100 != NULL) {
         
@@ -327,7 +375,8 @@ int main(int argc, char *argv[]) {
 
         char ***results;
 
-        if(read_file(CONST_BOT_CSV, &cols, &rows, &results) && cols == 6) {
+        if(read_file(get_global(CONST_BOT_CSV), &cols, &rows, &results) 
+            && rows == 100 && cols == 6) {
 
             for(i = 0; i < gtk_custom_table_get_rows(nb_tab_bot100); i++) {
 
@@ -386,7 +435,7 @@ int main(int argc, char *argv[]) {
     no_results = 1;
 
     /* set all-time boxoffice table values */
-    FILE *fp_boxoffice = fopen(CONST_BOX_CSV, "rb");
+    FILE *fp_boxoffice = fopen(get_global(CONST_BOX_CSV), "rb");
 
     if(fp_boxoffice != NULL) {
 
@@ -398,7 +447,8 @@ int main(int argc, char *argv[]) {
 
         char ***results;
 
-        if(read_file(CONST_BOX_CSV, &cols, &rows, &results) && cols == 5) {
+        if(read_file(get_global(CONST_BOX_CSV), &cols, &rows, &results) 
+            && cols == 5) {
 
             /* update boxoffice tab size */
             gtk_custom_table_resize(nb_tab_boxoffice, -1, rows);

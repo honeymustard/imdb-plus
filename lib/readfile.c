@@ -17,6 +17,7 @@
 *
 *****************************************************************************/
 
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -91,12 +92,14 @@ int entities_decode(char *buffer, int i) {
     }
 
     if(buffer[i] != '\0' && buffer[i+1] != '\0' && buffer[i+2] == ';') {
+        
+        unsigned char temp = 0;
 
         /* for conventional ascii chars */
         if(is_0_to_9(buffer[i]) && is_0_to_f(buffer[i+1])) {
 
-            unsigned char temp = (buffer[i] - HEX_D_OFF) << 4;
-            temp |= (buffer[i+1] - HEX_D_OFF);
+            temp = (buffer[i] - HEX_D_OFF) << 4;
+            temp |= buffer[i+1] - HEX_D_OFF;
 
             buffer[i+2] = temp;
 
@@ -106,13 +109,14 @@ int entities_decode(char *buffer, int i) {
         else if((buffer[i] >= 'A' && buffer[i] <= 'B') && 
             is_0_to_f(buffer[i+1])) {
 
-            unsigned char temp = ((buffer[i] + 10) - HEX_C_OFF) << 4;
+            temp = ((buffer[i] + 10) - HEX_C_OFF) << 4;
 
             if(is_a_to_f(buffer[i+1])) {
-                temp |= ((buffer[i+1] + 10) - HEX_C_OFF);
+
+                temp |= (buffer[i+1] + 10) - HEX_C_OFF;
             }
             else {
-                temp |= (buffer[i+1] - HEX_D_OFF);
+                temp |= buffer[i+1] - HEX_D_OFF;
             }
 
             buffer[++i] = 0xC2;
@@ -126,13 +130,14 @@ int entities_decode(char *buffer, int i) {
 
             char values[] = {8, 9, 10, 11};
 
-            unsigned char temp = values[buffer[i] - (HEX_C_OFF + 2)] << 4;
+            temp = values[buffer[i] - (HEX_C_OFF + 2)] << 4;
 
             if(is_a_to_f(buffer[i+1])) {
-                temp |= ((buffer[i+1] + 10) - HEX_C_OFF);
+
+                temp |= (buffer[i+1] + 10) - HEX_C_OFF;
             }
             else {
-                temp |= (buffer[i+1] - HEX_D_OFF);
+                temp |= buffer[i+1] - HEX_D_OFF;
             }
 
             buffer[++i] = 0xC3;
@@ -210,8 +215,7 @@ int parse_line(char **container, char *buffer) {
 int calc_cols(char *buffer) {
 
     int i = 0;
-
-    int length = 0;
+    int j = 0;
 
     for(i = 0; buffer[i] != '\0'; i++) {
 
@@ -221,13 +225,13 @@ int calc_cols(char *buffer) {
                 i++;
                 if(buffer[i] != '\0' && buffer[i] == '"') {
                     i++;
-                    length++;
+                    j++;
                 }
             }
         }
     }
 
-    return ++length;
+    return ++j;
 }
 
 
@@ -241,7 +245,6 @@ int calc_cols(char *buffer) {
  */
 int read_file(char *filename, int *cols, int *rows, char ****results) {
         
-
     FILE *fp = fopen(filename, "rb");
         
     if(!fp) {

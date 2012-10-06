@@ -50,12 +50,12 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
 
     /* download from this url.. */
     char load[100];
-    strcpy(load, CONST_URL);
+    strcpy(load, get_global(CONST_RAT_URL));
     strcat(load, entered);
 
     /* save to this path.. */
     char save[100];
-    strcpy(save, CONST_PREFIX);
+    strcpy(save, get_global(CONST_HOME));
     strcat(save, entered);
     strcat(save, ".csv");
 

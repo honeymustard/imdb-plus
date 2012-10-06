@@ -18,40 +18,53 @@
 *****************************************************************************/
 
 
+/* project started december 27th 2011 */
+
 #ifndef _MASTER_
 #define _MASTER_
 
-/* project started december 27th 2011 */
-
-#define APP_NAME "imdb-plus"
-
-/* set alternate path for linux install */
+/* set icon path */
 #ifdef INSTALL
-    #define CONST_PREFIX "/usr/share/"APP_NAME"/res/" 
+    #define IMG_DIR "/usr/share/pixmaps/" 
 #else
-    #define CONST_PREFIX "./res/" 
+    #define IMG_DIR "./share/icons/" 
 #endif
 
-#define APP_ADDR "/usr/share/"APP_NAME
-#define APP_ICON CONST_PREFIX "graphics/imdb-plus.png"
+/* application */
+#define APP_NAME "imdb-plus"
+#define APP_ICON IMG_DIR "imdb-plus.png"
+#define APP_DIRE ".imdb-plus"
 #define APP_TITL APP_NAME " " APP_VERS
 #define APP_COPY "Copyright \xc2\xa9 2011-2012 Adrian Solumsmo"
 #define APP_DESC APP_NAME " is a statistical extension application for IMDB"
 #define APP_HOME "https://github.com/honeymustard/imdb-plus"
 
-/* url constants */
-#define CONST_BOX "http://akas.imdb.com/boxoffice/alltimegross?region=world-wide"
-#define CONST_TOP "http://akas.imdb.com/chart/top"
-#define CONST_BOT "http://akas.imdb.com/chart/bottom"
-#define CONST_URL "http://akas.imdb.com/list/export?list_id=ratings&author_id=ur"
+/* constants */
+#define CONST_HOME    0x01
+#define CONST_TOP_TMP 0x02
+#define CONST_TOP_CSV 0x03
+#define CONST_TOP_URL 0x04
+#define CONST_BOT_TMP 0x05
+#define CONST_BOT_CSV 0x06
+#define CONST_BOT_URL 0x07
+#define CONST_BOX_TMP 0x08
+#define CONST_BOX_CSV 0x09
+#define CONST_BOX_URL 0x10
+#define CONST_RAT_URL 0x11 
 
-/* path constants */
-#define CONST_TOP_SAV CONST_PREFIX"top250.html"
-#define CONST_TOP_CSV CONST_PREFIX"top250.csv"
-#define CONST_BOT_SAV CONST_PREFIX"bottom100.html"
-#define CONST_BOT_CSV CONST_PREFIX"bottom100.csv"
-#define CONST_BOX_SAV CONST_PREFIX"boxoffice.html"
-#define CONST_BOX_CSV CONST_PREFIX"boxoffice.csv" 
+/* filenames */
+#define TOP_TMP "top250.html"
+#define TOP_CSV "top250.csv"
+#define BOT_TMP "bottom100.html"
+#define BOT_CSV "bottom100.csv"
+#define BOX_TMP "boxoffice.html"
+#define BOX_CSV "boxoffice.csv" 
+
+/* urls */
+#define BOX_URL "http://akas.imdb.com/boxoffice/alltimegross?region=world-wide"
+#define TOP_URL "http://akas.imdb.com/chart/top"
+#define BOT_URL "http://akas.imdb.com/chart/bottom"
+#define RAT_URL "http://akas.imdb.com/list/export?list_id=ratings&author_id=ur"
 
 #endif
 

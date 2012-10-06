@@ -32,7 +32,7 @@ int menu_signal_update_top() {
 
     char ***results;
     
-    if(read_file(CONST_TOP_CSV, &cols, &rows, &results) 
+    if(read_file(get_global(CONST_TOP_CSV), &cols, &rows, &results) 
         && rows == 250 && cols == 6) {
 
         for(i = 0; i < gtk_custom_table_get_rows(nb_tab_top250); i++) {
@@ -82,7 +82,8 @@ int menu_signal_update_bot() {
 
     char ***results;
     
-    if(read_file(CONST_BOT_CSV, &cols, &rows, &results) && cols == 6) {
+    if(read_file(get_global(CONST_BOT_CSV), &cols, &rows, &results) 
+        && rows == 100 && cols == 6) {
 
         for(i = 0; i < gtk_custom_table_get_rows(nb_tab_bot100); i++) {
 
@@ -130,7 +131,8 @@ int menu_signal_update_box() {
     
     char ***results;
     
-    if(read_file(CONST_BOX_CSV, &cols, &rows, &results) && cols == 5) {
+    if(read_file(get_global(CONST_BOX_CSV), &cols, &rows, &results) 
+        && cols == 5) {
 
         /* update boxoffice tab size */
         gtk_custom_table_resize(nb_tab_boxoffice, -1, rows);
@@ -273,8 +275,8 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
 
         /* download top250 list */
         struct download *dl_top = malloc(sizeof (struct download));
-        dl_top->url = CONST_TOP;
-        dl_top->saveas = CONST_TOP_SAV;
+        dl_top->url = get_global(CONST_TOP_URL);
+        dl_top->saveas = get_global(CONST_TOP_TMP);
 
         thread1 = g_thread_create(&download, dl_top, TRUE, NULL);
 
@@ -291,8 +293,8 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
 
         /* download bottom100 list */
         struct download *dl_bot = malloc(sizeof (struct download));
-        dl_bot->url = CONST_BOT;
-        dl_bot->saveas = CONST_BOT_SAV;
+        dl_bot->url = get_global(CONST_BOT_URL);
+        dl_bot->saveas = get_global(CONST_BOT_TMP);
 
         thread2 = g_thread_create(&download, dl_bot, TRUE, NULL);
 
@@ -309,8 +311,8 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
 
         /* download boxoffice list */
         struct download *dl_box = malloc(sizeof (struct download));
-        dl_box->url = CONST_BOX;
-        dl_box->saveas = CONST_BOX_SAV;
+        dl_box->url = get_global(CONST_BOX_URL);
+        dl_box->saveas = get_global(CONST_BOX_TMP);
 
         thread3 = g_thread_create(&download, dl_box, TRUE, NULL);
 
@@ -335,7 +337,8 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         /* attempt to parse top 250 list */
         if(dl_top->status == DL_STATUS_OK) {
 
-            if(parse_file(CONST_TOP_SAV, CONST_TOP_CSV, pattern_top250)) {
+            if(parse_file(get_global(CONST_TOP_TMP), 
+                get_global(CONST_TOP_CSV), pattern_top250)) {
                 
                 if(menu_signal_update_top()) {
                     topstat = "OK";
@@ -346,7 +349,8 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         /* attempt to parse bot 100 list */
         if(dl_bot->status == DL_STATUS_OK) {
 
-            if(parse_file(CONST_BOT_SAV, CONST_BOT_CSV, pattern_bot100)) {
+            if(parse_file(get_global(CONST_BOT_TMP), 
+                get_global(CONST_BOT_CSV), pattern_bot100)) {
 
                 if(menu_signal_update_bot()) {
                     botstat = "OK";
@@ -357,8 +361,10 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         /* attempt to parse boxoffice list */
         if(dl_box->status == DL_STATUS_OK) {
 
-            if(parse_file(CONST_BOX_SAV, CONST_BOX_CSV, pattern_boxoffice) || 
-               parse_file(CONST_BOX_SAV, CONST_BOX_CSV, pattern_boxoffice_win)) {
+            if(parse_file(get_global(CONST_BOX_TMP), 
+                get_global(CONST_BOX_CSV), pattern_boxoffice) || 
+                parse_file(get_global(CONST_BOX_TMP), 
+                get_global(CONST_BOX_CSV), pattern_boxoffice_win)) {
 
                 if(menu_signal_update_box()) {
                     boxstat = "OK";
@@ -367,9 +373,9 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         }
 
         /* remove temp files */
-        remove(CONST_BOT_SAV);
-        remove(CONST_BOX_SAV);
-        remove(CONST_TOP_SAV);
+        remove(get_global(CONST_BOT_TMP));
+        remove(get_global(CONST_BOX_TMP));
+        remove(get_global(CONST_TOP_TMP));
 
         /* free memory */
         free(dl_top);
