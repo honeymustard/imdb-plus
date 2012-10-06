@@ -20,8 +20,8 @@
 
 /* project started december 27th 2011 */
 
-#ifndef _MASTER_
-#define _MASTER_
+#ifndef _MAIN_
+#define _MAIN_
 
 /* set icon path */
 #ifdef INSTALL
