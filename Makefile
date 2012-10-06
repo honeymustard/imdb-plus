@@ -22,9 +22,9 @@
 EXECUTE = imdb-plus
 VERSION = 0.0.6
 OBJECTS = main.o readfile.o openfile.o parsefile.o download.o \
-          patterns.o colors.o strnatcmp.o 
+          patterns.o colors.o globals.o strnatcmp.o 
 SOURCES = *.c *.h Makefile COPYING TODO *.md *.iss *.rc
-FOLDERS = lib res misc share scripts
+FOLDERS = lib misc share scripts
 CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
 WINDOWS = -mwindows
@@ -41,8 +41,6 @@ DIR_APP = $(DESTDIR)/usr/share/applications
 DIR_PIX = $(DESTDIR)/usr/share/pixmaps
 DIR_MAN = $(DESTDIR)/usr/share/man
 DIR_MNP = $(DESTDIR)/usr/share/man/man1
-DIR_EXE = $(DESTDIR)/usr/share/$(EXECUTE)
-DIR_DAT = $(DESTDIR)/usr/share/$(EXECUTE)/res
 
 ###############################################################################
 # Standard linux build..
@@ -68,14 +66,10 @@ install:
 	-@test -d $(DIR_PIX) || mkdir -p $(DIR_PIX)
 	-@test -d $(DIR_MAN) || mkdir -p $(DIR_MAN)
 	-@test -d $(DIR_MNP) || mkdir -p $(DIR_MNP)
-	-@test -d $(DIR_EXE) || mkdir -p $(DIR_EXE)
-	-@test -d $(DIR_DAT) || mkdir -p $(DIR_DAT)
-	-@cp -R ./res/graphics $(DIR_DAT)
 	-@cp ./misc/$(EXECUTE).desktop $(DIR_APP)
 	-@cp ./misc/$(EXECUTE).1.gz $(DIR_MNP)
-	-@cp ./res/graphics/$(EXECUTE).png $(DIR_PIX)
+	-@cp ./share/icons/$(EXECUTE).png $(DIR_PIX)
 	-@cp $(EXECUTE) $(DIR_BIN)
-	-@chmod a+rwx $(DIR_DAT)
 	-@echo "$(EXECUTE) was installed successfully"
 
 # Make uninstall..
@@ -84,7 +78,6 @@ uninstall:
 	-@rm -f /usr/share/man/man1/$(EXECUTE).1.gz
 	-@rm -f /usr/share/applications/$(EXECUTE).desktop
 	-@rm -f /usr/share/pixmaps/$(EXECUTE).png
-	-@rm -f -R /usr/share/$(EXECUTE)
 	-@rm -f /usr/bin/$(EXECUTE)
 	-@echo "$(EXECUTE) uninstalled successfully"
 
@@ -211,6 +204,7 @@ windows: GTK2 = -mms-bitfields \
 
 # MinGW convenience..
 .PHONY : windows
+windows: OS += WINDOWS
 windows: CFLAGS += $(GTK2) $(CURL) $(PCRE)
 windows: OBJECTS += resfile.o
 windows: resfile.o $(OBJECTS)
@@ -246,8 +240,8 @@ mingw32-build:
 #
 ###############################################################################
 
-main.o: main.c master.h tables.h widgets.h lib/events/events.h
-	gcc $(CFLAGS) main.c -DAPP_VERS=\"$(VERSION)\"
+main.o: main.c main.h tables.h widgets.h lib/globals.h lib/events/events.h
+	gcc $(CFLAGS) main.c -DAPP_VERS=\"$(VERSION)\" -DOS=\"$(OS)\"
 
 readfile.o: lib/readfile.c lib/readfile.h
 	gcc $(CFLAGS) lib/readfile.c
@@ -266,6 +260,9 @@ patterns.o: lib/patterns.c lib/patterns.h
 
 colors.o: lib/colors.c lib/colors.h
 	gcc $(CFLAGS) lib/colors.c
+
+globals.o: lib/globals.c lib/globals.h
+	gcc $(CFLAGS) lib/globals.c
 
 strnatcmp.o: lib/gtk_custom_table/strnatcmp/strnatcmp.c lib/gtk_custom_table/strnatcmp/strnatcmp.h
 	gcc $(CFLAGS) lib/gtk_custom_table/strnatcmp/strnatcmp.c
