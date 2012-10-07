@@ -24,7 +24,7 @@
 #include <sys/types.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-#include "master.h"
+#include "main.h"
 #include "tables.h"
 #include "widgets.h"
 #include "lib/colors.h"
@@ -44,11 +44,12 @@ int main(int argc, char *argv[]) {
     gtk_init(&argc, &argv);
 
     /* create home directory */
-    if(strcmp(OS, "WINDOWS") != 0) { 
+    if(strcmp(OS, "LINUX") == 0) { 
 
         char *home = getenv("HOME");
         char *path = malloc(strlen(home) + strlen(APP_DIRE) + 3);
 
+        /* make new path */
         strcpy(path, home);
         strcat(path, "/");
         strcat(path, APP_DIRE);
@@ -66,6 +67,7 @@ int main(int argc, char *argv[]) {
         char *box_tmp = malloc(strlen(path) + strlen(BOX_TMP) + 1);
         char *box_csv = malloc(strlen(path) + strlen(BOX_CSV) + 1);
 
+        /* make paths to home directory */
         strcpy(top_tmp, path);
         strcpy(top_csv, path);
         strcpy(bot_tmp, path);
@@ -80,6 +82,7 @@ int main(int argc, char *argv[]) {
         strcat(box_tmp, BOX_TMP);
         strcat(box_csv, BOX_CSV);
 
+        /* set global paths */
         set_global(CONST_TOP_TMP, top_tmp);
         set_global(CONST_TOP_CSV, top_csv);
         set_global(CONST_BOT_TMP, bot_tmp);
