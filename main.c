@@ -92,6 +92,8 @@ int main(int argc, char *argv[]) {
         set_global(CONST_BOT_CSV, bot_csv);
         set_global(CONST_BOX_TMP, box_tmp);
         set_global(CONST_BOX_CSV, box_csv);
+
+        free(path);
     }
 
     int i = 0;
@@ -101,13 +103,17 @@ int main(int argc, char *argv[]) {
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
     /* create title string */
-    char title[100];
+    char *title = malloc(strlen(APP_NAME) + 
+        strlen(get_global(CONST_VERSION) + 2));
+
     strcpy(title, APP_NAME);
     strcat(title, "-");
     strcat(title, get_global(CONST_VERSION));
 
     gtk_window_set_title(GTK_WINDOW(window), title);
     gtk_window_set_icon_from_file(GTK_WINDOW(window), APP_ICON, NULL);
+
+    free(title);
 
     /* connect window signals to callbacks */
     g_signal_connect(window, "destroy", 
