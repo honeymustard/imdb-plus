@@ -39,18 +39,19 @@
 #define APP_HOME "https://github.com/honeymustard/imdb-plus"
 
 /* constants */
-#define CONST_HOME    0x01
-#define CONST_TOP_TMP 0x02
-#define CONST_TOP_CSV 0x03
-#define CONST_TOP_URL 0x04
-#define CONST_BOT_TMP 0x05
-#define CONST_BOT_CSV 0x06
-#define CONST_BOT_URL 0x07
-#define CONST_BOX_TMP 0x08
-#define CONST_BOX_CSV 0x09
-#define CONST_BOX_URL 0x10
-#define CONST_RAT_URL 0x11 
-#define CONST_VERSION 0x12
+#define CONST_HOME    1
+#define CONST_TOP_TMP 2
+#define CONST_TOP_CSV 3
+#define CONST_TOP_URL 4
+#define CONST_BOT_TMP 5
+#define CONST_BOT_CSV 6
+#define CONST_BOT_URL 7
+#define CONST_BOX_TMP 8
+#define CONST_BOX_CSV 9
+#define CONST_BOX_URL 10
+#define CONST_RAT_URL 11 
+#define CONST_VERSION 12
+#define CONST_EOL     13
 
 /* filenames */
 #define TOP_TMP "top250.html"
