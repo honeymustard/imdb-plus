@@ -169,7 +169,7 @@
     /* public getters and setters */
     void gtk_custom_table_set_cell_color(GtkWidget *table, int col, int row, 
         double rgb[]);
-    void gtk_custom_table_set_graph_color(GtkWidget *table, int col, int row, 
+    void gtk_custom_table_set_graph_color(GtkWidget *table, int col, 
         double rgb[]);
     void gtk_custom_table_set_column_index(GtkWidget *table, int col, gboolean value);
     void gtk_custom_table_set_column_shade(GtkWidget *table, int col, gboolean value);

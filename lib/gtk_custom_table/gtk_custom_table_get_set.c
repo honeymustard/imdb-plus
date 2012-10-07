@@ -146,8 +146,7 @@ void gtk_custom_table_set_cell_text(GtkWidget *table, int col, int row,
  * mark a column as graphable.. i.e. integers will show up as graph..
  * @param GtkWidget *table    current table
  * @param int col             column 
- * @param int row             row
- * @param double colors[]     array of colors for graph
+ * @param gboolean value      turn on or off
  */
 void gtk_custom_table_set_column_graph(GtkWidget *table, int col, gboolean value) {
  
@@ -169,11 +168,34 @@ void gtk_custom_table_set_column_graph(GtkWidget *table, int col, gboolean value
     }
 
     /* set default graph color */
-    meta->graph[0] = 1.00;
-    meta->graph[1] = 0.00;
-    meta->graph[2] = 1.00;
+    meta->graph[0] = 0.00;
+    meta->graph[1] = 0.90;
+    meta->graph[2] = 0.00;
 
     meta->graphable = value;
+}
+
+
+/**
+ * add foreground-color to a column graph..
+ * @param GtkWidget *table    current working table
+ * @param int col             column 
+ * @param double rgb[]        array of colors for graph
+ */
+void gtk_custom_table_set_graph_color(GtkWidget *table, int col,  
+        double rgb[]) {
+
+    GtkCustomTablePrivate *priv;
+    priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
+
+    struct table_meta *meta = priv->table_cols[col]->meta;
+
+    if(meta != NULL) {
+
+        meta->graph[0] = rgb[0];
+        meta->graph[1] = rgb[1];
+        meta->graph[2] = rgb[2];
+    }
 }
 
 
