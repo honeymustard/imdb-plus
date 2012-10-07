@@ -57,7 +57,7 @@ void menu_signal_about(GtkWidget *widget, gpointer data) {
     gtk_about_dialog_set_name(GTK_ABOUT_DIALOG(dialog), 
         APP_NAME);
     gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), 
-        APP_VERS); 
+        get_global(CONST_VERSION)); 
     gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog), 
         APP_COPY);
     gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog), 
