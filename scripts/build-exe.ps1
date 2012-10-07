@@ -145,7 +145,6 @@ function build-exe
     # copy relevant binaries..
     copy-item "$($program).exe" $instdir
     copy-item "lib\gtk-2.0" "$($instdir)\lib" -recurse -force
-    copy-item res $instdir -recurse -force
     copy-item *.dll $instdir -recurse -force
 
     # run setup script..
