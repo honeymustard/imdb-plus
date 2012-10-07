@@ -23,7 +23,7 @@ EXECUTE = imdb-plus
 VERSION = 0.0.6
 OBJECTS = main.o readfile.o openfile.o parsefile.o download.o \
           patterns.o colors.o globals.o strnatcmp.o 
-SOURCES = *.c *.h Makefile COPYING TODO *.md *.iss *.rc
+SOURCES = *.c *.h Makefile COPYING TODO *.md *.iss
 FOLDERS = lib misc share scripts
 CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
@@ -276,5 +276,5 @@ event_%.o: event_%.c lib/events/events.h
 	gcc $(CFLAGS) $< -o $@ -DAPP_VERS=\"$(VERSION)\"
 
 resfile.o:
-	windres -o resfile.o resources.rc
+	windres -o resfile.o ./misc/resources.rc
 
