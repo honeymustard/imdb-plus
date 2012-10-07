@@ -23,6 +23,7 @@
 
 #define TABLE_STATS_COLS 8
 #define TABLE_MYMOV_COLS 6
+#define TABLE_LSTST_COLS 8
 #define TABLE_MYLST_COLS 6
 #define TABLE_TP250_COLS 7
 #define TABLE_BT100_COLS 7
@@ -31,6 +32,10 @@
 
 /* table column width descriptions */
 int nb_tab_statistics_cols[TABLE_STATS_COLS] = {
+    45, 55, 55, -1, 75, 75, 75, 75
+};
+
+int nb_tab_lists_stats_cols[TABLE_LSTST_COLS] = {
     45, 55, 55, -1, 75, 75, 75, 75
 };
 
@@ -50,6 +55,10 @@ int nb_tab_mymovies_cols[TABLE_MYMOV_COLS] = {
     55, 90, 90, 90, -1, 55, 
 };
 
+int nb_tab_mylists_cols[TABLE_MYLST_COLS] = {
+    55, 90, 90, 90, -1, 55, 
+};
+
 
 /* table headers */
 char *nb_tab_statistics_headers[TABLE_STATS_COLS] = {
@@ -57,6 +66,17 @@ char *nb_tab_statistics_headers[TABLE_STATS_COLS] = {
     "IMDb", 
     "Flux", 
     "Your Rating", 
+    "Percent", 
+    "Votes", 
+    "Runtime", 
+    "Year Avg", 
+};
+
+char *nb_tab_lists_stats_headers[TABLE_LSTST_COLS] = {
+    "IMDb", 
+    "N / A", 
+    "N / A", 
+    "IMDb Rating", 
     "Percent", 
     "Votes", 
     "Runtime", 
@@ -92,6 +112,14 @@ char *nb_tab_mymovies_headers[TABLE_MYMOV_COLS] = {
     "Year", 
 };
 
-#endif
+char *nb_tab_mylists_headers[TABLE_MYLST_COLS] = {
+    "#", 
+    "IMDb Rating", 
+    "Your Rating", 
+    "Unique ID", 
+    "Title", 
+    "Year", 
+};
 
+#endif
 

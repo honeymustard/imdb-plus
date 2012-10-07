@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
 
     /* create title string */
     char *title = malloc(strlen(APP_NAME) + 
-        strlen(get_global(CONST_VERSION) + 2));
+        strlen(get_global(CONST_VERSION)) + 2);
 
     strcpy(title, APP_NAME);
     strcat(title, "-");
@@ -146,8 +146,8 @@ int main(int argc, char *argv[]) {
     nb_tab_mymovies = gtk_custom_table_new(TABLE_MYMOV_COLS, 
         50, 500, 500, nb_tab_mymovies_cols);
     nb_tab_lists = gtk_custom_table_new(TABLE_MYLST_COLS, 
-        50, 500, 500, nb_tab_mymovies_cols);
-    nb_tab_lists_stats = gtk_custom_table_new(TABLE_STATS_COLS, 
+        50, 500, 500, nb_tab_mylists_cols);
+    nb_tab_lists_stats = gtk_custom_table_new(TABLE_LSTST_COLS, 
         10, 500, 500, nb_tab_statistics_cols);
 
     /* set primary columns to enable quick searches */
@@ -169,9 +169,9 @@ int main(int argc, char *argv[]) {
     }
 
     /* set lists statistics headers */
-    for(i = 0; i < TABLE_STATS_COLS; i++) {
+    for(i = 0; i < TABLE_LSTST_COLS; i++) {
         gtk_custom_table_set_head_text(nb_tab_lists_stats, i, 
-            nb_tab_statistics_headers[i]);
+            nb_tab_lists_stats_headers[i]);
     }
 
     /* set top 250 headers */
@@ -181,7 +181,7 @@ int main(int argc, char *argv[]) {
     }
 
     /* set bottom 100 headers */
-    for(i = 0; i < TABLE_TP250_COLS; i++) {
+    for(i = 0; i < TABLE_BT100_COLS; i++) {
         gtk_custom_table_set_head_text(nb_tab_bot100, i, 
             nb_tab_top250_headers[i]);
     }
@@ -199,9 +199,9 @@ int main(int argc, char *argv[]) {
     }
 
     /* set my-lists headers */
-    for(i = 0; i < TABLE_MYMOV_COLS; i++) {
+    for(i = 0; i < TABLE_MYLST_COLS; i++) {
         gtk_custom_table_set_head_text(nb_tab_lists, i, 
-            nb_tab_mymovies_headers[i]);
+            nb_tab_mylists_headers[i]);
     }
 
     /* set automatic numbering columns and a graph column */
