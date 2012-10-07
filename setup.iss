@@ -26,7 +26,7 @@ OutputDir=../
 OutputBaseFilename={#MyAppName}-{#MyAppVersion}-setup
 Compression=lzma
 SolidCompression=yes
-SetupIconFile=.\res\graphics\imdb-plus.ico
+SetupIconFile=.\share\icons\imdb-plus.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
