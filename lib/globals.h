@@ -21,14 +21,6 @@
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
-char *const_home;
-char *const_top_tmp;
-char *const_top_csv;
-char *const_bot_tmp;
-char *const_bot_csv;
-char *const_box_tmp;
-char *const_box_csv;
-
 char *get_global(int global);
 int set_global(int global, char *value);
 

@@ -43,4 +43,17 @@ double graph_bg[3] = {
     0.90,
 };
 
+/* graph foreground colors */
+double graph_fg1[3] = {
+    1.00,
+    0.00,
+    1.00,
+};
+
+double graph_fg2[3] = {
+    1.00,
+    0.95,
+    0.00,
+};
+
 

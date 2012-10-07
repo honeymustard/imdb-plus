@@ -19,7 +19,7 @@
 
 
 #include "globals.h"
-#include "../master.h"
+#include "../main.h"
 
 
 char *const_home;

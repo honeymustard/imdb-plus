@@ -26,7 +26,7 @@
 #include <string.h>
 
 /* include external headers */
-#include "../../master.h"
+#include "../../main.h"
 #include "../../widgets.h"
 #include "../readfile.h"
 #include "../openfile.h"
