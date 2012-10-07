@@ -25,15 +25,6 @@
 #
 ###############################################################
 
-###############################################################
-# required programs that must be in path
-#
-# powershell.exe  : with admin privileges
-# 7za.exe         : 7-zip cmdline version
-# ISCC.exe        : InnoSetup 5
-#
-###############################################################
-
 
 # make sure script is run from toplevel makefile only..
 if ($args.length -lt 5)
@@ -148,7 +139,7 @@ function build-exe
     copy-item *.dll $instdir -recurse -force
 
     # run setup script..
-    iscc "$($instdir)\setup.iss" /dMyAppVersion=$($version)
+    iscc "$($instdir)\misc\setup.iss" /dMyAppVersion=$($version)
 
     # build archive..
     &'7za' a -t7z "$($copydir)\$($execute)-exe.7z" `

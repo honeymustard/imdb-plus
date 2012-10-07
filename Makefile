@@ -21,7 +21,7 @@
 # Program variables..
 EXECUTE = imdb-plus
 VERSION = 0.0.6
-SOURCES = *.c *.h Makefile COPYING TODO *.md *.iss
+SOURCES = *.c *.h *.md Makefile COPYING TODO
 FOLDERS = lib misc share scripts
 CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
@@ -222,7 +222,7 @@ mingw32-debug: windows
 mingw32-clean:
 	del /s *.o $(EXECUTE).exe
 
-# MinGW build requires that powershell & 7zip (7za.exe) are in PATH..
+# MinGW build requires Powershell, 7za (7zip cli), ISSC (Inno Setup) in PATH..
 .PHONY : mingw32-build
 mingw32-build: mingw32
 mingw32-build:
