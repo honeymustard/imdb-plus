@@ -18,20 +18,28 @@
 ###############################################################################
 
 
-# Main program variables..
+# Program variables..
 EXECUTE = imdb-plus
 VERSION = 0.0.6
-OBJECTS = main.o readfile.o openfile.o parsefile.o download.o \
-          patterns.o colors.o globals.o strnatcmp.o 
 SOURCES = *.c *.h Makefile COPYING TODO *.md *.iss
 FOLDERS = lib misc share scripts
 CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
 WINDOWS = -mwindows
 
-# Other libs..
+# All project files..
+OBJECTS += $(patsubst %.c, %.o, $(wildcard ./*.c))
+OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/*.c))
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/gtk_custom_table/*.c))
+OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/gtk_custom_table/strnatcmp/*.c))
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/events/*.c))
+
+
+###############################################################################
+# Standard linux build..
+#
+###############################################################################
+
 
 # Install paths..
 DIR_USR = $(DESTDIR)/usr
@@ -42,10 +50,6 @@ DIR_PIX = $(DESTDIR)/usr/share/pixmaps
 DIR_MAN = $(DESTDIR)/usr/share/man
 DIR_MNP = $(DESTDIR)/usr/share/man/man1
 
-###############################################################################
-# Standard linux build..
-#
-###############################################################################
 
 # Standard make for install..
 .PHONY : all
@@ -226,7 +230,8 @@ mingw32-debug: windows
 # MinGW clean, remove o's exe's..
 .PHONY : mingw32-clean
 mingw32-clean:
-	del *.o lib\events\*.o lib\gtk_custom_table\*.o $(EXECUTE).exe
+	del *.o lib\events\*.o lib\gtk_custom_table\*.o \
+    lib\gtk_custom_table\strnatcmp\*.o $(EXECUTE).exe
 
 # MinGW build requires that powershell & 7zip (7za.exe) are in PATH..
 .PHONY : mingw32-build
@@ -238,43 +243,27 @@ mingw32-build:
 
 
 ###############################################################################
-# Project files..
+# Project targets..
 #
 ###############################################################################
 
+# Compile default..
+%.o: %.c %.h 
+	gcc $(CFLAGS) $< -o $@
+
+# Compile main..
 main.o: main.c main.h tables.h widgets.h lib/globals.h lib/events/events.h
-	gcc $(CFLAGS) main.c -DAPP_VERS=\"$(VERSION)\" -DOS=\"$(OS)\"
+	gcc $(CFLAGS) main.c -DVERSION=\"$(VERSION)\" -DOS=\"$(OS)\"
 
-readfile.o: lib/readfile.c lib/readfile.h
-	gcc $(CFLAGS) lib/readfile.c
-
-openfile.o: lib/openfile.c lib/openfile.h
-	gcc $(CFLAGS) lib/openfile.c
-
-parsefile.o: lib/parsefile.c lib/parsefile.h
-	gcc $(CFLAGS) lib/parsefile.c
-
-download.o: lib/download.c lib/download.h
-	gcc $(CFLAGS) lib/download.c
-
-patterns.o: lib/patterns.c lib/patterns.h
-	gcc $(CFLAGS) lib/patterns.c
-
-colors.o: lib/colors.c lib/colors.h
-	gcc $(CFLAGS) lib/colors.c
-
-globals.o: lib/globals.c lib/globals.h
-	gcc $(CFLAGS) lib/globals.c
-
-strnatcmp.o: lib/gtk_custom_table/strnatcmp/strnatcmp.c lib/gtk_custom_table/strnatcmp/strnatcmp.h
-	gcc $(CFLAGS) lib/gtk_custom_table/strnatcmp/strnatcmp.c
-
+# Compile table..
 gtk_custom_table_%.o: gtk_custom_table_%.c lib/gtk_custom_table/gtk_custom_table.h
 	gcc $(CFLAGS) $< -o $@
 
+# Compile events..
 event_%.o: event_%.c lib/events/events.h
-	gcc $(CFLAGS) $< -o $@ -DAPP_VERS=\"$(VERSION)\"
+	gcc $(CFLAGS) $< -o $@
 
+# Compile Windows resource..
 resfile.o:
 	windres -o resfile.o ./misc/resources.rc
 
