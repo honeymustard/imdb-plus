@@ -43,6 +43,9 @@ int main(int argc, char *argv[]) {
 
     gtk_init(&argc, &argv);
 
+    /* set version global */
+    set_global(CONST_VERSION, VERSION);
+
     /* create home directory */
     if(strcmp(OS, "LINUX") == 0) { 
 
@@ -96,7 +99,14 @@ int main(int argc, char *argv[]) {
 
     /* create a new window, set title and icon */
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(window), APP_TITL);
+
+    /* create title string */
+    char title[100];
+    strcpy(title, APP_NAME);
+    strcat(title, "-");
+    strcat(title, get_global(CONST_VERSION));
+
+    gtk_window_set_title(GTK_WINDOW(window), title);
     gtk_window_set_icon_from_file(GTK_WINDOW(window), APP_ICON, NULL);
 
     /* connect window signals to callbacks */

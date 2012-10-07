@@ -34,7 +34,6 @@
 #define APP_NAME "imdb-plus"
 #define APP_ICON IMG_DIR "imdb-plus.png"
 #define APP_DIRE ".imdb-plus"
-#define APP_TITL APP_NAME " " APP_VERS
 #define APP_COPY "Copyright \xc2\xa9 2011-2012 Adrian Solumsmo"
 #define APP_DESC APP_NAME " is a statistical extension application for IMDB"
 #define APP_HOME "https://github.com/honeymustard/imdb-plus"
@@ -51,6 +50,7 @@
 #define CONST_BOX_CSV 0x09
 #define CONST_BOX_URL 0x10
 #define CONST_RAT_URL 0x11 
+#define CONST_VERSION 0x12
 
 /* filenames */
 #define TOP_TMP "top250.html"
