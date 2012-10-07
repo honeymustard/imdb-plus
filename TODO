@@ -2,10 +2,14 @@ TODO for project imdb-plus:
 
  -> CONSIDER THIS:
 
-  * secondary sorting. pros) easy to implement, cons) negligible value
-  * add 'List stats' tab. pros) This would take minutes
-  * add 'Comparison' tab. compare MyMovies <-> MyLists -> vs IMDB
-  * add 'Other stats' tab. lists contain additional statistically significant information..
+  * secondary sorting for tables..
+
+  * add the following new tabs:
+
+      * Comparison: Intersection of open lists: MyMovies -> MyLists
+      * Top250 stats: How many top250 films have you seen..
+      * Bottom100 stats: How many bottom100 films have you seen..
+      * Box-office stats: How many box-office films have you seen..
 
  -> TO BE FIXED:
   
