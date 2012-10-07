@@ -37,5 +37,5 @@ rm -rf %{buildroot}
 
 %changelog
 * Wed Oct 02 2012 Honeymustard <adrian.solumsmo@gmail.com>
-- Created first RPM for Fedora
+- Created RPM on Fedora
 
