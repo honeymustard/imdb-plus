@@ -51,14 +51,25 @@ DIR_MAN = $(DESTDIR)/usr/share/man
 DIR_MNP = $(DESTDIR)/usr/share/man/man1
 
 
-# Standard make for install..
+# Default for make..
 .PHONY : all
-all: OS += LINUX
-all: CURL = -lcurl
-all: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
-all: CFLAGS += -O2 $(GTK2) $(CURL) -DINSTALL
-all: $(OBJECTS)
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL) -lgthread-2.0
+all: CFLAGS += -O2 -DINSTALL
+all: linux
+
+# Make run-in-place debug..
+.PHONY : debug
+debug: CFLAGS += -g
+debug: linux
+
+# Faux target..
+.PHONY : linux
+linux: OS += LINUX
+linux: CURL = -lcurl
+linux: GTHREAD = -lgthread-2.0
+linux: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
+linux: CFLAGS += $(GTK2) $(CURL)
+linux: $(OBJECTS)
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL) $(GTHREAD)
 
 # Make install..
 .PHONY : install
@@ -85,15 +96,6 @@ uninstall:
 	-@rm -f /usr/share/pixmaps/$(EXECUTE).png
 	-@rm -f /usr/bin/$(EXECUTE)
 	-@echo "$(EXECUTE) uninstalled successfully"
-
-# Make run-in-place debug..
-.PHONY : debug
-debug: OS += LINUX
-debug: CURL = -lcurl
-debug: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
-debug: CFLAGS += -g $(GTK2) $(CURL)
-debug: $(OBJECTS)
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL) -lgthread-2.0
 
 # Make clean..
 .PHONY : dist-clean
@@ -141,27 +143,15 @@ build-rpm:
 .PHONY : clean
 clean:
 	-@rm $(OBJECTS) $(EXECUTE) 2>/dev/null && \
-    echo "it's clean" || \
-    echo "it's already clean"
+    echo "it's clean" || echo "it's already clean"
 
 
 ###############################################################################
-# Windows specific stuff, required packages: 
-#
-# gnuwin32 pcre 
-# libcurl 
-# gtk+
-#
-# Required .dll's to run program:
-#
-# pcre3.dll, libucrl.dll, GTK\*.dll
+# Required Windows packages: MinGW, Gnuwin32 PCRE, libcurl, GTK+
 #
 # Command line invocation:
 #
-# mingw32-make mingw32
-# mingw32-make mingw32-debug
-# mingw32-make mingw32-clean
-# mingw32-make mingw32-build
+# mingw32-make [ mingw32 | mingw32-debug | mingw32-clean | mingw32-build ]
 #
 ###############################################################################
 
@@ -230,8 +220,7 @@ mingw32-debug: windows
 # MinGW clean, remove o's exe's..
 .PHONY : mingw32-clean
 mingw32-clean:
-	del *.o lib\events\*.o lib\gtk_custom_table\*.o \
-    lib\gtk_custom_table\strnatcmp\*.o $(EXECUTE).exe
+	del /s *.o $(EXECUTE).exe
 
 # MinGW build requires that powershell & 7zip (7za.exe) are in PATH..
 .PHONY : mingw32-build
