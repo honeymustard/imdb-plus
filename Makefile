@@ -49,6 +49,7 @@ DIR_MNP = $(DESTDIR)/usr/share/man/man1
 
 # Standard make for install..
 .PHONY : all
+all: OS += LINUX
 all: CURL = -lcurl
 all: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 all: CFLAGS += -O2 $(GTK2) $(CURL) -DINSTALL
@@ -83,6 +84,7 @@ uninstall:
 
 # Make run-in-place debug..
 .PHONY : debug
+debug: OS += LINUX
 debug: CURL = -lcurl
 debug: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 debug: CFLAGS += -g $(GTK2) $(CURL)
