@@ -93,7 +93,14 @@ int main(int argc, char *argv[]) {
         set_global(CONST_BOX_TMP, box_tmp);
         set_global(CONST_BOX_CSV, box_csv);
 
+        /* free up memory */
         free(path);
+        free(top_tmp);
+        free(top_csv);
+        free(bot_tmp);
+        free(bot_csv);
+        free(box_tmp);
+        free(box_csv);
     }
 
     int i = 0;
