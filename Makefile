@@ -86,7 +86,7 @@ install:
 	-@cp ./misc/$(EXECUTE).1.gz $(DIR_MNP)
 	-@cp ./share/icons/$(EXECUTE).png $(DIR_PIX)
 	-@cp $(EXECUTE) $(DIR_BIN)
-	-@echo "$(EXECUTE) was installed successfully"
+	-@echo "$(EXECUTE) installed successfully"
 
 # Make uninstall..
 .PHONY : uninstall
