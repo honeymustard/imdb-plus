@@ -67,7 +67,7 @@ linux: OS += LINUX
 linux: CURL = -lcurl
 linux: GTHREAD = -lgthread-2.0
 linux: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
-linux: CFLAGS += $(GTK2) $(CURL)
+linux: CFLAGS += $(GTK2) $(CURL) $(GTHREAD)
 linux: $(OBJECTS)
 	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL) $(GTHREAD)
 
