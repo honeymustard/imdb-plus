@@ -23,6 +23,7 @@
 
 
 char *const_home;
+char *const_version;
 char *const_top_tmp;
 char *const_top_csv;
 char *const_bot_tmp;
@@ -39,6 +40,9 @@ char *get_global(int global) {
 
     if(global == CONST_HOME) {
         return const_home;
+    }
+    else if(global == CONST_VERSION) {
+        return const_version;
     }
     else if(global == CONST_TOP_TMP) {
         return const_top_tmp;
@@ -81,6 +85,9 @@ int set_global(int global, char *value) {
 
     if(global == CONST_HOME) {
         const_home = value;
+    }
+    else if(global == CONST_VERSION) {
+        const_version = value;
     }
     else if(global == CONST_TOP_TMP) {
         const_top_tmp = value;
