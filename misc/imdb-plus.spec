@@ -30,7 +30,6 @@ make DESTDIR=%{buildroot} install
 %{_mandir}/man1/%{name}.1.gz
 %{_bindir}/%{name}
 %{_datadir}/applications/%{name}.desktop
-%{_datadir}/%{name}/res
 %{_datadir}/pixmaps
 
 %clean
