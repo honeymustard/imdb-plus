@@ -28,16 +28,16 @@
 ########################################################
 
 
+# export credentials to match gpg key..
+DEBEMAIL="adrian.solumsmo@gmail.com"
+DEBFULLNAME="Adrian Solumsmo"
+export DEBEMAIL DEBFULLNAME
+
 # make sure script is run from toplevel only..
 if [ "$3" != "build-deb" ]; then 
     echo "Error: script must be run from toplevel Makefile!"
     exit
 fi
-
-# export credentials to match my gpg key..
-DEBEMAIL="adrian.solumsmo@gmail.com"
-DEBFULLNAME="Adrian Solumsmo"
-export DEBEMAIL DEBFULLNAME
 
 # make build directory if not available..
 if [ ! -d "build" ]; then
@@ -59,11 +59,7 @@ if [ ! -d "$1-$2-deb" ]; then
 fi
 
 cd $1-$2-deb
-
-# remove existing folder if necessary..
-if [ -d "$1-$2" ]; then
-    rm -Rf $1-$2
-fi
+rm -Rf ./*
 
 # dist tar was made by make. move it here.
 mv ../../../$1-$2.tar.gz .
@@ -91,7 +87,6 @@ cat ./debian/clog > ./debian/changelog && rm ./debian/clog
 cp ../../../../misc/control ./debian/control
 cp ../../../../misc/copyright ./debian/copyright
 cp ../../../../misc/rules ./debian/rules
-cp ../../../../misc/postinst ./debian/postinst
 rm ./debian/README.Debian
 rm ./debian/README.source
 rm ./debian/docs
