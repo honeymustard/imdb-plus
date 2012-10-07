@@ -18,18 +18,12 @@
 *****************************************************************************/
 
 
+#include <string.h>
 #include "globals.h"
 #include "../main.h"
 
 
-char *const_home;
-char *const_version;
-char *const_top_tmp;
-char *const_top_csv;
-char *const_bot_tmp;
-char *const_bot_csv;
-char *const_box_tmp;
-char *const_box_csv;
+char constants[CONST_EOL][200];
 
 
 /**
@@ -38,41 +32,7 @@ char *const_box_csv;
  */
 char *get_global(int global) {
 
-    if(global == CONST_HOME) {
-        return const_home;
-    }
-    else if(global == CONST_VERSION) {
-        return const_version;
-    }
-    else if(global == CONST_TOP_TMP) {
-        return const_top_tmp;
-    }
-    else if(global == CONST_TOP_CSV) {
-        return const_top_csv;
-    }
-    else if(global == CONST_TOP_URL) {
-        return TOP_URL;
-    }
-    else if(global == CONST_BOT_TMP) {
-        return const_bot_tmp;
-    }
-    else if(global == CONST_BOT_CSV) {
-        return const_bot_csv;
-    }
-    else if(global == CONST_BOT_URL) {
-        return BOT_URL;
-    }
-    else if(global == CONST_BOX_TMP) {
-        return const_box_tmp;
-    }
-    else if(global == CONST_BOX_CSV) {
-        return const_box_csv;
-    }
-    else if(global == CONST_BOX_URL) {
-        return BOX_URL;
-    }
-
-    return "";
+    return constants[global];
 }
 
 
@@ -83,30 +43,7 @@ char *get_global(int global) {
  */
 int set_global(int global, char *value) {
 
-    if(global == CONST_HOME) {
-        const_home = value;
-    }
-    else if(global == CONST_VERSION) {
-        const_version = value;
-    }
-    else if(global == CONST_TOP_TMP) {
-        const_top_tmp = value;
-    }
-    else if(global == CONST_TOP_CSV) {
-        const_top_csv = value;
-    }
-    else if(global == CONST_BOT_TMP) {
-        const_bot_tmp = value;
-    }
-    else if(global == CONST_BOT_CSV) {
-        const_bot_csv = value;
-    }
-    else if(global == CONST_BOX_TMP) {
-        const_box_tmp = value;
-    }
-    else if(global == CONST_BOX_CSV) {
-        const_box_csv = value;
-    }
+    strcpy(constants[global], value);
 
     return 0;
 }
