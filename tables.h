@@ -25,6 +25,7 @@
 #define TABLE_MYMOV_COLS 6
 #define TABLE_LSTST_COLS 8
 #define TABLE_MYLST_COLS 6
+#define TABLE_COMPR_COLS 8
 #define TABLE_TP250_COLS 7
 #define TABLE_BT100_COLS 7
 #define TABLE_BOXOF_COLS 7
@@ -35,8 +36,20 @@ int nb_tab_statistics_cols[TABLE_STATS_COLS] = {
     45, 55, 55, -1, 75, 75, 75, 75
 };
 
+int nb_tab_mymovies_cols[TABLE_MYMOV_COLS] = {
+    55, 90, 90, 90, -1, 55, 
+};
+
 int nb_tab_lists_stats_cols[TABLE_LSTST_COLS] = {
     45, 55, 55, -1, 75, 75, 75, 75
+};
+
+int nb_tab_mylists_cols[TABLE_MYLST_COLS] = {
+    55, 90, 90, 90, -1, 55, 
+};
+
+int nb_tab_compare_cols[TABLE_COMPR_COLS] = {
+    45, 55, 55, -1, 75, 75, 75, 75 
 };
 
 int nb_tab_top250_cols[TABLE_TP250_COLS] = {
@@ -49,14 +62,6 @@ int nb_tab_bot100_cols[TABLE_BT100_COLS] = {
 
 int nb_tab_boxoffice_cols[TABLE_BOXOF_COLS] = {
     55, 90, 90, 90, -1, 55, 120, 
-};
-
-int nb_tab_mymovies_cols[TABLE_MYMOV_COLS] = {
-    55, 90, 90, 90, -1, 55, 
-};
-
-int nb_tab_mylists_cols[TABLE_MYLST_COLS] = {
-    55, 90, 90, 90, -1, 55, 
 };
 
 
@@ -72,6 +77,15 @@ char *nb_tab_statistics_headers[TABLE_STATS_COLS] = {
     "Year Avg", 
 };
 
+char *nb_tab_mymovies_headers[TABLE_MYMOV_COLS] = {
+    "#", 
+    "IMDb Rating", 
+    "Your Rating", 
+    "Unique ID", 
+    "Title", 
+    "Year", 
+};
+
 char *nb_tab_lists_stats_headers[TABLE_LSTST_COLS] = {
     "IMDb", 
     "N / A", 
@@ -83,7 +97,37 @@ char *nb_tab_lists_stats_headers[TABLE_LSTST_COLS] = {
     "Year Avg", 
 };
 
+char *nb_tab_mylists_headers[TABLE_MYLST_COLS] = {
+    "#", 
+    "IMDb Rating", 
+    "Your Rating", 
+    "Unique ID", 
+    "Title", 
+    "Year", 
+};
+
+char *nb_tab_compare_headers[TABLE_COMPR_COLS] = {
+    "IMDb", 
+    "Movies", 
+    "List", 
+    "Intersected Ratings", 
+    "Percent", 
+    "Votes", 
+    "Runtime", 
+    "Year Avg", 
+};
+
 char *nb_tab_top250_headers[TABLE_TP250_COLS] = {
+    "#", 
+    "IMDb Rating", 
+    "Your Rating", 
+    "Unique ID", 
+    "Title", 
+    "Year", 
+    "Votes", 
+};
+
+char *nb_tab_bot100_headers[TABLE_BT100_COLS] = {
     "#", 
     "IMDb Rating", 
     "Your Rating", 
@@ -101,24 +145,6 @@ char *nb_tab_boxoffice_headers[TABLE_BOXOF_COLS] = {
     "Title", 
     "Year", 
     "Gross", 
-};
-
-char *nb_tab_mymovies_headers[TABLE_MYMOV_COLS] = {
-    "#", 
-    "IMDb Rating", 
-    "Your Rating", 
-    "Unique ID", 
-    "Title", 
-    "Year", 
-};
-
-char *nb_tab_mylists_headers[TABLE_MYLST_COLS] = {
-    "#", 
-    "IMDb Rating", 
-    "Your Rating", 
-    "Unique ID", 
-    "Title", 
-    "Year", 
 };
 
 #endif
