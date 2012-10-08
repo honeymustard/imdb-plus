@@ -6,10 +6,8 @@ TODO for project imdb-plus:
 
   * add the following new tabs:
 
-      * Comparison: Intersection of open lists: MyMovies -> MyLists
-      * Top250 stats: How many top250 films have you seen..
-      * Bottom100 stats: How many bottom100 films have you seen..
-      * Box-office stats: How many box-office films have you seen..
+      * Compare: Intersection of MyMovies <> MyLists
+      * All Stats: Statistics on top 250, bottom 100 & boxoffice..
 
  -> TO BE FIXED:
   
