@@ -137,18 +137,18 @@ int main(int argc, char *argv[]) {
     /* initialize new table widgets */
     nb_tab_statistics = gtk_custom_table_new(TABLE_STATS_COLS, 
         10, 500, 500, nb_tab_statistics_cols);
+    nb_tab_mymovies = gtk_custom_table_new(TABLE_MYMOV_COLS, 
+        50, 500, 500, nb_tab_mymovies_cols);
+    nb_tab_lists_stats = gtk_custom_table_new(TABLE_LSTST_COLS, 
+        10, 500, 500, nb_tab_statistics_cols);
+    nb_tab_lists = gtk_custom_table_new(TABLE_MYLST_COLS, 
+        50, 500, 500, nb_tab_mylists_cols);
     nb_tab_top250 = gtk_custom_table_new(TABLE_TP250_COLS, 
         250, 500, 500, nb_tab_top250_cols);
     nb_tab_bot100 = gtk_custom_table_new(TABLE_BT100_COLS, 
         100, 500, 500, nb_tab_bot100_cols);
     nb_tab_boxoffice = gtk_custom_table_new(TABLE_BOXOF_COLS, 
         50, 500, 500, nb_tab_boxoffice_cols);
-    nb_tab_mymovies = gtk_custom_table_new(TABLE_MYMOV_COLS, 
-        50, 500, 500, nb_tab_mymovies_cols);
-    nb_tab_lists = gtk_custom_table_new(TABLE_MYLST_COLS, 
-        50, 500, 500, nb_tab_mylists_cols);
-    nb_tab_lists_stats = gtk_custom_table_new(TABLE_LSTST_COLS, 
-        10, 500, 500, nb_tab_statistics_cols);
 
     /* set primary columns to enable quick searches */
     gtk_custom_table_set_column_prime(nb_tab_top250, 3, 
@@ -616,24 +616,36 @@ int main(int argc, char *argv[]) {
 
     /* create new vboxes for tabs */
     nb_tab_statistics_vbox = gtk_vbox_new(FALSE, 0);
+    nb_tab_mymovies_vbox = gtk_vbox_new(FALSE, 0);
+    nb_tab_lists_stats_vbox = gtk_vbox_new(FALSE, 0);
+    nb_tab_lists_vbox = gtk_vbox_new(FALSE, 0);
+    nb_tab_compare_vbox = gtk_vbox_new(FALSE, 0);
     nb_tab_top250_vbox = gtk_vbox_new(FALSE, 0);
     nb_tab_bot100_vbox = gtk_vbox_new(FALSE, 0);
     nb_tab_boxoffice_vbox = gtk_vbox_new(FALSE, 0);
-    nb_tab_mymovies_vbox = gtk_vbox_new(FALSE, 0);
-    nb_tab_lists_vbox = gtk_vbox_new(FALSE, 0);
-    nb_tab_lists_stats_vbox = gtk_vbox_new(FALSE, 0);
+    nb_tab_allstats_vbox = gtk_vbox_new(FALSE, 0);
 
     /* initialize scrolled windows */
     nb_statistics_scroll = gtk_scrolled_window_new(NULL, NULL);
+    nb_mymovies_scroll = gtk_scrolled_window_new(NULL, NULL);
+    nb_lists_stats_scroll = gtk_scrolled_window_new(NULL, NULL);
+    nb_lists_scroll = gtk_scrolled_window_new(NULL, NULL);
+    nb_compare_scroll = gtk_scrolled_window_new(NULL, NULL);
     nb_top250_scroll = gtk_scrolled_window_new(NULL, NULL);
     nb_bot100_scroll = gtk_scrolled_window_new(NULL, NULL);
     nb_boxoffice_scroll = gtk_scrolled_window_new(NULL, NULL);
-    nb_mymovies_scroll = gtk_scrolled_window_new(NULL, NULL);
-    nb_lists_scroll = gtk_scrolled_window_new(NULL, NULL);
-    nb_lists_stats_scroll = gtk_scrolled_window_new(NULL, NULL);
+    nb_allstats_scroll = gtk_scrolled_window_new(NULL, NULL);
 
     /* set scrolled window policies */
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_statistics_scroll), 
+        GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_mymovies_scroll), 
+        GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_lists_stats_scroll), 
+        GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_lists_scroll), 
+        GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_compare_scroll), 
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_top250_scroll), 
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -641,40 +653,50 @@ int main(int argc, char *argv[]) {
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_boxoffice_scroll), 
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_mymovies_scroll), 
-        GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_lists_scroll), 
-        GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_lists_stats_scroll), 
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_allstats_scroll), 
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
     /* create viewports */
     nb_statistics_view = gtk_viewport_new(NULL, NULL);
+    nb_mymovies_view = gtk_viewport_new(NULL, NULL);
+    nb_lists_stats_view = gtk_viewport_new(NULL, NULL);
+    nb_lists_view = gtk_viewport_new(NULL, NULL);
+    nb_compare_view = gtk_viewport_new(NULL, NULL);
     nb_top250_view = gtk_viewport_new(NULL, NULL);
     nb_bot100_view = gtk_viewport_new(NULL, NULL);
     nb_boxoffice_view = gtk_viewport_new(NULL, NULL);
-    nb_mymovies_view = gtk_viewport_new(NULL, NULL);
-    nb_lists_view = gtk_viewport_new(NULL, NULL);
-    nb_lists_stats_view = gtk_viewport_new(NULL, NULL);
+    nb_allstats_view = gtk_viewport_new(NULL, NULL);
 
     /* add widgets to viewports */
     gtk_container_add(GTK_CONTAINER(nb_statistics_view), 
         nb_tab_statistics);
+    gtk_container_add(GTK_CONTAINER(nb_mymovies_view), 
+        nb_tab_mymovies); 
+    gtk_container_add(GTK_CONTAINER(nb_lists_stats_view), 
+        nb_tab_lists_stats);
+    gtk_container_add(GTK_CONTAINER(nb_lists_view), 
+        nb_tab_lists);
+    gtk_container_add(GTK_CONTAINER(nb_compare_view), 
+        nb_tab_compare);
     gtk_container_add(GTK_CONTAINER(nb_top250_view), 
         nb_tab_top250);
     gtk_container_add(GTK_CONTAINER(nb_bot100_view), 
         nb_tab_bot100);
     gtk_container_add(GTK_CONTAINER(nb_boxoffice_view), 
         nb_tab_boxoffice);
-    gtk_container_add(GTK_CONTAINER(nb_mymovies_view), 
-        nb_tab_mymovies);
-    gtk_container_add(GTK_CONTAINER(nb_lists_view), 
-        nb_tab_lists);
-    gtk_container_add(GTK_CONTAINER(nb_lists_stats_view), 
-        nb_tab_lists_stats);
+    gtk_container_add(GTK_CONTAINER(nb_allstats_view), 
+        nb_tab_allstats);
 
     /* disable viewport shadows */
     gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_statistics_view), 
+        GTK_SHADOW_NONE);
+    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_mymovies_view), 
+        GTK_SHADOW_NONE);
+    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_lists_stats_view), 
+        GTK_SHADOW_NONE);
+    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_lists_view), 
+        GTK_SHADOW_NONE);
+    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_compare_view), 
         GTK_SHADOW_NONE);
     gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_top250_view), 
         GTK_SHADOW_NONE);
@@ -682,44 +704,48 @@ int main(int argc, char *argv[]) {
         GTK_SHADOW_NONE);
     gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_boxoffice_view), 
         GTK_SHADOW_NONE);
-    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_mymovies_view), 
+    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_allstats_view), 
         GTK_SHADOW_NONE);
-    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_lists_view), 
-        GTK_SHADOW_NONE);
-    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_lists_stats_view), 
-        GTK_SHADOW_NONE);
- 
+
     /* add viewports to scrollwindows */
     gtk_container_add(GTK_CONTAINER(nb_statistics_scroll), 
         nb_statistics_view); 
+    gtk_container_add(GTK_CONTAINER(nb_mymovies_scroll), 
+        nb_mymovies_view); 
+    gtk_container_add(GTK_CONTAINER(nb_lists_stats_scroll), 
+        nb_lists_stats_view); 
+    gtk_container_add(GTK_CONTAINER(nb_lists_scroll), 
+        nb_lists_view); 
+    gtk_container_add(GTK_CONTAINER(nb_compare_scroll), 
+        nb_compare_view); 
     gtk_container_add(GTK_CONTAINER(nb_top250_scroll), 
         nb_top250_view); 
     gtk_container_add(GTK_CONTAINER(nb_bot100_scroll), 
         nb_bot100_view); 
     gtk_container_add(GTK_CONTAINER(nb_boxoffice_scroll), 
         nb_boxoffice_view); 
-    gtk_container_add(GTK_CONTAINER(nb_mymovies_scroll), 
-        nb_mymovies_view); 
-    gtk_container_add(GTK_CONTAINER(nb_lists_scroll), 
-        nb_lists_view); 
-    gtk_container_add(GTK_CONTAINER(nb_lists_stats_scroll), 
-        nb_lists_stats_view); 
+    gtk_container_add(GTK_CONTAINER(nb_allstats_scroll), 
+        nb_allstats_view); 
 
     /* pack scrolled widgets into vboxes */
     gtk_box_pack_start(GTK_BOX(nb_tab_statistics_vbox), 
         nb_statistics_scroll, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(nb_tab_mymovies_vbox), 
+        nb_mymovies_scroll, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(nb_tab_lists_stats_vbox), 
+        nb_lists_stats_scroll, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(nb_tab_lists_vbox), 
+        nb_lists_scroll, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(nb_tab_compare_vbox), 
+        nb_compare_scroll, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(nb_tab_top250_vbox), 
         nb_top250_scroll, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(nb_tab_bot100_vbox), 
         nb_bot100_scroll, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(nb_tab_boxoffice_vbox), 
         nb_boxoffice_scroll, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(nb_tab_mymovies_vbox), 
-        nb_mymovies_scroll, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(nb_tab_lists_vbox), 
-        nb_lists_scroll, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(nb_tab_lists_stats_vbox), 
-        nb_lists_stats_scroll, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(nb_tab_allstats_vbox), 
+        nb_allstats_scroll, TRUE, TRUE, 0);
 
     /* append notebook tabs */
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
@@ -731,11 +757,15 @@ int main(int argc, char *argv[]) {
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
         nb_tab_lists_vbox, gtk_label_new("My Lists"));
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
+        nb_tab_compare_vbox, gtk_label_new("Compare"));
+    gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
         nb_tab_top250_vbox, gtk_label_new("Top 250"));
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
         nb_tab_bot100_vbox, gtk_label_new("Bottom 100"));
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
         nb_tab_boxoffice_vbox, gtk_label_new("Box Office"));
+    gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
+        nb_tab_allstats_vbox, gtk_label_new("All Stats"));
 
     /* notebook setup */
     gtk_notebook_set_tab_pos(GTK_NOTEBOOK(nb), GTK_POS_TOP);
