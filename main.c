@@ -140,9 +140,11 @@ int main(int argc, char *argv[]) {
     nb_tab_mymovies = gtk_custom_table_new(TABLE_MYMOV_COLS, 
         50, 500, 500, nb_tab_mymovies_cols);
     nb_tab_lists_stats = gtk_custom_table_new(TABLE_LSTST_COLS, 
-        10, 500, 500, nb_tab_statistics_cols);
+        10, 500, 500, nb_tab_lists_stats_cols);
     nb_tab_lists = gtk_custom_table_new(TABLE_MYLST_COLS, 
         50, 500, 500, nb_tab_mylists_cols);
+    nb_tab_compare = gtk_custom_table_new(TABLE_COMPR_COLS, 
+        10, 500, 500, nb_tab_compare_cols);
     nb_tab_top250 = gtk_custom_table_new(TABLE_TP250_COLS, 
         250, 500, 500, nb_tab_top250_cols);
     nb_tab_bot100 = gtk_custom_table_new(TABLE_BT100_COLS, 
@@ -151,15 +153,15 @@ int main(int argc, char *argv[]) {
         50, 500, 500, nb_tab_boxoffice_cols);
 
     /* set primary columns to enable quick searches */
+    gtk_custom_table_set_column_prime(nb_tab_mymovies, 3, 
+        TRUE);
+    gtk_custom_table_set_column_prime(nb_tab_lists, 3, 
+        TRUE);
     gtk_custom_table_set_column_prime(nb_tab_top250, 3, 
         TRUE);
     gtk_custom_table_set_column_prime(nb_tab_bot100, 3, 
         TRUE);
     gtk_custom_table_set_column_prime(nb_tab_boxoffice, 3, 
-        TRUE);
-    gtk_custom_table_set_column_prime(nb_tab_mymovies, 3, 
-        TRUE);
-    gtk_custom_table_set_column_prime(nb_tab_lists, 3, 
         TRUE);
 
     /* set statistics headers */
@@ -168,10 +170,27 @@ int main(int argc, char *argv[]) {
             nb_tab_statistics_headers[i]);
     }
 
-    /* set lists statistics headers */
+    /* set my-movies headers */
+    for(i = 0; i < TABLE_MYMOV_COLS; i++) {
+        gtk_custom_table_set_head_text(nb_tab_mymovies, i, 
+            nb_tab_mymovies_headers[i]);
+    }
+    /* set lists stats headers */
     for(i = 0; i < TABLE_LSTST_COLS; i++) {
         gtk_custom_table_set_head_text(nb_tab_lists_stats, i, 
             nb_tab_lists_stats_headers[i]);
+    }
+
+    /* set my-lists headers */
+    for(i = 0; i < TABLE_MYLST_COLS; i++) {
+        gtk_custom_table_set_head_text(nb_tab_lists, i, 
+            nb_tab_mylists_headers[i]);
+    }
+
+    /* set compare headers */
+    for(i = 0; i < TABLE_COMPR_COLS; i++) {
+        gtk_custom_table_set_head_text(nb_tab_compare, i, 
+            nb_tab_compare_headers[i]);
     }
 
     /* set top 250 headers */
@@ -183,7 +202,7 @@ int main(int argc, char *argv[]) {
     /* set bottom 100 headers */
     for(i = 0; i < TABLE_BT100_COLS; i++) {
         gtk_custom_table_set_head_text(nb_tab_bot100, i, 
-            nb_tab_top250_headers[i]);
+            nb_tab_bot100_headers[i]);
     }
 
     /* set boxoffice headers */
@@ -192,26 +211,16 @@ int main(int argc, char *argv[]) {
             nb_tab_boxoffice_headers[i]);
     }
 
-    /* set my-movies headers */
-    for(i = 0; i < TABLE_MYMOV_COLS; i++) {
-        gtk_custom_table_set_head_text(nb_tab_mymovies, i, 
-            nb_tab_mymovies_headers[i]);
-    }
-
-    /* set my-lists headers */
-    for(i = 0; i < TABLE_MYLST_COLS; i++) {
-        gtk_custom_table_set_head_text(nb_tab_lists, i, 
-            nb_tab_mylists_headers[i]);
-    }
-
     /* set automatic numbering columns and a graph column */
+    gtk_custom_table_set_column_graph(nb_tab_statistics, 3, 
+        TRUE);
     gtk_custom_table_set_column_index(nb_tab_mymovies, 0, 
+        TRUE);
+    gtk_custom_table_set_column_graph(nb_tab_lists_stats, 3, 
         TRUE);
     gtk_custom_table_set_column_index(nb_tab_lists, 0, 
         TRUE);
-    gtk_custom_table_set_column_graph(nb_tab_statistics, 3, 
-        TRUE);
-    gtk_custom_table_set_column_graph(nb_tab_lists_stats, 3, 
+    gtk_custom_table_set_column_graph(nb_tab_compare, 3, 
         TRUE);
 
     char temp[10];
@@ -315,6 +324,56 @@ int main(int argc, char *argv[]) {
 
     gtk_custom_table_set_graph_color(nb_tab_lists_stats, 3, 
         graph_fg2);
+
+    /* set compare statistics table values */
+    for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
+
+        sprintf(temp, "%d", (j + 1));
+
+        gtk_custom_table_set_cell_text(nb_tab_compare, 0, i, 
+            temp);
+        gtk_custom_table_set_cell_text(nb_tab_compare, 1, i, 
+            "0.00");
+        gtk_custom_table_set_cell_text(nb_tab_compare, 2, i, 
+            "0.00");
+        gtk_custom_table_set_cell_text(nb_tab_compare, 3, i, 
+            "3");
+        gtk_custom_table_set_cell_text(nb_tab_compare, 4, i, 
+            "0.00 %");
+        gtk_custom_table_set_cell_text(nb_tab_compare, 5, i, 
+            "0");
+        gtk_custom_table_set_cell_text(nb_tab_compare, 6, i, 
+            "0");
+        gtk_custom_table_set_cell_text(nb_tab_compare, 7, i, 
+            "0.00");
+
+        /* set cell colors */
+        gtk_custom_table_set_cell_color(nb_tab_compare, 0, i, 
+            colors[j]);
+        gtk_custom_table_set_cell_color(nb_tab_compare, 3, i, 
+            graph_bg);
+    }
+    
+    /* compare statistics footer */
+    gtk_custom_table_set_foot_text(nb_tab_compare, 0, 
+        "0");
+    gtk_custom_table_set_foot_text(nb_tab_compare, 1, 
+        "0.00");
+    gtk_custom_table_set_foot_text(nb_tab_compare, 2, 
+        "0.00");
+    gtk_custom_table_set_foot_text(nb_tab_compare, 3, 
+        "");
+    gtk_custom_table_set_foot_text(nb_tab_compare, 4, 
+        "0.00 %");
+    gtk_custom_table_set_foot_text(nb_tab_compare, 5, 
+        "0");
+    gtk_custom_table_set_foot_text(nb_tab_compare, 6, 
+        "0");
+    gtk_custom_table_set_foot_text(nb_tab_compare, 7, 
+        "0.00");
+
+    gtk_custom_table_set_graph_color(nb_tab_compare, 3, 
+        graph_fg3);
 
     int no_results = 1;
 
@@ -585,7 +644,7 @@ int main(int argc, char *argv[]) {
     /* set default my-movies/my-lists values */
     for(i = 0; i < 50; i++) {
 
-        sprintf(temp, "%d.", i+1);
+        sprintf(temp, "%d", i+1);
 
         gtk_custom_table_set_cell_text(nb_tab_mymovies, 0, i, 
             temp);
