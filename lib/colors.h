@@ -21,13 +21,16 @@
 #ifndef _COLORS_
 #define _COLORS_
 
-/* solid green to solid red, for ratings */
+/* ratings colors */
 double colors[10][3];
+
 /* graph background colors */
 double graph_bg[3];
+
 /* graph foreground colors */
 double graph_fg1[3];
 double graph_fg2[3];
+double graph_fg3[3];
 
 #endif
 

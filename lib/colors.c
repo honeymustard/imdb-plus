@@ -56,4 +56,9 @@ double graph_fg2[3] = {
     0.00,
 };
 
+double graph_fg3[3] = {
+    0.20,
+    0.95,
+    0.20,
+};
 
