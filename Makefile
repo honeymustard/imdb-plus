@@ -20,7 +20,7 @@
 
 # Program variables..
 EXECUTE = imdb-plus
-VERSION = 0.0.6
+VERSION = 0.0.7
 SOURCES = *.c *.h *.md Makefile COPYING TODO
 FOLDERS = lib misc share scripts
 CFLAGS  = -c -Wall
