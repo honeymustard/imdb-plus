@@ -1,18 +1,3 @@
-## Readme for imdb-plus
-
-**imdb-plus** is currently under development, and as such only provides limited functionality.
-
-This means that if you were to attempt to compile the sources at any given point in time <br />
-they might not be entirely up to speed, which is to say that **it might be complete bunk**. <br />
-
-## Features
-
-* Download and view personal vote history, and statistics.
-* Download official IMDb lists such as Top 250, Bottom 100, All-Time Boxoffice.
-* Compare personal vote history to IMDb lists and track your viewing progress.
-* Supports vote histories with north of 100 000 votes..
-
-## Screenshots
 
 <table>
  <tr>
@@ -42,7 +27,19 @@ they might not be entirely up to speed, which is to say that **it might be compl
  </tr>
 </table>
 
+## Readme for imdb-plus
 
+**imdb-plus** is currently under development, and as such only provides limited functionality.
+
+This means that if you were to attempt to compile the sources at any given point in time <br />
+they might not be entirely up to speed, which is to say that **it might be complete bunk**. <br />
+
+## Features
+
+* Download and view personal vote history, and statistics.
+* Download official IMDb lists such as Top 250, Bottom 100, All-Time Boxoffice.
+* Compare personal vote history to IMDb lists and track your viewing progress.
+* Supports vote histories with north of 100 000 votes..
 
 ## Compilation instructions
 
