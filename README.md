@@ -27,9 +27,9 @@
  </tr>
 </table>
 
-## Readme for imdb-plus
+## Notice
 
-**imdb-plus** is currently under development, and as such only provides limited functionality.
+**imdb-plus** is currently under development, and as such only provides **limited functionality**.
 
 This means that if you were to attempt to compile the sources at any given point in time <br />
 they might not be entirely up to speed, which is to say that **it might be complete bunk**. <br />
@@ -39,7 +39,7 @@ they might not be entirely up to speed, which is to say that **it might be compl
 * Download and view personal vote history, and statistics.
 * Download official IMDb lists such as Top 250, Bottom 100, All-Time Boxoffice.
 * Compare personal vote history to IMDb lists and track your viewing progress.
-* Supports vote histories with north of 100 000 votes..
+* Supports vote histories with north of 100 000 votes.. (got RAM ?)
 
 ## Compilation instructions
 
