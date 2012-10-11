@@ -46,52 +46,30 @@ $version = $args[1]
 $sources = $args[2].split(" ")
 $folders = $args[3].split(" ")
 
+# long program name..
+$program_name = "$program-$version"
+
 # temporary locations..
-$tmpdir = ".\$($program)-$($version)-win"
-$tmpzip = ".\$($program)-$($version)-win.7z"
+$tmp_srcdir = ".\$program_name-src"
+$tmp_srczip = ".\$program_name-src.7z"
 
-$execute = "$($program)-$($version)"
-$builddir = ".\build\$($execute)"
-$copydir = ".\build\$($execute)\$($execute)-exe"
-$instdir = "$($copydir)\installer"
+# build directories..
+$dir_build = ".\build"
+$dir_build_vers = "$dir_build\$program_name"
+$dir_build_vers_output = "$dir_build_vers\$program_name-win"
 
 
-###########################################
-# make source package
-###########################################
-
-function build-src 
+# make temporary source directory
+function make-srcdir
 {
-
     # Make dist folder..
-    if (test-path -path $tmpdir) 
+    if (test-path $tmp_srcdir)
     { 
-        remove-item $tmpdir -recurse -force
+        remove-item $tmp_srcdir -recurse -force
     }
-    else {
-        new-item $tmpdir -type directory | out-null
-    }
-
-    # copy sources and folders to our temp dir..
-    copy-item $sources $tmpdir -recurse
-    copy-item $folders $tmpdir -recurse
-
-    # remove all non-source files..
-    get-childitem $tmpdir -include *.csv, *.swo, *.swp, `
-        *.dll, *.o, *~, *.fuse -recurse |
-        foreach-object { remove-item $_.fullname -force }
-
-    # remove existing archive is necessary..
-    if (test-path -path $tmpzip) 
-    {
-        remove-item $tmpzip -force 
-    }
-
-    # zip entire *-win folder..
-    &'7za' a -t7z $tmpzip $tmpdir
-
-    remove-item $tmpdir -recurse -force
-}
+    
+    new-item $tmp_srcdir -type directory | out-null
+}    
 
 
 ###########################################
@@ -102,22 +80,53 @@ function build-env
 {
 
     # make build directory..
-    if (!(test-path -path $builddir))
+    if (-not (test-path $dir_build))
     {
-        new-item $builddir -type directory | out-null
+        new-item $dir_build -type directory | out-null
     }
 
-    # make copy directory..
-    if (!(test-path -path $copydir))
+    # make build version directory..
+    if (-not (test-path $dir_build_vers))
     {
-        new-item $copydir -type directory | out-null
+        new-item $dir_build_vers -type directory | out-null
+    }
+
+    # make build output directory..
+    if (-not (test-path $dir_build_vers_output))
+    {
+        new-item $dir_build_vers_output -type directory | out-null
     }
     else 
     {
-        remove-item "$($copydir)\*" -recurse -force
+        remove-item "$dir_build_vers_output\*" -recurse -force
     }
 
-    new-item $instdir -type directory | out-null
+    return $true
+}
+
+
+###########################################
+# make source package
+###########################################
+
+function build-src 
+{
+
+    make-srcdir
+
+    # copy sources and folders to our temp dir..
+    copy-item $sources $tmp_srcdir -recurse
+    copy-item $folders $tmp_srcdir -recurse
+
+    # remove all non-source files..
+    get-childitem $tmp_srcdir -include *.csv, *.swo, *.swp, `
+        *.dll, *.o, *~, *.fuse -recurse |
+        foreach { remove-item $_.fullname -force }
+
+    # zip entire *-win folder..
+    &'7za' a -t7z $tmp_srczip $tmp_srcdir
+
+    move-item $tmp_srczip $dir_build_vers_output
 }
 
 
@@ -128,26 +137,29 @@ function build-env
 function build-exe
 {
 
-    # extract source package..
-    &'7za' x $tmpzip "-o$($instdir)"
-    move-item "$($instdir)\$($execute)-win\*" $instdir
-    remove-item "$($instdir)\$($execute)-win" -force
+    make-srcdir
 
-    # copy relevant binaries..
-    copy-item "$($program).exe" $instdir
-    copy-item "lib\gtk-2.0" "$($instdir)\lib" -recurse -force
-    copy-item *.dll $instdir -recurse -force
+    # copy sources and folders to our temp dir..
+    copy-item $sources $tmp_srcdir -recurse
+    copy-item $folders $tmp_srcdir -recurse
+    copy-item "$program.exe" $tmp_srcdir
+    copy-item *.dll $tmp_srcdir -force
+
+    # remove all non-source files..
+    get-childitem $tmp_srcdir -include *.csv, *.swo, *.swp, `
+        *.o, *~, *.fuse -recurse |
+        foreach { remove-item $_.fullname -force }
+
+    move-item $tmp_srcdir $dir_build_vers_output
 
     # run setup script..
-    iscc "$($instdir)\misc\setup.iss" /dMyAppVersion=$($version)
+    iscc "$dir_build_vers_output\$tmp_srcdir\misc\setup.iss" /dMyAppVersion=$version
 
     # build archive..
-    &'7za' a -t7z "$($copydir)\$($execute)-exe.7z" `
-        "$($copydir)\$($execute)-setup.exe"
+    &'7za' a -t7z "$dir_build_vers_output\$program_name-setup.7z" `
+        "$dir_build_vers_output\$tmp_srcdir\$program_name-setup.exe"
 
-    # cleanup..
-    remove-item "$($copydir)\$($execute)-setup.exe" -force
-    remove-item $instdir -recurse -force
+    remove-item "$dir_build_vers_output\$tmp_srcdir" -recurse -force
 }
 
 
@@ -155,14 +167,13 @@ function build-exe
 # make all targets
 ###########################################
 
-build-src
-build-env
-build-exe
+if (build-env)
+{
+    build-src
+    build-exe
 
-copy-item $tmpzip $copydir
+    get-childitem $dir_build_vers_output
 
-# view contents of builddir..
-get-childitem $copydir
-
-write-output "$($execute).exe: build completed"
+    write-host "`n$program_name.exe: build completed"
+}
 
