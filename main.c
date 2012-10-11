@@ -47,61 +47,74 @@ int main(int argc, char *argv[]) {
     set_global(CONST_VERSION, VERSION);
 
     /* create home directory */
-    if(strcmp(OS, "LINUX") == 0) { 
+    #ifdef WINDOWS
+
+        char *path = APP_DIR;
+
+    #endif
+    #ifdef LINUX
 
         char *home = getenv("HOME");
-        char *path = malloc(strlen(home) + strlen(APP_DIRE) + 3);
+        char *path = malloc(strlen(home) + strlen(APP_DIR) + 3);
 
         /* make new path */
         strcpy(path, home);
         strcat(path, "/");
-        strcat(path, APP_DIRE);
+        strcat(path, APP_DIR);
         strcat(path, "/");
-
-        set_global(CONST_HOME, path);
 
         mkdir(path, S_IRWXU);
 
-        /* path constants */
-        char *top_tmp = malloc(strlen(path) + strlen(TOP_TMP) + 1);
-        char *top_csv = malloc(strlen(path) + strlen(TOP_CSV) + 1);
-        char *bot_tmp = malloc(strlen(path) + strlen(BOT_TMP) + 1);
-        char *bot_csv = malloc(strlen(path) + strlen(BOT_CSV) + 1);
-        char *box_tmp = malloc(strlen(path) + strlen(BOX_TMP) + 1);
-        char *box_csv = malloc(strlen(path) + strlen(BOX_CSV) + 1);
+    #endif
 
-        /* make paths to home directory */
-        strcpy(top_tmp, path);
-        strcpy(top_csv, path);
-        strcpy(bot_tmp, path);
-        strcpy(bot_csv, path);
-        strcpy(box_tmp, path);
-        strcpy(box_csv, path);
+    set_global(CONST_HOME, path);
 
-        strcat(top_tmp, TOP_TMP);
-        strcat(top_csv, TOP_CSV);
-        strcat(bot_tmp, BOT_TMP);
-        strcat(bot_csv, BOT_CSV);
-        strcat(box_tmp, BOX_TMP);
-        strcat(box_csv, BOX_CSV);
+    /* path constants */
+    char *top_tmp = malloc(strlen(path) + strlen(TOP_TMP) + 1);
+    char *top_csv = malloc(strlen(path) + strlen(TOP_CSV) + 1);
+    char *bot_tmp = malloc(strlen(path) + strlen(BOT_TMP) + 1);
+    char *bot_csv = malloc(strlen(path) + strlen(BOT_CSV) + 1);
+    char *box_tmp = malloc(strlen(path) + strlen(BOX_TMP) + 1);
+    char *box_csv = malloc(strlen(path) + strlen(BOX_CSV) + 1);
 
-        /* set global paths */
-        set_global(CONST_TOP_TMP, top_tmp);
-        set_global(CONST_TOP_CSV, top_csv);
-        set_global(CONST_BOT_TMP, bot_tmp);
-        set_global(CONST_BOT_CSV, bot_csv);
-        set_global(CONST_BOX_TMP, box_tmp);
-        set_global(CONST_BOX_CSV, box_csv);
+    /* make paths to home directory */
+    strcpy(top_tmp, path);
+    strcpy(top_csv, path);
+    strcpy(bot_tmp, path);
+    strcpy(bot_csv, path);
+    strcpy(box_tmp, path);
+    strcpy(box_csv, path);
 
-        /* free up memory */
+    strcat(top_tmp, TOP_TMP);
+    strcat(top_csv, TOP_CSV);
+    strcat(bot_tmp, BOT_TMP);
+    strcat(bot_csv, BOT_CSV);
+    strcat(box_tmp, BOX_TMP);
+    strcat(box_csv, BOX_CSV);
+
+    /* set global paths */
+    set_global(CONST_TOP_TMP, top_tmp);
+    set_global(CONST_TOP_CSV, top_csv);
+    set_global(CONST_TOP_URL, TOP_URL);
+    set_global(CONST_BOT_TMP, bot_tmp);
+    set_global(CONST_BOT_CSV, bot_csv);
+    set_global(CONST_BOT_URL, BOT_URL);
+    set_global(CONST_BOX_TMP, box_tmp);
+    set_global(CONST_BOX_CSV, box_csv);
+    set_global(CONST_BOX_URL, BOX_URL);
+
+    /* free up memory */
+
+    #ifdef LINUX
         free(path);
-        free(top_tmp);
-        free(top_csv);
-        free(bot_tmp);
-        free(bot_csv);
-        free(box_tmp);
-        free(box_csv);
-    }
+    #endif
+
+    free(top_tmp);
+    free(top_csv);
+    free(bot_tmp);
+    free(bot_csv);
+    free(box_tmp);
+    free(box_csv);
 
     int i = 0;
     int j = 0;
