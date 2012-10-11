@@ -63,7 +63,7 @@ debug: linux
 
 # Faux target..
 .PHONY : linux
-linux: OS += LINUX
+linux: OS = LINUX
 linux: CURL = -lcurl
 linux: GTHREAD = -lgthread-2.0
 linux: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
@@ -151,7 +151,7 @@ clean:
 #
 # Command line invocation:
 #
-# mingw32-make [ mingw32 | mingw32-debug | mingw32-clean | mingw32-build ]
+# mingw32-make [ mingw32-make | mingw32-debug | mingw32-clean | mingw32-build ]
 #
 ###############################################################################
 
@@ -167,7 +167,7 @@ windows: CURL = -I"C:\MinGW\curl\include" \
                 -L"C:\MinGW\curl\lib" \
                 -lcurl
 
-# Result from "pkg-config --libs --cflags gtk+-win32-2.0" in GTK\bin
+# Result from "pkg-config.exe --libs --cflags gtk+-win32-2.0" in GTK+\bin
 windows: GTK2 = -mms-bitfields \
                 -IC:/GTK+/include/gtk-2.0 \
                 -IC:/GTK+/lib/gtk-2.0/include \
@@ -200,16 +200,16 @@ windows: GTK2 = -mms-bitfields \
 
 # MinGW convenience..
 .PHONY : windows
-windows: OS += WINDOWS
+windows: OS = WINDOWS
 windows: CFLAGS += $(GTK2) $(CURL) $(PCRE)
 windows: OBJECTS += resfile.o
 windows: resfile.o $(OBJECTS)
 	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL) $(PCRE) $(WINDOWS)
 
 # MinGW run-in-place build..
-.PHONY : mingw32
-mingw32: CFLAGS += -O2 
-mingw32: windows
+.PHONY : mingw32-make
+mingw32-make: CFLAGS += -O2 
+mingw32-make: windows
 
 # MinGW debug build..
 .PHONY : mingw32-debug
@@ -217,17 +217,20 @@ mingw32-debug: WINDOWS =
 mingw32-debug: CFLAGS += -g
 mingw32-debug: windows
 
-# MinGW clean, remove o's exe's..
+# MinGW clean..
 .PHONY : mingw32-clean
 mingw32-clean:
-	del /s *.o $(EXECUTE).exe
+	-@powershell -command "& { if (test-path $(EXECUTE).exe) \
+		{ remove-item $(EXECUTE).exe -force } }"
+	-@powershell -command "& get-childitem .\ *.o -recurse \
+		| foreach-object { remove-item $$_.fullname -force }"
 
 # MinGW build requires Powershell, 7za (7zip cli), ISSC (Inno Setup) in PATH..
 .PHONY : mingw32-build
-mingw32-build: mingw32
+mingw32-build: mingw32-make
 mingw32-build:
-	powershell -command "& {Set-ExecutionPolicy RemoteSigned}"
-	powershell -command "& .\scripts\build-exe.ps1 \
+	-@powershell -command "& { Set-ExecutionPolicy RemoteSigned }"
+	-@powershell -command "& .\scripts\build-exe.ps1 \
 		$(EXECUTE) $(VERSION) '$(SOURCES)' '$(FOLDERS)' build-win"
 
 
@@ -242,7 +245,7 @@ mingw32-build:
 
 # Compile main..
 main.o: main.c main.h tables.h widgets.h lib/globals.h lib/events/events.h
-	gcc $(CFLAGS) main.c -DVERSION=\"$(VERSION)\" -DOS=\"$(OS)\"
+	gcc $(CFLAGS) main.c -DVERSION=\"$(VERSION)\" -D$(OS)
 
 # Compile table..
 gtk_custom_table_%.o: gtk_custom_table_%.c lib/gtk_custom_table/gtk_custom_table.h
