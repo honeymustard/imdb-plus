@@ -69,6 +69,10 @@ function make-srcdir
     }
     
     new-item $tmp_srcdir -type directory | out-null
+
+    # copy sources and folders to our temp dir..
+    copy-item $sources $tmp_srcdir -recurse
+    copy-item $folders $tmp_srcdir -recurse
 }    
 
 
@@ -114,10 +118,6 @@ function build-src
 
     make-srcdir
 
-    # copy sources and folders to our temp dir..
-    copy-item $sources $tmp_srcdir -recurse
-    copy-item $folders $tmp_srcdir -recurse
-
     # remove all non-source files..
     get-childitem $tmp_srcdir -include *.csv, *.swo, *.swp, `
         *.dll, *.o, *~, *.fuse -recurse |
@@ -139,9 +139,6 @@ function build-exe
 
     make-srcdir
 
-    # copy sources and folders to our temp dir..
-    copy-item $sources $tmp_srcdir -recurse
-    copy-item $folders $tmp_srcdir -recurse
     copy-item "$program.exe" $tmp_srcdir
     copy-item *.dll $tmp_srcdir -force
 
