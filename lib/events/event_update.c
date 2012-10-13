@@ -172,13 +172,13 @@ int menu_signal_update_box() {
             
             /* copy them into boxoffice table */
             char *rating1 = index1 >= 0 ? 
-                gtk_custom_table_get_cell_value(nb_tab_mymovies, 1, index1) : "0";
+                gtk_custom_table_get_cell_text(nb_tab_mymovies, 1, index1) : "0";
             char *rating2 = index2 >= 0 ? 
-                gtk_custom_table_get_cell_value(nb_tab_top250, 1, index2) : "0";
+                gtk_custom_table_get_cell_text(nb_tab_top250, 1, index2) : "0";
             char *rating3 = index3 >= 0 ? 
-                gtk_custom_table_get_cell_value(nb_tab_bot100, 1, index3) : "0";
+                gtk_custom_table_get_cell_text(nb_tab_bot100, 1, index3) : "0";
             char *rating4 = index4 >= 0 ? 
-                gtk_custom_table_get_cell_value(nb_tab_lists, 1, index4) : "0";
+                gtk_custom_table_get_cell_text(nb_tab_lists, 1, index4) : "0";
 
             /* translate ratings */
             int num1 = atoi(rating1);
