@@ -104,7 +104,6 @@ int main(int argc, char *argv[]) {
     set_global(CONST_BOX_URL, BOX_URL);
 
     /* free up memory */
-
     #ifdef LINUX
         free(path);
     #endif
@@ -164,6 +163,8 @@ int main(int argc, char *argv[]) {
         100, 500, 500, nb_tab_bot100_cols);
     nb_tab_boxoffice = gtk_custom_table_new(TABLE_BOXOF_COLS, 
         50, 500, 500, nb_tab_boxoffice_cols);
+    nb_tab_allstats = gtk_custom_table_new(TABLE_ALLST_COLS, 
+        12, 500, 500, nb_tab_allstats_cols);
 
     /* set primary columns to enable quick searches */
     gtk_custom_table_set_column_prime(nb_tab_mymovies, 3, 
@@ -224,16 +225,20 @@ int main(int argc, char *argv[]) {
             nb_tab_boxoffice_headers[i]);
     }
 
-    /* set automatic numbering columns and a graph column */
+    /* mark a column as being a graph */
     gtk_custom_table_set_column_graph(nb_tab_statistics, 3, 
-        TRUE);
-    gtk_custom_table_set_column_index(nb_tab_mymovies, 0, 
         TRUE);
     gtk_custom_table_set_column_graph(nb_tab_lists_stats, 3, 
         TRUE);
-    gtk_custom_table_set_column_index(nb_tab_lists, 0, 
-        TRUE);
     gtk_custom_table_set_column_graph(nb_tab_compare, 3, 
+        TRUE);
+    gtk_custom_table_set_column_graph(nb_tab_allstats, 3, 
+        TRUE);
+
+    /* set automatic column numbering */
+    gtk_custom_table_set_column_index(nb_tab_mymovies, 0, 
+        TRUE);
+    gtk_custom_table_set_column_index(nb_tab_lists, 0, 
         TRUE);
 
     char temp[10];
@@ -250,13 +255,13 @@ int main(int argc, char *argv[]) {
         gtk_custom_table_set_cell_text(nb_tab_statistics, 2, i, 
             "0.00");
         gtk_custom_table_set_cell_text(nb_tab_statistics, 3, i, 
-            "3");
+            "4");
         gtk_custom_table_set_cell_text(nb_tab_statistics, 4, i, 
             "0.00 %");
         gtk_custom_table_set_cell_text(nb_tab_statistics, 5, i, 
             "0");
         gtk_custom_table_set_cell_text(nb_tab_statistics, 6, i, 
-            "0");
+            "0.00");
         gtk_custom_table_set_cell_text(nb_tab_statistics, 7, i, 
             "0.00");
 
@@ -269,7 +274,7 @@ int main(int argc, char *argv[]) {
     
     /* statistics footer */
     gtk_custom_table_set_foot_text(nb_tab_statistics, 0, 
-        "0");
+        "0.00");
     gtk_custom_table_set_foot_text(nb_tab_statistics, 1, 
         "0.00");
     gtk_custom_table_set_foot_text(nb_tab_statistics, 2, 
@@ -281,7 +286,7 @@ int main(int argc, char *argv[]) {
     gtk_custom_table_set_foot_text(nb_tab_statistics, 5, 
         "0");
     gtk_custom_table_set_foot_text(nb_tab_statistics, 6, 
-        "0");
+        "0.00");
     gtk_custom_table_set_foot_text(nb_tab_statistics, 7, 
         "0.00");
 
@@ -300,13 +305,13 @@ int main(int argc, char *argv[]) {
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 2, i, 
             "0.00");
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 3, i, 
-            "3");
+            "4");
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 4, i, 
             "0.00 %");
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 5, i, 
             "0");
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 6, i, 
-            "0");
+            "0.00");
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 7, i, 
             "0.00");
 
@@ -319,7 +324,7 @@ int main(int argc, char *argv[]) {
     
     /* lists statistics footer */
     gtk_custom_table_set_foot_text(nb_tab_lists_stats, 0, 
-        "0");
+        "0.00");
     gtk_custom_table_set_foot_text(nb_tab_lists_stats, 1, 
         "0.00");
     gtk_custom_table_set_foot_text(nb_tab_lists_stats, 2, 
@@ -331,7 +336,7 @@ int main(int argc, char *argv[]) {
     gtk_custom_table_set_foot_text(nb_tab_lists_stats, 5, 
         "0");
     gtk_custom_table_set_foot_text(nb_tab_lists_stats, 6, 
-        "0");
+        "0.00");
     gtk_custom_table_set_foot_text(nb_tab_lists_stats, 7, 
         "0.00");
 
@@ -350,13 +355,13 @@ int main(int argc, char *argv[]) {
         gtk_custom_table_set_cell_text(nb_tab_compare, 2, i, 
             "0.00");
         gtk_custom_table_set_cell_text(nb_tab_compare, 3, i, 
-            "3");
+            "4");
         gtk_custom_table_set_cell_text(nb_tab_compare, 4, i, 
             "0.00 %");
         gtk_custom_table_set_cell_text(nb_tab_compare, 5, i, 
             "0");
         gtk_custom_table_set_cell_text(nb_tab_compare, 6, i, 
-            "0");
+            "0.00");
         gtk_custom_table_set_cell_text(nb_tab_compare, 7, i, 
             "0.00");
 
@@ -369,7 +374,7 @@ int main(int argc, char *argv[]) {
     
     /* compare statistics footer */
     gtk_custom_table_set_foot_text(nb_tab_compare, 0, 
-        "0");
+        "0.00");
     gtk_custom_table_set_foot_text(nb_tab_compare, 1, 
         "0.00");
     gtk_custom_table_set_foot_text(nb_tab_compare, 2, 
@@ -381,12 +386,80 @@ int main(int argc, char *argv[]) {
     gtk_custom_table_set_foot_text(nb_tab_compare, 5, 
         "0");
     gtk_custom_table_set_foot_text(nb_tab_compare, 6, 
-        "0");
+        "0.00");
     gtk_custom_table_set_foot_text(nb_tab_compare, 7, 
         "0.00");
 
     gtk_custom_table_set_graph_color(nb_tab_compare, 3, 
         graph_fg3);
+
+    /* set all statistics table values */
+    for(i = 0; i < 12; i++) {
+
+        /* set allstats headers */
+        if((i % 4) == 0) {
+            for(j = 0; j < TABLE_ALLST_COLS; j++) {
+
+                gtk_custom_table_set_cell_text(nb_tab_allstats, j, i, 
+                    nb_tab_allstats_headers[j]);
+                /* set row color */
+                gtk_custom_table_set_row_color(nb_tab_allstats, i, 
+                    rgb_header);
+            }
+        }
+        else if((i % 4) == 3) {
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 0, i, 
+                "toto");
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 1, i, 
+                "0.00");
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 2, i, 
+                "0.00");
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 3, i, 
+                "4");
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 4, i, 
+                "0.00 %");
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 5, i, 
+                "0 / 0");
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 6, i, 
+                "0.00");
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 7, i, 
+                "0.00");
+
+        }
+        else {
+
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 0, i, 
+                "0.00");
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 1, i, 
+                "0.00");
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 2, i, 
+                "0.00");
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 3, i, 
+                "4");
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 4, i, 
+                "0.00 %");
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 5, i, 
+                "0 / 0");
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 6, i, 
+                "0.00");
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 7, i, 
+                "0.00");
+
+            /* set cell colors */
+            gtk_custom_table_set_cell_color(nb_tab_allstats, 3, i, 
+                graph_bg);
+        }
+    } 
+
+    gtk_custom_table_set_cell_text(nb_tab_allstats, 3, 0, 
+        "Completion: Top 205");
+    gtk_custom_table_set_cell_text(nb_tab_allstats, 3, 4, 
+        "Completion: Bottom 100");
+    gtk_custom_table_set_cell_text(nb_tab_allstats, 3, 8, 
+        "Completion: Box Office");
+
+    gtk_custom_table_set_graph_color(nb_tab_allstats, 3, 
+        graph_fg4);
 
     int no_results = 1;
 
@@ -580,13 +653,13 @@ int main(int argc, char *argv[]) {
 
                 /* copy imdb ratings from other tabs to box office tab */
                 char *rating1 = index1 >= 0 ? 
-                    gtk_custom_table_get_cell_value(nb_tab_mymovies, 1, index1) : "0";
+                    gtk_custom_table_get_cell_text(nb_tab_mymovies, 1, index1) : "0";
                 char *rating2 = index2 >= 0 ? 
-                    gtk_custom_table_get_cell_value(nb_tab_top250, 1, index2) : "0";
+                    gtk_custom_table_get_cell_text(nb_tab_top250, 1, index2) : "0";
                 char *rating3 = index3 >= 0 ? 
-                    gtk_custom_table_get_cell_value(nb_tab_bot100, 1, index3) : "0";
+                    gtk_custom_table_get_cell_text(nb_tab_bot100, 1, index3) : "0";
                 char *rating4 = index4 >= 0 ? 
-                    gtk_custom_table_get_cell_value(nb_tab_lists, 1, index4) : "0";
+                    gtk_custom_table_get_cell_text(nb_tab_lists, 1, index4) : "0";
 
                 /* translate ratings */
                 int num1 = atoi(rating1);
@@ -654,7 +727,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    /* set default my-movies/my-lists values */
+    /* set default movies and lists values */
     for(i = 0; i < 50; i++) {
 
         sprintf(temp, "%d", i+1);
@@ -671,6 +744,8 @@ int main(int argc, char *argv[]) {
             "N/A");
         gtk_custom_table_set_cell_text(nb_tab_mymovies, 5, i, 
             "0");
+        gtk_custom_table_set_cell_text(nb_tab_mymovies, 6, i, 
+            "0");
 
         gtk_custom_table_set_cell_text(nb_tab_lists, 0, i, 
             temp);
@@ -683,6 +758,8 @@ int main(int argc, char *argv[]) {
         gtk_custom_table_set_cell_text(nb_tab_lists, 4, i, 
             "N/A");
         gtk_custom_table_set_cell_text(nb_tab_lists, 5, i, 
+            "0");
+        gtk_custom_table_set_cell_text(nb_tab_lists, 6, i, 
             "0");
     }
 
@@ -949,7 +1026,7 @@ int main(int argc, char *argv[]) {
 
     /* last steps, show window */
     gtk_container_add(GTK_CONTAINER(window), vbox);
-    gtk_window_set_default_size(GTK_WINDOW(window), 880, 460);
+    gtk_window_set_default_size(GTK_WINDOW(window), 800, 460);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_widget_show_all(window);
 
