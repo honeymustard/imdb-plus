@@ -178,12 +178,12 @@ void gtk_custom_table_set_column_graph(GtkWidget *table, int col,
 
 
 /**
- * add foreground-color to a column graph..
+ * add foreground-color to a all graphs in a column..
  * @param GtkWidget *table    current working table
  * @param int col             column 
  * @param double rgb[]        array of colors for graph
  */
-void gtk_custom_table_set_graph_color(GtkWidget *table, int col,  
+void gtk_custom_table_set_graph_color_col(GtkWidget *table, int col,  
         double rgb[]) {
 
     GtkCustomTablePrivate *priv;
@@ -196,6 +196,34 @@ void gtk_custom_table_set_graph_color(GtkWidget *table, int col,
         meta->graph[0] = rgb[0];
         meta->graph[1] = rgb[1];
         meta->graph[2] = rgb[2];
+
+        meta->graphable = TRUE;
+    }
+}
+
+
+/**
+ * add foreground-color to a graph in a specific cell..
+ * @param GtkWidget *table    current working table
+ * @param int col             column 
+ * @param int row             row
+ * @param double rgb[]        array of colors for graph
+ */
+void gtk_custom_table_set_graph_color_cell(GtkWidget *table, int col,  
+        int row, double rgb[]) {
+
+    GtkCustomTablePrivate *priv;
+    priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
+
+    struct table_meta *meta = priv->table_rows[row]->cell[col]->meta;
+
+    if(meta != NULL) {
+
+        meta->graph[0] = rgb[0];
+        meta->graph[1] = rgb[1];
+        meta->graph[2] = rgb[2];
+
+        meta->graphable = TRUE;
     }
 }
 
