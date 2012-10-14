@@ -17,6 +17,7 @@
 *
 *****************************************************************************/
 
+
 #include "gtk_custom_table.h"
 
 
@@ -36,6 +37,7 @@ GtkWidget * gtk_custom_table_new(int cols, int rows, int min_width, int min_heig
     GtkCustomTablePrivate *priv;
     priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
 
+    /* variable defaults */
     priv->table_surface = NULL;
     priv->table_min_width = min_width;
     priv->table_row_height = 25;
@@ -50,7 +52,7 @@ GtkWidget * gtk_custom_table_new(int cols, int rows, int min_width, int min_heig
     priv->table_is_sortable = FALSE;
     priv->table_col_primary = 2;
 
-    /* create header/footer */
+    /* create header & footer */
     priv->table_head = malloc(sizeof (struct table_cell *) * cols); 
     priv->table_foot = malloc(sizeof (struct table_cell *) * cols); 
 
