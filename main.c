@@ -290,7 +290,7 @@ int main(int argc, char *argv[]) {
     gtk_custom_table_set_foot_text(nb_tab_statistics, 7, 
         "0.00");
 
-    gtk_custom_table_set_graph_color(nb_tab_statistics, 3, 
+    gtk_custom_table_set_graph_color_col(nb_tab_statistics, 3, 
         graph_fg1);
 
     /* set lists statistics table values */
@@ -340,7 +340,7 @@ int main(int argc, char *argv[]) {
     gtk_custom_table_set_foot_text(nb_tab_lists_stats, 7, 
         "0.00");
 
-    gtk_custom_table_set_graph_color(nb_tab_lists_stats, 3, 
+    gtk_custom_table_set_graph_color_col(nb_tab_lists_stats, 3, 
         graph_fg2);
 
     /* set compare statistics table values */
@@ -390,7 +390,7 @@ int main(int argc, char *argv[]) {
     gtk_custom_table_set_foot_text(nb_tab_compare, 7, 
         "0.00");
 
-    gtk_custom_table_set_graph_color(nb_tab_compare, 3, 
+    gtk_custom_table_set_graph_color_col(nb_tab_compare, 3, 
         graph_fg3);
 
     /* set all statistics table values */
@@ -398,6 +398,7 @@ int main(int argc, char *argv[]) {
 
         /* set allstats headers */
         if((i % 4) == 0) {
+
             for(j = 0; j < TABLE_ALLST_COLS; j++) {
 
                 gtk_custom_table_set_cell_text(nb_tab_allstats, j, i, 
@@ -406,25 +407,6 @@ int main(int argc, char *argv[]) {
                 gtk_custom_table_set_row_color(nb_tab_allstats, i, 
                     rgb_header);
             }
-        }
-        else if((i % 4) == 3) {
-            gtk_custom_table_set_cell_text(nb_tab_allstats, 0, i, 
-                "toto");
-            gtk_custom_table_set_cell_text(nb_tab_allstats, 1, i, 
-                "0.00");
-            gtk_custom_table_set_cell_text(nb_tab_allstats, 2, i, 
-                "0.00");
-            gtk_custom_table_set_cell_text(nb_tab_allstats, 3, i, 
-                "4");
-            gtk_custom_table_set_cell_text(nb_tab_allstats, 4, i, 
-                "0.00 %");
-            gtk_custom_table_set_cell_text(nb_tab_allstats, 5, i, 
-                "0 / 0");
-            gtk_custom_table_set_cell_text(nb_tab_allstats, 6, i, 
-                "0.00");
-            gtk_custom_table_set_cell_text(nb_tab_allstats, 7, i, 
-                "0.00");
-
         }
         else {
 
@@ -449,6 +431,21 @@ int main(int argc, char *argv[]) {
             gtk_custom_table_set_cell_color(nb_tab_allstats, 3, i, 
                 graph_bg);
         }
+
+        if((i % 4) == 1) {
+            gtk_custom_table_set_graph_color_cell(nb_tab_allstats, 3, i, 
+                graph_fg1);
+        }
+
+        if((i % 4) == 2) {
+            gtk_custom_table_set_graph_color_cell(nb_tab_allstats, 3, i, 
+                graph_fg2);
+        }
+
+        if((i % 4) == 3) {
+            gtk_custom_table_set_graph_color_cell(nb_tab_allstats, 3, i, 
+                graph_fg3);
+        }
     } 
 
     gtk_custom_table_set_cell_text(nb_tab_allstats, 3, 0, 
@@ -457,9 +454,6 @@ int main(int argc, char *argv[]) {
         "Completion: Bottom 100");
     gtk_custom_table_set_cell_text(nb_tab_allstats, 3, 8, 
         "Completion: Box Office");
-
-    gtk_custom_table_set_graph_color(nb_tab_allstats, 3, 
-        graph_fg4);
 
     int no_results = 1;
 
