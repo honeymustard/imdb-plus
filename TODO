@@ -1,15 +1,11 @@
-TODO for project imdb-plus:
+    
+  TODO for project imdb-plus:
 
- -> CONSIDER THIS:
-
+  * make -DINSTALL a global
   * secondary sorting for tables..
-
-  * add the following new tabs:
-
-      * Compare: Intersection of MyMovies <> MyLists
-      * All Stats: Statistics on top 250, bottom 100 & boxoffice..
+  * finish all-stats tab..
 
  -> TO BE FIXED:
   
-  * All appears to be well
+  * ratings download is broken
 
