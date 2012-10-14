@@ -153,6 +153,7 @@ void gtk_custom_table_tree_add(struct table_tree *tree,
     struct table_rows *data, int primary);
 void gtk_custom_table_alloc(GtkCustomTablePrivate *priv, int cols, 
     int rows, int column_widths[]);
+int gtk_custom_table_is_integer(char *string);
 
 /* widget event functions */
 gboolean gtk_custom_table_clicked(GtkWidget *table, 
@@ -176,8 +177,10 @@ void gtk_custom_table_set_cell_color(GtkWidget *table, int col,
     int row, double rgb[]);
 void gtk_custom_table_set_row_color(GtkWidget *table, int row, 
     double rgb[]);
-void gtk_custom_table_set_graph_color(GtkWidget *table, int col, 
+void gtk_custom_table_set_graph_color_col(GtkWidget *table, int col, 
     double rgb[]);
+void gtk_custom_table_set_graph_color_cell(GtkWidget *table, int col,  
+        int row, double rgb[]);
 void gtk_custom_table_set_column_index(GtkWidget *table, int col, 
     gboolean value);
 void gtk_custom_table_set_column_shade(GtkWidget *table, int col, 
