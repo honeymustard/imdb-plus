@@ -17,6 +17,7 @@
 *
 *****************************************************************************/
 
+
 #include "gtk_custom_table.h"
 
 
@@ -78,14 +79,14 @@ void gtk_custom_table_sort(GtkWidget *table, int col, int orient) {
     priv->table_sort_order = orient == -1 ? !priv->table_sort_order : orient;
 
     /* perform qsort on table cells array */
-    qsort((void *)priv->table_rows, priv->table_y, sizeof(struct table_rows *), 
-        gtk_custom_table_compare);
-
+    qsort((void *)priv->table_rows, priv->table_y, 
+        sizeof(struct table_rows *), gtk_custom_table_compare);
 
     int i = 0;
 
     /* reset row index, so that binary search can find them */
     for(i = 0; i < priv->table_y; i++) {
+
         priv->table_rows[i]->row = i;
     }
 }
