@@ -22,46 +22,51 @@
 #define _TABLES_
 
 #define TABLE_STATS_COLS 8
-#define TABLE_MYMOV_COLS 6
+#define TABLE_MYMOV_COLS 7
 #define TABLE_LSTST_COLS 8
-#define TABLE_MYLST_COLS 6
+#define TABLE_MYLST_COLS 7
 #define TABLE_COMPR_COLS 8
 #define TABLE_TP250_COLS 7
 #define TABLE_BT100_COLS 7
 #define TABLE_BOXOF_COLS 7
+#define TABLE_ALLST_COLS 8
 
 
 /* table column width descriptions */
 int nb_tab_statistics_cols[TABLE_STATS_COLS] = {
-    45, 55, 55, -1, 75, 75, 75, 75
+    55, 55, 55, -1, 75, 75, 75, 75
 };
 
 int nb_tab_mymovies_cols[TABLE_MYMOV_COLS] = {
-    55, 90, 90, 90, -1, 55, 
+    55, 55, 55, 90, -1, 70, 55
 };
 
 int nb_tab_lists_stats_cols[TABLE_LSTST_COLS] = {
-    45, 55, 55, -1, 75, 75, 75, 75
+    55, 55, 55, -1, 75, 75, 75, 75
 };
 
 int nb_tab_mylists_cols[TABLE_MYLST_COLS] = {
-    55, 90, 90, 90, -1, 55, 
+    55, 55, 55, 90, -1, 70, 55
 };
 
 int nb_tab_compare_cols[TABLE_COMPR_COLS] = {
-    45, 55, 55, -1, 75, 75, 75, 75 
+    55, 55, 55, -1, 75, 75, 75, 75 
 };
 
 int nb_tab_top250_cols[TABLE_TP250_COLS] = {
-    55, 90, 90, 90, -1, 55, 65
+    55, 55, 55, 90, -1, 55, 70 
 };
 
 int nb_tab_bot100_cols[TABLE_BT100_COLS] = {
-    55, 90, 90, 90, -1, 55, 65
+    55, 55, 55, 90, -1, 55, 70
 };
 
 int nb_tab_boxoffice_cols[TABLE_BOXOF_COLS] = {
-    55, 90, 90, 90, -1, 55, 120, 
+    55, 55, 55, 90, -1, 55, 120, 
+};
+
+int nb_tab_allstats_cols[TABLE_ALLST_COLS] = {
+    55, 55, 55, -1, 75, 75, 75, 75
 };
 
 
@@ -70,7 +75,7 @@ char *nb_tab_statistics_headers[TABLE_STATS_COLS] = {
     "Vote", 
     "IMDb", 
     "Flux", 
-    "Your Rating", 
+    "Your Ratings", 
     "Percent", 
     "Votes", 
     "Runtime", 
@@ -79,10 +84,11 @@ char *nb_tab_statistics_headers[TABLE_STATS_COLS] = {
 
 char *nb_tab_mymovies_headers[TABLE_MYMOV_COLS] = {
     "#", 
-    "IMDb Rating", 
-    "Your Rating", 
+    "IMDb", 
+    "Vote", 
     "Unique ID", 
     "Title", 
+    "Runtime", 
     "Year", 
 };
 
@@ -90,7 +96,7 @@ char *nb_tab_lists_stats_headers[TABLE_LSTST_COLS] = {
     "IMDb", 
     "N / A", 
     "N / A", 
-    "IMDb Rating", 
+    "IMDb Ratings", 
     "Percent", 
     "Votes", 
     "Runtime", 
@@ -99,17 +105,18 @@ char *nb_tab_lists_stats_headers[TABLE_LSTST_COLS] = {
 
 char *nb_tab_mylists_headers[TABLE_MYLST_COLS] = {
     "#", 
-    "IMDb Rating", 
-    "Your Rating", 
+    "IMDb", 
+    "Vote", 
     "Unique ID", 
     "Title", 
+    "Runtime", 
     "Year", 
 };
 
 char *nb_tab_compare_headers[TABLE_COMPR_COLS] = {
     "IMDb", 
-    "Movies", 
-    "List", 
+    "Vote", 
+    "Flux", 
     "Intersected Ratings", 
     "Percent", 
     "Votes", 
@@ -119,8 +126,8 @@ char *nb_tab_compare_headers[TABLE_COMPR_COLS] = {
 
 char *nb_tab_top250_headers[TABLE_TP250_COLS] = {
     "#", 
-    "IMDb Rating", 
-    "Your Rating", 
+    "IMDb", 
+    "Vote", 
     "Unique ID", 
     "Title", 
     "Year", 
@@ -129,8 +136,8 @@ char *nb_tab_top250_headers[TABLE_TP250_COLS] = {
 
 char *nb_tab_bot100_headers[TABLE_BT100_COLS] = {
     "#", 
-    "IMDb Rating", 
-    "Your Rating", 
+    "IMDb", 
+    "Vote", 
     "Unique ID", 
     "Title", 
     "Year", 
@@ -139,12 +146,23 @@ char *nb_tab_bot100_headers[TABLE_BT100_COLS] = {
 
 char *nb_tab_boxoffice_headers[TABLE_BOXOF_COLS] = {
     "#", 
-    "IMDb Rating", 
-    "Your Rating", 
+    "IMDb", 
+    "Vote", 
     "Unique ID", 
     "Title", 
     "Year", 
     "Gross", 
+};
+
+char *nb_tab_allstats_headers[TABLE_ALLST_COLS] = {
+    "Vote", 
+    "IMDb", 
+    "Flux", 
+    "Completion", 
+    "Percent", 
+    "Movies", 
+    "Runtime", 
+    "Year Avg",
 };
 
 #endif
