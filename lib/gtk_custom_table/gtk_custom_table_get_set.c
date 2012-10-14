@@ -148,7 +148,8 @@ void gtk_custom_table_set_cell_text(GtkWidget *table, int col, int row,
  * @param int col             column 
  * @param gboolean value      turn on or off
  */
-void gtk_custom_table_set_column_graph(GtkWidget *table, int col, gboolean value) {
+void gtk_custom_table_set_column_graph(GtkWidget *table, int col, 
+    gboolean value) {
  
     GtkCustomTablePrivate *priv;
     priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
@@ -196,6 +197,35 @@ void gtk_custom_table_set_graph_color(GtkWidget *table, int col,
         meta->graph[1] = rgb[1];
         meta->graph[2] = rgb[2];
     }
+}
+
+
+/**
+ * add a background-color to specific table row..
+ * @param GtkWidget *table    current working table
+ * @param int row             row
+ * @param double rgb[]        array of colors for graph
+ */
+void gtk_custom_table_set_row_color(GtkWidget *table, int row, 
+        double rgb[]) {
+
+    GtkCustomTablePrivate *priv;
+    priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
+
+    struct table_meta *meta = priv->table_rows[row]->meta;
+
+    if(meta == NULL) {
+
+        priv->table_rows[row]->meta = malloc(sizeof(struct table_meta));
+        meta = priv->table_rows[row]->meta;
+        priv->table_rows[row]->meta->graphable = FALSE;
+    }
+
+    meta->color[0] = rgb[0];
+    meta->color[1] = rgb[1];
+    meta->color[2] = rgb[2];
+
+    meta->has_bg_color = TRUE;
 }
 
 
@@ -256,11 +286,11 @@ int gtk_custom_table_set_cell_color_enable(GtkWidget *table, int col, int row,
 
 /**
  * get a specific table row as a char * array of text values..
- * @param GtkWidget *table    current table
- * @param int index           row index
- * @param char **container    container large enough for values..
+ * @param GtkWidget *table     current table
+ * @param int index            row index
+ * @param char ***container    container which equals NULL..
  */
-void gtk_custom_table_get_row(GtkWidget *table, int index, char **container) {
+void gtk_custom_table_get_row(GtkWidget *table, int index, char ***container) {
     
     GtkCustomTablePrivate *priv;
     priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
@@ -269,12 +299,14 @@ void gtk_custom_table_get_row(GtkWidget *table, int index, char **container) {
         g_error("can't get row, index out of bounds");    
     }
 
+    *container = malloc(sizeof(char *) * priv->table_x);
+
     int i = 0;
 
     for(i = 0; i < priv->table_x; i++) {
 
-        container[i] = malloc(strlen(priv->table_rows[index]->cell[i]->text) + 1);
-        strcpy(container[i], priv->table_rows[index]->cell[i]->text);
+        (*container)[i] = malloc(strlen(priv->table_rows[index]->cell[i]->text) + 1);
+        strcpy((*container)[i], priv->table_rows[index]->cell[i]->text);
     }
 }
 
@@ -285,7 +317,7 @@ void gtk_custom_table_get_row(GtkWidget *table, int index, char **container) {
  * @param int col             col value
  * @param int row             row value
  */
-char* gtk_custom_table_get_cell_value(GtkWidget *table, int col, int row) {
+char* gtk_custom_table_get_cell_text(GtkWidget *table, int col, int row) {
     
     GtkCustomTablePrivate *priv;
     priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
@@ -305,7 +337,7 @@ int gtk_custom_table_get_rows(GtkWidget *table) {
 
 int gtk_custom_table_get_cols(GtkWidget *table) {
 
-    return GTK_CUSTOM_TABLE_GET_PRIVATE(table)->table_y;   
+    return GTK_CUSTOM_TABLE_GET_PRIVATE(table)->table_x;
 }
 
 void gtk_custom_table_set_column_prime(GtkWidget *table, int col, gboolean value) {
