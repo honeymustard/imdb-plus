@@ -308,7 +308,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
 
                 cairo_rectangle(cr, 
                     priv->table_column_offset_temp[j] + 4, 
-                    ((i + priv->table_has_header) * priv->table_row_height) + 4, 
+                    offset + 4, 
                     graph_width > 12 ? graph_width - 8 : 0,
                     priv->table_row_height - 8
                 );
@@ -339,7 +339,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
 
                 cairo_move_to(cr, 
                     10.0 + priv->table_column_offset_temp[j], 
-                    ((i + priv->table_has_header) * priv->table_row_height) + 16
+                    offset + 16
                 );
 
                 /* column is an index, show numbering */
