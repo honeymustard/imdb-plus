@@ -21,42 +21,6 @@
 #include "gtk_custom_table.h"
 
 
-double checkers[2][3] = {
-    {1.00, 1.00, 1.00}, 
-    {0.90, 0.90, 0.90}, 
-};
-
-double rgb_header[3] = {
-    0.8, 
-    0.8, 
-    0.8, 
-};
-
-double rgb_footer[3] = {
-    0.8, 
-    0.8, 
-    0.8, 
-};
-
-double rgb_header_bold[3] = {
-    0.87, 
-    0.90, 
-    0.99, 
-};
-
-double rgb_border[3] = {
-    0.2, 
-    0.2, 
-    0.2, 
-};
-
-double rgb_text[3] = {
-    0.1, 
-    0.1, 
-    0.1, 
-};
-
-
 /**
  * calculate widget dimensions, paint to cairo context
  * @param GtkCustomTablePrivate *table    current table
@@ -71,8 +35,12 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
     /* update table dimensions for redrawing table */
     if(refresh == FALSE) {
 
-        priv->table_max_width = table->allocation.width < priv->table_min_width ? 
-            priv->table_min_width: table->allocation.width;
+        if(table->allocation.width < priv->table_min_width) {
+            priv->table_max_width = priv->table_min_width;
+        }
+        else {
+            priv->table_max_width = table->allocation.width;
+        }
 
         gtk_custom_table_calc(priv);
     }
@@ -110,21 +78,17 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
         cr = gdk_cairo_create(table->window);
     }
 
-    /* set font */
-    cairo_select_font_face(cr, 
-        "Sans", 
-        CAIRO_FONT_SLANT_NORMAL,
-        CAIRO_FONT_WEIGHT_NORMAL
-    );
-
-    cairo_set_font_size(cr, 12.0);
-
     int i = 0;
     int j = 0;
 
     char temp[10];
 
     cairo_set_line_width(cr, 1);
+
+    PangoFontDescription *description = NULL;
+    description = pango_font_description_from_string("Monospace 10");
+    
+    PangoLayout *layout = NULL;
 
     /* DRAW HEADER ROW */    
     if((scroll_beg_row == 0) && priv->table_has_header) {
@@ -150,7 +114,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
 
             cairo_stroke_preserve(cr);
 
-            /* sorted-by column background color */
+            /* column selected background color */
             if(priv->table_sort_index == i) {
 
                 cairo_set_source_rgb(cr, 
@@ -175,28 +139,54 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
                 rgb_text[2]
             );
 
+            /* align text */
             cairo_move_to(cr, 
-                10.0 + priv->table_column_offset_temp[i], 
-                16
+                priv->table_column_offset_temp[i] + 10, 
+                4
             );
 
-            cairo_show_text(cr, priv->table_head[i]->text);
+            /* Create a PangoLayout, set the font and text */
+            layout = pango_cairo_create_layout(cr);
+
+            pango_layout_set_text(layout, 
+                    priv->table_head->cell[i]->text, -1);
+
+            pango_layout_set_font_description(layout, 
+                description);
+
+            pango_layout_set_width(layout, 
+                (priv->table_column_widths_temp[i] - 20) * PANGO_SCALE);
+
+            pango_layout_set_height(layout, 
+                priv->table_row_height * PANGO_SCALE);
+
+            pango_layout_set_ellipsize(layout, 
+                PANGO_ELLIPSIZE_END);
+
+            pango_layout_set_alignment(layout, 
+                priv->table_cols[i]->meta->align);
+
+            pango_cairo_show_layout(cr, layout);
+
+            g_object_unref(layout);
         }
     }
 
     int offset = 0;
-    int offset_y = 0;
     int is_integer = 0;
     int modulus = 0;
+    int t_height = 0;
 
+    char *text_temp = NULL;
+
+    double graph_step = 0;
+    double graph_amount = 0;
     double graph_width = 0;
 
     struct table_meta *meta_cell = NULL;
     struct table_meta *meta_rows = NULL;
     struct table_meta *meta_cols = NULL;
     struct table_meta *meta_temp = NULL;
-
-    cairo_set_line_width(cr, 1);
 
     /* only draw those columns which will be visible on window surface */
     for(i = scroll_beg_row; i < scroll_end_row && i < priv->table_y; i++) {
@@ -220,11 +210,9 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
             offset = ((i + priv->table_has_header) * 
                 priv->table_row_height);
 
-            offset_y =  offset > 0 ? offset : 1;
-
             cairo_rectangle(cr, 
                 priv->table_column_offset_temp[j] + 0.5, 
-                offset_y, 
+                offset > 0 ? offset : 1, 
                 priv->table_column_widths_temp[j], 
                 priv->table_row_height
             );
@@ -302,9 +290,11 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
 
             /* DRAW CELL DATA AS GRAPH */
             if(meta_temp != NULL) {
-
-                graph_width = (priv->table_column_widths_temp[j] / 100.0) * 
-                    (atoi(priv->table_rows[i]->cell[j]->text));
+                
+                /* calculate graph size */
+                graph_step = priv->table_column_widths_temp[j] / 100.0;
+                graph_amount = atoi(priv->table_rows[i]->cell[j]->text);
+                graph_width = graph_amount * graph_step;
 
                 cairo_rectangle(cr, 
                     priv->table_column_offset_temp[j] + 4, 
@@ -324,7 +314,8 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
                 cairo_set_source_rgb(cr, 
                     meta_temp->graph[0], 
                     meta_temp->graph[1], 
-                    meta_temp->graph[2]);
+                    meta_temp->graph[2]
+                );
 
                 cairo_fill(cr);
             }
@@ -337,29 +328,52 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
                     rgb_text[2]
                 );
 
+                /* align text */
                 cairo_move_to(cr, 
-                    10.0 + priv->table_column_offset_temp[j], 
-                    offset + 16
+                    priv->table_column_offset_temp[j] + 10, 
+                    offset + 2
                 );
+
+                /* Create a PangoLayout, set the font and text */
+                layout = pango_cairo_create_layout(cr);
 
                 /* column is an index, show numbering */
                 if(priv->table_column_index[j]) {
 
                     sprintf(temp, "%d", i + 1);
-                    cairo_show_text(cr, temp);
+                    text_temp = temp;
                 }
                 else {
-
-                    cairo_show_text(cr, priv->table_rows[i]->cell[j]->text);
+                    text_temp = priv->table_rows[i]->cell[j]->text;
                 }
+                
+                pango_layout_set_text(layout, text_temp, -1);
+
+                pango_layout_set_font_description(layout, 
+                    description);
+
+                pango_layout_set_width(layout, 
+                    (priv->table_column_widths_temp[j] - 20) * PANGO_SCALE);
+
+                pango_layout_set_height(layout, 
+                    priv->table_row_height * PANGO_SCALE);
+
+                pango_layout_set_ellipsize(layout, 
+                    PANGO_ELLIPSIZE_END);
+
+                pango_layout_set_alignment(layout, 
+                    priv->table_cols[j]->meta->align);
+
+                pango_cairo_show_layout(cr, layout);
+
+                g_object_unref(layout);
             }
 
             meta_temp = NULL;
         }
     }
 
-    int table_height = priv->table_row_height * 
-        (priv->table_y + priv->table_has_header);
+    t_height = priv->table_row_height * (priv->table_y + priv->table_has_header);
 
 
     /* DRAW FOOTER ROW */ 
@@ -381,7 +395,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
             /* draw footer background color */
             cairo_rectangle(cr, 
                 priv->table_column_offset_temp[i] + 0.5, 
-                table_height, 
+                t_height, 
                 priv->table_column_widths_temp[i], 
                 priv->table_row_height
             );
@@ -403,15 +417,38 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
             );
 
             cairo_move_to(cr, 
-                10.0 + priv->table_column_offset_temp[i], 
-                16.0 + table_height
+                priv->table_column_offset_temp[i] + 10, 
+                t_height + 2
             );
 
-            cairo_show_text(cr, priv->table_foot[i]->text);
+            /* set the font and text */
+            layout = pango_cairo_create_layout(cr);
+
+            pango_layout_set_text(layout, 
+                priv->table_foot->cell[i]->text, -1);
+
+            pango_layout_set_font_description(layout, 
+                description);
+
+            pango_layout_set_width(layout, 
+                (priv->table_column_widths_temp[i] - 20) * PANGO_SCALE);
+
+            pango_layout_set_height(layout, 
+                priv->table_row_height * PANGO_SCALE);
+
+            pango_layout_set_ellipsize(layout, 
+                PANGO_ELLIPSIZE_END);
+
+            pango_layout_set_alignment(layout, 
+                priv->table_cols[i]->meta->align);
+
+            pango_cairo_show_layout(cr, layout);
         }
 
-        table_height += priv->table_row_height;
+        t_height += priv->table_row_height;
     }
+
+    pango_font_description_free(description);
 
     /* REFRESH, draw image to avoid flicker.. */
     if(refresh == TRUE) {
@@ -428,7 +465,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
     cairo_destroy(cr);
 
     /* make sure the scrollbars are up to speed */
-    gtk_widget_set_size_request(table, priv->table_min_width, table_height);
+    gtk_widget_set_size_request(table, priv->table_min_width, t_height);
 }
 
 
