@@ -24,6 +24,7 @@
 static void gtk_custom_table_class_init(GtkCustomTableClass *class);
 static void gtk_custom_table_init(GtkCustomTable *table);
 
+
 G_DEFINE_TYPE(GtkCustomTable, gtk_custom_table, GTK_TYPE_DRAWING_AREA);
 
 
@@ -43,19 +44,22 @@ static void gtk_custom_table_class_init(GtkCustomTableClass *class) {
 
 
 /**
- * set-up custom widget events if applicable..
+ * add custom widget event masks and callbacks....
  * @param GtkCustomTable *table    
  */
 static void gtk_custom_table_init(GtkCustomTable *table) {
 
-    /* table event masks, to enable these events */
-    gtk_widget_add_events(GTK_WIDGET(table), GDK_BUTTON_PRESS_MASK);
-    gtk_widget_add_events(GTK_WIDGET(table), GDK_BUTTON_RELEASE_MASK);
-    gtk_widget_add_events(GTK_WIDGET(table), GDK_POINTER_MOTION_MASK);
+    /* enable table events events */
+    gtk_widget_add_events(GTK_WIDGET(table), 
+        GDK_BUTTON_PRESS_MASK | 
+        GDK_BUTTON_RELEASE_MASK | 
+        GDK_POINTER_MOTION_MASK
+    );
 
     /* connect these events to callbacks */
     g_signal_connect(G_OBJECT(table), "button_release_event", 
         G_CALLBACK(gtk_custom_table_mouse_released), NULL);
+
     g_signal_connect(G_OBJECT(table), "button_press_event", 
         G_CALLBACK(gtk_custom_table_clicked), NULL);
 }
