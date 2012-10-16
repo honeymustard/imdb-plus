@@ -17,6 +17,7 @@
 *
 *****************************************************************************/
 
+
 #include "gtk_custom_table.h"
 
 
@@ -34,6 +35,7 @@ void gtk_custom_table_alloc(GtkCustomTablePrivate *priv, int cols, int rows,
 
     int i = 0;
     int j = 0;
+    int k = 0;
 
     priv->table_column_widths = malloc(cols * sizeof(int));
     priv->table_column_index = malloc(cols * sizeof(int));
@@ -52,20 +54,39 @@ void gtk_custom_table_alloc(GtkCustomTablePrivate *priv, int cols, int rows,
     for(i = 0; i < (rows * cols); i++) {
 
         /* create new table cell */
-        priv->table_cell[i] = malloc(sizeof (struct table_cell));
+        priv->table_cell[i] = malloc(sizeof(struct table_cell));
         priv->table_cell[i]->text = NULL;
-        priv->table_cell[i]->meta = NULL;
+        priv->table_cell[i]->meta = malloc(sizeof(struct table_meta));
+        priv->table_cell[i]->meta->align = PANGO_ALIGN_LEFT;
+        priv->table_cell[i]->meta->graphable = FALSE;
+        priv->table_cell[i]->meta->has_bg_color = FALSE;
+
+        for(k = 0; k < 3; k++) {
+            priv->table_cell[i]->meta->graph[k] = rgb_graph[k];
+            priv->table_cell[i]->meta->color[k] = rgb_cell[k];
+        }
     }
 
     for(i = 0; i < rows; i++) {
 
-        priv->table_rows[i] = malloc(sizeof (struct table_rows));
-        priv->table_rows[i]->meta = NULL;
-        priv->table_rows[i]->cell = malloc(sizeof (struct table_cell *) * cols);
+        priv->table_rows[i] = malloc(sizeof(struct table_rows));
+        priv->table_rows[i]->meta = malloc(sizeof(struct table_meta));
+        priv->table_rows[i]->meta->align = PANGO_ALIGN_LEFT;
+        priv->table_rows[i]->meta->graphable = FALSE;
+        priv->table_rows[i]->meta->has_bg_color = FALSE;
+
+        priv->table_rows[i]->row_genesis = i;
+
+        for(k = 0; k < 3; k++) {
+            priv->table_rows[i]->meta->graph[k] = rgb_graph[k];
+            priv->table_rows[i]->meta->color[k] = rgb_cell[k];
+        }
+
+        priv->table_rows[i]->cell = malloc(sizeof(struct table_cell *) * cols);
         priv->table_rows[i]->priv = priv;
 
-        for(j = 0; j < cols; j++) {
-            priv->table_rows[i]->cell[j] = priv->table_cell[cell++];
+        for(j = 0; j < cols; j++, cell++) {
+            priv->table_rows[i]->cell[j] = priv->table_cell[cell];
         }
     }
 
@@ -73,12 +94,21 @@ void gtk_custom_table_alloc(GtkCustomTablePrivate *priv, int cols, int rows,
 
     for(i = 0; i < cols; i++) {
 
-        priv->table_cols[i] = malloc(sizeof (struct table_cols));
-        priv->table_cols[i]->meta = NULL;
-        priv->table_cols[i]->cell = malloc(sizeof (struct table_cell *) * rows);
+        priv->table_cols[i] = malloc(sizeof(struct table_cols));
+        priv->table_cols[i]->meta = malloc(sizeof(struct table_meta));
+        priv->table_cols[i]->meta->align = PANGO_ALIGN_LEFT;
+        priv->table_cols[i]->meta->graphable = FALSE;
+        priv->table_cols[i]->meta->has_bg_color = FALSE;
 
-        for(j = 0; j < rows; j++) {
-            priv->table_cols[i]->cell[j] = priv->table_cell[cell++];
+        for(k = 0; k < 3; k++) {
+            priv->table_cols[i]->meta->graph[k] = rgb_graph[k];
+            priv->table_cols[i]->meta->color[k] = rgb_cell[k];
+        }
+
+        priv->table_cols[i]->cell = malloc(sizeof(struct table_cell *) * rows);
+
+        for(j = 0; j < rows; j++, cell++) {
+            priv->table_cols[i]->cell[j] = priv->table_cell[cell % priv->table_x];
         }
 
         priv->table_column_widths[i] = column_widths[i];
