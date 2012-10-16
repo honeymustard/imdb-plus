@@ -102,6 +102,7 @@ int main(int argc, char *argv[]) {
     set_global(CONST_BOX_TMP, box_tmp);
     set_global(CONST_BOX_CSV, box_csv);
     set_global(CONST_BOX_URL, BOX_URL);
+    set_global(CONST_RAT_URL, RAT_URL);
 
     /* free up memory */
     #ifdef LINUX
@@ -292,6 +293,19 @@ int main(int argc, char *argv[]) {
 
     gtk_custom_table_set_graph_color_col(nb_tab_statistics, 3, 
         graph_fg1);
+    
+    gtk_custom_table_set_column_alignment(nb_tab_statistics, 1, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_statistics, 2, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_statistics, 4, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_statistics, 5, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_statistics, 6, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_statistics, 7, 
+        PANGO_ALIGN_RIGHT);
 
     /* set lists statistics table values */
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
@@ -343,6 +357,19 @@ int main(int argc, char *argv[]) {
     gtk_custom_table_set_graph_color_col(nb_tab_lists_stats, 3, 
         graph_fg2);
 
+    gtk_custom_table_set_column_alignment(nb_tab_lists_stats, 1, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_lists_stats, 2, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_lists_stats, 4, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_lists_stats, 5, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_lists_stats, 6, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_lists_stats, 7, 
+        PANGO_ALIGN_RIGHT);
+
     /* set compare statistics table values */
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
 
@@ -392,6 +419,19 @@ int main(int argc, char *argv[]) {
 
     gtk_custom_table_set_graph_color_col(nb_tab_compare, 3, 
         graph_fg3);
+
+    gtk_custom_table_set_column_alignment(nb_tab_compare, 1, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_compare, 2, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_compare, 4, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_compare, 5, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_compare, 6, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_compare, 7, 
+        PANGO_ALIGN_RIGHT);
 
     /* set all statistics table values */
     for(i = 0; i < 12; i++) {
@@ -526,6 +566,19 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    gtk_custom_table_set_column_alignment(nb_tab_top250, 0, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_top250, 1, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_top250, 2, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_top250, 3, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_top250, 5, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_top250, 6, 
+        PANGO_ALIGN_RIGHT);
+
     no_results = 1;
 
     /* set bottom 100 table values */
@@ -596,6 +649,19 @@ int main(int argc, char *argv[]) {
                 "0");
         }
     }
+
+    gtk_custom_table_set_column_alignment(nb_tab_bot100, 0, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_bot100, 1, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_bot100, 2, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_bot100, 3, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_bot100, 5, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_bot100, 6, 
+        PANGO_ALIGN_RIGHT);
 
     no_results = 1;
 
@@ -721,6 +787,19 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    gtk_custom_table_set_column_alignment(nb_tab_boxoffice, 0, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_boxoffice, 1, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_boxoffice, 2, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_boxoffice, 3, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_boxoffice, 5, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_boxoffice, 6, 
+        PANGO_ALIGN_RIGHT);
+
     /* set default movies and lists values */
     for(i = 0; i < 50; i++) {
 
@@ -756,6 +835,32 @@ int main(int argc, char *argv[]) {
         gtk_custom_table_set_cell_text(nb_tab_lists, 6, i, 
             "0");
     }
+
+    gtk_custom_table_set_column_alignment(nb_tab_mymovies, 0, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_mymovies, 1, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_mymovies, 2, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_mymovies, 3, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_mymovies, 5, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_mymovies, 6, 
+        PANGO_ALIGN_RIGHT);
+
+    gtk_custom_table_set_column_alignment(nb_tab_lists, 0, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_lists, 1, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_lists, 2, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_lists, 3, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_lists, 5, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_lists, 6, 
+        PANGO_ALIGN_RIGHT);
 
     /* create new vboxes for tabs */
     nb_tab_statistics_vbox = gtk_vbox_new(FALSE, 0);
@@ -1020,7 +1125,7 @@ int main(int argc, char *argv[]) {
 
     /* last steps, show window */
     gtk_container_add(GTK_CONTAINER(window), vbox);
-    gtk_window_set_default_size(GTK_WINDOW(window), 800, 460);
+    gtk_window_set_default_size(GTK_WINDOW(window), 830, 460);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_widget_show_all(window);
 
