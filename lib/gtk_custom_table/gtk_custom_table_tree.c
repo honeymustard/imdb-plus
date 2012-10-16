@@ -17,6 +17,7 @@
 *
 *****************************************************************************/
 
+
 #include "gtk_custom_table.h"
 
 
@@ -55,7 +56,7 @@ void gtk_custom_table_tree_get_recurse(GtkCustomTablePrivate *priv,
     /* have we found the correct cell? */
     if(strcmp(value, (tree->data->cell[col])->text) == 0) {
 
-        priv->table_tree_index = tree->data->row;
+        priv->table_tree_index = tree->data->row_current;
     }
     /* else, go left then right */
     else {
@@ -88,7 +89,8 @@ void gtk_custom_table_tree_add(struct table_tree *tree, struct table_rows *data,
     /* compare text in primary index to current node text */
     else {
 
-        int compare = strcmp(tree->data->cell[primary]->text, data->cell[primary]->text);
+        int compare = strcmp(tree->data->cell[primary]->text, 
+            data->cell[primary]->text);
 
         /* we'll go left in such cases.. */
         if(compare > 0 || compare == 0) {
