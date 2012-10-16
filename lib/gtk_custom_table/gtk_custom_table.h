@@ -21,7 +21,7 @@
 #ifndef __GTKCUSTOMTABLE_H__
 #define __GTKCUSTOMTABLE_H__
 
-#include <cairo.h>
+#include <pango/pangocairo.h>
 #include <gtk/gtk.h>
 #include <string.h>
 #include <stdlib.h>
@@ -65,6 +65,7 @@ struct table_meta {
     double graph[3];
     gboolean graphable;
     gboolean has_bg_color;
+    PangoAlignment align;
 };
 
 /* table cells */
@@ -86,7 +87,8 @@ struct table_rows {
 
     GtkCustomTablePrivate *priv;
 
-    int row;
+    int row_current;
+    int row_genesis;
     struct table_meta *meta;
     struct table_cell **cell;
 };
@@ -132,9 +134,8 @@ struct _GtkCustomTablePrivate {
     struct table_cols **table_cols;
     struct table_rows **table_rows;
     struct table_cell **table_cell;
-    struct table_cell **table_head;
-    struct table_cell **table_foot;
-    // should be table_row..
+    struct table_rows *table_head;
+    struct table_rows *table_foot;
 };
 
 
@@ -185,6 +186,8 @@ void gtk_custom_table_set_column_index(GtkWidget *table, int col,
     gboolean value);
 void gtk_custom_table_set_column_shade(GtkWidget *table, int col, 
     gboolean value);
+void gtk_custom_table_set_column_alignment(GtkWidget *table, int col, 
+    PangoAlignment align);
 void gtk_custom_table_set_column_prime(GtkWidget *table, int col, 
     gboolean value);
 void gtk_custom_table_set_column_graph(GtkWidget *table, int col, 
@@ -198,20 +201,24 @@ void gtk_custom_table_set_head_text(GtkWidget *table, int col,
 void gtk_custom_table_set_foot_text(GtkWidget *table, int col, 
     char *text);
 void gtk_custom_table_get_row(GtkWidget *table, int index, char ***container);
-
+void gtk_custom_table_set_cell_color_enable(GtkWidget *table, int col, 
+    int row, gboolean value);
 
 int gtk_custom_table_get_rows(GtkWidget *table);
 int gtk_custom_table_get_cols(GtkWidget *table);
 int gtk_custom_table_get_indexof(GtkWidget *table, char *value);
-int gtk_custom_table_set_cell_color_enable(GtkWidget *table, int col, 
-    int row, gboolean value);
 
 char* gtk_custom_table_get_cell_text(GtkWidget *table, int col, 
     int row);
 
+double checkers[2][3];
 double rgb_header[3];
 double rgb_footer[3];
 double rgb_header_bold[3];
+double rgb_border[3];
+double rgb_text[3];
+double rgb_graph[3];
+double rgb_cell[3];
 
 #endif
 
