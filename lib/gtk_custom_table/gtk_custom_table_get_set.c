@@ -39,7 +39,7 @@ void gtk_custom_table_set_head_foot_text(GtkWidget *table, int col,
         g_error("table overflow");
     }
 
-    struct table_cell **table_row;
+    struct table_rows *table_row;
 
     /* type is header */
     if(strcmp(type, "header") == 0) {
@@ -53,13 +53,13 @@ void gtk_custom_table_set_head_foot_text(GtkWidget *table, int col,
     }
 
     /* free old text as needed */
-    if(table_row[col]->text != NULL) {
-        free(table_row[col]->text);
+    if(table_row->cell[col]->text != NULL) {
+        free(table_row->cell[col]->text);
     }
 
     /* malloc and copy new text to cell */
-    table_row[col]->text = malloc(strlen(text) + 1);      
-    strcpy(table_row[col]->text, text);
+    table_row->cell[col]->text = malloc(strlen(text) + 1);      
+    strcpy(table_row->cell[col]->text, text);
 }
 
 
@@ -112,7 +112,6 @@ void gtk_custom_table_set_cell_text(GtkWidget *table, int col, int row,
         g_error("table overflow");
     }
 
-
     /* when adding text to the same cell twice, free memory */
     if(priv->table_rows[row]->cell[col]->text != NULL) {
         free(priv->table_rows[row]->cell[col]->text);
@@ -154,26 +153,7 @@ void gtk_custom_table_set_column_graph(GtkWidget *table, int col,
     GtkCustomTablePrivate *priv;
     priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
 
-    if(priv->table_cols[col] == NULL) {
-        priv->table_cols[col] = malloc(sizeof (struct table_cols));
-        priv->table_cols[col]->meta = NULL;
-    }
-
-    struct table_meta *meta = priv->table_cols[col]->meta;
-
-    if(meta == NULL) {
-
-        priv->table_cols[col]->meta = malloc(sizeof (struct table_meta));
-        meta = priv->table_cols[col]->meta;
-        meta->has_bg_color = FALSE;
-    }
-
-    /* set default graph color */
-    meta->graph[0] = 0.00;
-    meta->graph[1] = 0.90;
-    meta->graph[2] = 0.00;
-
-    meta->graphable = value;
+    priv->table_cols[col]->meta->graphable = value;
 }
 
 
@@ -189,16 +169,13 @@ void gtk_custom_table_set_graph_color_col(GtkWidget *table, int col,
     GtkCustomTablePrivate *priv;
     priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
 
-    struct table_meta *meta = priv->table_cols[col]->meta;
+    int i = 0;
 
-    if(meta != NULL) {
-
-        meta->graph[0] = rgb[0];
-        meta->graph[1] = rgb[1];
-        meta->graph[2] = rgb[2];
-
-        meta->graphable = TRUE;
+    for(i = 0; i < 3; i++) {
+        priv->table_cols[col]->meta->graph[i] = rgb[i];
     }
+
+    priv->table_cols[col]->meta->graphable = TRUE;
 }
 
 
@@ -215,16 +192,13 @@ void gtk_custom_table_set_graph_color_cell(GtkWidget *table, int col,
     GtkCustomTablePrivate *priv;
     priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
 
-    struct table_meta *meta = priv->table_rows[row]->cell[col]->meta;
+    int i = 0;
 
-    if(meta != NULL) {
-
-        meta->graph[0] = rgb[0];
-        meta->graph[1] = rgb[1];
-        meta->graph[2] = rgb[2];
-
-        meta->graphable = TRUE;
+    for(i = 0; i < 3; i++) {
+        priv->table_rows[row]->cell[col]->meta->graph[i] = rgb[i];
     }
+
+    priv->table_rows[row]->cell[col]->meta->graphable = TRUE;
 }
 
 
@@ -240,20 +214,13 @@ void gtk_custom_table_set_row_color(GtkWidget *table, int row,
     GtkCustomTablePrivate *priv;
     priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
 
-    struct table_meta *meta = priv->table_rows[row]->meta;
+    int i = 0;
 
-    if(meta == NULL) {
-
-        priv->table_rows[row]->meta = malloc(sizeof(struct table_meta));
-        meta = priv->table_rows[row]->meta;
-        priv->table_rows[row]->meta->graphable = FALSE;
+    for(i = 0; i < 3; i++) {
+        priv->table_rows[row]->meta->color[i] = rgb[i];
     }
 
-    meta->color[0] = rgb[0];
-    meta->color[1] = rgb[1];
-    meta->color[2] = rgb[2];
-
-    meta->has_bg_color = TRUE;
+    priv->table_rows[row]->meta->has_bg_color = TRUE;
 }
 
 
@@ -269,21 +236,14 @@ void gtk_custom_table_set_cell_color(GtkWidget *table, int col, int row,
 
     GtkCustomTablePrivate *priv;
     priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
+    
+    int i = 0;
 
-    struct table_meta *meta = priv->table_rows[row]->cell[col]->meta;
-
-    if(meta == NULL) {
-
-        priv->table_rows[row]->cell[col]->meta = malloc(sizeof(struct table_meta));
-        meta = priv->table_rows[row]->cell[col]->meta;
-        priv->table_rows[row]->cell[col]->meta->graphable = FALSE;
+    for(i = 0; i < 3; i++) {
+        priv->table_rows[row]->cell[col]->meta->color[i] = rgb[i];
     }
 
-    meta->color[0] = rgb[0];
-    meta->color[1] = rgb[1];
-    meta->color[2] = rgb[2];
-
-    meta->has_bg_color = TRUE;
+    priv->table_rows[row]->cell[col]->meta->has_bg_color = TRUE;
 }
 
 
@@ -294,7 +254,7 @@ void gtk_custom_table_set_cell_color(GtkWidget *table, int col, int row,
  * @param int row             cell y index
  * gboolean value             value, true or false
  */
-int gtk_custom_table_set_cell_color_enable(GtkWidget *table, int col, int row, 
+void gtk_custom_table_set_cell_color_enable(GtkWidget *table, int col, int row, 
         gboolean value) {
 
     GtkCustomTablePrivate *priv;
@@ -302,13 +262,7 @@ int gtk_custom_table_set_cell_color_enable(GtkWidget *table, int col, int row,
 
     struct table_meta *meta = priv->table_rows[row]->cell[col]->meta;
 
-    if(meta == NULL) {
-        return 0;
-    }
-
     meta->has_bg_color = value;
-
-    return 1;
 }
 
 
@@ -382,6 +336,12 @@ void gtk_custom_table_set_column_index(GtkWidget *table, int col, gboolean value
 void gtk_custom_table_set_column_shade(GtkWidget *table, int col, gboolean value) {
 
     GTK_CUSTOM_TABLE_GET_PRIVATE(table)->table_column_hidden[col] = value;
+}
+
+void gtk_custom_table_set_column_alignment(GtkWidget *table, int col, 
+    PangoAlignment align) {
+
+    GTK_CUSTOM_TABLE_GET_PRIVATE(table)->table_cols[col]->meta->align = align;
 }
 
 void gtk_custom_table_set_sort_index(GtkWidget *table, int col) {
