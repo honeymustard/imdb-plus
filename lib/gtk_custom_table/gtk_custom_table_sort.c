@@ -35,26 +35,44 @@ int gtk_custom_table_compare(const void *cmp1, const void *cmp2) {
     char *x = row1->cell[row1->priv->table_sort_index]->text;
     char *y = row2->cell[row2->priv->table_sort_index]->text;
 
-    /* natural sort is confused by monetary value strings of unequal length */
+    int sort = row1->priv->table_sort_order;
+
+    /* exception for monetary strings beginning with $ */
     if(x[0] == '$' && y[0] == '$') {
 
         if(strlen(x) != strlen(y)) { 
+            return sort != GTK_CUSTOM_TABLE_ASC ? 
+                strnatcmp(y, x) : strnatcmp(x, y);
+        }
+        else {
+            return sort != GTK_CUSTOM_TABLE_ASC ? 
+                strnatcmp(x, y) : strnatcmp(y, x);
+        }
+    }
+    /* exception for strings beginning with + or - */
+    else if((x[0] == '+' || x[0] == '-') && 
+        (y[0] == '+' || y[0] == '-')) {
 
-            if(row1->priv->table_sort_order == GTK_CUSTOM_TABLE_ASC) {
-                return strcmp(y, x);
-            }
+        if(x[0] == '+' && y[0] == '+') {
 
-            return strcmp(x, y);
+            return sort != GTK_CUSTOM_TABLE_ASC ? 
+                strnatcmp(x, y) : strnatcmp(y, x);
         }
     }
 
-    /* use natural sort comparison */
-    if(row1->priv->table_sort_order == GTK_CUSTOM_TABLE_ASC) {
-        return strnatcmp(x, y);
+    /* use standard natural sort */
+    int result = sort != GTK_CUSTOM_TABLE_ASC ?
+        strnatcmp(y, x) : strnatcmp(x, y);
+
+    /* use secondary sorting to break ties */
+    if(result == 0) {
+
+        return sort != GTK_CUSTOM_TABLE_ASC ? 
+            row1->row_genesis > row2->row_genesis :
+            row2->row_genesis > row1->row_genesis;
     }
-    else {
-        return strnatcmp(y, x);    
-    }
+
+    return result;
 }
 
 
@@ -87,7 +105,7 @@ void gtk_custom_table_sort(GtkWidget *table, int col, int orient) {
     /* reset row index, so that binary search can find them */
     for(i = 0; i < priv->table_y; i++) {
 
-        priv->table_rows[i]->row = i;
+        priv->table_rows[i]->row_current = i;
     }
 }
 
