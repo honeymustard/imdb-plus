@@ -51,6 +51,8 @@ void *download(void *download) {
 
         curl_easy_setopt(curl, CURLOPT_URL, down->url);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, tmp);
+
+        printf("%s\n", down->url);
         
         curl_res = curl_easy_perform(curl);
 

@@ -458,7 +458,6 @@ int open_file(char *filename) {
 
         gtk_custom_table_set_sortable(nb_tab_statistics, TRUE);
 
-
         /* update mymovies tab with new data */
         gtk_custom_table_resize(nb_tab_mymovies, -1, rows);
 
