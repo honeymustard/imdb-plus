@@ -42,7 +42,7 @@
 #define APP_NAME "imdb-plus"
 #define APP_ICON IMG_DIR "imdb-plus.png"
 #define APP_COPY "Copyright \xc2\xa9 2011-2012 Adrian Solumsmo"
-#define APP_DESC APP_NAME " is a statistical extension application for IMDB"
+#define APP_DESC APP_NAME " is a statistical application for movie fans"
 #define APP_HOME "https://github.com/honeymustard/imdb-plus"
 
 /* constants */
