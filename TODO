@@ -1,11 +1,11 @@
     
-  TODO for project imdb-plus:
+  TODO for imdb-plus:
+
+ -> NOT URGENT
 
   * make -DINSTALL a global
-  * secondary sorting for tables..
-  * finish all-stats tab..
 
  -> TO BE FIXED:
   
-  * ratings download is broken
+  * finish all-stats tab..
 
