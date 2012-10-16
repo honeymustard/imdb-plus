@@ -17,6 +17,7 @@
 *
 *****************************************************************************/
 
+
 #include "gtk_custom_table.h"
 
 
@@ -28,12 +29,88 @@
  */
 void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
 
-    int i = 0;
-
     GtkCustomTablePrivate *priv;
     priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
 
-    /* free memory occupied by table cells */
+    int t_cols = cols >= 0 ? cols : priv->table_x;
+    int t_rows = rows >= 0 ? rows : priv->table_y;
+
+    int t_copy_cols = t_cols > priv->table_x ? priv->table_x : t_cols;
+    int t_copy_rows = t_rows > priv->table_y ? priv->table_y : t_rows;
+    int t_copy_cell = t_copy_cols * t_copy_rows;
+
+    /* copy table meta-data */
+    struct table_meta **table_cols = malloc(sizeof(struct table_meta *) * t_copy_cols); 
+    struct table_meta **table_rows = malloc(sizeof(struct table_meta *) * t_copy_rows); 
+    struct table_meta **table_cell = malloc(sizeof(struct table_meta *) * t_copy_cell); 
+
+    int i = 0;
+    int j = 0;
+    int k = 0;
+
+    struct table_meta *meta = NULL;
+
+    for(i = 0; i < t_copy_rows; i++) {
+        
+        table_rows[i] = malloc(sizeof(struct table_meta));
+        
+        meta = priv->table_rows[i]->meta;
+
+        for(j = 0; j < 3; j++) {
+            table_rows[i]->color[j] = meta->color[j];
+            table_rows[i]->graph[j] = meta->graph[j];
+        }
+
+        table_rows[i]->graphable = meta->graphable;
+        table_rows[i]->has_bg_color = meta->has_bg_color;
+        table_rows[i]->align = meta->align;
+    }
+
+    for(i = 0; i < t_copy_cols; i++) {
+
+        table_cols[i] = malloc(sizeof(struct table_meta));
+
+        meta = priv->table_cols[i]->meta;
+
+        for(j = 0; j < 3; j++) {
+            table_cols[i]->color[j] = meta->color[j];
+            table_cols[i]->graph[j] = meta->graph[j];
+        }
+
+        table_cols[i]->graphable = meta->graphable;
+        table_cols[i]->has_bg_color = meta->has_bg_color;
+        table_cols[i]->align = meta->align;
+    }
+
+    int cell = 0;
+
+    for(i = 0; i < t_copy_rows; i++) {
+        
+        for(j = 0; j < priv->table_x; j++) {
+
+            /* table might've shrunk */
+            if(j >= t_cols) {
+                continue;
+            }
+
+            table_cell[cell] = malloc(sizeof(struct table_meta));
+
+            meta = priv->table_rows[i]->cell[j]->meta;
+
+            for(k = 0; k < 3; k++) {
+                table_cell[cell]->color[k] = meta->color[k];
+                table_cell[cell]->graph[k] = meta->graph[k];
+            }
+
+            table_cell[cell]->graphable = meta->graphable;
+            table_cell[cell]->has_bg_color = meta->has_bg_color;
+            table_cell[cell]->align = meta->align;
+
+            cell++;
+        }
+    }
+
+     /* free memory occupied by table cells */
     for(i = 0; i < (priv->table_x * priv->table_y); i++) {
 
         /* free meta structure */
@@ -48,7 +125,6 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
         free(priv->table_cell[i]);
     }
 
-
     /* free memory occupied by table rows */
     for(i = 0; i < priv->table_y; i++) {
 
@@ -59,7 +135,6 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
         free(priv->table_rows[i]->cell);
         free(priv->table_rows[i]);
     }
-
 
     /* free memory occupied by table cols */
     for(i = 0; i < priv->table_x; i++) {
@@ -72,10 +147,9 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
         free(priv->table_cols[i]);
     }
 
-    int col_widths[priv->table_x];
+    int col_widths[t_cols];
 
-    /* reuse old column widths */
-    for(i = 0; i < priv->table_x; i++) {
+    for(i = 0; i < t_cols; i++) {
         col_widths[i] = priv->table_column_widths[i];
     }
     
@@ -90,15 +164,65 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
     gtk_custom_table_tree_free(priv->table_tree);
     priv->table_tree = NULL;
 
-    /* use existing size(s) if desired */
-    if(cols >= 0) {
-        priv->table_x = cols;    
-    }
-    /* what he said.. */
-    if(rows >= 0) {
-        priv->table_y = rows;
-    }
+    priv->table_x = t_cols;
+    priv->table_y = t_rows;
 
     gtk_custom_table_alloc(priv, priv->table_x, priv->table_y, col_widths);
+
+    /* put saved meta-data back into table */
+    for(i = 0; i < t_copy_rows; i++) {
+        
+        meta = priv->table_rows[i]->meta;
+
+        for(j = 0; j < 3; j++) {
+            meta->color[j] = table_rows[i]->color[j];
+            meta->graph[j] = table_rows[i]->graph[j];
+        }
+
+        meta->graphable = table_rows[i]->graphable;
+        meta->has_bg_color = table_rows[i]->has_bg_color;
+        meta->align = table_rows[i]->align;
+
+        free(table_rows[i]);
+    }
+
+    free(table_rows);
+
+    for(i = 0; i < t_copy_cols; i++) {
+
+        meta = priv->table_cols[i]->meta;
+
+        for(j = 0; j < 3; j++) {
+            meta->color[j] = table_cols[i]->color[j];
+            meta->graph[j] = table_cols[i]->graph[j];
+        }
+
+        meta->graphable = table_cols[i]->graphable;
+        meta->has_bg_color = table_cols[i]->has_bg_color;
+        meta->align = table_cols[i]->align;
+
+        free(table_cols[i]);
+    }
+
+    free(table_cols);
+
+    for(i = 0; i < t_copy_cell; i++) {
+        
+        meta = priv->table_cell[i]->meta;
+
+        for(j = 0; j < 3; j++) {
+            meta->color[j] = table_cell[i]->color[j];
+            meta->graph[j] = table_cell[i]->graph[j];
+        }
+
+        meta->graphable = table_cell[i]->graphable;
+        meta->has_bg_color = table_cell[i]->has_bg_color;
+        meta->align = table_cell[i]->align;
+
+        free(table_cell[i]);
+    }
+
+    free(table_cell);
+
 }
 
