@@ -46,25 +46,30 @@ int main(int argc, char *argv[]) {
     /* set version global */
     set_global(CONST_VERSION, VERSION);
 
+    char *home = NULL;
+    char *path = NULL;
+
     /* create home directory */
     #ifdef WINDOWS
-
-        char *path = APP_DIR;
-
+        home = "C:\\Users\\Public\\Documents";
     #endif
     #ifdef LINUX
+        home = getenv("HOME");
+    #endif
 
-        char *home = getenv("HOME");
-        char *path = malloc(strlen(home) + strlen(APP_DIR) + 3);
+    path = malloc(strlen(home) + strlen(APP_FOLD) + 3);
 
-        /* make new path */
-        strcpy(path, home);
-        strcat(path, "/");
-        strcat(path, APP_DIR);
-        strcat(path, "/");
+    /* make new path */
+    strcpy(path, home);
+    strcat(path, "/");
+    strcat(path, APP_FOLD);
+    strcat(path, "/");
 
+    #ifdef WINDOWS
+        mkdir(path);
+    #endif
+    #ifdef LINUX
         mkdir(path, S_IRWXU);
-
     #endif
 
     set_global(CONST_HOME, path);
@@ -105,9 +110,7 @@ int main(int argc, char *argv[]) {
     set_global(CONST_RAT_URL, RAT_URL);
 
     /* free up memory */
-    #ifdef LINUX
-        free(path);
-    #endif
+    free(path);
 
     free(top_tmp);
     free(top_csv);
