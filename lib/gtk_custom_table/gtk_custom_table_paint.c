@@ -142,7 +142,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
             /* align text */
             cairo_move_to(cr, 
                 priv->table_column_offset_temp[i] + 10, 
-                4
+                2
             );
 
             /* Create a PangoLayout, set the font and text */
@@ -292,14 +292,14 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
             if(meta_temp != NULL) {
                 
                 /* calculate graph size */
-                graph_step = priv->table_column_widths_temp[j] / 100.0;
+                graph_step = (priv->table_column_widths_temp[j] - 8) / 100.0;
                 graph_amount = atoi(priv->table_rows[i]->cell[j]->text);
                 graph_width = graph_amount * graph_step;
 
                 cairo_rectangle(cr, 
                     priv->table_column_offset_temp[j] + 4, 
                     offset + 4, 
-                    graph_width > 12 ? graph_width - 8 : 0,
+                    graph_width > 0 ? graph_width : 1,
                     priv->table_row_height - 8
                 );
 
