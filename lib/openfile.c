@@ -30,6 +30,98 @@ int has_open_movies = 0;
 int has_open_lists = 0;
 
 
+/* add values to allstats tab */
+void set_allstats(double allstats[5], int row, int rows) {
+
+    char temp[100];
+
+    double vote_avg = allstats[1] / allstats[0] ;
+    double imdb_avg = allstats[2] / allstats[0];
+    double flux_avg = vote_avg - imdb_avg;
+
+    if(vote_avg > 0.0) {
+        sprintf(temp, "%1.2f", vote_avg);
+    }
+    else {
+        strcpy(temp, "N/A");
+    }
+
+    gtk_custom_table_set_cell_text(nb_tab_allstats, 0, row, 
+        temp);
+
+    if(imdb_avg > 0.0) {
+        sprintf(temp, "%1.2f", imdb_avg);
+    }
+    else {
+        strcpy(temp, "N/A");
+    }
+
+    gtk_custom_table_set_cell_text(nb_tab_allstats, 1, row, 
+        temp);
+
+    if(allstats[1] > 0.0 && allstats[2] > 0.0) {
+        sprintf(temp, "%+1.2f", flux_avg);
+    }
+    else {
+        strcpy(temp, "N/A");
+    }
+
+    gtk_custom_table_set_cell_text(nb_tab_allstats, 2, row, 
+        temp);
+
+    sprintf(temp, "%d", (int)allstats[0] > 0 ? 
+        (int)(100.0 / (rows / allstats[0])) : 0);
+    gtk_custom_table_set_cell_text(nb_tab_allstats, 3, row, 
+        temp);
+
+    sprintf(temp, "%1.2f %%", (int)allstats[0] > 0 ? 
+        allstats[0] / (rows / 100.0) : 0.0);
+    gtk_custom_table_set_cell_text(nb_tab_allstats, 4, row, 
+        temp);
+
+    sprintf(temp, "%d/%d", (int)allstats[0], rows);
+    gtk_custom_table_set_cell_text(nb_tab_allstats, 5, row, 
+        temp);
+
+    sprintf(temp, "%1.2f", (int)allstats[0] > 0 ?
+        allstats[3] / allstats[0] : 0.0);
+    gtk_custom_table_set_cell_text(nb_tab_allstats, 6, row, 
+        temp);
+
+    sprintf(temp, "%1.2f", (int)allstats[0] > 0 ? 
+        allstats[4] / allstats[0] : 0.0);
+    gtk_custom_table_set_cell_text(nb_tab_allstats, 7, row, 
+        temp);
+
+    /* reset background colors */
+    gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 0, row, 
+        FALSE);
+    gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 1, row, 
+        FALSE);
+    gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 2, row, 
+        FALSE);
+
+    int vote = (int)vote_avg;
+    int imdb = (int)imdb_avg;
+    int flux = (int)flux_avg;
+
+    if(vote_avg > 0.0) {
+        gtk_custom_table_set_cell_color(nb_tab_allstats, 0, row, 
+            colors[vote < 10 && vote > 0 ? vote - 1 : 1 ]);
+    }
+
+    if(imdb_avg > 0.0) {
+        gtk_custom_table_set_cell_color(nb_tab_allstats, 1, row, 
+            colors[imdb < 10 && imdb > 0 ? imdb - 1 : 1]);
+    }
+
+    if(allstats[1] > 0.0 && allstats[2] > 0.0) {
+        gtk_custom_table_set_cell_color(nb_tab_allstats, 2, row, 
+            colors[flux > 0 ? 8 : 1]);
+    }
+}
+
+
 int open_compare(GtkWidget *current, GtkWidget *other) {
 
     int i = 0;
@@ -46,6 +138,7 @@ int open_compare(GtkWidget *current, GtkWidget *other) {
     int time = 0;
     int year = 0;
 
+    int index = 0;
     int graph_apex = 0;
     int year_average = 0;
     int vote_average = 0;
@@ -56,6 +149,9 @@ int open_compare(GtkWidget *current, GtkWidget *other) {
     char temp[100];
     char **shared = NULL;
     char *unique_id = NULL;
+
+    double allstats[3][5];
+    memset(allstats, '\0', sizeof(allstats));
 
     gtk_custom_table_sort(nb_tab_compare, 0, GTK_CUSTOM_TABLE_DESC);
 
@@ -73,14 +169,6 @@ int open_compare(GtkWidget *current, GtkWidget *other) {
             time = atoi(shared[5]);
             year = atoi(shared[6]);
 
-            for(j = 0; j < gtk_custom_table_get_cols(current); j++) {
-                free(shared[j]);
-            }
-
-            free(shared);
-
-            shared = NULL;
-
             imdb_key = (int)imdb - 1;
             
             /* add up for each rating */
@@ -97,8 +185,60 @@ int open_compare(GtkWidget *current, GtkWidget *other) {
             flux_average += (vote - imdb);
 
             row_count++;
+
+            /* add to allstats tab if applicable */
+            index = gtk_custom_table_get_indexof(nb_tab_top250, 
+                unique_id);
+
+            if(index >= 0) {
+
+                allstats[0][0] += 1;
+                allstats[0][1] += vote;
+                allstats[0][2] += imdb;
+                allstats[0][3] += time;
+                allstats[0][4] += year;
+            }
+
+            index = gtk_custom_table_get_indexof(nb_tab_bot100, 
+                unique_id);
+
+            if(index >= 0) {
+
+                allstats[1][0] += 1;
+                allstats[1][1] += vote;
+                allstats[1][2] += imdb;
+                allstats[1][3] += time;
+                allstats[1][4] += year;
+            }
+
+            index = gtk_custom_table_get_indexof(nb_tab_boxoffice, 
+                unique_id);
+
+            if(index >= 0) {
+
+                allstats[2][0] += 1;
+                allstats[2][1] += vote;
+                allstats[2][2] += imdb;
+                allstats[2][3] += time;
+                allstats[2][4] += year;
+            }
+
+            for(j = 0; j < gtk_custom_table_get_cols(current); j++) {
+                free(shared[j]);
+            }
+
+            free(shared);
+
+            shared = NULL;
         }
     }
+
+    set_allstats(allstats[0], 3, 
+        gtk_custom_table_get_rows(nb_tab_top250));
+    set_allstats(allstats[1], 7, 
+        gtk_custom_table_get_rows(nb_tab_bot100));
+    set_allstats(allstats[2], 11, 
+        gtk_custom_table_get_rows(nb_tab_boxoffice));
 
     for(i = 0; i < 10; i++) {
 
@@ -256,6 +396,9 @@ int open_file(char *filename) {
 
     double stats[10][6];
     memset(stats, '\0', sizeof(stats));
+
+    double allstats[3][5];
+    memset(allstats, '\0', sizeof(allstats));
 
     int vote = 0;
     int imdb = 0;
@@ -461,6 +604,8 @@ int open_file(char *filename) {
         /* update mymovies tab with new data */
         gtk_custom_table_resize(nb_tab_mymovies, -1, rows);
 
+        memset(allstats, '\0', sizeof(allstats));
+
         /* add text to widget table */
         for(i = 1, j = 0; i <= rows; i++, j++) {
 
@@ -487,16 +632,44 @@ int open_file(char *filename) {
             gtk_custom_table_set_cell_color(nb_tab_mymovies, 2, j, 
                 colors[atoi(results[i][8]) - 1]);
 
-            /* add 'my rating' to top250 tab if applicable */
+            /* mark rated movies on top250 list */
             int index = gtk_custom_table_get_indexof(nb_tab_top250, 
                 results[i][1]);
 
             if(index >= 0) {
 
+                /* add 'my rating' to top250 tab */
                 gtk_custom_table_set_cell_text(nb_tab_top250, 2, 
                     index, results[i][8]);
+
                 gtk_custom_table_set_cell_color(nb_tab_top250, 2, 
                     index, colors[atoi(results[i][8]) - 1]);
+                
+                allstats[0][0] += 1;
+                allstats[0][1] += atof(results[i][8]);
+                allstats[0][2] += atof(results[i][9]);
+                allstats[0][3] += atof(results[i][10]);
+                allstats[0][4] += atof(results[i][11]);
+            }
+
+            /* add 'my rating' to bottom100 tab if applicable */
+            index = gtk_custom_table_get_indexof(nb_tab_bot100, 
+                results[i][1]);
+
+            if(index >= 0) {
+
+                /* set cell values */
+                gtk_custom_table_set_cell_text(nb_tab_bot100, 2, 
+                    index, results[i][8]);
+
+                gtk_custom_table_set_cell_color(nb_tab_bot100, 2, 
+                    index, colors[atoi(results[i][8]) - 1]);
+
+                allstats[1][0] += 1;
+                allstats[1][1] += atof(results[i][8]);
+                allstats[1][2] += atof(results[i][9]);
+                allstats[1][3] += atof(results[i][10]);
+                allstats[1][4] += atof(results[i][11]);
             }
 
             /* add 'my rating' to boxoffice tab if applicable */
@@ -516,6 +689,12 @@ int open_file(char *filename) {
                     index, colors[atoi(results[i][9]) - 1]);
                 gtk_custom_table_set_cell_color(nb_tab_boxoffice, 2, 
                     index, colors[atoi(results[i][8]) - 1]);
+
+                allstats[2][0] += 1;
+                allstats[2][1] += atof(results[i][8]);
+                allstats[2][2] += atof(results[i][9]);
+                allstats[2][3] += atof(results[i][10]);
+                allstats[2][4] += atof(results[i][11]);
             }
 
             /* add 'my rating' to lists tab if applicable */
@@ -530,6 +709,13 @@ int open_file(char *filename) {
                     index, colors[atoi(results[i][8]) - 1]);
             }
         }
+ 
+        set_allstats(allstats[0], 1, 
+            gtk_custom_table_get_rows(nb_tab_top250));
+        set_allstats(allstats[1], 5, 
+            gtk_custom_table_get_rows(nb_tab_bot100));
+        set_allstats(allstats[2], 9, 
+            gtk_custom_table_get_rows(nb_tab_boxoffice));
 
         /* set sortable and sort by index */
         gtk_custom_table_set_sortable(nb_tab_mymovies, TRUE);
@@ -654,6 +840,8 @@ int open_file(char *filename) {
         /* update lists tab with new data */
         gtk_custom_table_resize(nb_tab_lists, -1, (rows - 1));
 
+        memset(allstats, '\0', sizeof(allstats)); 
+
         /* add text to widget table */
         for(i = 1, j = 0; i < rows; i++, j++) {
 
@@ -708,7 +896,7 @@ int open_file(char *filename) {
 
             /* add imdb-rating to boxoffice tab if applicable */
             index = gtk_custom_table_get_indexof(nb_tab_boxoffice, 
-                results[i][8]);
+                results[i][1]);
 
             if(index >= 0) {
 
@@ -718,7 +906,49 @@ int open_file(char *filename) {
                 gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, 
                     index, colors[rating_color]);
             }
+
+            /* add to allstats tab if applicable */
+            index = gtk_custom_table_get_indexof(nb_tab_top250, 
+                results[i][1]);
+
+            if(index >= 0) {
+
+                allstats[0][0] += 1;
+                allstats[0][2] += atof(results[i][8]);
+                allstats[0][3] += atof(results[i][9]);
+                allstats[0][4] += atof(results[i][10]);
+            }
+
+            index = gtk_custom_table_get_indexof(nb_tab_bot100, 
+                results[i][1]);
+
+            if(index >= 0) {
+
+                allstats[1][0] += 1;
+                allstats[1][2] += atof(results[i][8]);
+                allstats[1][3] += atof(results[i][9]);
+                allstats[1][4] += atof(results[i][10]);
+            }
+
+            index = gtk_custom_table_get_indexof(nb_tab_boxoffice, 
+                results[i][1]);
+
+            if(index >= 0) {
+
+                allstats[2][0] += 1;
+                allstats[2][2] += atof(results[i][8]);
+                allstats[2][3] += atof(results[i][9]);
+                allstats[2][4] += atof(results[i][10]);
+            }
+
         }
+
+        set_allstats(allstats[0], 2, 
+            gtk_custom_table_get_rows(nb_tab_top250));
+        set_allstats(allstats[1], 6, 
+            gtk_custom_table_get_rows(nb_tab_bot100));
+        set_allstats(allstats[2], 10, 
+            gtk_custom_table_get_rows(nb_tab_boxoffice));
 
         /* set sortable and sort by index */
         gtk_custom_table_set_sortable(nb_tab_lists, TRUE);
