@@ -27,13 +27,13 @@
 
 
 # make sure script is run from toplevel makefile only..
-if ($args.length -lt 5)
+if ($args.length -lt 6)
 {
     write-output "Error: Script expected more arguments!"
     exit
 }
 
-if ($args[4] -ne "build-win")
+if ($args[5] -ne "build-win")
 {
     write-output "Error: Script should be run by toplevel Makefile!"
     exit
@@ -45,6 +45,7 @@ $program = $args[0]
 $version = $args[1]
 $sources = $args[2].split(" ")
 $folders = $args[3].split(" ")
+$install = $args[4].split(" ")
 
 # long program name..
 $program_name = "$program-$version"
@@ -69,10 +70,6 @@ function make-srcdir
     }
     
     new-item $tmp_srcdir -type directory | out-null
-
-    # copy sources and folders to our temp dir..
-    copy-item $sources $tmp_srcdir -recurse
-    copy-item $folders $tmp_srcdir -recurse
 }    
 
 
@@ -118,6 +115,10 @@ function build-src
 
     make-srcdir
 
+    # copy sources and folders to our temp dir..
+    copy-item $sources $tmp_srcdir -recurse
+    copy-item $folders $tmp_srcdir -recurse
+
     # remove all non-source files..
     get-childitem $tmp_srcdir -include *.csv, *.swo, *.swp, `
         *.dll, *.o, *~, *.fuse -recurse |
@@ -139,18 +140,17 @@ function build-exe
 
     make-srcdir
 
-    copy-item "$program.exe" $tmp_srcdir
-    copy-item *.dll $tmp_srcdir -force
+    copy-item $install $tmp_srcdir -recurse
 
     # remove all non-source files..
     get-childitem $tmp_srcdir -include *.csv, *.swo, *.swp, `
-        *.o, *~, *.fuse -recurse |
-        foreach { remove-item $_.fullname -force }
+        *.o, *.c, *.h, *~, events, gtk_custom_table, *.fuse -recurse |
+        foreach { remove-item $_.fullname -recurse -force }
 
     move-item $tmp_srcdir $dir_build_vers_output
 
     # run setup script..
-    iscc "$dir_build_vers_output\$tmp_srcdir\misc\setup.iss" /dMyAppVersion=$version
+    iscc "$dir_build_vers_output\$tmp_srcdir\setup.iss" /dMyAppVersion=$version
 
     # build archive..
     &'7za' a -t7z "$dir_build_vers_output\$program_name-setup.7z" `
