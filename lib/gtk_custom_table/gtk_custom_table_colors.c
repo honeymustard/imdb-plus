@@ -27,9 +27,9 @@ double checkers[2][3] = {
 };
 
 double rgb_header[3] = {
-    0.8, 
-    0.8, 
-    0.8, 
+    0.85, 
+    0.85, 
+    0.85, 
 };
 
 double rgb_footer[3] = {
