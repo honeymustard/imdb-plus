@@ -256,7 +256,7 @@ int main(int argc, char *argv[]) {
         gtk_custom_table_set_cell_text(nb_tab_statistics, 2, i, 
             "0.00");
         gtk_custom_table_set_cell_text(nb_tab_statistics, 3, i, 
-            "4");
+            "0");
         gtk_custom_table_set_cell_text(nb_tab_statistics, 4, i, 
             "0.00 %");
         gtk_custom_table_set_cell_text(nb_tab_statistics, 5, i, 
@@ -319,7 +319,7 @@ int main(int argc, char *argv[]) {
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 2, i, 
             "0.00");
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 3, i, 
-            "4");
+            "0");
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 4, i, 
             "0.00 %");
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 5, i, 
@@ -382,7 +382,7 @@ int main(int argc, char *argv[]) {
         gtk_custom_table_set_cell_text(nb_tab_compare, 2, i, 
             "0.00");
         gtk_custom_table_set_cell_text(nb_tab_compare, 3, i, 
-            "4");
+            "0");
         gtk_custom_table_set_cell_text(nb_tab_compare, 4, i, 
             "0.00 %");
         gtk_custom_table_set_cell_text(nb_tab_compare, 5, i, 
@@ -457,7 +457,7 @@ int main(int argc, char *argv[]) {
             gtk_custom_table_set_cell_text(nb_tab_allstats, 2, i, 
                 "0.00");
             gtk_custom_table_set_cell_text(nb_tab_allstats, 3, i, 
-                "4");
+                "0");
             gtk_custom_table_set_cell_text(nb_tab_allstats, 4, i, 
                 "0.00 %");
             gtk_custom_table_set_cell_text(nb_tab_allstats, 5, i, 
@@ -494,6 +494,21 @@ int main(int argc, char *argv[]) {
         "Completion: Bottom 100");
     gtk_custom_table_set_cell_text(nb_tab_allstats, 3, 8, 
         "Completion: Box Office");
+
+    gtk_custom_table_set_column_alignment(nb_tab_allstats, 0, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_allstats, 1, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_allstats, 2, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_allstats, 4, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_allstats, 5, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_allstats, 6, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_allstats, 7, 
+        PANGO_ALIGN_RIGHT);
 
     int no_results = 1;
 
