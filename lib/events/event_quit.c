@@ -19,6 +19,7 @@
 
 
 #include "events.h"
+#include "../gtk_custom_table/gtk_custom_table.h"
 
 
 /* main window quit event, I might need this.. */
