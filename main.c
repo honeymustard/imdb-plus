@@ -565,7 +565,7 @@ int main(int argc, char *argv[]) {
 
         for(i = 0; i < 250; i++) {
 
-            sprintf(temp, "%d.", i+1);
+            sprintf(temp, "%d", i+1);
 
             gtk_custom_table_set_cell_text(nb_tab_top250, 0, i, 
                 temp);
@@ -649,7 +649,7 @@ int main(int argc, char *argv[]) {
 
         for(i = 0; i < 100; i++) {
 
-            sprintf(temp, "%d.", i+1);
+            sprintf(temp, "%d", i+1);
 
             gtk_custom_table_set_cell_text(nb_tab_bot100, 0, i, 
                 temp);
@@ -786,7 +786,7 @@ int main(int argc, char *argv[]) {
 
         for(i = 0; i < 50; i++) {
 
-            sprintf(temp, "%d.", i+1);
+            sprintf(temp, "%d", i+1);
 
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 0, i, 
                 temp);
