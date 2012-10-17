@@ -443,6 +443,8 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
                 priv->table_cols[i]->meta->align);
 
             pango_cairo_show_layout(cr, layout);
+
+            g_object_unref(layout);
         }
 
         t_height += priv->table_row_height;
