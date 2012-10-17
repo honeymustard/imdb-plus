@@ -1,11 +1,17 @@
     
-  TODO for imdb-plus:
+ +----------------------+
+ | TODO for imdb-plus:  |
+ +----------------------+
 
- -> NOT URGENT
+ +----------------------+
+ | NOT URGENT FIXES     |
+ +----------------------+
+ | * None
+ ------------------------
 
-  * make -DINSTALL a global
-
- -> TO BE FIXED:
-  
-  * finish all-stats tab..
+ +----------------------+
+ | MUST BE FIXED:       |
+ +----------------------+
+ | * None
+ +-----------------------
 
