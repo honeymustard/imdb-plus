@@ -77,7 +77,7 @@ char *nb_tab_statistics_headers[TABLE_STATS_COLS] = {
     "Flux", 
     "Your Ratings", 
     "Percent", 
-    "Votes", 
+    "Movies", 
     "Runtime", 
     "Year", 
 };
@@ -98,7 +98,7 @@ char *nb_tab_lists_stats_headers[TABLE_LSTST_COLS] = {
     "N/A", 
     "IMDb Ratings", 
     "Percent", 
-    "Votes", 
+    "Movies", 
     "Runtime", 
     "Year", 
 };
@@ -119,7 +119,7 @@ char *nb_tab_compare_headers[TABLE_COMPR_COLS] = {
     "Flux", 
     "Intersected Ratings", 
     "Percent", 
-    "Votes", 
+    "Movies", 
     "Runtime", 
     "Year", 
 };
