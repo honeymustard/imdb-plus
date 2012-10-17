@@ -23,6 +23,7 @@ EXECUTE = imdb-plus
 VERSION = 0.0.7
 SOURCES = *.c *.h *.md Makefile COPYING TODO
 FOLDERS = lib misc share scripts
+WININST = lib share COPYING *.dll misc\setup.iss $(EXECUTE).exe
 CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
 WINDOWS = -mwindows
@@ -231,7 +232,7 @@ mingw32-build: mingw32-make
 mingw32-build:
 	-@powershell -command "& { Set-ExecutionPolicy RemoteSigned }"
 	-@powershell -command "& .\scripts\build-exe.ps1 \
-		$(EXECUTE) $(VERSION) '$(SOURCES)' '$(FOLDERS)' build-win"
+		$(EXECUTE) $(VERSION) '$(SOURCES)' '$(FOLDERS)' '$(WININST)' build-win"
 
 
 ###############################################################################
