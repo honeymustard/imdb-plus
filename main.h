@@ -30,12 +30,12 @@
     #define IMG_DIR "./share/icons/" 
 #endif
 
-/* set home path */
+/* set default home */
 #ifdef LINUX
-    #define APP_DIR ".imdb-plus"
+    #define APP_FOLD ".imdb-plus"
 #endif
 #ifdef WINDOWS
-    #define APP_DIR "./share/"
+    #define APP_FOLD "imdb-plus"
 #endif
 
 /* application */
