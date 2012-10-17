@@ -142,7 +142,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
             /* align text */
             cairo_move_to(cr, 
                 priv->table_column_offset_temp[i] + 10, 
-                2
+                4
             );
 
             /* Create a PangoLayout, set the font and text */
@@ -331,7 +331,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
                 /* align text */
                 cairo_move_to(cr, 
                     priv->table_column_offset_temp[j] + 10, 
-                    offset + 2
+                    offset + 4
                 );
 
                 /* Create a PangoLayout, set the font and text */
@@ -418,7 +418,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
 
             cairo_move_to(cr, 
                 priv->table_column_offset_temp[i] + 10, 
-                t_height + 2
+                t_height + 4
             );
 
             /* set the font and text */
