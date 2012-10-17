@@ -138,7 +138,7 @@ char *nb_tab_bot100_headers[TABLE_BT100_COLS] = {
     "#", 
     "IMDb", 
     "Vote", 
-    "Unique ID", 
+    "IMDb ID", 
     "Title", 
     "Year", 
     "Votes", 
