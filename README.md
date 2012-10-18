@@ -52,21 +52,20 @@ they might not be entirely up to speed, which is to say that **it might be compl
     
     or
     
-    $ make build-deb              # builds .deb package
-    $ make build-rpm              # builds .rpm package
+    $ make build-deb                # builds .deb package
+    $ make build-rpm                # builds .rpm package
     
 **Windows:**
 
     # Note: Requires MinGW, GTK+, GnuWin32 PCRE, Libcurl. See Makefile.
     
-    $ mingw32-make mingw32        # builds imdb-plus.exe
+    $ mingw32-make mingw32-make     # builds imdb-plus.exe
     
     or 
     
     # Note: Requires Inno Setup 5, 7-zip command-line version (7za.exe). See Makefile
     
-    $ mingw32-make mingw32        # builds imdb-plus.exe
-    $ mingw32-make mingw32-build  # builds src, dist, and setup archives..
+    $ mingw32-make mingw32-build    # builds src, setup archives..
 
 ## Copyright
 
