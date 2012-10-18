@@ -55,7 +55,7 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
 
     /* save to this path.. */
     char save[100];
-    strcpy(save, get_global(CONST_HOME));
+    strcpy(save, get_global(CONST_DOWN));
     strcat(save, entered);
     strcat(save, ".csv");
 
