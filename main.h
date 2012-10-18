@@ -46,22 +46,6 @@
 #define APP_DESC APP_NAME " is a statistical application for movie fans"
 #define APP_HOME "https://github.com/honeymustard/imdb-plus"
 
-/* constants */
-#define CONST_HOME    1
-#define CONST_DOWN    2
-#define CONST_TOP_TMP 3
-#define CONST_TOP_CSV 4
-#define CONST_TOP_URL 5
-#define CONST_BOT_TMP 6
-#define CONST_BOT_CSV 7
-#define CONST_BOT_URL 8
-#define CONST_BOX_TMP 9
-#define CONST_BOX_CSV 10
-#define CONST_BOX_URL 11
-#define CONST_RAT_URL 12 
-#define CONST_VERSION 13
-#define CONST_EOL     14
-
 /* filenames */
 #define TOP_TMP "top250.html"
 #define TOP_CSV "top250.csv"
