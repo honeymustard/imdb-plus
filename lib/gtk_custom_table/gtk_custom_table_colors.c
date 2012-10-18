@@ -39,9 +39,9 @@ double rgb_footer[3] = {
 };
 
 double rgb_header_bold[3] = {
-    0.87, 
     0.90, 
-    0.99, 
+    0.90, 
+    0.90, 
 };
 
 double rgb_border[3] = {
