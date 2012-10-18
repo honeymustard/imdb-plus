@@ -21,11 +21,11 @@
 #include "colors.h"
 #include "openfile.h"
 #include "readfile.h"
+#include "globals.h"
 #include "gtk_custom_table/gtk_custom_table.h"
 #include "../widgets.h"
 
 
-char *current_open_file = NULL;
 int has_open_movies = 0;
 int has_open_lists = 0;
 
@@ -416,6 +416,8 @@ int open_file(char *filename) {
 
     if(strcmp("IMDb Rating", results[0][9]) == 0) {
 
+        set_global(CONST_OPEN_M, filename);
+
         /* clear associated color from lists */
         for(i = 0; i < gtk_custom_table_get_rows(nb_tab_lists); i++) {
             
@@ -439,14 +441,6 @@ int open_file(char *filename) {
             gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 2, i, 
                 FALSE);
         }
-
-        if(current_open_file != NULL) {
-            free(current_open_file);
-        }
-
-        /* remember filename */
-        current_open_file = malloc(strlen(filename) + 1);
-        strcpy(current_open_file, filename);
 
         gtk_custom_table_sort(nb_tab_statistics, 0, GTK_CUSTOM_TABLE_DESC);
 
@@ -724,6 +718,8 @@ int open_file(char *filename) {
         has_open_movies = 1;
     }
     else {
+
+        set_global(CONST_OPEN_L, filename);
 
         gtk_custom_table_sort(nb_tab_lists_stats, 0, GTK_CUSTOM_TABLE_DESC);
 
