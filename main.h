@@ -40,6 +40,7 @@
 
 /* application */
 #define APP_NAME "imdb-plus"
+#define APP_DOWN "ratings"
 #define APP_ICON IMG_DIR "imdb-plus.png"
 #define APP_COPY "Copyright \xc2\xa9 2011-2012 Adrian Solumsmo"
 #define APP_DESC APP_NAME " is a statistical application for movie fans"
@@ -47,18 +48,19 @@
 
 /* constants */
 #define CONST_HOME    1
-#define CONST_TOP_TMP 2
-#define CONST_TOP_CSV 3
-#define CONST_TOP_URL 4
-#define CONST_BOT_TMP 5
-#define CONST_BOT_CSV 6
-#define CONST_BOT_URL 7
-#define CONST_BOX_TMP 8
-#define CONST_BOX_CSV 9
-#define CONST_BOX_URL 10
-#define CONST_RAT_URL 11 
-#define CONST_VERSION 12
-#define CONST_EOL     13
+#define CONST_DOWN    2
+#define CONST_TOP_TMP 3
+#define CONST_TOP_CSV 4
+#define CONST_TOP_URL 5
+#define CONST_BOT_TMP 6
+#define CONST_BOT_CSV 7
+#define CONST_BOT_URL 8
+#define CONST_BOX_TMP 9
+#define CONST_BOX_CSV 10
+#define CONST_BOX_URL 11
+#define CONST_RAT_URL 12 
+#define CONST_VERSION 13
+#define CONST_EOL     14
 
 /* filenames */
 #define TOP_TMP "top250.html"
