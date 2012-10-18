@@ -37,7 +37,7 @@ void menu_signal_open(GtkWidget *widget, gpointer data) {
         NULL);
 
     gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), 
-        get_global(CONST_HOME));
+        get_global(CONST_DOWN));
 
     /* set position and icon */
     gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
