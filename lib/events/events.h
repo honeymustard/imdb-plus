@@ -34,6 +34,7 @@
 #include "../parsefile.h"
 #include "../colors.h"
 #include "../globals.h"
+#include "../patterns.h"
 
 /* main window events */
 void menu_signal_about(GtkWidget *widget, gpointer data);
