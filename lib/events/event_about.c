@@ -22,15 +22,14 @@
 
 
 /* credits aka self-praise */
-const char *APP_AUTH[3] = {
+const char *APP_AUTH[2] = {
     "Adrian Solumsmo <adrian.solumsmo@gmail.com>\n",
-    "Thanks to:\n\nThe GnuWin32 project (pcre)\nMartin Pool (natcmpsort)",
     NULL,
 };
 
 /* default license */
 const char *APP_LICN = "\
-Copyright (C) imdb-plus  Adrian Solumsmo\n\
+Copyright \xc2\xa9 imdb-plus  Adrian Solumsmo\n\
 \n\
 imdb-plus program is free software: you can redistribute it and/or modify\n\
 it under the terms of the GNU General Public License as published by\n\
