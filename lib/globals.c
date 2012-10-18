@@ -19,11 +19,31 @@
 
 
 #include <string.h>
+#include <stdlib.h>
 #include "globals.h"
 #include "../main.h"
 
 
-char constants[CONST_EOL][200];
+int initiated = 0;
+
+char *constants[CONST_EOL];
+
+
+/**
+ * Initiates global constants array to NULL..
+ */
+void init_globals() {
+
+    if(initiated) return;
+    
+    int i = 0;
+
+    for(i = 0; i < CONST_EOL; i++) {
+        constants[i] = NULL;
+    }
+        
+    initiated = 1;
+}
 
 
 /**
@@ -31,6 +51,8 @@ char constants[CONST_EOL][200];
  * @param int global     global id
  */
 char *get_global(int global) {
+
+    init_globals();
 
     return constants[global];
 }
@@ -43,8 +65,15 @@ char *get_global(int global) {
  */
 int set_global(int global, char *value) {
 
+    init_globals();
+
+    if(constants[global] != NULL) {
+        free(constants[global]);
+    }
+
+    constants[global] = malloc(strlen(value) + 1);
     strcpy(constants[global], value);
 
-    return 0;
+    return 1;
 }
 
