@@ -46,18 +46,26 @@ int main(int argc, char *argv[]) {
     /* set version global */
     set_global(CONST_VERSION, VERSION);
 
-    char *home = NULL;
-    char *path = NULL;
-
     /* create home directory */
     #ifdef WINDOWS
-        home = "C:\\Users\\Public\\Documents";
+
+        #define _WIN32_IE 0x0500
+    
+        #include "windows.h"
+        #include "Shlobj.h"
+
+        TCHAR home[MAX_PATH];
+
+        SHGetFolderPath(0, CSIDL_APPDATA, 0, SHGFP_TYPE_CURRENT, home);
+
     #endif
     #ifdef LINUX
-        home = getenv("HOME");
+
+        char *home = getenv("HOME");
+
     #endif
 
-    path = malloc(strlen(home) + strlen(APP_FOLD) + 3);
+    char *path = malloc(strlen(home) + strlen(APP_FOLD) + 3);
 
     /* make new path */
     strcpy(path, home);
@@ -65,14 +73,24 @@ int main(int argc, char *argv[]) {
     strcat(path, APP_FOLD);
     strcat(path, "/");
 
+    char *down = malloc(strlen(path) + strlen(APP_DOWN) + 3);
+
+    strcpy(down, path);
+    strcat(down, "/");
+    strcat(down, APP_DOWN);
+    strcat(down, "/");
+
     #ifdef WINDOWS
         mkdir(path);
+        mkdir(down);
     #endif
     #ifdef LINUX
         mkdir(path, S_IRWXU);
+        mkdir(down, S_IRWXU);
     #endif
 
     set_global(CONST_HOME, path);
+    set_global(CONST_DOWN, down);
 
     /* path constants */
     char *top_tmp = malloc(strlen(path) + strlen(TOP_TMP) + 1);
