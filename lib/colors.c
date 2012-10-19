@@ -62,10 +62,9 @@ double graph_fg3[3] = {
     0.20,
 };
 
-double graph_fg4[3] = {
-    0.20,
-    0.50,
-    0.95,
+double not_app[3] = {
+    0.40,
+    0.75,
+    0.90,
 };
-
 
