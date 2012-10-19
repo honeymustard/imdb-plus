@@ -1,15 +1,13 @@
     
 ## TODO
 
-**CONSIDER**
+**Considerations**
 * add lists directory to enforce separation of lists/movies files
- 
-# Fixes
 
-**Not urgent**
+**Improvements**
 * add multiple fonts support for table widget
 * add support for multiple text alignments in headers/footers
 
-**Urget**
+**Urget fixes**
 * none
 
