@@ -26,6 +26,11 @@
 #include "globals.h"
 
 
+/**
+ * make home directory, downloads directory therein..
+ * @param char **path    empty string pointer..
+ * @param char **down    empty string pointer..
+ */
 void make_paths(char **path, char **down) {
 
     /* create home directory */
@@ -78,6 +83,10 @@ void make_paths(char **path, char **down) {
 }
 
 
+/**
+ * append path to home directory to all filenames..
+ * @param char *path    path to home directory..
+ */
 void make_filenames(char *path) {
 
     /* path constants */
