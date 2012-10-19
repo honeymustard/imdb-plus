@@ -31,6 +31,7 @@ WINDOWS = -mwindows
 # All project files..
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./*.c))
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/*.c))
+OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/ui/*.c))
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/gtk_custom_table/*.c))
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/gtk_custom_table/strnatcmp/*.c))
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/events/*.c))
@@ -107,10 +108,10 @@ dist-clean:
 # Make dist archive..
 .PHONY : dist
 dist:
-	cd misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz && cd ..
+	-@cd misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz && cd ..
 	-@test -d $(EXECUTE)-$(VERSION) || mkdir -p $(EXECUTE)-$(VERSION)
-	cp -R $(SOURCES) $(FOLDERS) -t $(EXECUTE)-$(VERSION)
-	tar -zcf $(EXECUTE)-$(VERSION).tar.gz \
+	-@cp -R $(SOURCES) $(FOLDERS) -t $(EXECUTE)-$(VERSION)
+	-@tar -zcf $(EXECUTE)-$(VERSION).tar.gz \
     --exclude='*.csv' \
     --exclude='*.swo' \
     --exclude='*.swp' \
@@ -119,7 +120,7 @@ dist:
     --exclude='*~' \
     --exclude='*.fuse' \
     $(EXECUTE)-$(VERSION)
-	rm -Rf $(EXECUTE)-$(VERSION)
+	-@rm -Rf $(EXECUTE)-$(VERSION)
 
 # Make build..
 .PHONY : build
@@ -240,13 +241,17 @@ mingw32-build:
 #
 ###############################################################################
 
-# Compile default..
-%.o: %.c %.h 
-	gcc $(CFLAGS) $< -o $@
+# Compile paths..
+path%.o: path%.c lib/paths.h main.h
+	gcc $(CFLAGS) $< -o $@ -D$(OS)
 
 # Compile main..
-main.o: main.c main.h tables.h widgets.h lib/globals.h lib/events/events.h
-	gcc $(CFLAGS) main.c -DVERSION=\"$(VERSION)\" -D$(OS)
+main.o: main.c main.h
+	gcc $(CFLAGS) main.c -DVERSION=\"$(VERSION)\"
+
+# Compile ui functions..
+ui_set_%.o: ui_set_%.c lib/ui/ui.h lib/ui/ui_widgets.h lib/events/events.h
+	gcc $(CFLAGS) $< -o $@
 
 # Compile table..
 gtk_custom_table_%.o: gtk_custom_table_%.c lib/gtk_custom_table/gtk_custom_table.h
@@ -259,4 +264,8 @@ event_%.o: event_%.c lib/events/events.h
 # Compile Windows resource..
 resfile.o:
 	windres -o resfile.o ./misc/resources.rc
+
+# Compile default..
+%.o: %.c %.h 
+	gcc $(CFLAGS) $< -o $@
 
