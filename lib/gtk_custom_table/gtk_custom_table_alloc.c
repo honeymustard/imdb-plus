@@ -57,7 +57,7 @@ void gtk_custom_table_alloc(GtkCustomTablePrivate *priv, int cols, int rows,
         priv->table_cell[i] = malloc(sizeof(struct table_cell));
         priv->table_cell[i]->text = NULL;
         priv->table_cell[i]->meta = malloc(sizeof(struct table_meta));
-        priv->table_cell[i]->meta->align = PANGO_ALIGN_LEFT;
+        priv->table_cell[i]->meta->align = PANGO_ALIGN_NONE;
         priv->table_cell[i]->meta->graphable = FALSE;
         priv->table_cell[i]->meta->has_bg_color = FALSE;
 
@@ -71,7 +71,7 @@ void gtk_custom_table_alloc(GtkCustomTablePrivate *priv, int cols, int rows,
 
         priv->table_rows[i] = malloc(sizeof(struct table_rows));
         priv->table_rows[i]->meta = malloc(sizeof(struct table_meta));
-        priv->table_rows[i]->meta->align = PANGO_ALIGN_LEFT;
+        priv->table_rows[i]->meta->align = PANGO_ALIGN_NONE;
         priv->table_rows[i]->meta->graphable = FALSE;
         priv->table_rows[i]->meta->has_bg_color = FALSE;
 
