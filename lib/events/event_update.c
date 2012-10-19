@@ -19,7 +19,6 @@
 
 
 #include "events.h"
-#include "../patterns.h"
 #include "../gtk_custom_table/gtk_custom_table.h"
 
 
@@ -382,8 +381,16 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         free(dl_bot);
         free(dl_box);
 
-        if(current_open_file != NULL) {
-            open_file(current_open_file);
+        /* re-open files to update other tabs */
+        char *open_movie_file = get_global(CONST_OPEN_M);
+        char *open_lists_file = get_global(CONST_OPEN_L);
+
+        if(open_movie_file != NULL) {
+            open_file(open_movie_file);
+        }
+
+        if(open_lists_file != NULL) {
+            open_file(open_lists_file);
         }
 
         /* set new statusbar message */
