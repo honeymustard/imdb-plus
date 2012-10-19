@@ -272,18 +272,15 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
             is_integer = gtk_custom_table_is_integer(
                 priv->table_rows[i]->cell[j]->text);
 
-            if(meta_cell != NULL && meta_cell->graphable 
-                && is_integer) {
+            if(meta_cell->graphable && is_integer) {
 
                 meta_temp = meta_cell;
             }
-            else if(meta_rows != NULL && meta_rows->graphable 
-                && is_integer) {
+            else if(meta_rows->graphable && is_integer) {
 
                 meta_temp = meta_rows;
             }
-            else if(meta_cols != NULL && meta_cols->graphable 
-                && is_integer) {
+            else if(meta_cols->graphable && is_integer) {
 
                 meta_temp = meta_cols;
             }
@@ -346,7 +343,21 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
                 else {
                     text_temp = priv->table_rows[i]->cell[j]->text;
                 }
-                
+
+                /* determine cell text alignment */
+                if(meta_cell->align != PANGO_ALIGN_NONE) {
+
+                    meta_temp = meta_cell;
+                }
+                else if(meta_rows->align != PANGO_ALIGN_NONE) {
+
+                    meta_temp = meta_rows;
+                }
+                else if(meta_cols->align != PANGO_ALIGN_NONE) {
+
+                    meta_temp = meta_cols;
+                }
+               
                 pango_layout_set_text(layout, text_temp, -1);
 
                 pango_layout_set_font_description(layout, 
@@ -362,7 +373,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
                     PANGO_ELLIPSIZE_END);
 
                 pango_layout_set_alignment(layout, 
-                    priv->table_cols[j]->meta->align);
+                    meta_temp->align);
 
                 pango_cairo_show_layout(cr, layout);
 
@@ -469,5 +480,4 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
     /* make sure the scrollbars are up to speed */
     gtk_widget_set_size_request(table, priv->table_min_width, t_height);
 }
-
 
