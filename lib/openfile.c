@@ -47,40 +47,63 @@ void set_allstats(double allstats[5], int row, int rows) {
     gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 2, row, 
         FALSE);
 
+    /* set first column, vote */
     if(vote_avg > 0.0) {
+
         sprintf(temp, "%1.2f", vote_avg);
+
+        gtk_custom_table_set_cell_alignment(nb_tab_allstats, 0, row, 
+            PANGO_ALIGN_RIGHT);
     }
     else {
+
         strcpy(temp, "N/A");
 
         gtk_custom_table_set_cell_color(nb_tab_allstats, 0, row, 
             not_app);
+        gtk_custom_table_set_cell_alignment(nb_tab_allstats, 0, row, 
+            PANGO_ALIGN_CENTER);
     }
 
     gtk_custom_table_set_cell_text(nb_tab_allstats, 0, row, 
         temp);
 
+    /* set second column, imdb */
     if(imdb_avg > 0.0) {
         sprintf(temp, "%1.2f", imdb_avg);
+
+        gtk_custom_table_set_cell_alignment(nb_tab_allstats, 1, row, 
+            PANGO_ALIGN_RIGHT);
     }
     else {
+
         strcpy(temp, "N/A");
 
         gtk_custom_table_set_cell_color(nb_tab_allstats, 1, row, 
             not_app);
+        gtk_custom_table_set_cell_alignment(nb_tab_allstats, 1, row, 
+            PANGO_ALIGN_CENTER);
     }
 
     gtk_custom_table_set_cell_text(nb_tab_allstats, 1, row, 
         temp);
 
+    /* set third column, flux */
     if(allstats[1] > 0.0 && allstats[2] > 0.0) {
+
         sprintf(temp, "%+1.2f", flux_avg);
+
+        gtk_custom_table_set_cell_alignment(nb_tab_allstats, 2, row, 
+            PANGO_ALIGN_RIGHT);
     }
     else {
+
         strcpy(temp, "N/A");
 
         gtk_custom_table_set_cell_color(nb_tab_allstats, 2, row, 
             not_app);
+        gtk_custom_table_set_cell_alignment(nb_tab_allstats, 2, row, 
+            PANGO_ALIGN_CENTER);
     }
 
     gtk_custom_table_set_cell_text(nb_tab_allstats, 2, row, 
