@@ -41,6 +41,7 @@
 #define GTK_CUSTOM_TABLE_ASC 0
 #define GTK_CUSTOM_TABLE_DESC 1
 #define GTK_CUSTOM_TABLE_INVERT -1
+#define PANGO_ALIGN_NONE -1
 
 typedef struct _GtkCustomTable GtkCustomTable;
 typedef struct _GtkCustomTableClass GtkCustomTableClass;
@@ -196,6 +197,8 @@ void gtk_custom_table_set_sortable(GtkWidget *table, gboolean
     truth);
 void gtk_custom_table_set_cell_text(GtkWidget *table, int col, 
     int row, char *text);
+void gtk_custom_table_set_cell_alignment(GtkWidget *table, int col, 
+    int row, PangoAlignment align);
 void gtk_custom_table_set_head_text(GtkWidget *table, int col, 
     char *text);
 void gtk_custom_table_set_foot_text(GtkWidget *table, int col, 
