@@ -23,7 +23,7 @@
 #include "readfile.h"
 #include "globals.h"
 #include "gtk_custom_table/gtk_custom_table.h"
-#include "../widgets.h"
+#include "ui/ui_widgets.h"
 
 
 int has_open_movies = 0;
@@ -39,11 +39,22 @@ void set_allstats(double allstats[5], int row, int rows) {
     double imdb_avg = allstats[2] / allstats[0];
     double flux_avg = vote_avg - imdb_avg;
 
+    /* reset background colors */
+    gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 0, row, 
+        FALSE);
+    gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 1, row, 
+        FALSE);
+    gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 2, row, 
+        FALSE);
+
     if(vote_avg > 0.0) {
         sprintf(temp, "%1.2f", vote_avg);
     }
     else {
         strcpy(temp, "N/A");
+
+        gtk_custom_table_set_cell_color(nb_tab_allstats, 0, row, 
+            not_app);
     }
 
     gtk_custom_table_set_cell_text(nb_tab_allstats, 0, row, 
@@ -54,6 +65,9 @@ void set_allstats(double allstats[5], int row, int rows) {
     }
     else {
         strcpy(temp, "N/A");
+
+        gtk_custom_table_set_cell_color(nb_tab_allstats, 1, row, 
+            not_app);
     }
 
     gtk_custom_table_set_cell_text(nb_tab_allstats, 1, row, 
@@ -64,6 +78,9 @@ void set_allstats(double allstats[5], int row, int rows) {
     }
     else {
         strcpy(temp, "N/A");
+
+        gtk_custom_table_set_cell_color(nb_tab_allstats, 2, row, 
+            not_app);
     }
 
     gtk_custom_table_set_cell_text(nb_tab_allstats, 2, row, 
@@ -92,14 +109,6 @@ void set_allstats(double allstats[5], int row, int rows) {
         allstats[4] / allstats[0] : 0.0);
     gtk_custom_table_set_cell_text(nb_tab_allstats, 7, row, 
         temp);
-
-    /* reset background colors */
-    gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 0, row, 
-        FALSE);
-    gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 1, row, 
-        FALSE);
-    gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 2, row, 
-        FALSE);
 
     int vote = (int)vote_avg;
     int imdb = (int)imdb_avg;
