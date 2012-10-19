@@ -27,7 +27,7 @@
 
 /* include external headers */
 #include "../../main.h"
-#include "../../widgets.h"
+#include "../ui/ui_widgets.h"
 #include "../readfile.h"
 #include "../openfile.h"
 #include "../download.h"
