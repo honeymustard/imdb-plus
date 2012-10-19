@@ -20,13 +20,12 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include "main.h"
 #include "tables.h"
 #include "widgets.h"
+#include "lib/paths.h"
 #include "lib/colors.h"
 #include "lib/globals.h"
 #include "lib/readfile.h"
@@ -46,99 +45,18 @@ int main(int argc, char *argv[]) {
     /* set version global */
     set_global(CONST_VERSION, VERSION);
 
-    /* create home directory */
-    #ifdef WINDOWS
+    char *path = NULL;
+    char *down = NULL;
 
-        #define _WIN32_IE 0x0500
-    
-        #include "windows.h"
-        #include "Shlobj.h"
-
-        TCHAR home[MAX_PATH];
-
-        SHGetFolderPath(0, CSIDL_APPDATA, 0, SHGFP_TYPE_CURRENT, home);
-
-    #endif
-    #ifdef LINUX
-
-        char *home = getenv("HOME");
-
-    #endif
-
-    char *path = malloc(strlen(home) + strlen(APP_FOLD) + 3);
-
-    /* make new path */
-    strcpy(path, home);
-    strcat(path, "/");
-    strcat(path, APP_FOLD);
-    strcat(path, "/");
-
-    char *down = malloc(strlen(path) + strlen(APP_DOWN) + 3);
-
-    strcpy(down, path);
-    strcat(down, APP_DOWN);
-    strcat(down, "/");
-
-    #ifdef WINDOWS
-
-        mkdir(path);
-        mkdir(down);
-
-    #endif
-    #ifdef LINUX
-
-        mkdir(path, S_IRWXU);
-        mkdir(down, S_IRWXU);
-
-    #endif
+    make_paths(&path, &down);
+    make_filenames(path);
 
     set_global(CONST_HOME, path);
     set_global(CONST_DOWN, down);
 
-    /* path constants */
-    char *top_tmp = malloc(strlen(path) + strlen(TOP_TMP) + 1);
-    char *top_csv = malloc(strlen(path) + strlen(TOP_CSV) + 1);
-    char *bot_tmp = malloc(strlen(path) + strlen(BOT_TMP) + 1);
-    char *bot_csv = malloc(strlen(path) + strlen(BOT_CSV) + 1);
-    char *box_tmp = malloc(strlen(path) + strlen(BOX_TMP) + 1);
-    char *box_csv = malloc(strlen(path) + strlen(BOX_CSV) + 1);
-
-    /* make paths to home directory */
-    strcpy(top_tmp, path);
-    strcpy(top_csv, path);
-    strcpy(bot_tmp, path);
-    strcpy(bot_csv, path);
-    strcpy(box_tmp, path);
-    strcpy(box_csv, path);
-
-    strcat(top_tmp, TOP_TMP);
-    strcat(top_csv, TOP_CSV);
-    strcat(bot_tmp, BOT_TMP);
-    strcat(bot_csv, BOT_CSV);
-    strcat(box_tmp, BOX_TMP);
-    strcat(box_csv, BOX_CSV);
-
-    /* set global paths */
-    set_global(CONST_TOP_TMP, top_tmp);
-    set_global(CONST_TOP_CSV, top_csv);
-    set_global(CONST_TOP_URL, TOP_URL);
-    set_global(CONST_BOT_TMP, bot_tmp);
-    set_global(CONST_BOT_CSV, bot_csv);
-    set_global(CONST_BOT_URL, BOT_URL);
-    set_global(CONST_BOX_TMP, box_tmp);
-    set_global(CONST_BOX_CSV, box_csv);
-    set_global(CONST_BOX_URL, BOX_URL);
-    set_global(CONST_RAT_URL, RAT_URL);
-
     /* free up memory */
     free(path);
-
-    free(top_tmp);
-    free(top_csv);
-    free(bot_tmp);
-    free(bot_csv);
-    free(box_tmp);
-    free(box_csv);
+    free(down);
 
     int i = 0;
     int j = 0;
