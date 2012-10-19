@@ -23,6 +23,7 @@
 
 /* ratings colors */
 double colors[10][3];
+double not_app[3];
 
 /* graph background colors */
 double graph_bg[3];
@@ -32,6 +33,7 @@ double graph_fg1[3];
 double graph_fg2[3];
 double graph_fg3[3];
 double graph_fg4[3];
+
 
 #endif
 
