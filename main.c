@@ -76,7 +76,6 @@ int main(int argc, char *argv[]) {
     char *down = malloc(strlen(path) + strlen(APP_DOWN) + 3);
 
     strcpy(down, path);
-    strcat(down, "/");
     strcat(down, APP_DOWN);
     strcat(down, "/");
 
