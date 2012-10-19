@@ -18,6 +18,11 @@
 *****************************************************************************/
 
 
+#ifndef _PATHS_
+#define _PATHS_
+
 void make_paths(char **path, char **down);
 void make_filenames(char *path);
+
+#endif
 
