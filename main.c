@@ -80,12 +80,16 @@ int main(int argc, char *argv[]) {
     strcat(down, "/");
 
     #ifdef WINDOWS
+
         mkdir(path);
         mkdir(down);
+
     #endif
     #ifdef LINUX
+
         mkdir(path, S_IRWXU);
         mkdir(down, S_IRWXU);
+
     #endif
 
     set_global(CONST_HOME, path);
