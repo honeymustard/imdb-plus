@@ -6,7 +6,9 @@
 
 **Improvements**
 * add multiple fonts support for table widget
-* add support for multiple text alignments in headers/footers
+
+**Non-Urgent fixes**
+* None
 
 **Urget fixes**
 * none
