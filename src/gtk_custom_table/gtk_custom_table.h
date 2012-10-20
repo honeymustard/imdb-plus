@@ -199,11 +199,21 @@ void gtk_custom_table_set_cell_text(GtkWidget *table, int col,
     int row, char *text);
 void gtk_custom_table_set_cell_alignment(GtkWidget *table, int col, 
     int row, PangoAlignment align);
+void gtk_custom_table_set_head_cell_alignment(GtkWidget *table, int col, 
+    PangoAlignment align);
+void gtk_custom_table_set_foot_cell_alignment(GtkWidget *table, int col, 
+    PangoAlignment align);
 void gtk_custom_table_set_head_text(GtkWidget *table, int col, 
     char *text);
 void gtk_custom_table_set_foot_text(GtkWidget *table, int col, 
     char *text);
 void gtk_custom_table_get_row(GtkWidget *table, int index, char ***container);
+void gtk_custom_table_set_row_alignment(GtkWidget *table, int row, 
+    PangoAlignment align);
+void gtk_custom_table_set_head_row_alignment(GtkWidget *table, 
+    PangoAlignment align);
+void gtk_custom_table_set_foot_row_alignment(GtkWidget *table, 
+    PangoAlignment align);
 void gtk_custom_table_set_cell_color_enable(GtkWidget *table, int col, 
     int row, gboolean value);
 

@@ -344,11 +344,43 @@ void gtk_custom_table_set_column_alignment(GtkWidget *table, int col,
     GTK_CUSTOM_TABLE_GET_PRIVATE(table)->table_cols[col]->meta->align = align;
 }
 
+void gtk_custom_table_set_row_alignment(GtkWidget *table, int row, 
+    PangoAlignment align) {
+
+    GTK_CUSTOM_TABLE_GET_PRIVATE(table)->table_rows[row]->meta->align = align;
+}
+
+void gtk_custom_table_set_head_row_alignment(GtkWidget *table, 
+    PangoAlignment align) {
+
+    GTK_CUSTOM_TABLE_GET_PRIVATE(table)->table_head->meta->align = align;
+}
+
+void gtk_custom_table_set_foot_row_alignment(GtkWidget *table, 
+    PangoAlignment align) {
+
+    GTK_CUSTOM_TABLE_GET_PRIVATE(table)->table_foot->meta->align = align;
+}
+
 void gtk_custom_table_set_cell_alignment(GtkWidget *table, int col, 
     int row, PangoAlignment align) {
 
     GtkCustomTablePrivate *priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
     priv->table_rows[row]->cell[col]->meta->align = align;
+}
+
+void gtk_custom_table_set_foot_cell_alignment(GtkWidget *table, int col, 
+    PangoAlignment align) {
+
+    GtkCustomTablePrivate *priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
+    priv->table_foot->cell[col]->meta->align = align;
+}
+
+void gtk_custom_table_set_head_cell_alignment(GtkWidget *table, int col, 
+    PangoAlignment align) {
+
+    GtkCustomTablePrivate *priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
+    priv->table_head->cell[col]->meta->align = align;
 }
 
 void gtk_custom_table_set_sort_index(GtkWidget *table, int col) {

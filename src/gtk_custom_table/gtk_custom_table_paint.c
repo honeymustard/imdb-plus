@@ -51,9 +51,10 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
     gtk_adjustment_set_step_increment(adjust, 500.0);
     gtk_adjustment_set_page_increment(adjust, 500.0);
 
+    int adj_size = (int)gtk_adjustment_get_page_size(adjust);
+
     int scroll_beg = (int)gtk_adjustment_get_value(adjust);
-    int scroll_end = scroll_beg + ((int)gtk_adjustment_get_page_size(adjust));
-    int scroll_tot = ((int)gtk_adjustment_get_page_size(adjust));
+    int scroll_end = scroll_beg + adj_size;
 
     int scroll_beg_row = (scroll_beg / 25);
     int scroll_end_row = (scroll_end / 25) + 1;
@@ -69,7 +70,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
         priv->table_surface = cairo_image_surface_create(
             CAIRO_FORMAT_ARGB32, 
             table->allocation.width, 
-            scroll_tot
+            adj_size
         );
 
         cr = cairo_create(priv->table_surface);
@@ -82,6 +83,8 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
     int j = 0;
 
     char temp[10];
+
+    struct table_meta *meta_temp = NULL;
 
     cairo_set_line_width(cr, 1);
 
@@ -145,6 +148,20 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
                 4
             );
 
+            /* determine cell text alignment */
+            if(priv->table_head->cell[i]->meta->align != PANGO_ALIGN_NONE) {
+
+                meta_temp = priv->table_head->cell[i]->meta;
+            }
+            else if(priv->table_head->meta->align != PANGO_ALIGN_NONE) {
+
+                meta_temp = priv->table_head->meta;
+            }
+            else {
+
+                meta_temp = priv->table_cols[i]->meta;
+            }
+            
             /* Create a PangoLayout, set the font and text */
             layout = pango_cairo_create_layout(cr);
 
@@ -164,7 +181,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
                 PANGO_ELLIPSIZE_END);
 
             pango_layout_set_alignment(layout, 
-                priv->table_cols[i]->meta->align);
+                meta_temp->align);
 
             pango_cairo_show_layout(cr, layout);
 
@@ -186,7 +203,6 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
     struct table_meta *meta_cell = NULL;
     struct table_meta *meta_rows = NULL;
     struct table_meta *meta_cols = NULL;
-    struct table_meta *meta_temp = NULL;
 
     /* only draw those columns which will be visible on window surface */
     for(i = scroll_beg_row; i < scroll_end_row && i < priv->table_y; i++) {
@@ -267,6 +283,8 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
             cairo_fill(cr);
 
             /* FIND META WITH HIGHEST PRECEDENCE */
+
+            meta_temp = NULL;
 
             /* check if data is numeric */
             is_integer = gtk_custom_table_is_integer(
@@ -379,8 +397,6 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
 
                 g_object_unref(layout);
             }
-
-            meta_temp = NULL;
         }
     }
 
@@ -432,6 +448,20 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
                 t_height + 4
             );
 
+            /* determine cell text alignment */
+            if(priv->table_foot->cell[i]->meta->align != PANGO_ALIGN_NONE) {
+
+                meta_temp = priv->table_foot->cell[i]->meta;
+            }
+            else if(priv->table_foot->meta->align != PANGO_ALIGN_NONE) {
+
+                meta_temp = priv->table_foot->meta;
+            }
+            else {
+
+                meta_temp = priv->table_cols[i]->meta;
+            }
+
             /* set the font and text */
             layout = pango_cairo_create_layout(cr);
 
@@ -451,7 +481,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
                 PANGO_ELLIPSIZE_END);
 
             pango_layout_set_alignment(layout, 
-                priv->table_cols[i]->meta->align);
+                meta_temp->align);
 
             pango_cairo_show_layout(cr, layout);
 
