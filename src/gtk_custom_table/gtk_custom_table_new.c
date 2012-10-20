@@ -63,21 +63,23 @@ GtkWidget * gtk_custom_table_new(int cols, int rows, int min_width, int min_heig
     int j = 0;
 
     priv->table_head->meta = malloc(sizeof(struct table_meta));
-    priv->table_head->meta->align = PANGO_ALIGN_LEFT;
+    priv->table_head->meta->align = PANGO_ALIGN_NONE;
     priv->table_head->meta->graphable = FALSE;
     priv->table_head->meta->has_bg_color = FALSE;
 
     for(i = 0; i < 3; i++) {
+
         priv->table_head->meta->graph[i] = rgb_graph[i];
         priv->table_head->meta->color[i] = rgb_cell[i];
     }
 
     priv->table_foot->meta = malloc(sizeof(struct table_meta));
-    priv->table_foot->meta->align = PANGO_ALIGN_LEFT;
+    priv->table_foot->meta->align = PANGO_ALIGN_NONE;
     priv->table_foot->meta->graphable = FALSE;
     priv->table_foot->meta->has_bg_color = FALSE;
 
     for(i = 0; i < 3; i++) {
+
         priv->table_foot->meta->graph[i] = rgb_graph[i];
         priv->table_foot->meta->color[i] = rgb_cell[i];
     }
@@ -89,11 +91,12 @@ GtkWidget * gtk_custom_table_new(int cols, int rows, int min_width, int min_heig
         priv->table_head->cell[i]->text = NULL;
 
         priv->table_head->cell[i]->meta = malloc(sizeof(struct table_meta));
-        priv->table_head->cell[i]->meta->align = PANGO_ALIGN_LEFT;
+        priv->table_head->cell[i]->meta->align = PANGO_ALIGN_NONE;
         priv->table_head->cell[i]->meta->graphable = FALSE;
         priv->table_head->cell[i]->meta->has_bg_color = FALSE;
 
         for(j = 0; j < 3; j++) {
+
             priv->table_head->cell[i]->meta->graph[j] = rgb_graph[j];
             priv->table_head->cell[i]->meta->color[j] = rgb_cell[j];
         }
@@ -102,11 +105,12 @@ GtkWidget * gtk_custom_table_new(int cols, int rows, int min_width, int min_heig
         priv->table_foot->cell[i]->text = NULL;
 
         priv->table_foot->cell[i]->meta = malloc(sizeof(struct table_meta));
-        priv->table_foot->cell[i]->meta->align = PANGO_ALIGN_LEFT;
+        priv->table_foot->cell[i]->meta->align = PANGO_ALIGN_NONE;
         priv->table_foot->cell[i]->meta->graphable = FALSE;
         priv->table_foot->cell[i]->meta->has_bg_color = FALSE;
 
         for(j = 0; j < 3; j++) {
+
             priv->table_foot->cell[i]->meta->graph[j] = rgb_graph[j];
             priv->table_foot->cell[i]->meta->color[j] = rgb_cell[j];
         }
