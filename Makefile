@@ -22,7 +22,7 @@
 EXECUTE = imdb-plus
 VERSION = 0.0.7
 SOURCES = *.c *.h *.md Makefile COPYING TODO
-FOLDERS = lib misc share scripts
+FOLDERS = src misc share scripts
 WININST = lib share COPYING *.dll misc\setup.iss $(EXECUTE).exe
 CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
@@ -30,11 +30,11 @@ WINDOWS = -mwindows
 
 # All project files..
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./*.c))
-OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/*.c))
-OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/ui/*.c))
-OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/gtk_custom_table/*.c))
-OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/gtk_custom_table/strnatcmp/*.c))
-OBJECTS += $(patsubst %.c, %.o, $(wildcard ./lib/events/*.c))
+OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/*.c))
+OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/ui/*.c))
+OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/gtk_custom_table/*.c))
+OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/gtk_custom_table/strnatcmp/*.c))
+OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/events/*.c))
 
 
 ###############################################################################
@@ -242,7 +242,7 @@ mingw32-build:
 ###############################################################################
 
 # Compile paths..
-path%.o: path%.c lib/paths.h main.h
+path%.o: path%.c src/paths.h main.h
 	gcc $(CFLAGS) $< -o $@ -D$(OS)
 
 # Compile main..
@@ -250,15 +250,15 @@ main.o: main.c main.h
 	gcc $(CFLAGS) main.c -DVERSION=\"$(VERSION)\"
 
 # Compile ui functions..
-ui_set_%.o: ui_set_%.c lib/ui/ui.h lib/ui/ui_widgets.h lib/events/events.h
+ui_set_%.o: ui_set_%.c src/ui/ui.h src/ui/ui_widgets.h src/events/events.h
 	gcc $(CFLAGS) $< -o $@
 
 # Compile table..
-gtk_custom_table_%.o: gtk_custom_table_%.c lib/gtk_custom_table/gtk_custom_table.h
+gtk_custom_table_%.o: gtk_custom_table_%.c src/gtk_custom_table/gtk_custom_table.h
 	gcc $(CFLAGS) $< -o $@
 
 # Compile events..
-event_%.o: event_%.c lib/events/events.h
+event_%.o: event_%.c src/events/events.h
 	gcc $(CFLAGS) $< -o $@
 
 # Compile Windows resource..
