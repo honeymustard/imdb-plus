@@ -8,7 +8,7 @@
 * top lists. which list films appear in top lists also?
 
 **Non-Urgent fixes**
-* Flux colors are off in allstats/compare tabs..
+* swap IMDb/Vote column in allstats tab..
 
 **Urget fixes**
 * none
