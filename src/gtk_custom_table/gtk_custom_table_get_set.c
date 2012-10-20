@@ -403,3 +403,51 @@ void gtk_custom_table_set_head_text(GtkWidget *table, int col, char *text) {
     gtk_custom_table_set_head_foot_text(table, col, text, "header");
 }
 
+void gtk_custom_table_set_head_cell_font(GtkWidget *table, int col, 
+    char *font) {
+
+    GtkCustomTablePrivate *priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
+    priv->table_head->cell[col]->meta->font = font;
+}
+
+void gtk_custom_table_set_foot_cell_font(GtkWidget *table, int col, 
+    char *font) {
+
+    GtkCustomTablePrivate *priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
+    priv->table_foot->cell[col]->meta->font = font;
+}
+
+void gtk_custom_table_set_head_row_font(GtkWidget *table, char *font) {
+
+    GtkCustomTablePrivate *priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
+    priv->table_head->meta->font = font;
+}
+
+void gtk_custom_table_set_foot_row_font(GtkWidget *table, char *font) {
+
+    GtkCustomTablePrivate *priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
+    priv->table_foot->meta->font = font;
+}
+
+void gtk_custom_table_set_cell_font(GtkWidget *table, int col, 
+    int row, char *font) {
+
+    GtkCustomTablePrivate *priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
+    priv->table_rows[row]->cell[col]->meta->font = font;
+}
+
+void gtk_custom_table_set_row_font(GtkWidget *table, int row, 
+    char *font) {
+
+    GtkCustomTablePrivate *priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
+    priv->table_rows[row]->meta->font = font;
+}
+
+void gtk_custom_table_set_column_font(GtkWidget *table, int col, 
+    char *font) {
+
+    GtkCustomTablePrivate *priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
+    priv->table_cols[col]->meta->font = font;
+}
+
+

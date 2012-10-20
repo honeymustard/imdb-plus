@@ -57,6 +57,7 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
         meta = priv->table_rows[i]->meta;
 
         for(j = 0; j < 3; j++) {
+
             table_rows[i]->color[j] = meta->color[j];
             table_rows[i]->graph[j] = meta->graph[j];
         }
@@ -64,6 +65,7 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
         table_rows[i]->graphable = meta->graphable;
         table_rows[i]->has_bg_color = meta->has_bg_color;
         table_rows[i]->align = meta->align;
+        table_rows[i]->font = meta->font;
     }
 
     for(i = 0; i < t_copy_cols; i++) {
@@ -73,6 +75,7 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
         meta = priv->table_cols[i]->meta;
 
         for(j = 0; j < 3; j++) {
+
             table_cols[i]->color[j] = meta->color[j];
             table_cols[i]->graph[j] = meta->graph[j];
         }
@@ -80,6 +83,7 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
         table_cols[i]->graphable = meta->graphable;
         table_cols[i]->has_bg_color = meta->has_bg_color;
         table_cols[i]->align = meta->align;
+        table_cols[i]->font = meta->font;
     }
 
     int cell = 0;
@@ -98,6 +102,7 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
             meta = priv->table_rows[i]->cell[j]->meta;
 
             for(k = 0; k < 3; k++) {
+
                 table_cell[cell]->color[k] = meta->color[k];
                 table_cell[cell]->graph[k] = meta->graph[k];
             }
@@ -105,6 +110,7 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
             table_cell[cell]->graphable = meta->graphable;
             table_cell[cell]->has_bg_color = meta->has_bg_color;
             table_cell[cell]->align = meta->align;
+            table_cell[cell]->font = meta->font;
 
             cell++;
         }
@@ -175,6 +181,7 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
         meta = priv->table_rows[i]->meta;
 
         for(j = 0; j < 3; j++) {
+
             meta->color[j] = table_rows[i]->color[j];
             meta->graph[j] = table_rows[i]->graph[j];
         }
@@ -182,6 +189,7 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
         meta->graphable = table_rows[i]->graphable;
         meta->has_bg_color = table_rows[i]->has_bg_color;
         meta->align = table_rows[i]->align;
+        meta->font = table_rows[i]->font;
 
         free(table_rows[i]);
     }
@@ -193,6 +201,7 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
         meta = priv->table_cols[i]->meta;
 
         for(j = 0; j < 3; j++) {
+
             meta->color[j] = table_cols[i]->color[j];
             meta->graph[j] = table_cols[i]->graph[j];
         }
@@ -200,6 +209,7 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
         meta->graphable = table_cols[i]->graphable;
         meta->has_bg_color = table_cols[i]->has_bg_color;
         meta->align = table_cols[i]->align;
+        meta->font = table_cols[i]->font;
 
         free(table_cols[i]);
     }
@@ -211,6 +221,7 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
         meta = priv->table_cell[i]->meta;
 
         for(j = 0; j < 3; j++) {
+
             meta->color[j] = table_cell[i]->color[j];
             meta->graph[j] = table_cell[i]->graph[j];
         }
@@ -218,11 +229,11 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
         meta->graphable = table_cell[i]->graphable;
         meta->has_bg_color = table_cell[i]->has_bg_color;
         meta->align = table_cell[i]->align;
+        meta->font = table_cell[i]->font;
 
         free(table_cell[i]);
     }
 
     free(table_cell);
-
 }
 

@@ -41,6 +41,8 @@
 #define GTK_CUSTOM_TABLE_ASC 0
 #define GTK_CUSTOM_TABLE_DESC 1
 #define GTK_CUSTOM_TABLE_INVERT -1
+
+#define PANGO_DEFAULT_FONT "Monospace 10"
 #define PANGO_ALIGN_NONE -1
 
 typedef struct _GtkCustomTable GtkCustomTable;
@@ -62,6 +64,7 @@ struct _GtkCustomTableClass {
 /* table cell meta data */
 struct table_meta {
 
+    char *font;
     double color[3];
     double graph[3];
     gboolean graphable;
@@ -216,6 +219,18 @@ void gtk_custom_table_set_foot_row_alignment(GtkWidget *table,
     PangoAlignment align);
 void gtk_custom_table_set_cell_color_enable(GtkWidget *table, int col, 
     int row, gboolean value);
+void gtk_custom_table_set_head_cell_font(GtkWidget *table, int col, 
+    char *font);
+void gtk_custom_table_set_foot_cell_font(GtkWidget *table, int col, 
+    char *font);
+void gtk_custom_table_set_head_row_font(GtkWidget *table, char *font);
+void gtk_custom_table_set_foot_row_font(GtkWidget *table, char *font);
+void gtk_custom_table_set_cell_font(GtkWidget *table, int col, 
+    int row, char *font);
+void gtk_custom_table_set_row_font(GtkWidget *table, int row, 
+    char *font);
+void gtk_custom_table_set_column_font(GtkWidget *table, int col, 
+    char *font);
 
 int gtk_custom_table_get_rows(GtkWidget *table);
 int gtk_custom_table_get_cols(GtkWidget *table);

@@ -88,10 +88,10 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
 
     cairo_set_line_width(cr, 1);
 
-    PangoFontDescription *description = NULL;
-    description = pango_font_description_from_string("Monospace 10");
-    
+    char *font_temp = NULL;
+
     PangoLayout *layout = NULL;
+    PangoFontDescription *description = NULL;
 
     /* DRAW HEADER ROW */    
     if((scroll_beg_row == 0) && priv->table_has_header) {
@@ -161,7 +161,23 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
 
                 meta_temp = priv->table_cols[i]->meta;
             }
-            
+
+            /* determine cell font */
+            if(priv->table_head->cell[i]->meta->font != NULL) {
+
+                font_temp = priv->table_head->cell[i]->meta->font;
+            }
+            else if(priv->table_head->meta->font != NULL) {
+
+                font_temp = priv->table_head->meta->font;
+            }
+            else {
+
+                font_temp = priv->table_cols[i]->meta->font;
+            }
+                
+            description = pango_font_description_from_string(font_temp);
+
             /* Create a PangoLayout, set the font and text */
             layout = pango_cairo_create_layout(cr);
 
@@ -185,6 +201,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
 
             pango_cairo_show_layout(cr, layout);
 
+            pango_font_description_free(description);
             g_object_unref(layout);
         }
     }
@@ -375,6 +392,22 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
 
                     meta_temp = meta_cols;
                 }
+
+                /* determine cell font */
+                if(priv->table_rows[i]->cell[j]->meta->font != NULL) {
+
+                    font_temp = priv->table_rows[i]->cell[j]->meta->font;
+                }
+                else if(priv->table_rows[i]->meta->font != NULL) {
+
+                    font_temp = priv->table_rows[i]->meta->font;
+                }
+                else {
+
+                    font_temp = priv->table_cols[j]->meta->font;
+                }
+                    
+                description = pango_font_description_from_string(font_temp);
                
                 pango_layout_set_text(layout, text_temp, -1);
 
@@ -395,6 +428,7 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
 
                 pango_cairo_show_layout(cr, layout);
 
+                pango_font_description_free(description);
                 g_object_unref(layout);
             }
         }
@@ -461,6 +495,22 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
 
                 meta_temp = priv->table_cols[i]->meta;
             }
+            
+            /* determine cell font */
+            if(priv->table_foot->cell[i]->meta->font != NULL) {
+
+                font_temp = priv->table_foot->cell[i]->meta->font;
+            }
+            else if(priv->table_foot->meta->font != NULL) {
+
+                font_temp = priv->table_foot->meta->font;
+            }
+            else {
+
+                font_temp = priv->table_cols[i]->meta->font;
+            }
+                
+            description = pango_font_description_from_string(font_temp);
 
             /* set the font and text */
             layout = pango_cairo_create_layout(cr);
@@ -485,13 +535,12 @@ void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event,
 
             pango_cairo_show_layout(cr, layout);
 
+            pango_font_description_free(description);
             g_object_unref(layout);
         }
 
         t_height += priv->table_row_height;
     }
-
-    pango_font_description_free(description);
 
     /* REFRESH, draw image to avoid flicker.. */
     if(refresh == TRUE) {
