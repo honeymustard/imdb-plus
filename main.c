@@ -22,8 +22,8 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include "main.h"
-#include "lib/paths.h"
-#include "lib/ui/ui.h"
+#include "src/paths.h"
+#include "src/ui/ui.h"
 
 
 /**
