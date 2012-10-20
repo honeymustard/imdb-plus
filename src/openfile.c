@@ -35,7 +35,7 @@ void set_allstats(double allstats[5], int row, int rows) {
 
     char temp[100];
 
-    double vote_avg = allstats[1] / allstats[0] ;
+    double vote_avg = allstats[1] / allstats[0];
     double imdb_avg = allstats[2] / allstats[0];
     double flux_avg = vote_avg - imdb_avg;
 
@@ -135,7 +135,6 @@ void set_allstats(double allstats[5], int row, int rows) {
 
     int vote = (int)vote_avg;
     int imdb = (int)imdb_avg;
-    int flux = (int)flux_avg;
 
     if(vote_avg > 0.0) {
         gtk_custom_table_set_cell_color(nb_tab_allstats, 0, row, 
@@ -149,7 +148,7 @@ void set_allstats(double allstats[5], int row, int rows) {
 
     if(allstats[1] > 0.0 && allstats[2] > 0.0) {
         gtk_custom_table_set_cell_color(nb_tab_allstats, 2, row, 
-            colors[flux > 0 ? 8 : 1]);
+            colors[flux_avg > 0.0 ? 8 : 1]);
     }
 }
 
@@ -302,7 +301,7 @@ int open_compare(GtkWidget *current, GtkWidget *other) {
     /* add statistics to widget table */
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
         
-        flux = stats[i][0] > 0 ? (i + 1) - stats[i][3] : 0.00;
+        flux = stats[i][0] > 0 ? stats[i][3] - (i + 1) : 0.00;
 
         /* add imdb value to table */
         sprintf(temp, "%d", i + 1);
