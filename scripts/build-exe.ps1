@@ -1,4 +1,4 @@
-#############################################################################
+###############################################################################
 #
 # Copyright (C) 2011-2012  Adrian Solumsmo
 # 
@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#############################################################################
+###############################################################################
 
 ###############################################################
 #
@@ -60,19 +60,6 @@ $dir_build_vers = "$dir_build\$program_name"
 $dir_build_vers_output = "$dir_build_vers\$program_name-win"
 
 
-# make temporary source directory
-function make-srcdir
-{
-    # Make dist folder..
-    if (test-path $tmp_srcdir)
-    { 
-        remove-item $tmp_srcdir -recurse -force
-    }
-    
-    new-item $tmp_srcdir -type directory | out-null
-}    
-
-
 ###########################################
 # make build environment
 ###########################################
@@ -113,8 +100,14 @@ function build-env
 function build-src 
 {
 
-    make-srcdir
-
+    # Make dist folder..
+    if (test-path $tmp_srcdir)
+    { 
+        remove-item $tmp_srcdir -recurse -force
+    }
+    
+    new-item $tmp_srcdir -type directory | out-null
+    
     # copy sources and folders to our temp dir..
     copy-item $sources $tmp_srcdir -recurse
     copy-item $folders $tmp_srcdir -recurse
@@ -128,6 +121,8 @@ function build-src
     &'7za' a -t7z $tmp_srczip $tmp_srcdir
 
     move-item $tmp_srczip $dir_build_vers_output
+
+    remove-item $tmp_srcdir -recurse -force
 }
 
 
@@ -138,16 +133,7 @@ function build-src
 function build-exe
 {
 
-    make-srcdir
-
-    copy-item $install $tmp_srcdir -recurse
-
-    # remove all non-source files..
-    get-childitem $tmp_srcdir -include *.csv, *.swo, *.swp, `
-        *.o, *.c, *.h, *~, events, gtk_custom_table, *.fuse -recurse |
-        foreach { remove-item $_.fullname -recurse -force }
-
-    move-item $tmp_srcdir $dir_build_vers_output
+    copy-item $install $dir_build_vers_output -recurse
 
     # run setup script..
     iscc "$dir_build_vers_output\$tmp_srcdir\setup.iss" /dMyAppVersion=$version
@@ -155,8 +141,6 @@ function build-exe
     # build archive..
     &'7za' a -t7z "$dir_build_vers_output\$program_name-setup.7z" `
         "$dir_build_vers_output\$tmp_srcdir\$program_name-setup.exe"
-
-    remove-item "$dir_build_vers_output\$tmp_srcdir" -recurse -force
 }
 
 
