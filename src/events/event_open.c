@@ -52,20 +52,13 @@ void menu_signal_open(GtkWidget *widget, gpointer data) {
 
         /* attempt to open ratings file */
         if(open_file(filename)) {
-            stat = "Opened ratings file: ";
+            stat = "Opened ratings file ";
         }
         else {
-            stat = "Unable to open file: ";
+            stat = "Unable to open file ";
         }
 
-        /* allocate new statusbar message */
-        char *temp = malloc(strlen(stat) + strlen(filename) + 1);
-        strcpy(temp, stat),
-        strcat(temp, filename);
-            
-        gtk_statusbar_push(GTK_STATUSBAR(status), 1, temp);
-
-        free(temp);
+        gtk_statusbar_push(GTK_STATUSBAR(status), 1, stat);
     }
 
     gtk_widget_destroy(dialog);
