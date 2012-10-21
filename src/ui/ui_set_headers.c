@@ -106,8 +106,8 @@ char *nb_tab_boxoffice_headers[TABLE_BOXOF_COLS] = {
 };
 
 char *nb_tab_allstats_headers[TABLE_ALLST_COLS] = {
-    "Vote", 
     "IMDb", 
+    "Vote", 
     "Flux", 
     "Completion", 
     "Percent", 
