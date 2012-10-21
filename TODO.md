@@ -6,7 +6,10 @@
 
 **Improvements**
 * top lists. which list films appear in top lists also?
-* save imdb-ratings which have been added to boxoffice tab
+* add support for sort text in meta so one could sort 
+  based on a value which is not the cell text.
+  This will allow for strings like N/A to be sorted as 0
+  in otherwise integer columns
 
 **Non-Urgent fixes**
 * none
