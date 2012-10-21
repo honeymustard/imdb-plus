@@ -81,10 +81,8 @@ void ui_set_stats() {
     /* set lists statistics table values */
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
 
-        sprintf(temp, "%d", (j + 1));
-
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 0, i, 
-            temp);
+            "0.00");
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 1, i, 
             "0.00");
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 2, i, 
@@ -101,8 +99,6 @@ void ui_set_stats() {
             "0.00");
 
         /* set cell colors */
-        gtk_custom_table_set_cell_color(nb_tab_lists_stats, 0, i, 
-            colors[j]);
         gtk_custom_table_set_cell_color(nb_tab_lists_stats, 3, i, 
             graph_bg);
     }
@@ -131,10 +127,8 @@ void ui_set_stats() {
     /* set compare statistics table values */
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
 
-        sprintf(temp, "%d", (j + 1));
-
         gtk_custom_table_set_cell_text(nb_tab_compare, 0, i, 
-            temp);
+            "0.00");
         gtk_custom_table_set_cell_text(nb_tab_compare, 1, i, 
             "0.00");
         gtk_custom_table_set_cell_text(nb_tab_compare, 2, i, 
@@ -151,8 +145,6 @@ void ui_set_stats() {
             "0.00");
 
         /* set cell colors */
-        gtk_custom_table_set_cell_color(nb_tab_compare, 0, i, 
-            colors[j]);
         gtk_custom_table_set_cell_color(nb_tab_compare, 3, i, 
             graph_bg);
     }
