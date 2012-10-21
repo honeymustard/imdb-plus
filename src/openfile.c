@@ -161,22 +161,26 @@ int open_compare(GtkWidget *current, GtkWidget *other) {
     int row_count = 0;
     int imdb_key = 0;
 
-    double stats[10][6];
+    double stats[10][7];
     memset(stats, '\0', sizeof(stats));
 
-    int vote = 0;
-    int imdb = 0;
-    int time = 0;
-    int year = 0;
+    double vote = 0;
+    double imdb = 0;
+    double time = 0;
+    double year = 0;
+    
+    double imdb_average = 0;
+    double flux_average = 0;
 
     int index = 0;
     int graph_apex = 0;
     int year_average = 0;
     int vote_average = 0;
     int time_average = 0;
-    double imdb_average = 0;
-    double flux_average = 0;
 
+    int imdb_l = 0;
+    int imdb_o = 0;
+    
     char temp[100];
     char **shared = NULL;
     char *unique_id = NULL;
@@ -195,18 +199,22 @@ int open_compare(GtkWidget *current, GtkWidget *other) {
             gtk_custom_table_get_row(current, i, &shared);
 
             /* make results numeric */
-            vote = atoi(shared[2]);
+            vote = atof(shared[2]);
             imdb = atof(shared[1]);
-            time = atoi(shared[5]);
-            year = atoi(shared[6]);
+            time = atof(shared[5]);
+            year = atof(shared[6]);
 
-            imdb_key = (int)imdb - 1;
-            
+            imdb_l = (int)imdb;
+            imdb_o = (imdb - imdb_l) * 10;
+
+            imdb_key = imdb_o > 5 ? (int)imdb_l : (int)imdb_l - 1;
+
             /* add up for each rating */
             stats[imdb_key][0] += 1;
             stats[imdb_key][3] += vote;
-            stats[imdb_key][4] += time;
-            stats[imdb_key][5] += year;
+            stats[imdb_key][4] += imdb;
+            stats[imdb_key][5] += time;
+            stats[imdb_key][6] += year;
 
             /* add up totals for vote averages */
             vote_average += vote;
@@ -288,12 +296,15 @@ int open_compare(GtkWidget *current, GtkWidget *other) {
         /* calculate vote averages for each rating */
         stats[i][3] = stats[i][0] != 0 ? 
             stats[i][3] / stats[i][0] : 0;
-        /* calculate time averages for each rating */
+        /* calculate imdb averages for each rating */
         stats[i][4] = stats[i][0] != 0 ? 
             stats[i][4] / stats[i][0] : 0;
-        /* calculate year averages for each rating */
+        /* calculate time averages for each rating */
         stats[i][5] = stats[i][0] != 0 ? 
             stats[i][5] / stats[i][0] : 0;
+        /* calculate year averages for each rating */
+        stats[i][6] = stats[i][0] != 0 ? 
+            stats[i][6] / stats[i][0] : 0;
     }
 
     double flux = 0;
@@ -301,10 +312,10 @@ int open_compare(GtkWidget *current, GtkWidget *other) {
     /* add statistics to widget table */
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
         
-        flux = stats[i][0] > 0 ? stats[i][3] - (i + 1) : 0.00;
+        flux = stats[i][0] > 0 ? stats[i][3] - stats[i][4] : 0.00;
 
         /* add imdb value to table */
-        sprintf(temp, "%d", i + 1);
+        sprintf(temp, "%1.2f", stats[i][4]);
         gtk_custom_table_set_cell_text(nb_tab_compare, 0, j, 
             temp);
 
@@ -334,27 +345,24 @@ int open_compare(GtkWidget *current, GtkWidget *other) {
             temp);
 
         /* add runtime value to table */
-        sprintf(temp, "%1.2f", stats[i][4]);
+        sprintf(temp, "%1.2f", stats[i][5]);
         gtk_custom_table_set_cell_text(nb_tab_compare, 6, j, 
             temp);
 
         /* add year value to table */
-        sprintf(temp, "%1.2f", stats[i][5]);
+        sprintf(temp, "%1.2f", stats[i][6]);
         gtk_custom_table_set_cell_text(nb_tab_compare, 7, j, 
             temp);
 
-
-        /* reset background colors */
-        gtk_custom_table_set_cell_color_enable(nb_tab_compare, 1, j, 
-            FALSE);
-        gtk_custom_table_set_cell_color_enable(nb_tab_compare, 2, j, 
-            FALSE);
-
         /* add new background color to vote rating */
-        int imdb_vote = (int)stats[i][3];
+        int imdb_vote = (int)stats[i][4];
+        int vote_vote = (int)stats[i][3];
+
+        gtk_custom_table_set_cell_color(nb_tab_compare, 0, j, 
+            colors[imdb_vote < 10 && imdb_vote > 0 ? imdb_vote - 1 : 1]);
 
         gtk_custom_table_set_cell_color(nb_tab_compare, 1, j, 
-            colors[imdb_vote < 10 && imdb_vote > 0 ? imdb_vote - 1 : 1]);
+            colors[vote_vote < 10 && vote_vote > 0 ? vote_vote - 1 : 1]);
 
         /* add new background color to flux */
         gtk_custom_table_set_cell_color(nb_tab_compare, 2, j, 
@@ -377,8 +385,7 @@ int open_compare(GtkWidget *current, GtkWidget *other) {
         temp);
 
     /* add statistics footer vote info */
-    sprintf(temp, "%d movies intersect, average rating is %1.2f", 
-        row_count, (double)vote_average / row_count);
+    sprintf(temp, "%d movies intersect", row_count);
     gtk_custom_table_set_foot_text(nb_tab_compare, 3, 
         temp);
 
@@ -431,17 +438,22 @@ int open_file(char *filename) {
     double allstats[3][5];
     memset(allstats, '\0', sizeof(allstats));
 
-    int vote = 0;
-    int imdb = 0;
-    int time = 0;
-    int year = 0;
+    double vote = 0;
+    double imdb = 0;
+    double time = 0;
+    double year = 0;
+
+    double imdb_average = 0;
+    double flux_average = 0;
+
+    int imdb_l = 0;
+    int imdb_o = 0;
+    int imdb_k = 0;
 
     int graph_apex = 0;
     int year_average = 0;
     int vote_average = 0;
     int time_average = 0;
-    double imdb_average = 0;
-    double flux_average = 0;
 
     char temp[100];
 
@@ -478,16 +490,16 @@ int open_file(char *filename) {
         for(i = 1; i < rows; i++) {
 
             /* make results numeric */
-            vote = atoi(results[i][8]);
+            vote = atof(results[i][8]);
             imdb = atof(results[i][9]);
-            time = atoi(results[i][10]);
-            year = atoi(results[i][11]);
+            time = atof(results[i][10]);
+            year = atof(results[i][11]);
 
             /* add up for each rating */
-            stats[vote - 1][0] += 1;
-            stats[vote - 1][3] += imdb;
-            stats[vote - 1][4] += time;
-            stats[vote - 1][5] += year;
+            stats[(int)vote - 1][0] += 1;
+            stats[(int)vote - 1][3] += imdb;
+            stats[(int)vote - 1][4] += time;
+            stats[(int)vote - 1][5] += year;
 
             /* add up totals for vote averages */
             vote_average += vote;
@@ -566,7 +578,6 @@ int open_file(char *filename) {
             gtk_custom_table_set_cell_text(nb_tab_statistics, 7, j, 
                 temp);
 
-
             /* reset background colors */
             gtk_custom_table_set_cell_color_enable(nb_tab_statistics, 1, j, 
                 FALSE);
@@ -600,10 +611,8 @@ int open_file(char *filename) {
             temp);
 
         /* add statistics footer vote info */
-        sprintf(temp, "You've rated %d movies, average rating is %1.2f", 
-            rows, (double)vote_average / rows);
         gtk_custom_table_set_foot_text(nb_tab_statistics, 3, 
-            temp);
+            filename);
 
         /* add statistics footer percent total */
         gtk_custom_table_set_foot_text(nb_tab_statistics, 4, 
@@ -650,6 +659,12 @@ int open_file(char *filename) {
                 results[i][10]);
             gtk_custom_table_set_cell_text(nb_tab_mymovies, 6, j, 
                 results[i][11]);
+
+            /* reset background colors */
+            gtk_custom_table_set_cell_color_enable(nb_tab_mymovies, 1, j, 
+                FALSE);
+            gtk_custom_table_set_cell_color_enable(nb_tab_mymovies, 2, j, 
+                FALSE);
 
             /* set cell colors for imdb and flux values */
             gtk_custom_table_set_cell_color(nb_tab_mymovies, 1, j, 
@@ -757,16 +772,21 @@ int open_file(char *filename) {
         for(i = 1; i < rows; i++) {
 
             /* make results numeric */
-            vote = atoi(results[i][8]);
+            vote = atof(results[i][8]);
             imdb = atof(results[i][8]);
-            time = atoi(results[i][9]);
-            year = atoi(results[i][10]);
+            time = atof(results[i][9]);
+            year = atof(results[i][10]);
+
+            imdb_l = (int)imdb;
+            imdb_o = (imdb - imdb_l) * 10;
+
+            imdb_k = imdb_o > 5 ? (int)imdb_l : (int)imdb_l - 1;
 
             /* add up for each rating */
-            stats[vote - 1][0] += 1;
-            stats[vote - 1][3] += imdb;
-            stats[vote - 1][4] += time;
-            stats[vote - 1][5] += year;
+            stats[imdb_k][0] += 1;
+            stats[imdb_k][3] += imdb;
+            stats[imdb_k][4] += time;
+            stats[imdb_k][5] += year;
 
             /* add up totals for vote averages */
             vote_average += vote;
@@ -804,6 +824,11 @@ int open_file(char *filename) {
 
         /* add statistics to widget table */
         for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
+
+            /* add imdb value to table */
+            sprintf(temp, "%1.2f", stats[i][3]);
+            gtk_custom_table_set_cell_text(nb_tab_lists_stats, 0, j, 
+                temp);
             
             /* add graph value to table */
             sprintf(temp, "%1.0f", stats[i][2]);
@@ -829,18 +854,22 @@ int open_file(char *filename) {
             sprintf(temp, "%1.2f", stats[i][5]);
             gtk_custom_table_set_cell_text(nb_tab_lists_stats, 7, j, 
                 temp);
+
+            /* add new background color to vote rating */
+            int imdb_vote = (int)stats[i][3];
+
+            gtk_custom_table_set_cell_color(nb_tab_lists_stats, 0, j, 
+                colors[imdb_vote < 10 && imdb_vote > 0 ? imdb_vote - 1 : 1]);
         }
 
         /* add statistics footer vote average */
-        sprintf(temp, "%2.2f", (double)vote_average / rows);
+        sprintf(temp, "%2.2f", (double)imdb_average / rows);
         gtk_custom_table_set_foot_text(nb_tab_lists_stats, 0, 
             temp);
 
         /* add statistics footer vote info */
-        sprintf(temp, "List contains %d movies, average rating is %1.2f", 
-            rows, (double)vote_average / rows);
         gtk_custom_table_set_foot_text(nb_tab_lists_stats, 3, 
-            temp);
+            filename);
 
         /* add statistics footer percent total */
         gtk_custom_table_set_foot_text(nb_tab_lists_stats, 4, 
@@ -863,14 +892,13 @@ int open_file(char *filename) {
 
         gtk_custom_table_set_sortable(nb_tab_lists_stats, TRUE);
 
-
         /* update lists tab with new data */
-        gtk_custom_table_resize(nb_tab_lists, -1, (rows - 1));
+        gtk_custom_table_resize(nb_tab_lists, -1, rows);
 
         memset(allstats, '\0', sizeof(allstats)); 
 
         /* add text to widget table */
-        for(i = 1, j = 0; i < rows; i++, j++) {
+        for(i = 1, j = 0; i <= rows; i++, j++) {
 
             sprintf(temp, "%d", i);
 
@@ -892,6 +920,12 @@ int open_file(char *filename) {
             /* add new background color to rating */
             int rating = (int)atoi(results[i][8]);
             int rating_color = rating < 10 && rating > 0 ? rating - 1 : 0;
+
+            /* reset background colors */
+            gtk_custom_table_set_cell_color_enable(nb_tab_lists, 1, j, 
+                FALSE);
+            gtk_custom_table_set_cell_color_enable(nb_tab_lists, 2, j, 
+                FALSE);
 
             gtk_custom_table_set_cell_color(nb_tab_lists, 1, j, 
                 colors[rating_color]);
@@ -967,7 +1001,6 @@ int open_file(char *filename) {
                 allstats[2][3] += atof(results[i][9]);
                 allstats[2][4] += atof(results[i][10]);
             }
-
         }
 
         set_allstats(allstats[0], 2, 
