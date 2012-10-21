@@ -1,4 +1,4 @@
-    
+
 ## TODO
 
 **Considerations**
@@ -8,7 +8,7 @@
 * top lists. which list films appear in top lists also?
 
 **Non-Urgent fixes**
-* swap IMDb/Vote column in allstats tab..
+* none
 
 **Urget fixes**
 * none
