@@ -131,7 +131,7 @@ int menu_signal_update_box() {
     char ***results;
     
     if(read_file(get_global(CONST_BOX_CSV), &cols, &rows, &results) 
-        && cols == 5) {
+        && cols == 6) {
 
         /* update boxoffice tab size */
         gtk_custom_table_resize(nb_tab_boxoffice, -1, rows);
@@ -141,7 +141,7 @@ int menu_signal_update_box() {
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 0, i, 
                 results[i][0]);
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
-                "0.0");
+                results[i][5]);
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, 
                 "0");
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 3, i, 
@@ -180,6 +180,7 @@ int menu_signal_update_box() {
                 gtk_custom_table_get_cell_text(nb_tab_lists, 1, index4) : "0";
 
             /* translate ratings */
+            int num = 0;
             int num1 = atoi(rating1);
             int num2 = atoi(rating2);
             int num3 = atoi(rating3);
@@ -189,28 +190,40 @@ int menu_signal_update_box() {
             if (num1 > 0) {
                 gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
                     rating1);
-                gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
-                    colors[num1 - 1]);
+
+                num = num1 - 1;
             }
             else if(num2 > 0) {
                 gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
                     rating2);
-                gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
-                    colors[num2 - 1]);
+
+                num = num2;
             }
             else if(num3 > 0) {
                 gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
                     rating3);
-                gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
-                    colors[num3 - 1]);
+
+                num = num3;
             }
             else if(num4 > 0) {
                 gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
                     rating4);
 
-                gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
-                    colors[num4 - 1]);
+                num = num4;
             }
+            else {
+
+                num = (int)atof(results[i][5]);
+
+                if(num == 0) {
+                    gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
+                        not_app);
+                    continue;
+                }
+            }
+
+            gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
+                colors[num - 1]);
         }
 
         free_memory(results, cols, rows);
@@ -364,6 +377,34 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
                 get_global(CONST_BOX_CSV), pattern_boxoffice) || 
                 parse_file(get_global(CONST_BOX_TMP), 
                 get_global(CONST_BOX_CSV), pattern_boxoffice_win)) {
+                
+                /* add extra column to boxoffice file */
+                int cols = 0;
+                int rows = 0;
+
+                char ***results;
+                
+                if(read_file(get_global(CONST_BOX_CSV), &cols, &rows, &results)) {
+
+                    FILE *fp_out = fopen(get_global(CONST_BOX_CSV), "wb");
+                    
+                    int i = 0;
+                    int j = 0;
+
+                    for(i = 0; i < rows; i++) {
+
+                        for(j = 0; j < cols; j++) {
+
+                            fprintf(fp_out, "\"%s\",", results[i][j]);
+                        }
+
+                        fprintf(fp_out, "\"%s\"\n", "0.0");
+                    }
+
+                    fclose(fp_out);
+                }
+
+                free_memory(results, cols, rows);
 
                 if(menu_signal_update_box()) {
                     boxstat = "OK";
