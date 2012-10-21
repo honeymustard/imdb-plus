@@ -59,8 +59,13 @@ void ui_set_meta() {
     gtk_custom_table_set_column_font(nb_tab_top250, 4, font); 
     gtk_custom_table_set_column_font(nb_tab_bot100, 4, font); 
     gtk_custom_table_set_column_font(nb_tab_boxoffice, 4, font); 
+
+    gtk_custom_table_set_foot_cell_font(nb_tab_statistics, 3, font); 
+    gtk_custom_table_set_foot_cell_font(nb_tab_lists_stats, 3, font); 
  
     /* set font alignments */
+    gtk_custom_table_set_column_alignment(nb_tab_statistics, 0, 
+        PANGO_ALIGN_RIGHT);
     gtk_custom_table_set_column_alignment(nb_tab_statistics, 1, 
         PANGO_ALIGN_RIGHT);
     gtk_custom_table_set_column_alignment(nb_tab_statistics, 2, 
@@ -74,6 +79,8 @@ void ui_set_meta() {
     gtk_custom_table_set_column_alignment(nb_tab_statistics, 7, 
         PANGO_ALIGN_RIGHT);
 
+    gtk_custom_table_set_column_alignment(nb_tab_lists_stats, 0, 
+        PANGO_ALIGN_RIGHT);
     gtk_custom_table_set_column_alignment(nb_tab_lists_stats, 1, 
         PANGO_ALIGN_RIGHT);
     gtk_custom_table_set_column_alignment(nb_tab_lists_stats, 2, 
@@ -87,6 +94,8 @@ void ui_set_meta() {
     gtk_custom_table_set_column_alignment(nb_tab_lists_stats, 7, 
         PANGO_ALIGN_RIGHT);
 
+    gtk_custom_table_set_column_alignment(nb_tab_compare, 0, 
+        PANGO_ALIGN_RIGHT);
     gtk_custom_table_set_column_alignment(nb_tab_compare, 1, 
         PANGO_ALIGN_RIGHT);
     gtk_custom_table_set_column_alignment(nb_tab_compare, 2, 
