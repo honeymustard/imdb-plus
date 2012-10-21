@@ -455,9 +455,13 @@ int open_file(char *filename) {
     int vote_average = 0;
     int time_average = 0;
 
+    char *font = "serif 10";
+
     char temp[100];
 
     if(strcmp("IMDb Rating", results[0][9]) == 0) {
+
+        gtk_custom_table_set_column_font(nb_tab_mymovies, 4, font); 
 
         set_global(CONST_OPEN_M, filename);
 
@@ -764,6 +768,8 @@ int open_file(char *filename) {
         has_open_movies = 1;
     }
     else {
+
+        gtk_custom_table_set_column_font(nb_tab_lists, 4, font); 
 
         set_global(CONST_OPEN_L, filename);
 

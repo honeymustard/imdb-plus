@@ -54,8 +54,6 @@ void ui_set_meta() {
     /* override default font */
     char *font = "serif 10";
 
-    gtk_custom_table_set_column_font(nb_tab_mymovies, 4, font); 
-    gtk_custom_table_set_column_font(nb_tab_lists, 4, font); 
     gtk_custom_table_set_column_font(nb_tab_top250, 4, font); 
     gtk_custom_table_set_column_font(nb_tab_bot100, 4, font); 
     gtk_custom_table_set_column_font(nb_tab_boxoffice, 4, font); 
