@@ -6,6 +6,7 @@
 
 **Improvements**
 * top lists. which list films appear in top lists also?
+* save imdb-ratings which have been added to boxoffice tab
 
 **Non-Urgent fixes**
 * none
