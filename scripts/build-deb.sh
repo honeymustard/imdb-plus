@@ -81,7 +81,7 @@ cd ..
 cp ../../../../misc/changelog ./debian/changelog
 
 # copy version number into changelog..
-sed "s/imdb-plus (0\.0\.0-1)/imdb-plus ($2-1)/" <./debian/changelog >./debian/clog
+sed "s/imdb-plus (X\.X\.X-1)/imdb-plus ($2-1)/" <./debian/changelog >./debian/clog
 cat ./debian/clog > ./debian/changelog && rm ./debian/clog
 
 cp ../../../../misc/control ./debian/control
