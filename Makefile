@@ -21,7 +21,7 @@
 # Program variables..
 EXECUTE = imdb-plus
 VERSION = 0.0.7
-SOURCES = *.c *.h *.md Makefile COPYING TODO
+SOURCES = *.c *.h *.md Makefile COPYING
 FOLDERS = src misc share scripts
 WININST = lib share COPYING *.dll misc\setup.iss $(EXECUTE).exe
 CFLAGS  = -c -Wall
@@ -85,6 +85,7 @@ install:
 	-@test -d $(DIR_MAN) || mkdir -p $(DIR_MAN)
 	-@test -d $(DIR_MNP) || mkdir -p $(DIR_MNP)
 	-@cp ./misc/$(EXECUTE).desktop $(DIR_APP)
+	-@cd ./misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz && cd ..
 	-@cp ./misc/$(EXECUTE).1.gz $(DIR_MNP)
 	-@cp ./share/icons/$(EXECUTE).png $(DIR_PIX)
 	-@cp $(EXECUTE) $(DIR_BIN)
@@ -99,16 +100,10 @@ uninstall:
 	-@rm -f /usr/bin/$(EXECUTE)
 	-@echo "$(EXECUTE) uninstalled successfully"
 
-# Make clean..
-.PHONY : dist-clean
-dist-clean:
-	-@rm -Rf ./build/$(EXECUTE)-$(VERSION)/$(EXECUTE)-$(VERSION)-deb
-	-@rm -Rf ./build/$(EXECUTE)-$(VERSION)/$(EXECUTE)-$(VERSION)-rpm
-
 # Make dist archive..
 .PHONY : dist
 dist:
-	-@cd misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz && cd ..
+	-@cd ./misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz && cd ..
 	-@test -d $(EXECUTE)-$(VERSION) || mkdir -p $(EXECUTE)-$(VERSION)
 	-@cp -R $(SOURCES) $(FOLDERS) -t $(EXECUTE)-$(VERSION)
 	-@tar -zcf $(EXECUTE)-$(VERSION).tar.gz \
