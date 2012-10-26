@@ -1,0 +1,14 @@
+*.dll
+*.o
+*~
+*.f*
+*.csv
+*.swp
+*.swo
+*.exe
+*.gz
+*.7z
+local
+build
+imdb*
+
