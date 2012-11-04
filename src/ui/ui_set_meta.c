@@ -52,7 +52,7 @@ void ui_set_meta() {
         TRUE);
 
     /* override default font */
-    char *font = "serif 10";
+    char *font = "sans 10";
 
     gtk_custom_table_set_column_font(nb_tab_top250, 4, font); 
     gtk_custom_table_set_column_font(nb_tab_bot100, 4, font); 
