@@ -36,10 +36,20 @@ they might not be entirely up to speed, which is to say that **it might be compl
 
 ## Features
 
-* Download and view personal vote history, and statistics.
+* Download and view personal vote history and statistics..
+* Download IMDb movie lists and compare them to your vote history..
 * Download official IMDb lists such as Top 250, Bottom 100, All-Time Boxoffice.
-* Compare personal vote history to IMDb lists and track your viewing progress.
-* Supports vote histories with north of 100 000 votes.. (got RAM ?)
+* Compare personal vote history to IMDb lists and view intersection statistics.
+* Supports vote histories with north of 100 000 votes..
+* View updated statistics for all official lists, and track your progress..
+
+## Binaries
+
+Binaries are currently unavailable due to the unstable nature of the project. 
+Once all features have been implemented and the program has been tested for 
+structure, integrity and efficiency, the program will be released.
+This initial testing phase will require the software to be built and also 
+rigorously tested on all the intended platforms.
 
 ## Compilation instructions
 
