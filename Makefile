@@ -32,6 +32,7 @@ WINDOWS = -mwindows
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./*.c))
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/*.c))
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/ui/*.c))
+OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/ui/ui_fill/*.c))
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/gtk_custom_table/*.c))
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/gtk_custom_table/strnatcmp/*.c))
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/events/*.c))
@@ -246,6 +247,10 @@ main.o: main.c main.h
 
 # Compile ui functions..
 ui_set_%.o: ui_set_%.c src/ui/ui.h src/ui/ui_widgets.h src/events/events.h
+	gcc $(CFLAGS) $< -o $@
+
+# Compile ui fill functions..
+ui_fill_%.o: ui_fill_%.c src/ui/ui_fill/ui_fill.h
 	gcc $(CFLAGS) $< -o $@
 
 # Compile table..
