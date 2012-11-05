@@ -27,13 +27,6 @@
  </tr>
 </table>
 
-## Notice
-
-**imdb-plus** is currently under development, and as such only provides **limited functionality**.
-
-This means that if you were to attempt to compile the sources at any given point in time <br />
-they might not be entirely up to speed, which is to say that **it might be complete bunk**. <br />
-
 ## Features
 
 * Download and view personal vote history and statistics..
@@ -45,7 +38,7 @@ they might not be entirely up to speed, which is to say that **it might be compl
 
 ## Binaries
 
-Binaries are currently unavailable due to the unstable nature of the project. 
+Binaries are **currently unavailable** due to the unstable nature of the project. 
 Once all features have been implemented and the program has been tested for 
 structure, integrity and efficiency, the program will be released.
 This initial testing phase will require the software to be built and also 
