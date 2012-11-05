@@ -22,7 +22,7 @@
 
 
 /* add values to allstats tab */
-void set_allstats(double allstats[5], int row, int rows) {
+void open_allstats(double allstats[5], int row, int rows) {
 
     char temp[100];
 

@@ -172,11 +172,11 @@ void open_movies(char ****results, int rows) {
         }
     }
 
-    set_allstats(allstats[0], 1, 
+    open_allstats(allstats[0], 1, 
         gtk_custom_table_get_rows(nb_tab_top250));
-    set_allstats(allstats[1], 5, 
+    open_allstats(allstats[1], 5, 
         gtk_custom_table_get_rows(nb_tab_bot100));
-    set_allstats(allstats[2], 9, 
+    open_allstats(allstats[2], 9, 
         gtk_custom_table_get_rows(nb_tab_boxoffice));
 
     /* set sortable and sort by index */

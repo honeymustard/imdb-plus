@@ -148,11 +148,11 @@ void open_list(char ****results, int rows) {
         }
     }
 
-    set_allstats(allstats[0], 2, 
+    open_allstats(allstats[0], 2, 
         gtk_custom_table_get_rows(nb_tab_top250));
-    set_allstats(allstats[1], 6, 
+    open_allstats(allstats[1], 6, 
         gtk_custom_table_get_rows(nb_tab_bot100));
-    set_allstats(allstats[2], 10, 
+    open_allstats(allstats[2], 10, 
         gtk_custom_table_get_rows(nb_tab_boxoffice));
 
     /* set sortable and sort by index */

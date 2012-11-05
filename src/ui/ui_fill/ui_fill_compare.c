@@ -140,11 +140,11 @@ void open_compare(GtkWidget *current, GtkWidget *other) {
         }
     }
 
-    set_allstats(allstats[0], 3, 
+    open_allstats(allstats[0], 3, 
         gtk_custom_table_get_rows(nb_tab_top250));
-    set_allstats(allstats[1], 7, 
+    open_allstats(allstats[1], 7, 
         gtk_custom_table_get_rows(nb_tab_bot100));
-    set_allstats(allstats[2], 11, 
+    open_allstats(allstats[2], 11, 
         gtk_custom_table_get_rows(nb_tab_boxoffice));
 
     for(i = 0; i < 10; i++) {
