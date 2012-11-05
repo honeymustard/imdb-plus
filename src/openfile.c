@@ -18,12 +18,9 @@
 *****************************************************************************/
 
 
-#include "colors.h"
 #include "openfile.h"
 #include "readfile.h"
 #include "globals.h"
-#include "gtk_custom_table/gtk_custom_table.h"
-#include "ui/ui_widgets.h"
 #include "ui/ui_fill/ui_fill.h"
 
 
@@ -56,6 +53,7 @@ int open_file(char *filename) {
 
         has_open_movies = 1;
     }
+    /* file is a list of some kind */
     else {
 
         set_global(CONST_OPEN_L, filename);
@@ -68,6 +66,7 @@ int open_file(char *filename) {
 
     free_memory(results, cols, rows);
 
+    /* fill comparison tab if applicable */
     if(has_open_movies && has_open_lists) {
         open_compare(nb_tab_mymovies, nb_tab_lists);
     }
