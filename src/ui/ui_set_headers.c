@@ -68,7 +68,7 @@ char *nb_tab_compare_headers[TABLE_COMPR_COLS] = {
     "IMDb", 
     "Vote", 
     "Flux", 
-    "Intersected Ratings", 
+    "MyMovies / MyLists Comparison", 
     "Percent", 
     "Movies", 
     "Runtime", 
