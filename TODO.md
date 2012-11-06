@@ -6,10 +6,10 @@
 
 **Improvements**
 * top lists. which list films appear in top lists also?
-* make up/down buttons scroll windows..
 
 **Non-Urgent fixes**
 * make various fields with no value more consistent
+* make boxoffice imdb ratings persistent on new download
 
 **Urget fixes**
 * none
