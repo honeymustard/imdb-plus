@@ -29,6 +29,8 @@
 #include "../../main.h"
 #include "../globals.h"
 
+#define TEXT_FONT "sans 10"
+
 #define TABLE_STATS_COLS 8
 #define TABLE_MYMOV_COLS 7
 #define TABLE_LSTST_COLS 8
