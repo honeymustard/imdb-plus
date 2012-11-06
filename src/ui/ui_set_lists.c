@@ -68,6 +68,7 @@ void ui_set_lists() {
 
             gtk_custom_table_set_sortable(nb_tab_top250, TRUE);
             gtk_custom_table_sort(nb_tab_top250, 0, GTK_CUSTOM_TABLE_ASC);
+            gtk_custom_table_set_column_font(nb_tab_top250, 4, TEXT_FONT); 
 
             no_results = !no_results;
         }
@@ -139,6 +140,7 @@ void ui_set_lists() {
 
             gtk_custom_table_set_sortable(nb_tab_bot100, TRUE);
             gtk_custom_table_sort(nb_tab_bot100, 0, GTK_CUSTOM_TABLE_ASC);
+            gtk_custom_table_set_column_font(nb_tab_bot100, 4, TEXT_FONT); 
 
             no_results = !no_results;
         }
@@ -276,6 +278,7 @@ void ui_set_lists() {
 
             gtk_custom_table_set_sortable(nb_tab_boxoffice, TRUE);
             gtk_custom_table_sort(nb_tab_boxoffice, 0, GTK_CUSTOM_TABLE_ASC);
+            gtk_custom_table_set_column_font(nb_tab_boxoffice, 4, TEXT_FONT); 
 
             no_results = !no_results;
         }
