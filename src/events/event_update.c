@@ -19,7 +19,6 @@
 
 
 #include "events.h"
-#include "../gtk_custom_table/gtk_custom_table.h"
 
 
 /* update lists from interwebs */
