@@ -64,6 +64,7 @@ int menu_signal_update_bot() {
 
         gtk_custom_table_set_sortable(nb_tab_bot100, TRUE);
         gtk_custom_table_sort(nb_tab_bot100, 0, GTK_CUSTOM_TABLE_ASC);
+        gtk_custom_table_set_column_font(nb_tab_bot100, 4, TEXT_FONT); 
 
         return 1;
     }

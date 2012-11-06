@@ -25,6 +25,7 @@
 int menu_signal_update_top() {
 
     int i = 0;
+
     int cols = 0;
     int rows = 0;
 
@@ -65,6 +66,7 @@ int menu_signal_update_top() {
 
         gtk_custom_table_set_sortable(nb_tab_top250, TRUE);
         gtk_custom_table_sort(nb_tab_top250, 0, GTK_CUSTOM_TABLE_ASC);
+        gtk_custom_table_set_column_font(nb_tab_top250, 4, TEXT_FONT); 
 
         return 1;
     }

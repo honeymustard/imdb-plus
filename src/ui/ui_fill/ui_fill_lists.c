@@ -26,8 +26,6 @@ void open_list(char ****results, int rows) {
     int i = 0;
     int j = 0;
 
-    gtk_custom_table_set_column_font(nb_tab_lists, 4, "sans 10"); 
-
     double allstats[3][5];
     memset(allstats, '\0', sizeof(allstats));
 
@@ -158,5 +156,6 @@ void open_list(char ****results, int rows) {
     /* set sortable and sort by index */
     gtk_custom_table_set_sortable(nb_tab_lists, TRUE);
     gtk_custom_table_sort(nb_tab_lists, 0, GTK_CUSTOM_TABLE_ASC);
+    gtk_custom_table_set_column_font(nb_tab_lists, 4, TEXT_FONT); 
 }
 
