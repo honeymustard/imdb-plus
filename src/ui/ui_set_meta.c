@@ -52,14 +52,10 @@ void ui_set_meta() {
         TRUE);
 
     /* override default font */
-    char *font = "sans 10";
-
-    gtk_custom_table_set_column_font(nb_tab_top250, 4, font); 
-    gtk_custom_table_set_column_font(nb_tab_bot100, 4, font); 
-    gtk_custom_table_set_column_font(nb_tab_boxoffice, 4, font); 
-
-    gtk_custom_table_set_foot_cell_font(nb_tab_statistics, 3, font); 
-    gtk_custom_table_set_foot_cell_font(nb_tab_lists_stats, 3, font); 
+    gtk_custom_table_set_foot_cell_font(nb_tab_statistics, 3, 
+        TEXT_FONT); 
+    gtk_custom_table_set_foot_cell_font(nb_tab_lists_stats, 3, 
+        TEXT_FONT); 
  
     /* set font alignments */
     gtk_custom_table_set_column_alignment(nb_tab_statistics, 0, 
