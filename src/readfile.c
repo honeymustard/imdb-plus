@@ -180,7 +180,7 @@ int parse_line(char **container, char *buffer) {
             /* check for null indices */
             if(buffer[++i] == '"') {
                 container[values_parsed] = malloc(2);
-                strcpy(container[values_parsed++], "-");
+                strcpy(container[values_parsed++], "0");
                 i++;
                 continue;
             }
