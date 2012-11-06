@@ -111,8 +111,7 @@ void ui_set_init() {
 
     ui_set_headers();
     ui_set_meta();
-    ui_set_stats();
-    ui_set_lists();
+    ui_set_tables();
     ui_set_tabs();
     ui_set_menu();
 
