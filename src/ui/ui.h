@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include "ui_widgets.h"
+#include "ui_fill/ui_fill.h"
 #include "../events/events.h"
 #include "../gtk_custom_table/gtk_custom_table.h"
 #include "../../main.h"
@@ -42,13 +43,11 @@
 #define TABLE_ALLST_COLS 8
 
 void ui_set_init();
-void ui_set_menu();
 void ui_set_headers();
-void ui_set_align();
-void ui_set_tabs();
-void ui_set_lists();
-void ui_set_stats();
 void ui_set_meta();
+void ui_set_tables();
+void ui_set_tabs();
+void ui_set_menu();
 
 int nb_tab_statistics_cols[TABLE_STATS_COLS];
 int nb_tab_mymovies_cols[TABLE_MYMOV_COLS];
