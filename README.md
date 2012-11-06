@@ -1,10 +1,9 @@
 
 <table>
  <tr>
-  <td><b>imdb-plus on debian</b></td>
-  <td><b>imdb-plus on fedora</b></td>
-  <td><b>imdb-plus on windows</b></td>
- </tr>
+  <td bgcolor="#EEEEFF"><b>imdb-plus on debian</b></td>
+  <td bgcolor="#EEEEFF"><b>imdb-plus on fedora</b></td>
+  <td bgcolor="#EEEEFF"><b>imdb-plus on windows</b></td>
  <tr>
   <td>
    <img width="260" height="200" 
