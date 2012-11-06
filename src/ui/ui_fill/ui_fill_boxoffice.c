@@ -25,6 +25,7 @@
 int menu_signal_update_box() {
 
     int i = 0;
+
     int cols = 0;
     int rows = 0;
     
@@ -133,6 +134,31 @@ int menu_signal_update_box() {
         gtk_custom_table_set_column_font(nb_tab_boxoffice, 4, TEXT_FONT); 
 
         return 1;
+    }
+    /* no boxoffice file on disk, add default values.. */
+    else {
+
+        char temp[10];
+
+        for(i = 0; i < 50; i++) {
+
+            sprintf(temp, "%d", i+1);
+
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 0, i, 
+                temp);
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
+                "0.0");
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, 
+                "0");
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 3, i, 
+                "N/A");
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 4, i, 
+                "N/A");
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 5, i, 
+                "0");
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 6, i, 
+                "$0");
+        }
     }
 
     return 0;

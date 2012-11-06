@@ -25,6 +25,7 @@
 int menu_signal_update_bot() {
 
     int i = 0;
+
     int cols = 0;
     int rows = 0;
 
@@ -67,6 +68,31 @@ int menu_signal_update_bot() {
         gtk_custom_table_set_column_font(nb_tab_bot100, 4, TEXT_FONT); 
 
         return 1;
+    }
+    /* no bot100 file on disk, add default values.. */
+    else {
+
+        char temp[10];
+
+        for(i = 0; i < 100; i++) {
+
+            sprintf(temp, "%d", i+1);
+
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 0, i, 
+                temp);
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 1, i, 
+                "0.0");
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 2, i, 
+                "N/A");
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 3, i, 
+                "0");
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 4, i, 
+                "N/A");
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 5, i, 
+                "0");
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 6, i, 
+                "0");
+        }
     }
 
     return 0;

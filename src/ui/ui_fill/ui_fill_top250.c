@@ -70,6 +70,31 @@ int menu_signal_update_top() {
 
         return 1;
     }
+    /* no top250 file on disk, add default values.. */
+    else {
+
+        char temp[10];
+
+        for(i = 0; i < 250; i++) {
+
+            sprintf(temp, "%d", i+1);
+
+            gtk_custom_table_set_cell_text(nb_tab_top250, 0, i, 
+                temp);
+            gtk_custom_table_set_cell_text(nb_tab_top250, 1, i, 
+                "0.0");
+            gtk_custom_table_set_cell_text(nb_tab_top250, 2, i, 
+                "N/A");
+            gtk_custom_table_set_cell_text(nb_tab_top250, 3, i, 
+                "0");
+            gtk_custom_table_set_cell_text(nb_tab_top250, 4, i, 
+                "N/A");
+            gtk_custom_table_set_cell_text(nb_tab_top250, 5, i, 
+                "0");
+            gtk_custom_table_set_cell_text(nb_tab_top250, 6, i, 
+                "0");
+        }
+    }
 
     return 0;
 }
