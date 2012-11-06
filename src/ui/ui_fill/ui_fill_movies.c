@@ -88,11 +88,18 @@ void open_movies(char ****results, int rows) {
         gtk_custom_table_set_cell_color_enable(nb_tab_mymovies, 2, j, 
             FALSE);
 
+        /* add new background color to rating */
+        int rating_imdb = (int)atoi((*results)[i][9]);
+        rating_imdb = rating_imdb <= 10 && rating_imdb > 0 ? rating_imdb : 0;
+
+        int rating_vote = (int)atoi((*results)[i][8]);
+        rating_vote = rating_vote <= 10 && rating_vote > 0 ? rating_vote : 0;
+
         /* set cell colors for imdb and flux values */
         gtk_custom_table_set_cell_color(nb_tab_mymovies, 1, j, 
-            colors[(int)atoi((*results)[i][9]) - 1]);
+            rating_imdb == 0 ? not_app : colors[rating_imdb - 1]);
         gtk_custom_table_set_cell_color(nb_tab_mymovies, 2, j, 
-            colors[atoi((*results)[i][8]) - 1]);
+            rating_vote == 0 ? not_app : colors[rating_vote - 1]);
 
         /* mark rated movies on top250 list */
         int index = gtk_custom_table_get_indexof(nb_tab_top250, 

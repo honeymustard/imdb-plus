@@ -62,18 +62,18 @@ void open_list(char ****results, int rows) {
         gtk_custom_table_set_cell_text(nb_tab_lists, 6, j, 
             (*results)[i][10]);
 
-        /* add new background color to rating */
-        int rating = (int)atoi((*results)[i][8]);
-        int rating_color = rating < 10 && rating > 0 ? rating - 1 : 0;
-
         /* reset background colors */
         gtk_custom_table_set_cell_color_enable(nb_tab_lists, 1, j, 
             FALSE);
         gtk_custom_table_set_cell_color_enable(nb_tab_lists, 2, j, 
             FALSE);
 
+        /* add new background color to rating */
+        int rating = (int)atoi((*results)[i][8]);
+        int rating_color = rating <= 10 && rating > 0 ? rating : 0;
+
         gtk_custom_table_set_cell_color(nb_tab_lists, 1, j, 
-            colors[rating_color]);
+            rating_color == 0 ? not_app : colors[rating_color - 1]);
 
         /* add 'my rating' to lists tab if applicable */
         int index = gtk_custom_table_get_indexof(nb_tab_mymovies, 

@@ -54,8 +54,10 @@ int menu_signal_update_top() {
             gtk_custom_table_set_cell_color_enable(nb_tab_top250, 2, i, 
                 FALSE);
 
+            int rating = (int)atof(results[i][1]);
+
             gtk_custom_table_set_cell_color(nb_tab_top250, 1, i, 
-                colors[(int)atof(results[i][1])]); 
+                colors[rating <= 10 && rating > 0 ? rating : 0]); 
 
         }
 
