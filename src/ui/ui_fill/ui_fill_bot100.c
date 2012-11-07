@@ -51,14 +51,13 @@ int menu_signal_update_bot() {
             gtk_custom_table_set_cell_text(nb_tab_bot100, 6, i, 
                 results[i][5]);
 
-            /* clear cell color */
-            gtk_custom_table_set_cell_color_enable(nb_tab_bot100, 2, i, 
-                FALSE);
-
+            /* set cell colors */
             int rating = (int)atof(results[i][1]);
 
             gtk_custom_table_set_cell_color(nb_tab_bot100, 1, i, 
                 colors[rating <= 10 && rating > 0 ? rating : 0]); 
+
+            gtk_custom_table_set_cell_color(nb_tab_bot100, 2, i, not_app);
         }
 
         free_memory(results, cols, rows);

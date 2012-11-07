@@ -54,12 +54,10 @@ int menu_signal_update_box() {
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 6, i, 
                 results[i][4]);
 
-            /* clear cell color */
-            gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 1, i, 
-                FALSE);
-            gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 2, i, 
-                FALSE);
- 
+            /* set cell colors */
+            gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, not_app);
+            gtk_custom_table_set_cell_color(nb_tab_boxoffice, 2, i, not_app);
+
             /* find imdb ratings in other tables */
             int index1 = gtk_custom_table_get_indexof(nb_tab_mymovies, 
                 results[i][1]);

@@ -30,24 +30,28 @@ void open_movies(char ****results, int rows) {
     for(i = 0; i < gtk_custom_table_get_rows(nb_tab_lists); i++) {
         
         gtk_custom_table_set_cell_text(nb_tab_lists, 2, i, "0");
-        gtk_custom_table_set_cell_color_enable(nb_tab_lists, 2, i, 
-            FALSE);
+        gtk_custom_table_set_cell_color(nb_tab_lists, 2, i, not_app);
     }
 
     /* clear associated color from top250 */
     for(i = 0; i < gtk_custom_table_get_rows(nb_tab_top250); i++) {
         
         gtk_custom_table_set_cell_text(nb_tab_top250, 2, i, "0");
-        gtk_custom_table_set_cell_color_enable(nb_tab_top250, 2, i, 
-            FALSE);
+        gtk_custom_table_set_cell_color(nb_tab_top250, 2, i, not_app);
+    }
+
+    /* clear associated color from bot100 */
+    for(i = 0; i < gtk_custom_table_get_rows(nb_tab_bot100); i++) {
+        
+        gtk_custom_table_set_cell_text(nb_tab_bot100, 2, i, "0");
+        gtk_custom_table_set_cell_color(nb_tab_bot100, 2, i, not_app);
     }
 
     /* clear associated color from boxoffice */
     for(i = 0; i < gtk_custom_table_get_rows(nb_tab_boxoffice); i++) {
         
         gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, "0");
-        gtk_custom_table_set_cell_color_enable(nb_tab_boxoffice, 2, i, 
-            FALSE);
+        gtk_custom_table_set_cell_color(nb_tab_boxoffice, 2, i, not_app);
     }
 
     double allstats[3][5];
@@ -80,11 +84,9 @@ void open_movies(char ****results, int rows) {
         gtk_custom_table_set_cell_text(nb_tab_mymovies, 6, j, 
             (*results)[i][11]);
 
-        /* reset background colors */
-        gtk_custom_table_set_cell_color_enable(nb_tab_mymovies, 1, j, 
-            FALSE);
-        gtk_custom_table_set_cell_color_enable(nb_tab_mymovies, 2, j, 
-            FALSE);
+        /* set background colors */
+        gtk_custom_table_set_cell_color(nb_tab_mymovies, 1, j, not_app);
+        gtk_custom_table_set_cell_color(nb_tab_mymovies, 2, j, not_app);
 
         /* add new background color to rating */
         int rating_imdb = (int)atoi((*results)[i][9]);
@@ -93,7 +95,7 @@ void open_movies(char ****results, int rows) {
         int rating_vote = (int)atoi((*results)[i][8]);
         rating_vote = rating_vote <= 10 && rating_vote > 0 ? rating_vote : 0;
 
-        /* set cell colors for imdb and flux values */
+        /* set cell colors for imdb and vote values */
         gtk_custom_table_set_cell_color(nb_tab_mymovies, 1, j, 
             rating_imdb == 0 ? not_app : colors[rating_imdb - 1]);
         gtk_custom_table_set_cell_color(nb_tab_mymovies, 2, j, 

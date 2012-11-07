@@ -73,29 +73,21 @@ void open_list(char ****results, int rows) {
         gtk_custom_table_set_cell_color(nb_tab_lists, 1, j, 
             rating_color == 0 ? not_app : colors[rating_color - 1]);
 
+        gtk_custom_table_set_cell_color(nb_tab_lists, 2, j, not_app);
+
         /* add 'my rating' to lists tab if applicable */
         int index = gtk_custom_table_get_indexof(nb_tab_mymovies, 
             (*results)[i][1]);
 
         if(index >= 0) {
             
-            char **table_row = NULL;
+            char *rating = gtk_custom_table_get_cell_text(nb_tab_mymovies, 2, index);
 
-            gtk_custom_table_get_row(nb_tab_mymovies, index, &table_row);
-
-            gtk_custom_table_set_cell_text(nb_tab_lists, 2, j, 
-                table_row[2]);
+            /* add new background color to rating */
+            gtk_custom_table_set_cell_text(nb_tab_lists, 2, j, rating);
 
             gtk_custom_table_set_cell_color(nb_tab_lists, 2, j, 
-                colors[atoi(table_row[2]) - 1]);
-
-            int k = 0;
-
-            for(k = 0; k < gtk_custom_table_get_cols(nb_tab_mymovies); k++) {
-                free(table_row[k]);
-            }
-
-            free(table_row);
+                atoi(rating) == 0 ? not_app : colors[atoi(rating) - 1]);
         }
 
         /* add imdb-rating to boxoffice tab if applicable */
