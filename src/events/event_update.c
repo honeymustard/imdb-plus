@@ -164,6 +164,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
                 /* add extra column to boxoffice file */
                 int cols = 0;
                 int rows = 0;
+                int index = 0;
 
                 char ***results;
                 
@@ -181,7 +182,17 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
                             fprintf(fp_out, "\"%s\",", results[i][j]);
                         }
 
-                        fprintf(fp_out, "\"%s\"\n", "0.0");
+                        index = gtk_custom_table_get_indexof(nb_tab_boxoffice, 
+                            results[i][1]);
+                            
+                        if(index >= 0) {
+                            fprintf(fp_out, "\"%s\"\n", 
+                                gtk_custom_table_get_cell_text(nb_tab_boxoffice, 
+                                    1, index));
+                        }
+                        else {
+                            fprintf(fp_out, "\"%s\"\n", "0.0");
+                        }
                     }
 
                     fclose(fp_out);
