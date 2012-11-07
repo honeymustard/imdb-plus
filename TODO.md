@@ -9,7 +9,6 @@
 
 **Non-Urgent fixes**
 * make various fields with no value more consistent
-* make boxoffice imdb ratings persistent on new download
 
 **Urget fixes**
 * none
