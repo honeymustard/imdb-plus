@@ -59,6 +59,8 @@ void menu_signal_open(GtkWidget *widget, gpointer data) {
         }
 
         gtk_statusbar_push(GTK_STATUSBAR(status), 1, stat);
+
+        free(filename);
     }
 
     gtk_widget_destroy(dialog);
