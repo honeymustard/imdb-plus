@@ -30,7 +30,7 @@ char *constants[CONST_EOL];
 
 
 /**
- * Initiates global constants array to NULL..
+ * initiates global constants array to NULL..
  */
 void init_globals() {
 
@@ -47,7 +47,7 @@ void init_globals() {
 
 
 /**
- * Gets a stored global variable..
+ * gets a stored global variable..
  * @param int global     global id
  */
 char *get_global(int global) {
@@ -59,11 +59,11 @@ char *get_global(int global) {
 
 
 /**
- * Sets a global variable to a value..
+ * sets a global variable to a value..
  * @param int global     global id
  * @param char *value    string value
  */
-int set_global(int global, char *value) {
+void set_global(int global, char *value) {
 
     init_globals();
 
@@ -73,7 +73,20 @@ int set_global(int global, char *value) {
 
     constants[global] = malloc(strlen(value) + 1);
     strcpy(constants[global], value);
-
-    return 1;
 }
+
+
+/**
+ * free all global variables..
+ */
+void free_globals() { 
+
+    int i = 0;
+
+    for(i = 0; i < CONST_EOL; i++) {
+        if(constants[i] != NULL) {
+            free(constants[i]);
+        }
+    }
+} 
 

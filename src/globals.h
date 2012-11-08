@@ -40,7 +40,8 @@
 #define CONST_EOL     16
 
 char *get_global(int global);
-int set_global(int global, char *value);
+void set_global(int global, char *value);
+void free_globals();
 
 #endif
 
