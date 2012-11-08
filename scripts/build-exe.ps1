@@ -136,11 +136,11 @@ function build-exe
     copy-item $install $dir_build_vers_output -recurse
 
     # run setup script..
-    iscc "$dir_build_vers_output\$tmp_srcdir\setup.iss" /dMyAppVersion=$version
+    iscc "$dir_build_vers_output\setup.iss" /dMyAppVersion=$version
 
     # build archive..
     &'7za' a -t7z "$dir_build_vers_output\$program_name-setup.7z" `
-        "$dir_build_vers_output\$tmp_srcdir\$program_name-setup.exe"
+        "$dir_build_vers_output\$program_name-setup.exe"
 }
 
 
@@ -152,6 +152,8 @@ if (build-env)
 {
     build-src
     build-exe
+
+    remove-item "$dir_build_vers_output\*" -exclude *.7z -recurse
 
     get-childitem $dir_build_vers_output
 
