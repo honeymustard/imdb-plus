@@ -70,8 +70,8 @@ void make_paths(char **path, char **down) {
 
     #ifdef WINDOWS
 
-        mkdir(*path);
-        mkdir(*down);
+        CreateDirectory(*path, NULL);
+        CreateDirectory(*down, NULL);
 
     #endif
     #ifdef LINUX
