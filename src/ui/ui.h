@@ -48,6 +48,7 @@ void ui_set_meta();
 void ui_set_tables();
 void ui_set_tabs();
 void ui_set_menu();
+void ui_set_destroy();
 
 int nb_tab_statistics_cols[TABLE_STATS_COLS];
 int nb_tab_mymovies_cols[TABLE_MYMOV_COLS];
