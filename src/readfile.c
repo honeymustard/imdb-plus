@@ -48,6 +48,8 @@ int free_memory(char ***results, int cols, int rows) {
         free(results[i]); 
     }
 
+    free(results);
+
     return 1;
 }
 
