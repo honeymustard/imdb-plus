@@ -19,47 +19,14 @@
 
 
 #include "events.h"
-#include "../gtk_custom_table/gtk_custom_table.h"
 
 
 /* main window quit event.. */
 void menu_signal_quit(GtkWidget *widget, gpointer data) {
     
-    /* write boxoffice values back to file */ 
-    FILE *fp_out = fopen(get_global(CONST_BOX_CSV), "wb");
-    
-    int i = 0;
-    int j = 0;
+    ui_set_destroy();
+    free_globals();
 
-    int cols = gtk_custom_table_get_cols(nb_tab_boxoffice);
-    int rows = gtk_custom_table_get_rows(nb_tab_boxoffice);
-
-    for(i = 0; i < rows; i++) {
-
-        char **results = NULL;
-        gtk_custom_table_get_row(nb_tab_boxoffice, i, &results);
-
-        for(j = 0; j < cols; j++) {
-
-            if(j == 1 || j == 2) {
-                continue;
-            }
-
-            fprintf(fp_out, "\"%s\",", results[j]);
-        }
-
-        fprintf(fp_out, "\"%s\"\n", results[1]);
-
-        /* free temporary memory */
-        for(j = 0; j < cols; j++) {
-            free(results[j]);
-        }
-
-        free(results);
-    }
-
-    fclose(fp_out);
-    
     gtk_main_quit();
 }
 
