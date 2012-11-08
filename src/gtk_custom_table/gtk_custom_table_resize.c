@@ -116,42 +116,7 @@ void gtk_custom_table_resize(GtkWidget *table, int cols, int rows) {
         }
     }
 
-     /* free memory occupied by table cells */
-    for(i = 0; i < (priv->table_x * priv->table_y); i++) {
-
-        /* free meta structure */
-        if(priv->table_cell[i]->meta != NULL) {
-            free(priv->table_cell[i]->meta);
-        }
-        /* free cell text */
-        if(priv->table_cell[i]->text != NULL) {
-            free(priv->table_cell[i]->text);
-        }
-
-        free(priv->table_cell[i]);
-    }
-
-    /* free memory occupied by table rows */
-    for(i = 0; i < priv->table_y; i++) {
-
-        if(priv->table_rows[i]->meta != NULL) {
-            free(priv->table_rows[i]->meta);
-        }
-
-        free(priv->table_rows[i]->cell);
-        free(priv->table_rows[i]);
-    }
-
-    /* free memory occupied by table cols */
-    for(i = 0; i < priv->table_x; i++) {
-
-        if(priv->table_cols[i]->meta != NULL) {
-            free(priv->table_cols[i]->meta);
-        }
-
-        free(priv->table_cols[i]->cell);
-        free(priv->table_cols[i]);
-    }
+    gtk_custom_table_free_cells(priv);
 
     int col_widths[t_cols];
 

@@ -117,7 +117,7 @@ void gtk_custom_table_set_cell_text(GtkWidget *table, int col, int row,
         free(priv->table_rows[row]->cell[col]->text);
     }
 
-    priv->table_rows[row]->cell[col]->text = malloc(strlen(text) + 1);      
+    priv->table_rows[row]->cell[col]->text = malloc(strlen(text) + 1); 
     strcpy(priv->table_rows[row]->cell[col]->text, text);
 
     /* add values in primary index column to binary tree */
