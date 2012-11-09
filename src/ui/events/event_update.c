@@ -18,7 +18,7 @@
 *****************************************************************************/
 
 
-#include "events.h"
+#include "../ui.h"
 
 
 /* update lists from interwebs */

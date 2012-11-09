@@ -21,8 +21,6 @@
 #ifndef _UI_FILL_
 #define _UI_FILL_
 
-#include "../ui.h"
-
 int menu_signal_update_box();
 int menu_signal_update_bot();
 int menu_signal_update_top();

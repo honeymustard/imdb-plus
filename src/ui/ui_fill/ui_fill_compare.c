@@ -18,7 +18,7 @@
 *****************************************************************************/
 
 
-#include "ui_fill.h"
+#include "../ui.h"
 
 
 void open_compare(GtkWidget *current, GtkWidget *other) {

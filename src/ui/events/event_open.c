@@ -18,7 +18,7 @@
 *****************************************************************************/
 
 
-#include "events.h"
+#include "../ui.h"
 
 
 /* open a ratings/list file from dialog */

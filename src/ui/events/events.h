@@ -21,19 +21,6 @@
 #ifndef _EVENTS_
 #define _EVENTS_
 
-#include <gtk/gtk.h>
-#include <stdlib.h>
-#include <string.h>
-
-/* include external headers */
-#include "../ui.h"
-#include "../../readfile.h"
-#include "../../openfile.h"
-#include "../../download.h"
-#include "../../parsefile.h"
-#include "../../colors.h"
-#include "../../patterns.h"
-
 /* main window events */
 void menu_signal_about(GtkWidget *widget, gpointer data);
 void menu_signal_open(GtkWidget *widget, gpointer data);
