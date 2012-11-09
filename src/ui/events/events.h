@@ -26,16 +26,13 @@
 #include <string.h>
 
 /* include external headers */
-#include "../../main.h"
-#include "../ui/ui_widgets.h"
-#include "../ui/ui_fill/ui_fill.h"
-#include "../readfile.h"
-#include "../openfile.h"
-#include "../download.h"
-#include "../parsefile.h"
-#include "../colors.h"
-#include "../globals.h"
-#include "../patterns.h"
+#include "../ui.h"
+#include "../../readfile.h"
+#include "../../openfile.h"
+#include "../../download.h"
+#include "../../parsefile.h"
+#include "../../colors.h"
+#include "../../patterns.h"
 
 /* main window events */
 void menu_signal_about(GtkWidget *widget, gpointer data);
