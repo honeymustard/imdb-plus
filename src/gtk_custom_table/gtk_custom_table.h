@@ -109,7 +109,6 @@ struct table_tree {
 struct _GtkCustomTablePrivate {
 
     gboolean table_is_sortable;
-    cairo_surface_t *table_surface;
 
     int table_x;
     int table_y;
@@ -149,8 +148,7 @@ GtkType gtk_custom_table_get_type(void);
 /* widget private functions */
 void gtk_custom_table_resize(GtkWidget *table, int cols, int rows);
 void gtk_custom_table_calc(GtkCustomTablePrivate *table);
-void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event, 
-    gboolean refresh);
+void gtk_custom_table_paint(GtkWidget *table, GdkEventExpose *event);
 void gtk_custom_table_tree_free(struct table_tree *tree);
 void gtk_custom_table_tree_get_recurse(GtkCustomTablePrivate *priv, 
     struct table_tree *tree, char *value, int col);
