@@ -38,7 +38,6 @@ GtkWidget * gtk_custom_table_new(int cols, int rows, int min_width, int min_heig
     priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
 
     /* variable defaults */
-    priv->table_surface = NULL;
     priv->table_min_width = min_width;
     priv->table_row_height = 25;
     priv->table_has_primary = 0;
