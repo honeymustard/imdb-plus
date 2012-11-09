@@ -25,8 +25,8 @@
 #include <gdk/gdkkeysyms.h>
 #include "ui_widgets.h"
 #include "ui_fill/ui_fill.h"
-#include "../events/events.h"
-#include "../gtk_custom_table/gtk_custom_table.h"
+#include "events/events.h"
+#include "gtk_custom_table/gtk_custom_table.h"
 #include "../../main.h"
 #include "../globals.h"
 
