@@ -33,8 +33,8 @@ OBJECTS += $(patsubst %.c, %.o, $(wildcard ./*.c))
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/*.c))
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/ui/*.c))
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/ui/ui_fill/*.c))
-OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/ui/gtk_custom_table/*.c))
-OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/ui/gtk_custom_table/strnatcmp/*.c))
+OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/ui/table/*.c))
+OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/ui/table/strnatcmp/*.c))
 OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/ui/events/*.c))
 
 
@@ -254,7 +254,7 @@ ui_fill_%.o: ui_fill_%.c src/ui/ui_fill/ui_fill.h
 	gcc $(CFLAGS) $< -o $@
 
 # Compile table..
-gtk_custom_table_%.o: gtk_custom_table_%.c src/ui/gtk_custom_table/gtk_custom_table.h
+gtk_custom_table_%.o: gtk_custom_table_%.c src/ui/table/gtk_custom_table.h
 	gcc $(CFLAGS) $< -o $@
 
 # Compile events..
