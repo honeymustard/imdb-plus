@@ -21,7 +21,7 @@
 #include "openfile.h"
 #include "readfile.h"
 #include "globals.h"
-#include "ui/ui_fill/ui_fill.h"
+#include "ui/ui.h"
 
 
 int has_open_movies = 0;
