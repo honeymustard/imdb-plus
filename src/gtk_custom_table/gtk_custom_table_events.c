@@ -127,7 +127,7 @@ gboolean gtk_custom_table_expose(GtkWidget *table, GdkEventExpose *event) {
 
     GtkCustomTablePrivate *priv = GTK_CUSTOM_TABLE_GET_PRIVATE(table);
 
-    gtk_custom_table_paint(table, event, FALSE);
+    gtk_custom_table_paint(table, event);
 
     /* use invalidate_rect here to combat smooth-scroll lag on windows */
     if(priv->table_scroll_lock == 0) {
