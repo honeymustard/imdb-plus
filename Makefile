@@ -20,7 +20,7 @@
 
 # Program variables..
 EXECUTE = imdb-plus
-VERSION = 0.0.7
+VERSION = 0.0.8
 SOURCES = *.c *.h *.md Makefile COPYING
 FOLDERS = src misc share scripts
 WININST = lib share COPYING *.dll misc\setup.iss $(EXECUTE).exe
