@@ -23,12 +23,20 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#include <stdlib.h>
+#include <string.h>
 #include "ui_widgets.h"
 #include "ui_fill/ui_fill.h"
 #include "events/events.h"
-#include "gtk_custom_table/gtk_custom_table.h"
+#include "table/gtk_custom_table.h"
 #include "../../main.h"
 #include "../globals.h"
+#include "../readfile.h"
+#include "../openfile.h"
+#include "../download.h"
+#include "../parsefile.h"
+#include "../colors.h"
+#include "../patterns.h"
 
 #define TEXT_FONT "sans 10"
 
@@ -40,7 +48,7 @@
 #define TABLE_TP250_COLS 7
 #define TABLE_BT100_COLS 7
 #define TABLE_BOXOF_COLS 7
-#define TABLE_ALLST_COLS 8
+#define TABLE_ALLST_COLS 9
 
 void ui_set_init();
 void ui_set_headers();
