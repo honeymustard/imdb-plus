@@ -30,7 +30,7 @@
     #define IMG_DIR "./share/icons/" 
 #endif
 
-#define DIR_ICON IMG_DIR "visual/"
+#define DIR_ICON IMG_DIR "imdb-plus/"
 
 /* set default home */
 #ifdef LINUX
