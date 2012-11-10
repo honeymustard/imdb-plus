@@ -88,6 +88,7 @@ install:
 	-@cp ./misc/$(EXECUTE).desktop $(DIR_APP)
 	-@cd ./misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz && cd ..
 	-@cp ./misc/$(EXECUTE).1.gz $(DIR_MNP)
+	-@cp -R ./share/icons/imdb-plus $(DIR_PIX)
 	-@cp ./share/icons/$(EXECUTE).png $(DIR_PIX)
 	-@cp $(EXECUTE) $(DIR_BIN)
 	-@echo "$(EXECUTE) installed successfully"
