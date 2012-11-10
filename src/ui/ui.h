@@ -50,6 +50,15 @@
 #define TABLE_BOXOF_COLS 7
 #define TABLE_ALLST_COLS 9
 
+#define ROSETTE       DIR_ICON "rosette_red.png"
+
+#define AWARD_GOLD    DIR_ICON "award_gold.png"
+#define AWARD_SILVER  DIR_ICON "award_silver.png"
+#define AWARD_BRONZE  DIR_ICON "award_bronze.png"
+#define RIBBON_GOLD   DIR_ICON "rosette_gold.png"
+#define RIBBON_SILVER DIR_ICON "rosette_silver.png"
+#define RIBBON_BRONZE DIR_ICON "rosette_bronze.png"
+
 void ui_set_init();
 void ui_set_headers();
 void ui_set_meta();
