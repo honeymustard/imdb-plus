@@ -107,21 +107,21 @@ void open_allstats(double allstats[5], int row, int rows) {
 
     sprintf(temp, "%1.2f %%", (int)allstats[0] > 0 ? 
         allstats[0] / (rows / 100.0) : 0.0);
-    gtk_custom_table_set_cell_text(nb_tab_allstats, 4, row, 
+    gtk_custom_table_set_cell_text(nb_tab_allstats, 5, row, 
         temp);
 
     sprintf(temp, "%d/%d", (int)allstats[0], rows);
-    gtk_custom_table_set_cell_text(nb_tab_allstats, 5, row, 
+    gtk_custom_table_set_cell_text(nb_tab_allstats, 6, row, 
         temp);
 
     sprintf(temp, "%1.2f", (int)allstats[0] > 0 ?
         allstats[3] / allstats[0] : 0.0);
-    gtk_custom_table_set_cell_text(nb_tab_allstats, 6, row, 
+    gtk_custom_table_set_cell_text(nb_tab_allstats, 7, row, 
         temp);
 
     sprintf(temp, "%1.2f", (int)allstats[0] > 0 ? 
         allstats[4] / allstats[0] : 0.0);
-    gtk_custom_table_set_cell_text(nb_tab_allstats, 7, row, 
+    gtk_custom_table_set_cell_text(nb_tab_allstats, 8, row, 
         temp);
 
     int imdb = (int)imdb_avg;
@@ -140,6 +140,29 @@ void open_allstats(double allstats[5], int row, int rows) {
     if(allstats[1] > 0.0 && allstats[2] > 0.0) {
         gtk_custom_table_set_cell_color(nb_tab_allstats, 2, row, 
             colors[flux_avg > 0.0 ? 8 : 1]);
+    }
+
+    int cent = allstats[0] / (rows / 100.0);
+
+    char *awards[] = {
+        AWARD_GOLD, 
+        AWARD_SILVER, 
+        AWARD_BRONZE, 
+        RIBBON_GOLD, 
+        RIBBON_SILVER, 
+        RIBBON_BRONZE
+    };
+
+    if(cent > 0 ) {
+
+        gtk_custom_table_set_cell_bg_image(nb_tab_allstats, 4, row, 
+          cent == 100 ? awards[0] : 
+          cent >= 80  ? awards[1] : 
+          cent >= 60  ? awards[2] : 
+          cent >= 40  ? awards[3] : 
+          cent >= 20  ? awards[4] : 
+          cent > 0    ? awards[5] : 
+          awards[5]);
     }
 }
 
