@@ -237,17 +237,25 @@ void ui_set_tables() {
             gtk_custom_table_set_cell_text(nb_tab_allstats, 3, i, 
                 "0");
             gtk_custom_table_set_cell_text(nb_tab_allstats, 4, i, 
-                "0.00 %");
+                "");
             gtk_custom_table_set_cell_text(nb_tab_allstats, 5, i, 
-                "0 / 0");
+                "0.00 %");
             gtk_custom_table_set_cell_text(nb_tab_allstats, 6, i, 
-                "0.00");
+                "0 / 0");
             gtk_custom_table_set_cell_text(nb_tab_allstats, 7, i, 
+                "0.00");
+            gtk_custom_table_set_cell_text(nb_tab_allstats, 8, i, 
                 "0.00");
 
             /* set cell colors */
             gtk_custom_table_set_cell_color(nb_tab_allstats, 3, i, 
                 graph_bg);
+
+            double rank[] = {0.85, 0.20, 0.30};
+
+            /* set cell colors */
+            gtk_custom_table_set_cell_color(nb_tab_allstats, 4, i, 
+                rank);
         }
 
         if((i % 4) == 1) {
@@ -267,10 +275,17 @@ void ui_set_tables() {
     } 
 
     gtk_custom_table_set_cell_text(nb_tab_allstats, 3, 0, 
-        "Completion: Top 205");
+        "Completion: Top 250");
     gtk_custom_table_set_cell_text(nb_tab_allstats, 3, 4, 
         "Completion: Bottom 100");
     gtk_custom_table_set_cell_text(nb_tab_allstats, 3, 8, 
         "Completion: Box Office");
+
+    gtk_custom_table_set_cell_bg_image(nb_tab_allstats, 4, 0, 
+        ROSETTE);
+    gtk_custom_table_set_cell_bg_image(nb_tab_allstats, 4, 4, 
+        ROSETTE);
+    gtk_custom_table_set_cell_bg_image(nb_tab_allstats, 4, 8, 
+        ROSETTE);
 }
 
