@@ -30,6 +30,8 @@
     #define IMG_DIR "./share/icons/" 
 #endif
 
+#define DIR_ICON IMG_DIR "visual/"
+
 /* set default home */
 #ifdef LINUX
     #define APP_FOLD ".imdb-plus"
