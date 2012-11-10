@@ -110,12 +110,14 @@ void ui_set_meta() {
     gtk_custom_table_set_column_alignment(nb_tab_allstats, 2, 
         PANGO_ALIGN_RIGHT);
     gtk_custom_table_set_column_alignment(nb_tab_allstats, 4, 
-        PANGO_ALIGN_RIGHT);
+        PANGO_ALIGN_CENTER);
     gtk_custom_table_set_column_alignment(nb_tab_allstats, 5, 
         PANGO_ALIGN_RIGHT);
     gtk_custom_table_set_column_alignment(nb_tab_allstats, 6, 
         PANGO_ALIGN_RIGHT);
     gtk_custom_table_set_column_alignment(nb_tab_allstats, 7, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_allstats, 8, 
         PANGO_ALIGN_RIGHT);
 
     gtk_custom_table_set_column_alignment(nb_tab_top250, 0, 

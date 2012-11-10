@@ -55,7 +55,7 @@ int nb_tab_boxoffice_cols[TABLE_BOXOF_COLS] = {
 };
 
 int nb_tab_allstats_cols[TABLE_ALLST_COLS] = {
-    60, 60, 60, -1, 85, 85, 85, 85
+    60, 60, 60, -1, 35, 85, 85, 85, 85
 };
 
 

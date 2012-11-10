@@ -110,6 +110,7 @@ char *nb_tab_allstats_headers[TABLE_ALLST_COLS] = {
     "Vote", 
     "Flux", 
     "Completion", 
+    "", 
     "Percent", 
     "Movies", 
     "Runtime", 
