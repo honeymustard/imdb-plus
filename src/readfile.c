@@ -277,7 +277,7 @@ int read_file(char *filename, int *cols, int *rows, char ****results) {
     /* reset */
     fseek(fp, 0, SEEK_SET);
 
-    *results = malloc(sizeof(char *) * (*rows));
+    (*results) = malloc(sizeof(char *) * (*rows));
     
     for(i = 0; i < (*rows); i++) {
 
@@ -294,6 +294,7 @@ int read_file(char *filename, int *cols, int *rows, char ****results) {
     while(fgets(buffer, 512, fp) != NULL) {
 
         if(!parse_line((*results)[lines++], buffer)) {
+            fclose(fp);
             return 0;
         }
     }
