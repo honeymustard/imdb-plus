@@ -48,19 +48,20 @@ void menu_signal_open(GtkWidget *widget, gpointer data) {
 
         char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
         
-        char *stat = NULL;
+        char *stat = malloc(25 + strlen(filename));
 
         /* attempt to open ratings file */
         if(open_file(filename)) {
-            stat = "Opened ratings file ";
+            sprintf(stat, "Opened file: %s", filename);
         }
         else {
-            stat = "Unable to open file ";
+            sprintf(stat, "Unable to open: %s", filename);
         }
 
         gtk_statusbar_push(GTK_STATUSBAR(status), 1, stat);
 
-        free(filename);
+        free(stat);
+        g_free(filename);
     }
 
     gtk_widget_destroy(dialog);
