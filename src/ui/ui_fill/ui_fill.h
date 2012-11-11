@@ -29,8 +29,8 @@ void open_allstats(double allstats[5], int row, int rows);
 void open_compare(GtkWidget *current, GtkWidget *other);
 void open_list(char ****results, int rows);
 void open_movies(char ****results, int rows);
-void open_movie_stats(char ****results, int rows, char *filename);
-void open_list_stats(char ****results, int rows, char *filename);
+void open_movie_stats(char ****results, int rows);
+void open_list_stats(char ****results, int rows);
 
 #endif
 
