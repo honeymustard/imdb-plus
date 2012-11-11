@@ -37,8 +37,8 @@ int open_file(char *filename) {
     int cols = 0;
     int rows = 0;
 
-    char ***results;
-            
+    char ***results = NULL;
+    
     if(!read_file(filename, &cols, &rows, &results) || cols < 10) {
         return 0;
     }
@@ -47,8 +47,7 @@ int open_file(char *filename) {
     if(strcmp("IMDb Rating", results[0][9]) == 0) {
 
         set_global(CONST_OPEN_M, filename);
-
-        open_movie_stats(&results, rows, filename);
+        open_movie_stats(&results, rows);
         open_movies(&results, rows);
 
         has_open_movies = 1;
@@ -57,8 +56,7 @@ int open_file(char *filename) {
     else {
 
         set_global(CONST_OPEN_L, filename);
-        
-        open_list_stats(&results, rows, filename);
+        open_list_stats(&results, rows);
         open_list(&results, rows);
 
         has_open_lists = 1;
