@@ -21,13 +21,13 @@
 #include "../ui.h"
 
 
-void open_movie_stats(char ****results, int rows, char *filename) {
+void open_movie_stats(char ****results, int rows) {
 
     int i = 0;
     int j = 0;
 
     double stats[10][6];
-    memset(stats, '\0', sizeof(stats));
+    memset(stats, 0, sizeof(stats));
 
     double vote = 0;
     double imdb = 0;
@@ -42,6 +42,11 @@ void open_movie_stats(char ****results, int rows, char *filename) {
     int vote_average = 0;
     int time_average = 0;
 
+    int vote_count = 0;
+    int year_count = 0;
+    int time_count = 0;
+    int imdb_count = 0;
+
     char temp[100];
     
     gtk_custom_table_sort(nb_tab_statistics, 0, GTK_CUSTOM_TABLE_DESC);
@@ -49,10 +54,15 @@ void open_movie_stats(char ****results, int rows, char *filename) {
     for(i = 1; i < rows; i++) {
 
         /* make results numeric */
-        vote = atof((*results)[i][8]);
-        imdb = atof((*results)[i][9]);
-        time = atof((*results)[i][10]);
-        year = atof((*results)[i][11]);
+        vote = strtol((*results)[i][8], NULL, 10);
+        imdb = strtod((*results)[i][9], NULL);
+        time = strtol((*results)[i][10], NULL, 10);
+        year = strtol((*results)[i][11], NULL, 10);
+
+        vote = vote >= 0.0 && vote <= 10 ? vote : 0.0;
+        imdb = imdb >= 0.0 && imdb <= 10.0 ? imdb : 0.0;
+        time = time >= 0.0 ? time : 0.0;
+        year = year > 1800.0 && year < 2200.0 ? year : 0.0;
 
         /* add up for each rating */
         stats[(int)vote - 1][0] += 1;
@@ -66,6 +76,11 @@ void open_movie_stats(char ****results, int rows, char *filename) {
         time_average += time;
         year_average += year;
         flux_average += (vote - imdb);
+
+        vote_count += vote > 0.0 ? 1 : 0;
+        imdb_count += imdb > 0.0 ? 1 : 0;
+        time_count += time > 0.0 ? 1 : 0;
+        year_count += year > 0.0 ? 1 : 0;
     }
 
     for(i = 0; i < 10; i++) {
@@ -76,7 +91,7 @@ void open_movie_stats(char ****results, int rows, char *filename) {
 
     rows = rows - 1;
 
-    for(i = 0, j = 10; i < 10 && j > 0; i++, j++) {
+    for(i = 0; i < 10; i++) {
 
         /* calculate percentage for each rating */
         stats[i][1] = stats[i][0] != 0 ? 
@@ -108,7 +123,7 @@ void open_movie_stats(char ****results, int rows, char *filename) {
             temp);
 
         /* add flux value to table */
-        sprintf(temp, "%+1.2f", flux);
+        sprintf(temp, flux == 0.0 ? "%1.2f" : "%+1.2f", flux);
         gtk_custom_table_set_cell_text(nb_tab_statistics, 2, j, 
             temp);
 
@@ -155,23 +170,23 @@ void open_movie_stats(char ****results, int rows, char *filename) {
     }
 
     /* add statistics footer vote average */
-    sprintf(temp, "%2.2f", (double)vote_average / rows);
+    sprintf(temp, "%2.2f", (double)vote_average / vote_count);
     gtk_custom_table_set_foot_text(nb_tab_statistics, 0, 
         temp);
 
     /* add statistics footer imdb average */
-    sprintf(temp, "%2.2f", (double)imdb_average / rows);
+    sprintf(temp, "%2.2f", (double)imdb_average / imdb_count);
     gtk_custom_table_set_foot_text(nb_tab_statistics, 1, 
         temp);
 
     /* add statistics footer flux average */
-    sprintf(temp, "%+2.2f", (double)flux_average / rows);
+    sprintf(temp, "%+2.2f", (double)flux_average / vote_count);
     gtk_custom_table_set_foot_text(nb_tab_statistics, 2, 
         temp);
 
     /* add statistics footer vote info */
     gtk_custom_table_set_foot_text(nb_tab_statistics, 3, 
-        filename);
+        get_global(CONST_OPEN_M));
 
     /* add statistics footer percent total */
     gtk_custom_table_set_foot_text(nb_tab_statistics, 4, 
@@ -183,12 +198,12 @@ void open_movie_stats(char ****results, int rows, char *filename) {
         temp);
 
     /* add statistics footer runtime average */
-    sprintf(temp, "%4.2f", (double)time_average / rows);
+    sprintf(temp, "%4.2f", (double)time_average / time_count);
     gtk_custom_table_set_foot_text(nb_tab_statistics, 6, 
         temp);
 
     /* add statistics footer year average */
-    sprintf(temp, "%4.2f", (double)year_average / rows);
+    sprintf(temp, "%4.2f", (double)year_average / year_count);
     gtk_custom_table_set_foot_text(nb_tab_statistics, 7, 
         temp);
 

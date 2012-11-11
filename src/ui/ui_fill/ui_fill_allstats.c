@@ -82,7 +82,7 @@ void open_allstats(double allstats[5], int row, int rows) {
     /* set third column, flux */
     if(allstats[1] > 0.0 && allstats[2] > 0.0) {
 
-        sprintf(temp, "%+1.2f", flux_avg);
+        sprintf(temp, flux_avg == 0.0 ? "%1.2f" : "%+1.2f", flux_avg);
 
         gtk_custom_table_set_cell_alignment(nb_tab_allstats, 2, row, 
             PANGO_ALIGN_RIGHT);
