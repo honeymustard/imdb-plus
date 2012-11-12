@@ -24,9 +24,10 @@
 /* main window quit event.. */
 void menu_signal_quit(GtkWidget *widget, gpointer data) {
     
+    gtk_main_quit();
     ui_set_destroy();
     free_globals();
 
-    gtk_main_quit();
+    printf("this happens...\n");
 }
 
