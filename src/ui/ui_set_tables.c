@@ -275,11 +275,11 @@ void ui_set_tables() {
     } 
 
     gtk_custom_table_set_cell_text(nb_tab_allstats, 3, 0, 
-        "Completion: Top 250");
+        "Top 250");
     gtk_custom_table_set_cell_text(nb_tab_allstats, 3, 4, 
-        "Completion: Bottom 100");
+        "Bottom 100");
     gtk_custom_table_set_cell_text(nb_tab_allstats, 3, 8, 
-        "Completion: Box Office");
+        "Box Office");
 
     gtk_custom_table_set_cell_bg_image(nb_tab_allstats, 4, 0, 
         ROSETTE);
