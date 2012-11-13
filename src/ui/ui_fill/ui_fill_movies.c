@@ -29,29 +29,37 @@ void open_movies(char ****results, int rows) {
     /* clear associated color from lists */
     for(i = 0; i < gtk_custom_table_get_rows(nb_tab_lists); i++) {
         
-        gtk_custom_table_set_cell_text(nb_tab_lists, 2, i, "0");
-        gtk_custom_table_set_cell_color(nb_tab_lists, 2, i, not_app);
+        gtk_custom_table_set_cell_text(nb_tab_lists, 2, i, 
+            "0");
+        gtk_custom_table_set_cell_color(nb_tab_lists, 2, i, 
+            not_app);
     }
 
     /* clear associated color from top250 */
     for(i = 0; i < gtk_custom_table_get_rows(nb_tab_top250); i++) {
         
-        gtk_custom_table_set_cell_text(nb_tab_top250, 2, i, "0");
-        gtk_custom_table_set_cell_color(nb_tab_top250, 2, i, not_app);
+        gtk_custom_table_set_cell_text(nb_tab_top250, 2, i, 
+            "0");
+        gtk_custom_table_set_cell_color(nb_tab_top250, 2, i, 
+            not_app);
     }
 
     /* clear associated color from bot100 */
     for(i = 0; i < gtk_custom_table_get_rows(nb_tab_bot100); i++) {
         
-        gtk_custom_table_set_cell_text(nb_tab_bot100, 2, i, "0");
-        gtk_custom_table_set_cell_color(nb_tab_bot100, 2, i, not_app);
+        gtk_custom_table_set_cell_text(nb_tab_bot100, 2, i, 
+            "0");
+        gtk_custom_table_set_cell_color(nb_tab_bot100, 2, i, 
+            not_app);
     }
 
     /* clear associated color from boxoffice */
     for(i = 0; i < gtk_custom_table_get_rows(nb_tab_boxoffice); i++) {
         
-        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, "0");
-        gtk_custom_table_set_cell_color(nb_tab_boxoffice, 2, i, not_app);
+        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, 
+            "0");
+        gtk_custom_table_set_cell_color(nb_tab_boxoffice, 2, i, 
+            not_app);
     }
 
     double allstats[3][5];
@@ -64,13 +72,11 @@ void open_movies(char ****results, int rows) {
 
     char temp[100];
 
-    rows = rows - 1;
-
     /* update mymovies tab with new data */
-    gtk_custom_table_resize(nb_tab_mymovies, -1, rows);
+    gtk_custom_table_resize(nb_tab_mymovies, -1, rows - 1);
 
     /* add text to widget table */
-    for(i = 1, j = 0; i <= rows; i++, j++) {
+    for(i = 1, j = 0; i < rows; i++, j++) {
 
         /* make results numeric */
         vote = strtol((*results)[i][8], NULL, 10);
@@ -78,10 +84,7 @@ void open_movies(char ****results, int rows) {
         time = strtol((*results)[i][10], NULL, 10);
         year = strtol((*results)[i][11], NULL, 10);
 
-        vote = vote >= 0.0 && vote <= 10.0 ? vote : 0.0;
-        imdb = imdb >= 0.0 && imdb <= 10.0 ? imdb : 0.0;
-        time = time >= 0.0 ? time : 0.0;
-        year = year > 1800.0 && year < 2200.0 ? year : 0.0;
+        fill_sanitize(&vote, &imdb, &time, &year);
 
         char *id = (*results)[i][1];
         char *title = (*results)[i][5];
@@ -114,8 +117,10 @@ void open_movies(char ****results, int rows) {
             str_year);
 
         /* set background colors */
-        gtk_custom_table_set_cell_color(nb_tab_mymovies, 1, j, not_app);
-        gtk_custom_table_set_cell_color(nb_tab_mymovies, 2, j, not_app);
+        gtk_custom_table_set_cell_color(nb_tab_mymovies, 1, j, 
+            not_app);
+        gtk_custom_table_set_cell_color(nb_tab_mymovies, 2, j, 
+            not_app);
 
         /* set cell colors for imdb and vote values */
         gtk_custom_table_set_cell_color(nb_tab_mymovies, 1, j, 

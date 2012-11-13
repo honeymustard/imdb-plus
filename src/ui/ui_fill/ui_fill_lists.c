@@ -29,28 +29,25 @@ void open_list(char ****results, int rows) {
     double allstats[3][5];
     memset(allstats, 0, sizeof(allstats));
 
+    double vote = 0;
     double imdb = 0;
     double time = 0;
     double year = 0;
 
     char temp[100];
 
-    rows = rows - 1;
-
     /* update lists tab with new data */
-    gtk_custom_table_resize(nb_tab_lists, -1, rows);
+    gtk_custom_table_resize(nb_tab_lists, -1, rows - 1);
 
     /* add text to widget table */
-    for(i = 1, j = 0; i <= rows; i++, j++) {
+    for(i = 1, j = 0; i < rows; i++, j++) {
 
         /* make results numeric */
         imdb = strtod((*results)[i][8], NULL);
         time = strtol((*results)[i][9], NULL, 10);
         year = strtol((*results)[i][10], NULL, 10);
 
-        imdb = imdb >= 0.0 && imdb <= 10.0 ? imdb : 0.0;
-        time = time >= 0.0 ? time : 0.0;
-        year = year > 1800.0 && year < 2200.0 ? year : 0.0;
+        fill_sanitize(&vote, &imdb, &time, &year);
 
         char *id = (*results)[i][1];
         char *title = (*results)[i][5];
@@ -93,7 +90,8 @@ void open_list(char ****results, int rows) {
         gtk_custom_table_set_cell_color(nb_tab_lists, 1, j, 
             (int)imdb == 0 ? not_app : colors[(int)imdb - 1]);
 
-        gtk_custom_table_set_cell_color(nb_tab_lists, 2, j, not_app);
+        gtk_custom_table_set_cell_color(nb_tab_lists, 2, j, 
+            not_app);
 
         /* add 'my rating' to lists tab if applicable */
         int index = gtk_custom_table_get_indexof(nb_tab_mymovies, 
@@ -101,10 +99,12 @@ void open_list(char ****results, int rows) {
 
         if(index >= 0) {
             
-            char *rating = gtk_custom_table_get_cell_text(nb_tab_mymovies, 2, index);
+            char *rating = gtk_custom_table_get_cell_text(nb_tab_mymovies, 2, 
+                index);
 
             /* add new background color to rating */
-            gtk_custom_table_set_cell_text(nb_tab_lists, 2, j, rating);
+            gtk_custom_table_set_cell_text(nb_tab_lists, 2, j, 
+                rating);
 
             gtk_custom_table_set_cell_color(nb_tab_lists, 2, j, 
                 atoi(rating) == 0 ? not_app : colors[atoi(rating) - 1]);
@@ -116,8 +116,8 @@ void open_list(char ****results, int rows) {
 
         if(index >= 0) {
 
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, index, 
-                str_imdb);
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, 
+                index, str_imdb);
 
             gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, 
                 index, colors[(int)imdb - 1]);
