@@ -35,11 +35,12 @@ void open_list_stats(char ****results, int rows);
 #define STATS_M 1
 #define STATS_L 0
 #define STATS_Y 10
-#define STATS_X 8
+#define STATS_X 13
 #define TOTAL_Y 5
 #define TOTAL_X 2
 
 void fill_sanitize(double *v, double *i, double *t, double *y);
+void ui_fill_calc(int rows, double stats[][STATS_X]);
 void ui_fill_stats(char ****results, int rows, double stats[][STATS_X], 
     double total[][TOTAL_X], int type);
 
@@ -52,7 +53,12 @@ enum STATS {
     IMDB_AVG, 
     FLUX_AVG, 
     TIME_AVG, 
-    YEAR_AVG
+    YEAR_AVG, 
+    VOTE_CNT, 
+    IMDB_CNT, 
+    TIME_CNT, 
+    YEAR_CNT, 
+    FLUX_CNT
 };
 
 enum TOTAL {

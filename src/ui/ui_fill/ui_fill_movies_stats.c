@@ -26,9 +26,6 @@ void open_movie_stats(char ****results, int rows) {
     double stats[STATS_Y][STATS_X];
     double total[TOTAL_Y][TOTAL_X];
 
-    memset(stats, 0, sizeof(stats));
-    memset(total, 0, sizeof(total));
-
     ui_fill_stats(results, rows, stats, total, STATS_M);
 
     gtk_custom_table_sort(nb_tab_statistics, 0, 

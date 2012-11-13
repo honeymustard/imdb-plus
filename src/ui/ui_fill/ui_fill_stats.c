@@ -34,8 +34,51 @@ void fill_sanitize(double *v, double *i, double *t, double *y) {
 }
 
 
+void ui_fill_calc(int rows, double stats[][STATS_X]) {
+
+    int i = 0;
+
+    int graph = 0;
+
+    /* find graph width */
+    for(i = 0; i < 10; i++) {
+
+        graph = stats[i][VOTES] > graph ? 
+            stats[i][VOTES]: graph;
+    }
+
+    for(i = 0; i < 10; i++) {
+
+        /* calculate percentage */
+        stats[i][PERCENTAGE] = stats[i][VOTES] > 0 ? 
+            (stats[i][VOTES] / rows) * 100: 0; 
+        /* calculate graph width */
+        stats[i][GRAPH_WIDTH] = stats[i][VOTES] > 0 ? 
+            100 / (graph / stats[i][VOTES]) : 0;
+        /* calculate vote average */
+        stats[i][VOTE_AVG] = stats[i][VOTE_CNT] > 0 ? 
+            stats[i][VOTE_AVG] / stats[i][VOTE_CNT] : 0;
+        /* calculate imdb average */
+        stats[i][IMDB_AVG] = stats[i][IMDB_CNT] > 0 ? 
+            stats[i][IMDB_AVG] / stats[i][IMDB_CNT] : 0;
+        /* calculate flux average */
+        stats[i][FLUX_AVG] = stats[i][FLUX_CNT] > 0 ? 
+            stats[i][FLUX_AVG] / stats[i][FLUX_CNT] : 0;
+        /* calculate time average */
+        stats[i][TIME_AVG] = stats[i][TIME_CNT] > 0 ? 
+            stats[i][TIME_AVG] / stats[i][TIME_CNT] : 0;
+        /* calculate year average */
+        stats[i][YEAR_AVG] = stats[i][YEAR_CNT] > 0 ? 
+            stats[i][YEAR_AVG] / stats[i][YEAR_CNT] : 0;
+    }
+}
+
+
 void ui_fill_stats(char ****results, int rows, double stats[][STATS_X], 
     double total[][TOTAL_X], int type) {
+
+    memset(stats, 0, STATS_X * STATS_Y * sizeof(double *));
+    memset(total, 0, TOTAL_X * TOTAL_Y * sizeof(double *));
 
     int i = 0;
 
@@ -56,7 +99,7 @@ void ui_fill_stats(char ****results, int rows, double stats[][STATS_X],
             time = strtol((*results)[i][10], NULL, 10);
             year = strtol((*results)[i][11], NULL, 10);
 
-            imdb_k = (int)vote - 1;
+            imdb_k = vote > 0 ? (int)vote - 1 : 0;
         }
         else {
 
@@ -65,17 +108,25 @@ void ui_fill_stats(char ****results, int rows, double stats[][STATS_X],
             year = strtol((*results)[i][10], NULL, 10);
 
             imdb_k = ((imdb - (int)imdb) * 10) > 5 ? 
-                (int)imdb : (int)imdb - 1;
+                (int)imdb : (int)imdb > 0 ? 
+                    (int)imdb - 1 : 0;
         }
 
         fill_sanitize(&vote, &imdb, &time, &year);
 
-        /* add up for each rating */
+        /* add up averages */
         stats[imdb_k][VOTES] += 1;
         stats[imdb_k][IMDB_AVG] += imdb;
         stats[imdb_k][TIME_AVG] += time;
         stats[imdb_k][YEAR_AVG] += year;
         stats[imdb_k][FLUX_AVG] += (vote - imdb);
+
+        /* add up non-null counts */
+        stats[imdb_k][VOTE_CNT] += vote > 0 ? 1 : 0;
+        stats[imdb_k][IMDB_CNT] += imdb > 0 ? 1 : 0;
+        stats[imdb_k][TIME_CNT] += time > 0 ? 1 : 0;
+        stats[imdb_k][YEAR_CNT] += year > 0 ? 1 : 0;
+        stats[imdb_k][FLUX_CNT] += vote > 0 && imdb > 0 ? 1 : 0;
 
         /* add up totals */
         total[VOTE_TOT][0] += vote;
@@ -84,42 +135,14 @@ void ui_fill_stats(char ****results, int rows, double stats[][STATS_X],
         total[YEAR_TOT][0] += year;
         total[FLUX_TOT][0] += (vote - imdb);
 
-        total[VOTE_TOT][1] += vote > 0.0 ? 1 : 0;
-        total[IMDB_TOT][1] += imdb > 0.0 ? 1 : 0;
-        total[TIME_TOT][1] += time > 0.0 ? 1 : 0;
-        total[YEAR_TOT][1] += year > 0.0 ? 1 : 0;
-        total[FLUX_TOT][1] += vote > 0.0 ? 1 : 0;
+        /* add up non-null counts */
+        total[VOTE_TOT][1] += vote > 0 ? 1 : 0;
+        total[IMDB_TOT][1] += imdb > 0 ? 1 : 0;
+        total[TIME_TOT][1] += time > 0 ? 1 : 0;
+        total[YEAR_TOT][1] += year > 0 ? 1 : 0;
+        total[FLUX_TOT][1] += vote > 0 ? 1 : 0;
     }
-
-    int graph = 0;
-
-    /* find graph width */
-    for(i = 0; i < 10; i++) {
-
-        graph = stats[i][VOTES] > graph ? 
-            stats[i][VOTES]: graph;
-    }
-
-    for(i = 0; i < 10; i++) {
-
-        /* calculate percentage */
-        stats[i][PERCENTAGE] = stats[i][VOTES] != 0.0 ? 
-            (stats[i][VOTES] / rows) * 100: 0; 
-        /* calculate graph width */
-        stats[i][GRAPH_WIDTH] = stats[i][VOTES] != 0.0 ? 
-            100 / (graph / stats[i][VOTES]) : 0;
-        /* calculate imdb average */
-        stats[i][IMDB_AVG] = stats[i][VOTES] != 0.0 ? 
-            stats[i][IMDB_AVG] / stats[i][VOTES] : 0;
-        /* calculate flux average */
-        stats[i][FLUX_AVG] = stats[i][VOTES] != 0.0 ? 
-            stats[i][FLUX_AVG] / stats[i][VOTES] : 0;
-        /* calculate time average */
-        stats[i][TIME_AVG] = stats[i][VOTES] != 0.0 ? 
-            stats[i][TIME_AVG] / stats[i][VOTES] : 0;
-        /* calculate year average */
-        stats[i][YEAR_AVG] = stats[i][VOTES] != 0.0 ? 
-            stats[i][YEAR_AVG] / stats[i][VOTES] : 0;
-    }
+    
+    ui_fill_calc(rows, stats);
 }
 

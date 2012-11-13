@@ -23,85 +23,71 @@
 
 void open_compare(GtkWidget *current, GtkWidget *other) {
 
-    int i = 0;
-    int j = 0;
+    double stats[STATS_Y][STATS_X];
+    double total[TOTAL_Y][TOTAL_X];
+    double allstats[3][5];
 
-    double stats[10][7];
-    memset(stats, '\0', sizeof(stats));
-
+    memset(stats, 0, sizeof(stats));
+    memset(total, 0, sizeof(total));
+    memset(allstats, 0, sizeof(allstats));
+ 
     double vote = 0;
     double imdb = 0;
     double time = 0;
     double year = 0;
-    
-    double imdb_average = 0;
-    double flux_average = 0;
 
-    int index = 0;
-    int graph_apex = 0;
-    int year_average = 0;
-    int vote_average = 0;
-    int time_average = 0;
-
-    int imdb_l = 0;
-    int imdb_o = 0;
     int imdb_k = 0;
+    int index = 0;
 
-    int vote_count = 0;
-    int year_count = 0;
-    int time_count = 0;
-    int imdb_count = 0;
-    int rows_count = 0;
-    
-    char temp[100];
-
-    char **shared = NULL;
     char *unique_id = NULL;
 
-    double allstats[3][5];
-    memset(allstats, 0, sizeof(allstats));
+    int rows = 0;
+   
+    int i = 0;
+    int j = 0;
 
-    gtk_custom_table_sort(nb_tab_compare, 0, GTK_CUSTOM_TABLE_DESC);
-
-    for(i = 0; i < gtk_custom_table_get_rows(current); i++) {
+    for(i = 0; i < gtk_custom_table_get_rows(current); i++, rows++) {
         
         unique_id = gtk_custom_table_get_cell_text(current, 3, i);
 
         if(gtk_custom_table_get_indexof(other, unique_id) >= 0) {
             
-            gtk_custom_table_get_row(current, i, &shared);
-
             /* make results numeric */
-            vote = atof(shared[2]);
-            imdb = atof(shared[1]);
-            time = atof(shared[5]);
-            year = atof(shared[6]);
+            vote = atof(gtk_custom_table_get_cell_text(current, 2, i));
+            imdb = atof(gtk_custom_table_get_cell_text(current, 1, i));
+            time = atof(gtk_custom_table_get_cell_text(current, 5, i));
+            year = atof(gtk_custom_table_get_cell_text(current, 6, i));
 
-            imdb_l = (int)imdb;
-            imdb_o = (imdb - imdb_l) * 10;
-
-            imdb_k = imdb_o > 5 ? imdb_l : imdb_l - 1;
+            imdb_k = ((imdb - (int)imdb) * 10) > 5 ? 
+                (int)imdb : (int)imdb > 0 ? 
+                    (int)imdb - 1 : 0;
 
             /* add up for each rating */
-            stats[imdb_k][0] += 1;
-            stats[imdb_k][3] += vote;
-            stats[imdb_k][4] += imdb;
-            stats[imdb_k][5] += time;
-            stats[imdb_k][6] += year;
+            stats[imdb_k][VOTES] += 1;
+            stats[imdb_k][VOTE_AVG] += vote;
+            stats[imdb_k][IMDB_AVG] += imdb;
+            stats[imdb_k][TIME_AVG] += time;
+            stats[imdb_k][YEAR_AVG] += year;
+            stats[imdb_k][FLUX_AVG] += (vote - imdb);
 
-            /* add up totals for vote averages */
-            vote_average += vote;
-            imdb_average += imdb;
-            time_average += time;
-            year_average += year;
-            flux_average += (vote - imdb);
+            stats[imdb_k][VOTE_CNT] += vote > 0 ? 1 : 0;
+            stats[imdb_k][IMDB_CNT] += imdb > 0 ? 1 : 0;
+            stats[imdb_k][TIME_CNT] += time > 0 ? 1 : 0;
+            stats[imdb_k][YEAR_CNT] += year > 0 ? 1 : 0;
+            stats[imdb_k][FLUX_CNT] += vote > 0 && imdb > 0 ? 1 : 0;
 
-            vote_count += vote > 0.0 ? 1 : 0;
-            imdb_count += imdb > 0.0 ? 1 : 0;
-            time_count += time > 0.0 ? 1 : 0;
-            year_count += year > 0.0 ? 1 : 0;
+            /* add up totals */
+            total[VOTE_TOT][0] += vote;
+            total[IMDB_TOT][0] += imdb;
+            total[TIME_TOT][0] += time;
+            total[YEAR_TOT][0] += year;
+            total[FLUX_TOT][0] += (vote - imdb);
 
-            rows_count++;
+            total[VOTE_TOT][1] += vote > 0.0 ? 1 : 0;
+            total[IMDB_TOT][1] += imdb > 0.0 ? 1 : 0;
+            total[TIME_TOT][1] += time > 0.0 ? 1 : 0;
+            total[YEAR_TOT][1] += year > 0.0 ? 1 : 0;
+            total[FLUX_TOT][1] += vote > 0.0 ? 1 : 0;
 
             /* add to allstats tab if applicable */
             index = gtk_custom_table_get_indexof(nb_tab_top250, 
@@ -139,14 +125,6 @@ void open_compare(GtkWidget *current, GtkWidget *other) {
                 allstats[2][3] += time;
                 allstats[2][4] += year;
             }
-
-            for(j = 0; j < gtk_custom_table_get_cols(current); j++) {
-                free(shared[j]);
-            }
-
-            free(shared);
-
-            shared = NULL;
         }
     }
 
@@ -157,113 +135,90 @@ void open_compare(GtkWidget *current, GtkWidget *other) {
     open_allstats(allstats[2], 11, 
         gtk_custom_table_get_rows(nb_tab_boxoffice));
 
-    for(i = 0; i < 10; i++) {
+    ui_fill_calc(rows, stats);
 
-        /* find graph apex, i.e. the longest bar on screen */
-        graph_apex = stats[i][0] > graph_apex ? stats[i][0]: graph_apex;
-    } 
+    gtk_custom_table_sort(nb_tab_compare, 0, 
+        GTK_CUSTOM_TABLE_DESC);
 
-    for(i = 0, j = 10; i < 10 && j > 0; i++, j++) {
-
-        /* calculate percentage for each rating */
-        stats[i][1] = stats[i][0] != 0 ? 
-            (stats[i][0] / rows_count) * 100: 0; 
-        /* calculate graph value from vote amounts, graph is 0-100 */
-        stats[i][2] = stats[i][0] != 0 ? 
-            100 / (graph_apex / stats[i][0]) : 0;
-        /* calculate vote averages for each rating */
-        stats[i][3] = stats[i][0] != 0 ? 
-            stats[i][3] / stats[i][0] : 0;
-        /* calculate imdb averages for each rating */
-        stats[i][4] = stats[i][0] != 0 ? 
-            stats[i][4] / stats[i][0] : 0;
-        /* calculate time averages for each rating */
-        stats[i][5] = stats[i][0] != 0 ? 
-            stats[i][5] / stats[i][0] : 0;
-        /* calculate year averages for each rating */
-        stats[i][6] = stats[i][0] != 0 ? 
-            stats[i][6] / stats[i][0] : 0;
-    }
-
-    double flux = 0;
+    char temp[100];
 
     /* add statistics to widget table */
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
         
-        flux = stats[i][0] > 0 ? stats[i][3] - stats[i][4] : 0.00;
-
         /* add imdb value to table */
-        sprintf(temp, "%1.2f", stats[i][4]);
+        sprintf(temp, "%1.2f", stats[i][IMDB_AVG]);
         gtk_custom_table_set_cell_text(nb_tab_compare, 0, j, 
             temp);
 
         /* add vote value to table */
-        sprintf(temp, "%1.2f", stats[i][3]);
+        sprintf(temp, "%1.2f", stats[i][VOTE_AVG]);
         gtk_custom_table_set_cell_text(nb_tab_compare, 1, j, 
             temp);
 
         /* add flux value to table */
-        sprintf(temp, flux == 0.0 ? "%1.2f" : "%+1.2f", flux);
+        sprintf(temp, stats[i][FLUX_AVG] == 0.0 ? 
+            "%1.2f" : "%+1.2f", stats[i][FLUX_AVG]);
         gtk_custom_table_set_cell_text(nb_tab_compare, 2, j, 
             temp);
 
         /* add graph value to table */
-        sprintf(temp, "%1.0f", stats[i][2]);
+        sprintf(temp, "%1.0f", stats[i][GRAPH_WIDTH]);
         gtk_custom_table_set_cell_text(nb_tab_compare, 3, j, 
             temp);
 
         /* add percent value to table */
-        sprintf(temp, "%2.2f %%", stats[i][1]);
+        sprintf(temp, "%2.2f %%", stats[i][PERCENTAGE]);
         gtk_custom_table_set_cell_text(nb_tab_compare, 4, j, 
             temp);
 
         /* add votes value to table */
-        sprintf(temp, "%1.0f", stats[i][0]);
+        sprintf(temp, "%1.0f", stats[i][VOTES]);
         gtk_custom_table_set_cell_text(nb_tab_compare, 5, j, 
             temp);
 
         /* add runtime value to table */
-        sprintf(temp, "%1.2f", stats[i][5]);
+        sprintf(temp, "%1.2f", stats[i][TIME_AVG]);
         gtk_custom_table_set_cell_text(nb_tab_compare, 6, j, 
             temp);
 
         /* add year value to table */
-        sprintf(temp, "%1.2f", stats[i][6]);
+        sprintf(temp, "%1.2f", stats[i][YEAR_AVG]);
         gtk_custom_table_set_cell_text(nb_tab_compare, 7, j, 
             temp);
 
         /* add new background color to vote rating */
-        int imdb_vote = (int)stats[i][4];
-        int vote_vote = (int)stats[i][3];
-
         gtk_custom_table_set_cell_color(nb_tab_compare, 0, j, 
-            colors[imdb_vote < 10 && imdb_vote > 0 ? imdb_vote - 1 : 1]);
+            colors[(int)stats[i][IMDB_AVG] < 10 && 
+                (int)stats[i][IMDB_AVG] > 0 ? 
+                (int)stats[i][IMDB_AVG] - 1 : 1]);
 
         gtk_custom_table_set_cell_color(nb_tab_compare, 1, j, 
-            colors[vote_vote < 10 && vote_vote > 0 ? vote_vote - 1 : 1]);
+            colors[(int)stats[i][VOTE_AVG] < 10 && 
+                (int)stats[i][VOTE_AVG] > 0 ? 
+                (int)stats[i][VOTE_AVG] - 1 : 1]);
 
         /* add new background color to flux */
         gtk_custom_table_set_cell_color(nb_tab_compare, 2, j, 
-            colors[flux > 0 ? 8 : 1]);
+            colors[(int)stats[i][FLUX_AVG] > 0 ? 8 : 1]);
     }
 
     /* add statistics footer vote average */
-    sprintf(temp, "%2.2f", (double)imdb_average / imdb_count);
+    sprintf(temp, "%2.2f", total[VOTE_TOT][0] / total[VOTE_TOT][1]);
     gtk_custom_table_set_foot_text(nb_tab_compare, 0, 
         temp);
 
     /* add statistics footer imdb average */
-    sprintf(temp, "%2.2f", (double)vote_average / vote_count);
+    sprintf(temp, "%2.2f", total[IMDB_TOT][0] / total[IMDB_TOT][1]);
     gtk_custom_table_set_foot_text(nb_tab_compare, 1, 
         temp);
 
     /* add statistics footer flux average */
-    sprintf(temp, "%+2.2f", (double)flux_average / vote_count);
+    sprintf(temp, "%+2.2f", total[FLUX_TOT][0] / total[FLUX_TOT][1]);
     gtk_custom_table_set_foot_text(nb_tab_compare, 2, 
         temp);
 
     /* add statistics footer vote info */
-    sprintf(temp, "%d movies intersect", vote_count);
+    sprintf(temp, "%d movies intersect", rows);
     gtk_custom_table_set_foot_text(nb_tab_compare, 3, 
         temp);
 
@@ -272,17 +227,17 @@ void open_compare(GtkWidget *current, GtkWidget *other) {
         "100.00 %");
 
     /* add statistics footer votes total */
-    sprintf(temp, "%d", rows_count);
+    sprintf(temp, "%d", rows);
     gtk_custom_table_set_foot_text(nb_tab_compare, 5, 
         temp);
 
     /* add statistics footer runtime average */
-    sprintf(temp, "%4.2f", (double)time_average / time_count);
+    sprintf(temp, "%4.2f", total[TIME_TOT][0] / total[TIME_TOT][1]);
     gtk_custom_table_set_foot_text(nb_tab_compare, 6, 
         temp);
 
     /* add statistics footer year average */
-    sprintf(temp, "%4.2f", (double)year_average / year_count);
+    sprintf(temp, "%4.2f", total[YEAR_TOT][0] / total[YEAR_TOT][1]);
     gtk_custom_table_set_foot_text(nb_tab_compare, 7, 
         temp);
 

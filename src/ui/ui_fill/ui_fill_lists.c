@@ -36,6 +36,10 @@ void open_list(char ****results, int rows) {
 
     char temp[100];
 
+    char str_imdb[10];
+    char str_time[10];
+    char str_year[10];
+
     /* update lists tab with new data */
     gtk_custom_table_resize(nb_tab_lists, -1, rows - 1);
 
@@ -51,10 +55,6 @@ void open_list(char ****results, int rows) {
 
         char *id = (*results)[i][1];
         char *title = (*results)[i][5];
-
-        char str_imdb[10];
-        char str_time[10];
-        char str_year[10];
 
         sprintf(str_imdb, "%1.2f", imdb);
         sprintf(str_time, "%d", (int)time);
@@ -77,19 +77,15 @@ void open_list(char ****results, int rows) {
         gtk_custom_table_set_cell_text(nb_tab_lists, 6, j, 
             str_year);
 
-        /* reset background colors */
-        gtk_custom_table_set_cell_color_enable(nb_tab_lists, 1, j, 
-            FALSE);
-        gtk_custom_table_set_cell_color_enable(nb_tab_lists, 2, j, 
-            FALSE);
-        gtk_custom_table_set_cell_color_enable(nb_tab_lists, 5, j, 
-            FALSE);
-        gtk_custom_table_set_cell_color_enable(nb_tab_lists, 6, j, 
-            FALSE);
-
+        /* set background colors */
         gtk_custom_table_set_cell_color(nb_tab_lists, 1, j, 
-            (int)imdb == 0 ? not_app : colors[(int)imdb - 1]);
+            not_app);
+        gtk_custom_table_set_cell_color(nb_tab_lists, 2, j, 
+            not_app);
 
+        /* set cell colors for imdb and vote values */
+        gtk_custom_table_set_cell_color(nb_tab_lists, 1, j, 
+            (int)imdb > 0 ? colors[(int)imdb - 1] : not_app);
         gtk_custom_table_set_cell_color(nb_tab_lists, 2, j, 
             not_app);
 
@@ -107,7 +103,7 @@ void open_list(char ****results, int rows) {
                 rating);
 
             gtk_custom_table_set_cell_color(nb_tab_lists, 2, j, 
-                atoi(rating) == 0 ? not_app : colors[atoi(rating) - 1]);
+                atoi(rating) > 0 ? colors[atoi(rating) - 1] : not_app);
         }
 
         /* add imdb-rating to boxoffice tab if applicable */
@@ -120,7 +116,7 @@ void open_list(char ****results, int rows) {
                 index, str_imdb);
 
             gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, 
-                index, colors[(int)imdb - 1]);
+                index, colors[(int)imdb > 0 ? (int)imdb - 1 : 0]);
         }
 
         /* add to allstats tab if applicable */
