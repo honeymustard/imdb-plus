@@ -17,7 +17,6 @@
 #
 ###############################################################################
 
-
 # Program variables..
 EXECUTE = imdb-plus
 VERSION = 0.0.8
@@ -26,23 +25,38 @@ FOLDERS = src misc share scripts
 WININST = lib share COPYING *.dll misc\setup.iss $(EXECUTE).exe
 CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
-WINDOWS = -mwindows
 
-# All project files..
-OBJECTS += $(patsubst %.c, %.o, $(wildcard ./*.c))
-OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/*.c))
-OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/ui/*.c))
-OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/ui/ui_fill/*.c))
-OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/ui/table/*.c))
-OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/ui/table/strnatcmp/*.c))
-OBJECTS += $(patsubst %.c, %.o, $(wildcard ./src/ui/events/*.c))
+
+###############################################################################
+# Project files..
+#
+###############################################################################
+
+# Linux specific objects
+ifeq ($(MAKE), make)
+
+OBJECTS = $(patsubst %.c, %.o, $(shell find ./ -name "*.c"))
+
+# Windows specific objects
+else
+
+OBJECTS = $(shell powershell -command \
+		  "& {Get-ChildItem .\ *.c -recurse | \
+		  foreach {(Resolve-Path $$_.fullname -relative) \
+		  -replace \".c$$\", \".o\"} | \
+		  write-host }")
+
+OBJECTS += resfile.o
+
+endif
 
 
 ###############################################################################
 # Standard linux build..
 #
+# @usage: make | make [debug | clean | build-[deb|rpm] | dist | [un]install]
+#
 ###############################################################################
-
 
 # Install paths..
 DIR_USR = $(DESTDIR)/usr
@@ -52,7 +66,6 @@ DIR_APP = $(DESTDIR)/usr/share/applications
 DIR_PIX = $(DESTDIR)/usr/share/pixmaps
 DIR_MAN = $(DESTDIR)/usr/share/man
 DIR_MNP = $(DESTDIR)/usr/share/man/man1
-
 
 # Default for make..
 .PHONY : all
@@ -70,9 +83,10 @@ linux: OS = LINUX
 linux: CURL = -lcurl
 linux: GTHREAD = -lgthread-2.0
 linux: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
-linux: CFLAGS += $(GTK2) $(CURL) $(GTHREAD)
+linux: PACKAGES = $(GTK2) $(CURL) $(GTHREAD) 
+linux: CFLAGS += $(PACKAGES)
 linux: $(OBJECTS)
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL) $(GTHREAD)
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES)
 
 # Make install..
 .PHONY : install
@@ -122,9 +136,9 @@ dist:
 # Make build..
 .PHONY : build
 build:
-	@echo "Choose a specific linux build.."
-	@echo "- make build-deb (for DEB based distros)"
-	@echo "- make build-rpm (for RPM based distros)"
+	-@echo "Choose a specific linux build.."
+	-@echo "- make build-deb (for DEB based distros)"
+	-@echo "- make build-rpm (for RPM based distros)"
 
 # Make .DEB package..
 .PHONY : build-deb
@@ -141,72 +155,20 @@ build-rpm:
 # Make clean..
 .PHONY : clean
 clean:
-	-@rm $(OBJECTS) $(EXECUTE) 2>/dev/null && \
+	-@rm $(EXECUTE) `find ./ -name "*.o"` 2>/dev/null && \
     echo "it's clean" || echo "it's already clean"
 
 
 ###############################################################################
-# Required Windows packages: MinGW, Gnuwin32 PCRE, libcurl, GTK+
+# Required Windows packages: Powershell, MinGW, Gnuwin32 PCRE, libcurl, GTK+
 #
-# Command line invocation:
-#
-# mingw32-make [ mingw32-make | mingw32-debug | mingw32-clean | mingw32-build ]
+# @usage: mingw32-make [ mingw32-[make | debug | clean | build] ]
 #
 ###############################################################################
 
-# Requires local copy of pcre3.dll..
-windows: PCRE = -I"C:\MinGW\GnuWin32\include" \
-                -I"C:\MinGW\GnuWin32\bin" \
-                -L"C:\MinGW\GnuWin32\lib" \
-                -lpcre
-
-# Requires local copy of libcurl.dll..
-windows: CURL = -I"C:\MinGW\curl\include" \
-                -I"C:\MinGW\curl\bin" \
-                -L"C:\MinGW\curl\lib" \
-                -lcurl
-
-# Result from "pkg-config.exe --libs --cflags gtk+-win32-2.0" in GTK+\bin
-windows: GTK2 = -mms-bitfields \
-                -IC:/GTK+/include/gtk-2.0 \
-                -IC:/GTK+/lib/gtk-2.0/include \
-                -IC:/GTK+/include/atk-1.0 \
-                -IC:/GTK+/include/cairo \
-                -IC:/GTK+/include/gdk-pixbuf-2.0 \
-                -IC:/GTK+/include/pango-1.0 \
-                -IC:/GTK+/include/glib-2.0 \
-                -IC:/GTK+/lib/glib-2.0/include \
-                -IC:/GTK+/include \
-                -IC:/GTK+/include/freetype2 \
-                -IC:/GTK+/include/libpng14 \
-                -LC:/GTK+/lib \
-                -lgtk-win32-2.0 \
-                -lgdk-win32-2.0 \
-                -latk-1.0 \
-                -lgio-2.0 \
-                -lpangowin32-1.0 \
-                -lgdi32 \
-                -lpangocairo-1.0 \
-                -lgdk_pixbuf-2.0 \
-                -lpango-1.0 \
-                -lcairo \
-                -lgobject-2.0 \
-                -lgmodule-2.0 \
-                -lgthread-2.0 \
-                -lglib-2.0 \
-                -lintl
-
-
-# MinGW convenience..
-.PHONY : windows
-windows: OS = WINDOWS
-windows: CFLAGS += $(GTK2) $(CURL) $(PCRE)
-windows: OBJECTS += resfile.o
-windows: resfile.o $(OBJECTS)
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(GTK2) $(CURL) $(PCRE) $(WINDOWS)
-
-# MinGW run-in-place build..
+# MinGW release build..
 .PHONY : mingw32-make
+mingw32-make: WINDOWS = -mwindows
 mingw32-make: CFLAGS += -O2 
 mingw32-make: windows
 
@@ -215,6 +177,30 @@ mingw32-make: windows
 mingw32-debug: WINDOWS = 
 mingw32-debug: CFLAGS += -g
 mingw32-debug: windows
+
+.PHONY : windows
+windows: GNUWIN32 = C:\MinGW\GnuWin32
+windows: LIBCURL  = C:\MinGW\curl
+
+# Requires local copy of pcre3.dll..
+windows: PCRE = -I"$(GNUWIN32)\include" \
+                -I"$(GNUWIN32)\bin" \
+                -L"$(GNUWIN32)\lib" \
+                -lpcre
+
+# Requires local copy of libcurl.dll..
+windows: CURL = -I"$(LIBCURL)\include" \
+                -I"$(LIBCURL)\bin" \
+                -L"$(LIBCURL)\lib" \
+                -lcurl
+
+# MinGW convenience..
+windows: OS = WINDOWS
+windows: GTK2 = $(shell pkg-config.exe --libs --cflags gtk+-win32-2.0)
+windows: PACKAGES = $(GTK2) $(CURL) $(PCRE)
+windows: CFLAGS += $(PACKAGES)
+windows: $(OBJECTS)
+	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES) $(WINDOWS)
 
 # MinGW clean..
 .PHONY : mingw32-clean
@@ -242,10 +228,6 @@ mingw32-build:
 path%.o: path%.c src/paths.h main.h
 	gcc $(CFLAGS) $< -o $@ -D$(OS)
 
-# Compile main..
-main.o: main.c main.h
-	gcc $(CFLAGS) main.c -DVERSION=\"$(VERSION)\"
-
 # Compile ui functions..
 ui_set_%.o: ui_set_%.c src/ui/ui.h src/ui/ui_widgets.h src/ui/events/events.h
 	gcc $(CFLAGS) $< -o $@
@@ -268,5 +250,5 @@ resfile.o:
 
 # Compile default..
 %.o: %.c %.h 
-	gcc $(CFLAGS) $< -o $@
+	gcc $(CFLAGS) $< -o $@ -DVERSION=\"$(VERSION)\"
 
