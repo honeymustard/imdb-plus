@@ -25,7 +25,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ui_widgets.h"
 #include "ui_fill/ui_fill.h"
 #include "events/events.h"
 #include "table/gtk_custom_table.h"
@@ -85,6 +84,64 @@ char *nb_tab_top250_headers[TABLE_TP250_COLS];
 char *nb_tab_bot100_headers[TABLE_BT100_COLS];
 char *nb_tab_boxoffice_headers[TABLE_BOXOF_COLS];
 char *nb_tab_allstats_headers[TABLE_ALLST_COLS];
+
+/* widget hierarchy */
+GtkWidget *window, *status, *vbox, *hbox;
+
+/* tabs hierarchy */
+GtkWidget *nb, 
+    *nb_tab_statistics_vbox, 
+        *nb_statistics_scroll, 
+            *nb_statistics_view, 
+                *nb_tab_statistics, 
+    *nb_tab_mymovies_vbox, 
+        *nb_mymovies_scroll, 
+            *nb_mymovies_view, 
+                *nb_tab_mymovies,
+    *nb_tab_lists_stats_vbox, 
+        *nb_lists_stats_scroll, 
+            *nb_lists_stats_view, 
+                *nb_tab_lists_stats, 
+    *nb_tab_lists_vbox, 
+        *nb_lists_scroll, 
+            *nb_lists_view, 
+                *nb_tab_lists, 
+    *nb_tab_compare_vbox, 
+        *nb_compare_scroll, 
+            *nb_compare_view, 
+                *nb_tab_compare, 
+    *nb_tab_top250_vbox, 
+        *nb_top250_scroll, 
+            *nb_top250_view, 
+                *nb_tab_top250, 
+    *nb_tab_bot100_vbox, 
+        *nb_bot100_scroll, 
+            *nb_bot100_view, 
+                *nb_tab_bot100, 
+    *nb_tab_boxoffice_vbox, 
+        *nb_boxoffice_scroll, 
+            *nb_boxoffice_view, 
+                *nb_tab_boxoffice, 
+    *nb_tab_allstats_vbox, 
+        *nb_allstats_scroll, 
+            *nb_allstats_view, 
+                *nb_tab_allstats;
+
+
+/* menubar hierarchy */
+GtkWidget *menubar, 
+    *menu_file, 
+        *menu_file_item, 
+            *menu_file_item_open,
+            *menu_file_item_new,
+            *menu_file_item_space,
+            *menu_file_item_exit,
+    *menu_edit, 
+        *menu_edit_item, 
+            *menu_edit_item_update, 
+    *menu_help,
+        *menu_help_item, 
+            *menu_help_item_about;
 
 #endif
 
