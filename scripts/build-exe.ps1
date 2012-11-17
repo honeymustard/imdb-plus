@@ -50,14 +50,14 @@ $install = $args[4].split(" ")
 # long program name..
 $program_name = "$program-$version"
 
-# temporary locations..
-$tmp_srcdir = ".\$program_name-src"
-$tmp_srczip = ".\$program_name-src.7z"
-
 # build directories..
 $dir_build = ".\build"
 $dir_build_vers = "$dir_build\$program_name"
 $dir_build_vers_output = "$dir_build_vers\$program_name-win"
+
+# temporary locations..
+$tmp_srcdir = "$dir_build_vers_output\$program_name-src"
+$tmp_srczip = "$dir_build_vers_output\$program_name-src.7z"
 
 
 ###########################################
@@ -89,6 +89,9 @@ function build-env
         remove-item "$dir_build_vers_output\*" -recurse -force
     }
 
+    # Make source folder..
+    new-item "$tmp_srcdir" -type directory | out-null
+
     return $true
 }
 
@@ -99,15 +102,7 @@ function build-env
 
 function build-src 
 {
-
-    # Make dist folder..
-    if (test-path $tmp_srcdir)
-    { 
-        remove-item $tmp_srcdir -recurse -force
-    }
-    
-    new-item $tmp_srcdir -type directory | out-null
-    
+ 
     # copy sources and folders to our temp dir..
     copy-item $sources $tmp_srcdir -recurse
     copy-item $folders $tmp_srcdir -recurse
@@ -118,9 +113,7 @@ function build-src
         foreach { remove-item $_.fullname -force }
 
     # zip entire *-win folder..
-    &'7za' a -t7z $tmp_srczip $tmp_srcdir
-
-    move-item $tmp_srczip $dir_build_vers_output
+    &'7za' a -t7z $tmp_srczip "$tmp_srcdir\*"
 
     remove-item $tmp_srcdir -recurse -force
 }
