@@ -21,7 +21,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include "globals.h"
-#include "../main.h"
 
 
 int initiated = 0;
