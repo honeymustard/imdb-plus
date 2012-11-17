@@ -25,6 +25,7 @@ FOLDERS = src misc share scripts
 WININST = lib share COPYING *.dll misc\setup.iss $(EXECUTE).exe
 CFLAGS  = -c -Wall
 LDFLAGS = -Wl,--as-needed
+CC      = gcc
 
 
 ###############################################################################
@@ -43,8 +44,7 @@ else
 OBJECTS = $(shell powershell -command \
 		  "& {Get-ChildItem .\ *.c -recurse | \
 		  foreach {(Resolve-Path $$_.fullname -relative) \
-		  -replace \".c$$\", \".o\"} | \
-		  write-host }")
+		  -replace \".c$$\", \".o\"}}")
 
 OBJECTS += resfile.o
 
@@ -58,6 +58,8 @@ endif
 #
 ###############################################################################
 
+.PHONY : all debug clean linux install uninstall build build-deb build-rpm dist
+
 # Install paths..
 DIR_USR = $(DESTDIR)/usr
 DIR_BIN = $(DESTDIR)/usr/bin
@@ -68,17 +70,14 @@ DIR_MAN = $(DESTDIR)/usr/share/man
 DIR_MNP = $(DESTDIR)/usr/share/man/man1
 
 # Default for make..
-.PHONY : all
 all: CFLAGS += -O2 -DINSTALL
 all: linux
 
-# Make run-in-place debug..
-.PHONY : debug
+# Make debug..
 debug: CFLAGS += -g
 debug: linux
 
 # Faux target..
-.PHONY : linux
 linux: OS = LINUX
 linux: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 linux: PACKAGES = $(GTK2) -lcurl -lgthread-2.0
@@ -87,9 +86,7 @@ linux: $(OBJECTS)
 	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES)
 
 # Make install..
-.PHONY : install
 install: all
-install:
 	-@test -d $(DIR_USR) || mkdir -p $(DIR_USR)
 	-@test -d $(DIR_BIN) || mkdir -p $(DIR_BIN)
 	-@test -d $(DIR_SHR) || mkdir -p $(DIR_SHR)
@@ -106,7 +103,6 @@ install:
 	-@echo "$(EXECUTE) installed successfully"
 
 # Make uninstall..
-.PHONY : uninstall
 uninstall:
 	-@rm -f /usr/share/man/man1/$(EXECUTE).1.gz
 	-@rm -f /usr/share/applications/$(EXECUTE).desktop
@@ -115,7 +111,6 @@ uninstall:
 	-@echo "$(EXECUTE) uninstalled successfully"
 
 # Make dist archive..
-.PHONY : dist
 dist: CURRENT = $(EXECUTE)-$(VERSION)
 dist: ARCHIVE = $(SOURCES) $(FOLDERS)
 dist:
@@ -123,26 +118,20 @@ dist:
 	-@tar -zcf $(CURRENT).tar.gz -X ./misc/exclude $(ARCHIVE)
 
 # Make build..
-.PHONY : build
 build:
 	-@echo "Choose a specific linux build.."
 	-@echo "- make build-deb (for DEB based distros)"
 	-@echo "- make build-rpm (for RPM based distros)"
 
 # Make .DEB package..
-.PHONY : build-deb
 build-deb: dist
-build-deb:
 	-@sh ./scripts/build-deb.sh $(EXECUTE) $(VERSION) build-deb
 
 # Make .RPM package..
-.PHONY : build-rpm
 build-rpm: dist
-build-rpm:
 	-@sh ./scripts/build-rpm.sh $(EXECUTE) $(VERSION) build-rpm
 
 # Make clean..
-.PHONY : clean
 clean:
 	-@rm $(EXECUTE) `find ./ -name "*.o"` 2>/dev/null && \
     echo "it's clean" || echo "it's already clean"
@@ -155,52 +144,36 @@ clean:
 #
 ###############################################################################
 
-# MinGW release build..
-.PHONY : mingw32-make
+.PHONY : mingw32-make mingw32-debug mingw32-clean mingw32-build windows
+
+# MinGW release..
 mingw32-make: WINDOWS = -mwindows
 mingw32-make: CFLAGS += -O2 
 mingw32-make: windows
 
-# MinGW debug build..
-.PHONY : mingw32-debug
+# MinGW debug..
 mingw32-debug: WINDOWS = 
 mingw32-debug: CFLAGS += -g
 mingw32-debug: windows
 
-.PHONY : windows
-windows: GNUWIN32 = C:\MinGW\GnuWin32
-windows: LIBCURL  = C:\MinGW\curl
-
-# Requires local copy of pcre3.dll..
-windows: PCRE = -I"$(GNUWIN32)\include" \
-                -I"$(GNUWIN32)\bin" \
-                -L"$(GNUWIN32)\lib" \
-                -lpcre
-
-# Requires local copy of libcurl.dll..
-windows: CURL = -I"$(LIBCURL)\include" \
-                -I"$(LIBCURL)\bin" \
-                -L"$(LIBCURL)\lib" \
-                -lcurl
-
-# MinGW convenience..
+# MinGW make all..
 windows: OS = WINDOWS
+windows: MINGW = C:\MinGW
 windows: GTK2 = $(shell pkg-config.exe --libs --cflags gtk+-win32-2.0)
-windows: PACKAGES = $(GTK2) $(CURL) $(PCRE)
+windows: PATHS = -I$(MINGW)\include -I$(MINGW)\bin -L$(MINGW)\lib 
+windows: PACKAGES = $(PATHS) $(GTK2) -lcurl -lpcre
 windows: CFLAGS += $(PACKAGES)
 windows: $(OBJECTS)
 	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES) $(WINDOWS)
 
 # MinGW clean..
-.PHONY : mingw32-clean
 mingw32-clean:
 	-@powershell -command "& { if (test-path $(EXECUTE).exe) \
 		{ remove-item $(EXECUTE).exe -force } }"
 	-@powershell -command "& get-childitem .\ *.o -recurse \
 		| foreach-object { remove-item $$_.fullname -force }"
 
-# MinGW build requires Powershell, 7za (7zip cli), ISSC (Inno Setup) in PATH..
-.PHONY : mingw32-build
+# MinGW build requires Powershell, 7za (7zip cli), ISSC (Inno Setup)..
 mingw32-build: mingw32-make
 mingw32-build:
 	-@powershell -command "& { Set-ExecutionPolicy RemoteSigned }"
@@ -213,31 +186,27 @@ mingw32-build:
 #
 ###############################################################################
 
-# Compile paths..
-path%.o: path%.c src/paths.h main.h
-	gcc $(CFLAGS) $< -o $@ -D$(OS)
+main.o: main.c main.h src/paths.h src/ui/ui.h
+	$(CC) $(CFLAGS) $< -o $@ -DVERSION=\"$(VERSION)\"
 
-# Compile ui functions..
-ui_set_%.o: ui_set_%.c src/ui/ui.h src/ui/ui_widgets.h src/ui/events/events.h
-	gcc $(CFLAGS) $< -o $@
+%openfile.o: %openfile.c %openfile.h %readfile.h %globals.h %ui/ui.h
+	$(CC) $(CFLAGS) $< -o $@
 
-# Compile ui fill functions..
-ui_fill_%.o: ui_fill_%.c src/ui/ui_fill/ui_fill.h
-	gcc $(CFLAGS) $< -o $@
+%paths.o: %paths.c %paths.h main.h
+	$(CC) $(CFLAGS) $< -o $@ -D$(OS)
 
-# Compile table..
-gtk_custom_table_%.o: gtk_custom_table_%.c src/ui/table/gtk_custom_table.h
-	gcc $(CFLAGS) $< -o $@
-
-# Compile events..
 event_%.o: event_%.c src/ui/events/events.h
-	gcc $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
-# Compile Windows resource..
+gtk_%.o: gtk_%.c src/ui/table/gtk_custom_table.h
+	$(CC) $(CFLAGS) $< -o $@
+
+ui_%.o: ui_%.c src/ui/ui.h src/ui/ui_fill/ui_fill.h
+	$(CC) $(CFLAGS) $< -o $@
+
 resfile.o:
 	windres -o resfile.o ./misc/resources.rc
 
-# Compile default..
-%.o: %.c %.h 
-	gcc $(CFLAGS) $< -o $@ -DVERSION=\"$(VERSION)\"
+src/%.o: src/%.c src/%.h 
+	$(CC) $(CFLAGS) $< -o $@
 
