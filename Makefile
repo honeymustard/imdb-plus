@@ -80,10 +80,8 @@ debug: linux
 # Faux target..
 .PHONY : linux
 linux: OS = LINUX
-linux: CURL = -lcurl
-linux: GTHREAD = -lgthread-2.0
 linux: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
-linux: PACKAGES = $(GTK2) $(CURL) $(GTHREAD) 
+linux: PACKAGES = $(GTK2) -lcurl -lgthread-2.0
 linux: CFLAGS += $(PACKAGES)
 linux: $(OBJECTS)
 	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES)
@@ -100,7 +98,7 @@ install:
 	-@test -d $(DIR_MAN) || mkdir -p $(DIR_MAN)
 	-@test -d $(DIR_MNP) || mkdir -p $(DIR_MNP)
 	-@cp ./misc/$(EXECUTE).desktop $(DIR_APP)
-	-@cd ./misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz && cd ..
+	-@cd ./misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz
 	-@cp ./misc/$(EXECUTE).1.gz $(DIR_MNP)
 	-@cp -R ./share/icons/imdb-plus $(DIR_PIX)
 	-@cp ./share/icons/$(EXECUTE).png $(DIR_PIX)
@@ -121,7 +119,7 @@ uninstall:
 dist: CURRENT = $(EXECUTE)-$(VERSION)
 dist: ARCHIVE = $(SOURCES) $(FOLDERS)
 dist:
-	-@cd ./misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz
+	-@gzip -f -c ./misc/$(EXECUTE).1 > ./misc$(EXECUTE).1.gz
 	-@tar -zcf $(CURRENT).tar.gz -X ./misc/exclude $(ARCHIVE)
 
 # Make build..
