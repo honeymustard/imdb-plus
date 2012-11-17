@@ -9,6 +9,9 @@
 
 **Non-Urgent fixes**
 * make various fields with no value more consistent
+* add or remove null values from lists, do i need a 0 row?
+* fix allstats, boxoffice must be sanitized
+* rpm build-script needs updating
 
 **Urget fixes**
 * none
