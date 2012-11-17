@@ -18,6 +18,9 @@
 *****************************************************************************/
 
 
+#include "patterns.h"
+
+
 /* top250 regex pattern */
 char *pattern_top250 = "<tr bgcolor=\"#.{6}\" valign\
 =\"top\"><td align=\"right\"><font face=\"Arial, Helvetica,\
