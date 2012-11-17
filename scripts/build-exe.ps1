@@ -109,7 +109,7 @@ function build-src
 
     # remove all non-source files..
     get-childitem $tmp_srcdir -include *.csv, *.swo, *.swp, `
-        *.dll, *.o, *~, *.fuse -recurse |
+        *.dll, *.o, *~, *.fuse* -recurse |
         foreach { remove-item $_.fullname -force }
 
     # zip entire *-win folder..
