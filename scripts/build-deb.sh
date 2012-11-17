@@ -61,13 +61,18 @@ fi
 cd $1-$2-deb
 rm -Rf ./*
 
+# make version dir..
+if [ ! -d "$1-$2" ]; then
+    mkdir $1-$2
+fi
+
 # dist tar was made by make. move it here.
 mv ../../../$1-$2.tar.gz .
 
-# extract that bad-boy.. zing.
-tar -zxf ./$1-$2.tar.gz 
-
 cd $1-$2
+
+# extract that bad-boy.. zing.
+tar -zxf ../$1-$2.tar.gz 
 
 # do dh_make to setup deb package structure..
 dh_make --single --copyright gpl3 -f ../$1-$2.tar.gz

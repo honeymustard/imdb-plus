@@ -54,7 +54,7 @@ endif
 ###############################################################################
 # Standard linux build..
 #
-# @usage: make | make [debug | clean | build-[deb|rpm] | dist | [un]install]
+# @usage: make | make [ debug | clean | build-[deb|rpm] | dist | [un]install ]
 #
 ###############################################################################
 
@@ -118,20 +118,11 @@ uninstall:
 
 # Make dist archive..
 .PHONY : dist
+dist: CURRENT = $(EXECUTE)-$(VERSION)
+dist: ARCHIVE = $(SOURCES) $(FOLDERS)
 dist:
-	-@cd ./misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz && cd ..
-	-@test -d $(EXECUTE)-$(VERSION) || mkdir -p $(EXECUTE)-$(VERSION)
-	-@cp -R $(SOURCES) $(FOLDERS) -t $(EXECUTE)-$(VERSION)
-	-@tar -zcf $(EXECUTE)-$(VERSION).tar.gz \
-    --exclude='*.csv' \
-    --exclude='*.swo' \
-    --exclude='*.swp' \
-    --exclude='*.dll' \
-    --exclude='*.o' \
-    --exclude='*~' \
-    --exclude='*.fuse' \
-    $(EXECUTE)-$(VERSION)
-	-@rm -Rf $(EXECUTE)-$(VERSION)
+	-@cd ./misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz
+	-@tar -zcf $(CURRENT).tar.gz -X ./misc/exclude $(ARCHIVE)
 
 # Make build..
 .PHONY : build
@@ -144,13 +135,13 @@ build:
 .PHONY : build-deb
 build-deb: dist
 build-deb:
-	sh ./scripts/build-deb.sh $(EXECUTE) $(VERSION) build-deb
+	-@sh ./scripts/build-deb.sh $(EXECUTE) $(VERSION) build-deb
 
 # Make .RPM package..
 .PHONY : build-rpm
 build-rpm: dist
 build-rpm:
-	sh ./scripts/build-rpm.sh $(EXECUTE) $(VERSION) build-rpm
+	-@sh ./scripts/build-rpm.sh $(EXECUTE) $(VERSION) build-rpm
 
 # Make clean..
 .PHONY : clean
@@ -162,7 +153,7 @@ clean:
 ###############################################################################
 # Required Windows packages: Powershell, MinGW, Gnuwin32 PCRE, libcurl, GTK+
 #
-# @usage: mingw32-make [ mingw32-[make | debug | clean | build] ]
+# @usage: mingw32-make [ mingw32-[ make | debug | clean | build ] ]
 #
 ###############################################################################
 
