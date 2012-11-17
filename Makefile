@@ -114,7 +114,7 @@ uninstall:
 dist: CURRENT = $(EXECUTE)-$(VERSION)
 dist: ARCHIVE = $(SOURCES) $(FOLDERS)
 dist:
-	-@gzip -f -c ./misc/$(EXECUTE).1 > ./misc$(EXECUTE).1.gz
+	-@gzip -f -c ./misc/$(EXECUTE).1 > ./misc/$(EXECUTE).1.gz
 	-@tar -zcf $(CURRENT).tar.gz -X ./misc/exclude $(ARCHIVE)
 
 # Make build..
