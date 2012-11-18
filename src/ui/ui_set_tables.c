@@ -19,6 +19,9 @@
 
 
 #include "ui.h"
+#include "ui_fill/ui_fill.h"
+#include "../colors.h"
+#include "../main.h"
 
 
 void ui_set_tables() {

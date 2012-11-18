@@ -19,6 +19,8 @@
 
 
 #include "ui.h"
+#include "../globals.h"
+#include "../main.h"
 
 
 /* table column width descriptions */

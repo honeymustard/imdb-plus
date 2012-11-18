@@ -19,6 +19,7 @@
 
 
 #include "../ui.h"
+#include "../../globals.h"
 
 
 /* main window quit event.. */

@@ -19,6 +19,9 @@
 
 
 #include "../ui.h"
+#include "../../globals.h"
+#include "../../openfile.h"
+#include "../../main.h"
 
 
 /* open a ratings/list file from dialog */

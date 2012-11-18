@@ -19,6 +19,10 @@
 
 
 #include "../ui.h"
+#include "../../globals.h"
+#include "../../download.h"
+#include "../../openfile.h"
+#include "../../main.h"
 
 
 GtkAdjustment *adj;

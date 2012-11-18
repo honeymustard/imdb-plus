@@ -34,6 +34,5 @@ double graph_fg2[3];
 double graph_fg3[3];
 double graph_fg4[3];
 
-
 #endif
 

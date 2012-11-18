@@ -19,6 +19,14 @@
 
 
 #include "../ui.h"
+#include "../ui_fill/ui_fill.h"
+#include "../../globals.h"
+#include "../../readfile.h"
+#include "../../openfile.h"
+#include "../../download.h"
+#include "../../parsefile.h"
+#include "../../patterns.h"
+#include "../../main.h"
 
 
 /* update lists from interwebs */

@@ -19,6 +19,8 @@
 
 
 #include "../ui.h"
+#include "../../colors.h"
+#include "../../main.h"
 
 
 /* add values to allstats tab */

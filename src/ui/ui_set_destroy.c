@@ -19,6 +19,7 @@
 
 
 #include "ui.h"
+#include "../globals.h"
 
 
 void ui_set_destroy() {

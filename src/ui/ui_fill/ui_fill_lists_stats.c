@@ -19,6 +19,9 @@
 
 
 #include "../ui.h"
+#include "ui_fill.h"
+#include "../../globals.h"
+#include "../../colors.h"
 
 
 void open_list_stats(char ****results, int rows) {

@@ -19,6 +19,8 @@
 
 
 #include "../ui.h"
+#include "ui_fill.h"
+#include "../../colors.h"
 
 
 void open_movies(char ****results, int rows) {

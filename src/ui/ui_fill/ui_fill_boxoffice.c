@@ -19,6 +19,9 @@
 
 
 #include "../ui.h"
+#include "../../readfile.h"
+#include "../../globals.h"
+#include "../../colors.h"
 
 
 /* parse new boxoffice list */
