@@ -22,7 +22,7 @@ EXECUTE = imdb-plus
 VERSION = 0.0.8
 SOURCES = Makefile TODO.md README.md COPYING src misc share scripts
 WININST = lib share COPYING *.dll misc\setup.iss $(EXECUTE).exe
-CFLAGS  = -c -Wall -MMD -MP
+CFLAGS  = -c -Wall -MMD -MP -Isrc
 LDFLAGS = -Wl,--as-needed
 CC      = gcc
 
