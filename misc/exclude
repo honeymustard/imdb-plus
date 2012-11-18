@@ -3,6 +3,7 @@
 *.swp
 *.dll
 *.o
+*.d
 *~
 *.fuse*
 
