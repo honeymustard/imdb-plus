@@ -20,9 +20,9 @@
 
 #include "openfile.h"
 #include "readfile.h"
-#include "globals.h"
-#include "ui/ui.h"
-#include "ui/ui_fill/ui_fill.h"
+#include "../globals.h"
+#include "../ui/ui.h"
+#include "../ui/ui_fill/ui_fill.h"
 
 
 int has_open_movies = 0;
