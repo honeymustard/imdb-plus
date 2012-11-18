@@ -45,7 +45,7 @@ OBJECTS = $(shell powershell -command \
 		  foreach {(Resolve-Path $$_.fullname -relative) \
 		  -replace \".c$$\", \".o\"}}")
 
-OBJECTS += resfile.o
+OBJECTS += ./src/resfile.o
 
 endif
 
@@ -195,6 +195,6 @@ mingw32-build:
 src/%.o: src/%.c
 	$(CC) $(CFLAGS) $< -o $@
 
-resfile.o:
-	windres -o resfile.o ./misc/resources.rc
+src/resfile.o:
+	windres -o ./src/resfile.o ./misc/resources.rc
 
