@@ -27,13 +27,13 @@
 
 
 # make sure script is run from toplevel makefile only..
-if ($args.length -lt 6)
+if ($args.length -lt 5)
 {
     write-output "Error: Script expected more arguments!"
     exit
 }
 
-if ($args[5] -ne "build-win")
+if ($args[4] -ne "build-win")
 {
     write-output "Error: Script should be run by toplevel Makefile!"
     exit
@@ -44,8 +44,7 @@ if ($args[5] -ne "build-win")
 $program = $args[0]
 $version = $args[1]
 $sources = $args[2].split(" ")
-$folders = $args[3].split(" ")
-$install = $args[4].split(" ")
+$install = $args[3].split(" ")
 
 # long program name..
 $program_name = "$program-$version"
@@ -103,13 +102,12 @@ function build-env
 function build-src 
 {
  
-    # copy sources and folders to our temp dir..
+    # copy sources to our temp dir..
     copy-item $sources $tmp_srcdir -recurse
-    copy-item $folders $tmp_srcdir -recurse
 
     # remove all non-source files..
     get-childitem $tmp_srcdir -include *.csv, *.swo, *.swp, `
-        *.dll, *.o, *~, *.fuse* -recurse |
+        *.dll, *.o, *.d, *~, *.fuse* -recurse |
         foreach { remove-item $_.fullname -force }
 
     # zip entire *-win folder..
