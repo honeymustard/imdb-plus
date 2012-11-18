@@ -18,11 +18,12 @@
 *****************************************************************************/
 
 
-#include "openfile.h"
-#include "readfile.h"
-#include "../globals.h"
-#include "../ui/ui.h"
-#include "../ui/ui_fill/ui_fill.h"
+#include "globals.h"
+#include "ui/ui.h"
+#include "ui/ui_fill/ui_fill.h"
+#include "ui/table/gtk_custom_table.h"
+#include "io/openfile.h"
+#include "io/readfile.h"
 
 
 int has_open_movies = 0;

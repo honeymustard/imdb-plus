@@ -18,9 +18,10 @@
 *****************************************************************************/
 
 
-#include "../ui.h"
-#include "../../colors.h"
-#include "../../main.h"
+#include "main.h"
+#include "ui/ui.h"
+#include "ui/env/colors.h"
+#include "ui/table/gtk_custom_table.h"
 
 
 /* add values to allstats tab */

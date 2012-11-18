@@ -18,9 +18,11 @@
 *****************************************************************************/
 
 
-#include "ui.h"
-#include "../globals.h"
-#include "../main.h"
+#include "main.h"
+#include "globals.h"
+#include "ui/ui.h"
+#include "ui/events/events.h"
+#include "ui/table/gtk_custom_table.h"
 
 
 /* table column width descriptions */

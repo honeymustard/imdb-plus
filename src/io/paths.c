@@ -24,6 +24,7 @@
 #include <sys/types.h>
 #include "main.h"
 #include "globals.h"
+#include "io/paths.h"
 
 
 /**

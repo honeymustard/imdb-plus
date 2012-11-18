@@ -18,8 +18,9 @@
 *****************************************************************************/
 
 
-#include "ui.h"
-#include "../globals.h"
+#include "globals.h"
+#include "ui/ui.h"
+#include "ui/table/gtk_custom_table.h"
 
 
 void ui_set_destroy() {

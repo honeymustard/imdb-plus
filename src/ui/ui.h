@@ -25,8 +25,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <stdlib.h>
 #include <string.h>
-#include "events/events.h"
-#include "table/gtk_custom_table.h"
 
 #define TEXT_FONT "sans 10"
 

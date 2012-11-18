@@ -18,7 +18,8 @@
 *****************************************************************************/
 
 
-#include "ui.h"
+#include "ui/ui.h"
+#include "ui/events/events.h"
 
 
 void ui_set_menu() {

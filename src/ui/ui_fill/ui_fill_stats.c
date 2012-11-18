@@ -18,8 +18,8 @@
 *****************************************************************************/
 
 
-#include "../ui.h"
-#include "ui_fill.h"
+#include "ui/ui.h"
+#include "ui/ui_fill/ui_fill.h"
 
 
 void fill_sanitize(double *v, double *i, double *t, double *y) {

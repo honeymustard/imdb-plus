@@ -18,9 +18,10 @@
 *****************************************************************************/
 
 
-#include "../ui.h"
-#include "ui_fill.h"
-#include "../../colors.h"
+#include "ui/ui.h"
+#include "ui/ui_fill/ui_fill.h"
+#include "ui/env/colors.h"
+#include "ui/table/gtk_custom_table.h"
 
 
 void open_compare(GtkWidget *current, GtkWidget *other) {

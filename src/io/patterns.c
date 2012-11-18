@@ -18,7 +18,7 @@
 *****************************************************************************/
 
 
-#include "patterns.h"
+#include "io/patterns.h"
 
 
 /* top250 regex pattern */

@@ -18,10 +18,11 @@
 *****************************************************************************/
 
 
-#include "../ui.h"
-#include "ui_fill.h"
-#include "../../globals.h"
-#include "../../colors.h"
+#include "globals.h"
+#include "ui/ui.h"
+#include "ui/env/colors.h"
+#include "ui/ui_fill/ui_fill.h"
+#include "ui/table/gtk_custom_table.h"
 
 
 void open_movie_stats(char ****results, int rows) {

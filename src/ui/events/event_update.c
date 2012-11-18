@@ -18,15 +18,16 @@
 *****************************************************************************/
 
 
-#include "../ui.h"
-#include "../ui_fill/ui_fill.h"
-#include "../../io/readfile.h"
-#include "../../io/openfile.h"
-#include "../../io/download.h"
-#include "../../io/parsefile.h"
-#include "../../globals.h"
-#include "../../patterns.h"
-#include "../../main.h"
+#include "main.h"
+#include "globals.h"
+#include "ui/ui.h"
+#include "ui/ui_fill/ui_fill.h"
+#include "ui/table/gtk_custom_table.h"
+#include "io/readfile.h"
+#include "io/openfile.h"
+#include "io/download.h"
+#include "io/parsefile.h"
+#include "io/patterns.h"
 
 
 /* update lists from interwebs */

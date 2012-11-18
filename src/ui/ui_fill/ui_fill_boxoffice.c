@@ -18,10 +18,11 @@
 *****************************************************************************/
 
 
-#include "../ui.h"
-#include "../../io/readfile.h"
-#include "../../globals.h"
-#include "../../colors.h"
+#include "globals.h"
+#include "ui/ui.h"
+#include "ui/env/colors.h"
+#include "ui/table/gtk_custom_table.h"
+#include "io/readfile.h"
 
 
 /* parse new boxoffice list */

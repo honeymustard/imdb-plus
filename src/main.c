@@ -22,9 +22,9 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include "main.h"
-#include "paths.h"
 #include "globals.h"
 #include "ui/ui.h"
+#include "io/paths.h"
 
 
 /**

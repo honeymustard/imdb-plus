@@ -18,10 +18,11 @@
 *****************************************************************************/
 
 
-#include "ui.h"
-#include "ui_fill/ui_fill.h"
-#include "../colors.h"
-#include "../main.h"
+#include "main.h"
+#include "ui/ui.h"
+#include "ui/ui_fill/ui_fill.h"
+#include "ui/env/colors.h"
+#include "ui/table/gtk_custom_table.h"
 
 
 void ui_set_tables() {
