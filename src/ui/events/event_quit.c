@@ -18,8 +18,8 @@
 *****************************************************************************/
 
 
-#include "../ui.h"
-#include "../../globals.h"
+#include "globals.h"
+#include "ui/ui.h"
 
 
 /* main window quit event.. */

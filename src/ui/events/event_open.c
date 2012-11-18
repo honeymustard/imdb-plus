@@ -18,10 +18,10 @@
 *****************************************************************************/
 
 
-#include "../ui.h"
-#include "../../io/openfile.h"
-#include "../../globals.h"
-#include "../../main.h"
+#include "main.h"
+#include "globals.h"
+#include "ui/ui.h"
+#include "io/openfile.h"
 
 
 /* open a ratings/list file from dialog */

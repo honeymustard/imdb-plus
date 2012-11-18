@@ -18,11 +18,11 @@
 *****************************************************************************/
 
 
-#include "../ui.h"
-#include "../../io/download.h"
-#include "../../io/openfile.h"
-#include "../../globals.h"
-#include "../../main.h"
+#include "main.h"
+#include "globals.h"
+#include "ui/ui.h"
+#include "io/download.h"
+#include "io/openfile.h"
 
 
 GtkAdjustment *adj;
