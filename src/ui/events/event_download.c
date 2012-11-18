@@ -19,9 +19,9 @@
 
 
 #include "../ui.h"
+#include "../../io/download.h"
+#include "../../io/openfile.h"
 #include "../../globals.h"
-#include "../../download.h"
-#include "../../openfile.h"
 #include "../../main.h"
 
 
