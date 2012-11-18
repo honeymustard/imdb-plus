@@ -20,9 +20,9 @@
 
 #include "../ui.h"
 #include "ui_fill.h"
+#include "../../io/readfile.h"
 #include "../../globals.h"
 #include "../../colors.h"
-#include "../../readfile.h"
 
 
 /* parse a new list */
