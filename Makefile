@@ -32,20 +32,6 @@ CCFILES = $(shell find ./src/ -name "*.c")
 OBJECTS = $(addprefix $(OBJSDIR)/,$(notdir $(patsubst %.c,%.o,$(CCFILES))))
 
 ###############################################################################
-# Shared targets..
-#
-###############################################################################
-
-.PHONY : output clean
-
-output:
-	-@test -d $(OBJSDIR) || mkdir -p $(OBJSDIR)
-
-clean: output
-	-@rm $(EXECUTE) ./$(OBJSDIR)/* 2>/dev/null && \
-    echo "it's clean" || echo "it's already clean"
-
-###############################################################################
 # Standard linux build..
 #
 # @usage: make | make [ debug | clean | build-[deb|rpm] | dist | [un]install ]
@@ -77,7 +63,7 @@ linux: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 linux: PACKAGES = $(GTK2) -lcurl -lgthread-2.0
 linux: CFLAGS += $(PACKAGES)
 linux: output $(OBJECTS)
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES)
+	$(CC) $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES)
 
 # Make install..
 install: all
@@ -154,7 +140,7 @@ windows: PACKAGES = $(PATHS) $(GTK2) -lcurl -lpcre
 windows: CFLAGS += $(PACKAGES)
 windows: OBJECTS += ./obj/resfile.o
 windows: output $(OBJECTS) ./obj/resfile.o
-	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES) $(WINDOWS)
+	$(CC) $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES) $(WINDOWS)
 
 # MinGW build..
 mingw32-build: mingw32-make
@@ -164,6 +150,20 @@ mingw32-build:
 
 # MinGW clean..
 mingw32-clean: clean
+
+###############################################################################
+# Shared targets..
+#
+###############################################################################
+
+.PHONY : output clean
+
+output:
+	-@test -d $(OBJSDIR) || mkdir -p $(OBJSDIR)
+
+clean: output
+	-@rm $(EXECUTE) ./$(OBJSDIR)/* 2>/dev/null && \
+    echo "it's clean" || echo "it's already clean"
 
 ###############################################################################
 # Project targets..
