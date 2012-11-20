@@ -24,31 +24,26 @@ SOURCES = Makefile TODO.md README.md COPYING src misc share scripts
 WININST = lib share COPYING *.dll misc\setup.iss $(EXECUTE).exe
 CFLAGS  = -c -Wall -MMD -MP -Isrc
 LDFLAGS = -Wl,--as-needed
+OBJSDIR = obj
 CC      = gcc
 
+# Program source and object files..
+CCFILES = $(shell find ./src/ -name "*.c")
+OBJECTS = $(addprefix $(OBJSDIR)/,$(notdir $(patsubst %.c,%.o,$(CCFILES))))
 
 ###############################################################################
-# Project files..
+# Shared targets..
 #
 ###############################################################################
 
-# Linux specific objects
-ifeq ($(MAKE), make)
+.PHONY : output clean
 
-OBJECTS = $(patsubst %.c, %.o, $(shell find ./src/ -name "*.c"))
+output:
+	-@test -d $(OBJSDIR) || mkdir -p $(OBJSDIR)
 
-# Windows specific objects
-else
-
-OBJECTS = $(shell powershell -command \
-		  "& {Get-ChildItem .\src\ *.c -recurse | \
-		  foreach {(Resolve-Path $$_.fullname -relative) \
-		  -replace \".c$$\", \".o\"}}")
-
-OBJECTS += ./src/resfile.o
-
-endif
-
+clean: output
+	-@rm $(EXECUTE) ./$(OBJSDIR)/* 2>/dev/null && \
+    echo "it's clean" || echo "it's already clean"
 
 ###############################################################################
 # Standard linux build..
@@ -57,7 +52,7 @@ endif
 #
 ###############################################################################
 
-.PHONY : all debug clean linux install uninstall build build-deb build-rpm dist
+.PHONY : all debug linux install uninstall build build-deb build-rpm dist
 
 # Install paths..
 DIR_USR = $(DESTDIR)/usr
@@ -81,7 +76,7 @@ linux: OS = LINUX
 linux: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 linux: PACKAGES = $(GTK2) -lcurl -lgthread-2.0
 linux: CFLAGS += $(PACKAGES)
-linux: $(OBJECTS)
+linux: output $(OBJECTS)
 	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES)
 
 # Make install..
@@ -129,14 +124,10 @@ build-deb: dist
 build-rpm: dist
 	-@sh ./scripts/build-rpm.sh $(EXECUTE) $(VERSION) build-rpm
 
-# Make clean..
-clean:
-	-@rm $(EXECUTE) `find ./src/ -name "*.o" -o -name "*.d"` 2>/dev/null && \
-    echo "it's clean" || echo "it's already clean"
-
-
 ###############################################################################
-# Required Windows packages: Powershell, MinGW, Gnuwin32 PCRE, libcurl, GTK+
+# Standard windows build: 
+#
+# Cygwin, MinGW, Gnuwin32 PCRE, Powershell, libcurl, GTK+, 7za.exe, ISSC.exe
 #
 # @usage: mingw32-make [ mingw32-[ make | debug | clean | build ] ]
 #
@@ -154,30 +145,25 @@ mingw32-debug: WINDOWS =
 mingw32-debug: CFLAGS += -g
 mingw32-debug: windows
 
-# MinGW make all..
+# MinGW make..
 windows: OS = WINDOWS
 windows: MINGW = C:\MinGW
 windows: GTK2 = $(shell pkg-config.exe --libs --cflags gtk+-win32-2.0)
 windows: PATHS = -I$(MINGW)\include -I$(MINGW)\bin -L$(MINGW)\lib 
 windows: PACKAGES = $(PATHS) $(GTK2) -lcurl -lpcre
 windows: CFLAGS += $(PACKAGES)
-windows: $(OBJECTS)
+windows: OBJECTS += ./obj/resfile.o
+windows: output $(OBJECTS) ./obj/resfile.o
 	gcc $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES) $(WINDOWS)
 
-# MinGW clean..
-mingw32-clean:
-	-@powershell -command "& { if (test-path $(EXECUTE).exe) \
-		{ remove-item $(EXECUTE).exe -force } }"
-	-@powershell -command "& get-childitem .\src\ -include *.o, *.d -recurse \
-		| foreach-object { remove-item $$_.fullname -force }"
-
-# MinGW build requires Powershell, 7za (7zip cli), ISSC (Inno Setup)..
+# MinGW build..
 mingw32-build: mingw32-make
 mingw32-build:
-	-@powershell -command "& { Set-ExecutionPolicy RemoteSigned }"
 	-@powershell -command "& .\scripts\build-exe.ps1 \
 		$(EXECUTE) $(VERSION) '$(SOURCES)' '$(WININST)' build-win"
 
+# MinGW clean..
+mingw32-clean: clean
 
 ###############################################################################
 # Project targets..
@@ -186,15 +172,21 @@ mingw32-build:
 
 -include $(OBJECTS:.o=.d)
 
-%main.o: %main.c
-	$(CC) $(CFLAGS) $< -o $@ -DVERSION=\"$(VERSION)\"
+define find-source 
+    $(filter %/$1.c, $(CCFILES)) 
+endef
 
-%paths.o: %paths.c
-	$(CC) $(CFLAGS) $< -o $@ -D$(OS)
+obj/main.o: $(call find-source,main)
+	$(CC) $(CFLAGS) ./$< -o $@ -DVERSION=\"$(VERSION)\"
 
-src/%.o: src/%.c
-	$(CC) $(CFLAGS) $< -o $@
+obj/paths.o: $(call find-source,paths)
+	$(CC) $(CFLAGS) ./$< -o $@ -D$(OS)
 
-src/resfile.o:
-	windres -o ./src/resfile.o ./misc/resources.rc
+obj/resfile.o:
+	windres -o ./obj/resfile.o ./misc/resources.rc
+
+obj/%.o: $(call find-source,$*)
+	$(CC) $(CFLAGS) $(strip $(call find-source,$*)) -o $@
+
+obj/%.d:
 
