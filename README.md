@@ -59,13 +59,11 @@ rigorously tested on all the intended platforms.
     
 **Windows:**
 
-    # Note: Requires MinGW, GTK+, GnuWin32 PCRE, Libcurl. See Makefile.
+    # Note: See Makefile for package requirements
     
     $ mingw32-make mingw32-make     # builds imdb-plus.exe
     
     or 
-    
-    # Note: Requires Inno Setup 5, 7-zip command-line version (7za.exe). See Makefile
     
     $ mingw32-make mingw32-build    # builds src, setup archives..
 
