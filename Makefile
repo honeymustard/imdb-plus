@@ -145,7 +145,7 @@ windows: output $(OBJECTS) ./obj/resfile.o
 # MinGW build..
 mingw32-build: mingw32-make
 mingw32-build:
-	-@powershell -command "& .\scripts\build-exe.ps1 \
+	-@powershell -command "& .\scripts\build-win.ps1 \
 		$(EXECUTE) $(VERSION) '$(SOURCES)' '$(WININST)' build-win"
 
 # MinGW clean..
