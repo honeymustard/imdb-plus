@@ -1,0 +1,30 @@
+# list of dll's required to run program on windows. 
+152K ./intl.dll
+ 92K ./libasprintf-0.dll
+160K ./libatk-1.0-0.dll
+1.3M ./libcairo-2.dll
+ 44K ./libcairo-gobject-2.dll
+180K ./libcairo-script-interpreter-2.dll
+260K ./libcurl.dll
+140K ./libexpat-1.dll
+276K ./libfontconfig-1.dll
+ 60K ./libgailutil-18.dll
+108K ./libgcc_s_dw2-1.dll
+280K ./libgdk_pixbuf-2.0-0.dll
+912K ./libgdk-win32-2.0-0.dll
+1.2M ./libgio-2.0-0.dll
+1.2M ./libglib-2.0-0.dll
+ 40K ./libgmodule-2.0-0.dll
+336K ./libgobject-2.0-0.dll
+ 44K ./libgthread-2.0-0.dll
+4.8M ./libgtk-win32-2.0-0.dll
+328K ./libpango-1.0-0.dll
+104K ./libpangocairo-1.0-0.dll
+800K ./libpangoft2-1.0-0.dll
+108K ./libpangowin32-1.0-0.dll
+228K ./libpng14-14.dll
+140K ./pcre3.dll
+100K ./zlib1.dll
+ 64K ./lib/gtk-2.0/2.10.0/engines/libpixmap.dll
+100K ./lib/gtk-2.0/2.10.0/engines/libwimp.dll
+
