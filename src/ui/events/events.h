@@ -21,6 +21,8 @@
 #ifndef _EVENTS_
 #define _EVENTS_
 
+#include "ui/ui.h"
+
 /* main window events */
 void menu_signal_about(GtkWidget *widget, gpointer data);
 void menu_signal_open(GtkWidget *widget, gpointer data);

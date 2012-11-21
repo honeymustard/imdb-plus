@@ -18,6 +18,8 @@
 *****************************************************************************/
 
 
+#include <stdlib.h>
+#include <string.h>
 #include "ui/ui.h"
 #include "ui/ui_fill/ui_fill.h"
 

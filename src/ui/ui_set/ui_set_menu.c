@@ -18,6 +18,7 @@
 *****************************************************************************/
 
 
+#include <gdk/gdkkeysyms.h>
 #include "ui/ui.h"
 #include "ui/events/events.h"
 

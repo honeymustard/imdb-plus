@@ -20,9 +20,13 @@
 
 #include "main.h"
 #include "ui/ui.h"
+#include "ui/ui_set/ui_set.h"
 #include "ui/ui_fill/ui_fill.h"
 #include "ui/env/colors.h"
 #include "ui/table/gtk_custom_table.h"
+
+
+#define ROSETTE DIR_ICON "rosette_red.png"
 
 
 void ui_set_tables() {

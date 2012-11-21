@@ -24,6 +24,7 @@
 #include "main.h"
 #include "globals.h"
 #include "ui/ui.h"
+#include "ui/ui_set/ui_set.h"
 #include "io/paths.h"
 
 

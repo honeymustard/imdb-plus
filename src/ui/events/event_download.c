@@ -18,6 +18,8 @@
 *****************************************************************************/
 
 
+#include <stdlib.h>
+#include <string.h>
 #include "main.h"
 #include "globals.h"
 #include "ui/ui.h"

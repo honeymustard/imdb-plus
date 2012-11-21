@@ -19,6 +19,7 @@
 
 
 #include "ui/ui.h"
+#include "ui/ui_set/ui_set.h"
 #include "ui/table/gtk_custom_table.h"
 
 
