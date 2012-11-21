@@ -90,7 +90,5 @@ GtkWidget *menubar,
         *menu_help_item, 
             *menu_help_item_about;
 
-
-
 #endif
 
