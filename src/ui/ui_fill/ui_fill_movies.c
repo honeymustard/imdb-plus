@@ -98,7 +98,7 @@ void open_movies(char ****results, int rows) {
         char *title = (*results)[i][5];
 
         sprintf(str_vote, "%d", (int)vote);
-        sprintf(str_imdb, "%1.2f", imdb);
+        sprintf(str_imdb, "%1.1f", imdb);
         sprintf(str_time, "%d", (int)time);
         sprintf(str_year, "%d", (int)year);
 

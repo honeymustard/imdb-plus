@@ -60,7 +60,7 @@ void open_list(char ****results, int rows) {
         char *id = (*results)[i][1];
         char *title = (*results)[i][5];
 
-        sprintf(str_imdb, "%1.2f", imdb);
+        sprintf(str_imdb, "%1.1f", imdb);
         sprintf(str_time, "%d", (int)time);
         sprintf(str_year, "%d", (int)year);
 
