@@ -74,8 +74,8 @@ install: all
 	-@test -d $(DIR_PIX) || mkdir -p $(DIR_PIX)
 	-@test -d $(DIR_MAN) || mkdir -p $(DIR_MAN)
 	-@test -d $(DIR_MNP) || mkdir -p $(DIR_MNP)
+	-@gzip -f -c ./misc/$(EXECUTE).1 > ./misc/$(EXECUTE).1.gz
 	-@cp ./misc/$(EXECUTE).desktop $(DIR_APP)
-	-@cd ./misc && gzip -f -c $(EXECUTE).1 > $(EXECUTE).1.gz
 	-@cp ./misc/$(EXECUTE).1.gz $(DIR_MNP)
 	-@cp -R ./share/icons/imdb-plus $(DIR_PIX)
 	-@cp ./share/icons/$(EXECUTE).png $(DIR_PIX)
