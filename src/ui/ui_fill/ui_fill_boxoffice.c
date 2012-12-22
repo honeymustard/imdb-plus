@@ -48,6 +48,7 @@ static double find_rating(char *string) {
     return n > 0 ? n : 0;
 }
 
+
 /* parse new boxoffice list */
 int menu_signal_update_box() {
 
@@ -56,9 +57,6 @@ int menu_signal_update_box() {
     int cols = 0;
     int rows = 0;
     
-    double imdb = 0;
-    double year = 0;
-
     char temp[50];
     char ***results = NULL;
     
@@ -70,8 +68,8 @@ int menu_signal_update_box() {
 
         for(i = 0; i < gtk_custom_table_get_rows(nb_tab_boxoffice); i++) {
 
-            imdb = strtod(results[i][5], NULL);
-            year = strtol(results[i][3], NULL, 10);
+            double imdb = strtod(results[i][5], NULL);
+            double year = strtol(results[i][3], NULL, 10);
 
             imdb = imdb >= 0 && imdb <= 10 ? imdb : 0;
             year = year > 1800 && year < 2200 ? year : 0;

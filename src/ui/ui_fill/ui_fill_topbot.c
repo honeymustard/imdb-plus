@@ -34,9 +34,6 @@ int fill_list(GtkWidget *table, char *filename, int x, int y) {
     int cols = 0;
     int rows = 0;
 
-    double imdb = 0;
-    double year = 0;
-
     char temp[50];
     char ***results = NULL;
     
@@ -46,8 +43,8 @@ int fill_list(GtkWidget *table, char *filename, int x, int y) {
         for(i = 0; i < gtk_custom_table_get_rows(table); i++) {
 
             /* make results numeric */
-            imdb = strtod(results[i][1], NULL);
-            year = strtol(results[i][4], NULL, 10);
+            double imdb = strtod(results[i][1], NULL);
+            double year = strtol(results[i][4], NULL, 10);
 
             imdb = imdb >= 0 && imdb <= 10 ? imdb : 0;
             year = year > 1800 && year < 2200 ? year : 0;
