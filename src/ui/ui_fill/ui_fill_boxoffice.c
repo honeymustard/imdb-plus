@@ -25,6 +25,29 @@
 #include "io/readfile.h"
 
 
+static double find_entry(GtkWidget *table, char *string) {
+ 
+    int index = gtk_custom_table_get_indexof(table, string);
+
+    if(index >= 0) 
+        return atof(gtk_custom_table_get_cell_text(table, 1, index));
+    else 
+        return 0;
+}
+
+
+static double find_rating(char *string) {
+
+    double n = 0;
+
+    if (n <= 0) n = find_entry(nb_tab_mymovies, string);
+    if (n <= 0) n = find_entry(nb_tab_top250, string);
+    if (n <= 0) n = find_entry(nb_tab_bot100, string);
+    if (n <= 0) n = find_entry(nb_tab_lists, string);
+
+    return n > 0 ? n : 0;
+}
+
 /* parse new boxoffice list */
 int menu_signal_update_box() {
 
@@ -33,7 +56,11 @@ int menu_signal_update_box() {
     int cols = 0;
     int rows = 0;
     
-    char ***results;
+    double imdb = 0;
+    double year = 0;
+
+    char temp[50];
+    char ***results = NULL;
     
     if(read_file(get_global(CONST_BOX_CSV), &cols, &rows, &results) 
         && cols == 6) {
@@ -43,90 +70,48 @@ int menu_signal_update_box() {
 
         for(i = 0; i < gtk_custom_table_get_rows(nb_tab_boxoffice); i++) {
 
+            imdb = strtod(results[i][5], NULL);
+            year = strtol(results[i][3], NULL, 10);
+
+            imdb = imdb >= 0 && imdb <= 10 ? imdb : 0;
+            year = year > 1800 && year < 2200 ? year : 0;
+
+            sprintf(temp, "%d", i + 1);
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 0, i, 
-                results[i][0]);
+                temp);
+
+            sprintf(temp, "%1.2f", imdb);
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
-                results[i][5]);
+                temp);
+
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, 
                 "0");
+
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 3, i, 
                 results[i][1]);
+
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 4, i, 
                 results[i][2]);
+
+            sprintf(temp, "%d", (int)year);
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 5, i, 
-                results[i][3]);
+                temp);
+
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 6, i, 
                 results[i][4]);
 
+            /* get imdb ratings from other tables */
+            double n = find_rating(results[i][1]);
+            n = n > 0 ? n : imdb;
+
+            sprintf(temp, "%1.1f", n);
+            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
+                temp);
+
             /* set cell colors */
-            gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, not_app);
-            gtk_custom_table_set_cell_color(nb_tab_boxoffice, 2, i, not_app);
-
-            /* find imdb ratings in other tables */
-            int index1 = gtk_custom_table_get_indexof(nb_tab_mymovies, 
-                results[i][1]);
-            int index2 = gtk_custom_table_get_indexof(nb_tab_top250, 
-                results[i][1]);
-            int index3 = gtk_custom_table_get_indexof(nb_tab_bot100, 
-                results[i][1]);
-            int index4 = gtk_custom_table_get_indexof(nb_tab_lists, 
-                results[i][1]);
-            
-            /* copy them into boxoffice table */
-            char *rating1 = index1 >= 0 ? 
-                gtk_custom_table_get_cell_text(nb_tab_mymovies, 1, index1) : "0";
-            char *rating2 = index2 >= 0 ? 
-                gtk_custom_table_get_cell_text(nb_tab_top250, 1, index2) : "0";
-            char *rating3 = index3 >= 0 ? 
-                gtk_custom_table_get_cell_text(nb_tab_bot100, 1, index3) : "0";
-            char *rating4 = index4 >= 0 ? 
-                gtk_custom_table_get_cell_text(nb_tab_lists, 1, index4) : "0";
-
-            /* translate ratings */
-            int num = 0;
-            int num1 = atoi(rating1);
-            int num2 = atoi(rating2);
-            int num3 = atoi(rating3);
-            int num4 = atoi(rating4);
-
-            /* apply first discovered value to table */
-            if (num1 > 0) {
-                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
-                    rating1);
-
-                num = num1 - 1;
-            }
-            else if(num2 > 0) {
-                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
-                    rating2);
-
-                num = num2;
-            }
-            else if(num3 > 0) {
-                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
-                    rating3);
-
-                num = num3;
-            }
-            else if(num4 > 0) {
-                gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
-                    rating4);
-
-                num = num4;
-            }
-            else {
-
-                num = (int)atof(results[i][5]);
-
-                if(num == 0) {
-                    gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
-                        not_app);
-                    continue;
-                }
-            }
-
             gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
-                colors[num - 1]);
+                n <= 0 ? not_app : colors[(int)n - 1]);
+            gtk_custom_table_set_cell_color(nb_tab_boxoffice, 2, i, not_app);
         }
 
         free_memory(results, cols, rows);
@@ -140,12 +125,9 @@ int menu_signal_update_box() {
     /* no boxoffice file on disk, add default values.. */
     else {
 
-        char temp[10];
-
         for(i = 0; i < 50; i++) {
 
             sprintf(temp, "%d", i+1);
-
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 0, i, 
                 temp);
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
