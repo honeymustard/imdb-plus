@@ -39,11 +39,6 @@ void open_compare(GtkWidget *current, GtkWidget *other) {
     double time = 0;
     double year = 0;
 
-    int imdb_k = 0;
-    int index = 0;
-
-    char *unique_id = NULL;
-
     int rows = 0;
    
     int i = 0;
@@ -51,9 +46,9 @@ void open_compare(GtkWidget *current, GtkWidget *other) {
 
     for(i = 0; i < gtk_custom_table_get_rows(current); i++, rows++) {
         
-        unique_id = gtk_custom_table_get_cell_text(current, 3, i);
+        char *id = gtk_custom_table_get_cell_text(current, 3, i);
 
-        if(gtk_custom_table_get_indexof(other, unique_id) >= 0) {
+        if(gtk_custom_table_get_indexof(other, id) >= 0) {
             
             /* make results numeric */
             vote = atof(gtk_custom_table_get_cell_text(current, 2, i));
@@ -61,7 +56,7 @@ void open_compare(GtkWidget *current, GtkWidget *other) {
             time = atof(gtk_custom_table_get_cell_text(current, 5, i));
             year = atof(gtk_custom_table_get_cell_text(current, 6, i));
 
-            imdb_k = ((imdb - (int)imdb) * 10) > 5 ? 
+            int imdb_k = ((imdb - (int)imdb) * 10) > 5 ? 
                 (int)imdb : (int)imdb > 0 ? 
                     (int)imdb - 1 : 0;
 
@@ -93,10 +88,7 @@ void open_compare(GtkWidget *current, GtkWidget *other) {
             total[FLUX_TOT][1] += vote > 0.0 ? 1 : 0;
 
             /* add to allstats tab if applicable */
-            index = gtk_custom_table_get_indexof(nb_tab_top250, 
-                unique_id);
-
-            if(index >= 0) {
+            if(gtk_custom_table_get_indexof(nb_tab_top250, id) >= 0) {
 
                 allstats[0][0] += 1;
                 allstats[0][1] += vote;
@@ -105,10 +97,7 @@ void open_compare(GtkWidget *current, GtkWidget *other) {
                 allstats[0][4] += year;
             }
 
-            index = gtk_custom_table_get_indexof(nb_tab_bot100, 
-                unique_id);
-
-            if(index >= 0) {
+            if(gtk_custom_table_get_indexof(nb_tab_bot100, id) >= 0) {
 
                 allstats[1][0] += 1;
                 allstats[1][1] += vote;
@@ -117,10 +106,7 @@ void open_compare(GtkWidget *current, GtkWidget *other) {
                 allstats[1][4] += year;
             }
 
-            index = gtk_custom_table_get_indexof(nb_tab_boxoffice, 
-                unique_id);
-
-            if(index >= 0) {
+            if(gtk_custom_table_get_indexof(nb_tab_boxoffice, id) >= 0) {
 
                 allstats[2][0] += 1;
                 allstats[2][1] += vote;

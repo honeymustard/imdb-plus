@@ -93,11 +93,10 @@ void open_list(char ****results, int rows) {
         gtk_custom_table_set_cell_color(nb_tab_lists, 2, j, 
             not_app);
 
-        /* add 'my rating' to lists tab if applicable */
-        int index = gtk_custom_table_get_indexof(nb_tab_mymovies, 
-            id);
+        int index = 0;
 
-        if(index >= 0) {
+        /* add 'my rating' to lists tab if applicable */
+        if((index = gtk_custom_table_get_indexof(nb_tab_mymovies, id)) >= 0) {
             
             char *rating = gtk_custom_table_get_cell_text(nb_tab_mymovies, 2, 
                 index);
@@ -111,10 +110,7 @@ void open_list(char ****results, int rows) {
         }
 
         /* add imdb-rating to boxoffice tab if applicable */
-        index = gtk_custom_table_get_indexof(nb_tab_boxoffice, 
-            id);
-
-        if(index >= 0) {
+        if((index = gtk_custom_table_get_indexof(nb_tab_boxoffice, id)) >= 0) {
 
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, 
                 index, str_imdb);
@@ -124,10 +120,7 @@ void open_list(char ****results, int rows) {
         }
 
         /* add to allstats tab if applicable */
-        index = gtk_custom_table_get_indexof(nb_tab_top250, 
-            id);
-
-        if(index >= 0) {
+        if(gtk_custom_table_get_indexof(nb_tab_top250, id) >= 0) {
 
             allstats[0][0] += 1;
             allstats[0][2] += imdb;
@@ -135,10 +128,7 @@ void open_list(char ****results, int rows) {
             allstats[0][4] += year;
         }
 
-        index = gtk_custom_table_get_indexof(nb_tab_bot100, 
-            id);
-
-        if(index >= 0) {
+        if(gtk_custom_table_get_indexof(nb_tab_bot100, id) >= 0) {
 
             allstats[1][0] += 1;
             allstats[1][2] += imdb;
@@ -146,10 +136,7 @@ void open_list(char ****results, int rows) {
             allstats[1][4] += year;
         }
 
-        index = gtk_custom_table_get_indexof(nb_tab_boxoffice, 
-            id);
-
-        if(index >= 0) {
+        if(gtk_custom_table_get_indexof(nb_tab_boxoffice, id) >= 0) {
 
             allstats[2][0] += 1;
             allstats[2][2] += imdb;
