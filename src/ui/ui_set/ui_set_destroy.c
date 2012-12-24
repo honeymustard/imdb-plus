@@ -25,6 +25,8 @@
 
 void ui_set_destroy() {
 
+    gtk_custom_table_sort(nb_tab_boxoffice, 0, GTK_CUSTOM_TABLE_ASC);
+
     /* write boxoffice values back to file */ 
     FILE *fp_out = fopen(get_global(CONST_BOX_CSV), "wb");
     
@@ -41,6 +43,7 @@ void ui_set_destroy() {
 
         for(j = 0; j < cols; j++) {
 
+            /* skip columns not represented in file */
             if(j == 1 || j == 2) {
                 continue;
             }
