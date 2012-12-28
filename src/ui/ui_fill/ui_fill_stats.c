@@ -80,9 +80,6 @@ void ui_fill_calc(int rows, double stats[][STATS_X]) {
 void ui_fill_stats(char ****results, int rows, double stats[][STATS_X], 
     double total[][TOTAL_X], int type) {
 
-    memset(stats, 0, STATS_X * STATS_Y * sizeof(double *));
-    memset(total, 0, TOTAL_X * TOTAL_Y * sizeof(double *));
-
     int i = 0;
 
     double vote = 0;

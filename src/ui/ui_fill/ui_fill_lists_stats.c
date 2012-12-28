@@ -29,6 +29,9 @@ void open_list_stats(char ****results, int rows) {
 
     double stats[STATS_Y][STATS_X];
     double total[TOTAL_Y][TOTAL_X];
+    
+    memset(stats, 0, sizeof(stats));
+    memset(total, 0, sizeof(total));
 
     ui_fill_stats(results, rows, stats, total, STATS_L);
 
@@ -44,7 +47,9 @@ void open_list_stats(char ****results, int rows) {
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
 
         /* add imdb value to table */
-        sprintf(temp, "%1.2f", stats[i][IMDB_AVG]);
+        double imdb = stats[i][IMDB_AVG] > 0 ?  stats[i][IMDB_AVG] : i + 1;
+
+        sprintf(temp, "%1.2f", imdb);
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 0, j, 
             temp);
         
@@ -74,9 +79,10 @@ void open_list_stats(char ****results, int rows) {
             temp);
 
         /* add new background color to vote rating */
+        double fraction = imdb - (int)imdb;
+
         gtk_custom_table_set_cell_color(nb_tab_lists_stats, 0, j, 
-            colors[(int)stats[i][IMDB_AVG] > 0 ? 
-                (int)stats[i][IMDB_AVG] - 1 : 0]);
+            colors[(int)(fraction > 0.5 ? imdb + fraction : imdb) - 1]);
     }
 
     /* add statistics footer vote average */
