@@ -95,7 +95,7 @@ void open_movie_stats(char ****results, int rows) {
 
         /* add new background color to flux */
         gtk_custom_table_set_cell_color(nb_tab_statistics, 2, j, 
-            colors[(int)stats[i][FLUX_AVG] > 0 ? 8 : 1]);
+            colors[stats[i][FLUX_AVG] > 0 ? 8 : 1]);
     }
 
     /* add statistics footer vote average */
