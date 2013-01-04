@@ -25,15 +25,57 @@
 #include "ui/table/gtk_custom_table.h"
 
 
-void open_list_stats(char ****results, int rows) {
-
-    double stats[STATS_Y][STATS_X];
-    double total[TOTAL_Y][TOTAL_X];
+void ui_fill_stats_lst_empty() {
     
-    memset(stats, 0, sizeof(stats));
-    memset(total, 0, sizeof(total));
+    int i = 0;
 
-    ui_fill_stats(results, rows, stats, total, STATS_L);
+    for(i = 0; i < 10; i++) {
+
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 0, i, 
+            "0.00");
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 1, i, 
+            "0.00");
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 2, i, 
+            "0.00");
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 3, i, 
+            "0");
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 4, i, 
+            "0.00 %");
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 5, i, 
+            "0");
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 6, i, 
+            "0.00");
+        gtk_custom_table_set_cell_text(nb_tab_lists_stats, 7, i, 
+            "0.00");
+
+        /* set cell colors */
+        gtk_custom_table_set_cell_color(nb_tab_lists_stats, 3, i, 
+            graph_bg);
+    }
+    
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 0, 
+        "0.00");
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 1, 
+        "0.00");
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 2, 
+        "0.00");
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 3, 
+        "");
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 4, 
+        "0.00 %");
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 5, 
+        "0");
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 6, 
+        "0.00");
+    gtk_custom_table_set_foot_text(nb_tab_lists_stats, 7, 
+        "0.00");
+
+    gtk_custom_table_set_graph_color_col(nb_tab_lists_stats, 3, 
+        graph_fg2);
+}
+
+
+void ui_fill_stats_lst_fill(Stats *s, int rows) {
 
     gtk_custom_table_sort(nb_tab_lists_stats, 0, 
         GTK_CUSTOM_TABLE_DESC);
@@ -43,38 +85,38 @@ void open_list_stats(char ****results, int rows) {
 
     char temp[100];
 
-    /* add statistics to widget table */
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
 
         /* add imdb value to table */
-        double imdb = stats[i][IMDB_AVG] > 0 ?  stats[i][IMDB_AVG] : i + 1;
+        double imdb = s->stats[i][IMDB] > 0 ?  
+            s->stats[i][IMDB] : i + 1;
 
         sprintf(temp, "%1.2f", imdb);
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 0, j, 
             temp);
         
         /* add graph value to table */
-        sprintf(temp, "%1.0f", stats[i][GRAPH_WIDTH]);
+        sprintf(temp, "%1.0f", s->graph[i][SIZE]);
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 3, j, 
             temp);
 
         /* add percent value to table */
-        sprintf(temp, "%2.2f %%", stats[i][PERCENTAGE]);
+        sprintf(temp, "%2.2f %%", s->graph[i][CENT]);
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 4, j, 
             temp);
 
         /* add votes value to table */
-        sprintf(temp, "%1.0f", stats[i][VOTES]);
+        sprintf(temp, "%1.0f", s->stats_cnt[i][IMDB]);
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 5, j, 
             temp);
 
         /* add runtime value to table */
-        sprintf(temp, "%1.2f", stats[i][TIME_AVG]);
+        sprintf(temp, "%1.2f", s->stats[i][TIME]);
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 6, j, 
             temp);
 
         /* add year value to table */
-        sprintf(temp, "%1.2f", stats[i][YEAR_AVG]);
+        sprintf(temp, "%1.2f", s->stats[i][YEAR]);
         gtk_custom_table_set_cell_text(nb_tab_lists_stats, 7, j, 
             temp);
 
@@ -86,7 +128,7 @@ void open_list_stats(char ****results, int rows) {
     }
 
     /* add statistics footer vote average */
-    sprintf(temp, "%2.2f", total[IMDB_TOT][0] / total[IMDB_TOT][1]);
+    sprintf(temp, "%2.2f", s->total[IMDB]);
     gtk_custom_table_set_foot_text(nb_tab_lists_stats, 0, 
         temp);
 
@@ -104,12 +146,12 @@ void open_list_stats(char ****results, int rows) {
         temp);
 
     /* add statistics footer runtime average */
-    sprintf(temp, "%4.2f", total[TIME_TOT][0] / total[TIME_TOT][1]);
+    sprintf(temp, "%4.2f", s->total[TIME]);
     gtk_custom_table_set_foot_text(nb_tab_lists_stats, 6, 
         temp);
 
     /* add statistics footer year average */
-    sprintf(temp, "%4.2f", total[YEAR_TOT][0] / total[YEAR_TOT][1]);
+    sprintf(temp, "%4.2f", s->total[YEAR]);
     gtk_custom_table_set_foot_text(nb_tab_lists_stats, 7, 
         temp);
 

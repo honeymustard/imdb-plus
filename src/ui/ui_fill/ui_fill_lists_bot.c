@@ -26,8 +26,39 @@
 #include "io/readfile.h"
 
 
-/* parse a new list */
-int fill_list(GtkWidget *table, char *filename, int x, int y) {
+#define BOT_COLS 6
+#define BOT_ROWS 100
+
+
+void ui_fill_lists_bot_empty() {
+
+    int i = 0;
+
+    char temp[10];
+
+    for(i = 0; i < BOT_ROWS; i++) {
+
+        sprintf(temp, "%d", i+1);
+
+        gtk_custom_table_set_cell_text(nb_tab_bot100, 0, i, 
+            temp);
+        gtk_custom_table_set_cell_text(nb_tab_bot100, 1, i, 
+            "0.0");
+        gtk_custom_table_set_cell_text(nb_tab_bot100, 2, i, 
+            "N/A");
+        gtk_custom_table_set_cell_text(nb_tab_bot100, 3, i, 
+            "0");
+        gtk_custom_table_set_cell_text(nb_tab_bot100, 4, i, 
+            "N/A");
+        gtk_custom_table_set_cell_text(nb_tab_bot100, 5, i, 
+            "0");
+        gtk_custom_table_set_cell_text(nb_tab_bot100, 6, i, 
+            "0");
+    }
+}
+
+
+static int ui_fill_bot(char *filename) {
 
     int i = 0;
 
@@ -38,11 +69,10 @@ int fill_list(GtkWidget *table, char *filename, int x, int y) {
     char ***results = NULL;
     
     if(read_file(filename, &cols, &rows, &results) 
-        && cols == x && rows == y) {
+        && cols == BOT_COLS && rows == BOT_ROWS) {
 
-        for(i = 0; i < gtk_custom_table_get_rows(table); i++) {
+        for(i = 0; i < rows; i++) {
 
-            /* make results numeric */
             double imdb = strtod(results[i][1], NULL);
             double year = strtol(results[i][4], NULL, 10);
 
@@ -50,82 +80,53 @@ int fill_list(GtkWidget *table, char *filename, int x, int y) {
             year = year > 1800 && year < 2200 ? year : 0;
 
             sprintf(temp, "%d", i + 1);
-            gtk_custom_table_set_cell_text(table, 0, i, 
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 0, i, 
                 temp);
-
             sprintf(temp, "%1.1f", imdb);
-            gtk_custom_table_set_cell_text(table, 1, i, 
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 1, i, 
                 temp);
-
-            gtk_custom_table_set_cell_text(table, 2, i, 
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 2, i, 
                 "0");
-
-            gtk_custom_table_set_cell_text(table, 3, i, 
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 3, i, 
                 results[i][2]);
-
-            gtk_custom_table_set_cell_text(table, 4, i, 
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 4, i, 
                 results[i][3]);
-
             sprintf(temp, "%d", (int)year);
-            gtk_custom_table_set_cell_text(table, 5, i, 
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 5, i, 
                 temp);
-
-            gtk_custom_table_set_cell_text(table, 6, i, 
+            gtk_custom_table_set_cell_text(nb_tab_bot100, 6, i, 
                 results[i][5]);
 
             /* set cell colors */
-            gtk_custom_table_set_cell_color(table, 1, i, 
+            gtk_custom_table_set_cell_color(nb_tab_bot100, 1, i, 
                 colors[(int)imdb]); 
 
-            gtk_custom_table_set_cell_color(table, 2, i, 
+            gtk_custom_table_set_cell_color(nb_tab_bot100, 2, i, 
                 not_app);
         }
 
         free_memory(results, cols, rows);
 
-        gtk_custom_table_set_sortable(table, TRUE);
-        gtk_custom_table_sort(table, 0, GTK_CUSTOM_TABLE_ASC);
-        gtk_custom_table_set_column_font(table, 4, TEXT_FONT); 
+        gtk_custom_table_set_sortable(nb_tab_bot100, TRUE);
+        gtk_custom_table_sort(nb_tab_bot100, 0, GTK_CUSTOM_TABLE_ASC);
+        gtk_custom_table_set_column_font(nb_tab_bot100, 4, TEXT_FONT); 
 
         return 1;
-    }
-    /* no list file on disk, add default values.. */
-    else {
-
-        for(i = 0; i < x; i++) {
-
-            sprintf(temp, "%d", i+1);
-
-            gtk_custom_table_set_cell_text(table, 0, i, 
-                temp);
-            gtk_custom_table_set_cell_text(table, 1, i, 
-                "0.0");
-            gtk_custom_table_set_cell_text(table, 2, i, 
-                "N/A");
-            gtk_custom_table_set_cell_text(table, 3, i, 
-                "0");
-            gtk_custom_table_set_cell_text(table, 4, i, 
-                "N/A");
-            gtk_custom_table_set_cell_text(table, 5, i, 
-                "0");
-            gtk_custom_table_set_cell_text(table, 6, i, 
-                "0");
-        }
     }
 
     return 0;
 }
 
 
-/* parse new top 250 list */
-int menu_signal_update_top() {
-    
-    return fill_list(nb_tab_top250, get_global(CONST_TOP_CSV), 6, 250);
+int ui_fill_lists_bot() {
+
+    if(ui_fill_bot(get_global(CONST_BOT_CSV))) {
+        return 1;
+    }
+
+    ui_fill_lists_bot_empty();
+
+    return 0;
 }
 
-/* parse new bottom 100 list */
-int menu_signal_update_bot() {
-
-    return fill_list(nb_tab_bot100, get_global(CONST_BOT_CSV), 6, 100);
-}
 

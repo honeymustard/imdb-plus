@@ -21,6 +21,7 @@
 #include "main.h"
 #include "globals.h"
 #include "ui/ui.h"
+#include "ui/ui_fill/ui_fill.h"
 #include "ui/ui_set/ui_set.h"
 #include "ui/events/events.h"
 #include "ui/table/gtk_custom_table.h"
@@ -116,9 +117,18 @@ void ui_set_init() {
 
     ui_set_headers();
     ui_set_meta();
-    ui_set_tables();
     ui_set_tabs();
     ui_set_menu();
+
+    ui_fill_lists_top();
+    ui_fill_lists_bot();
+    ui_fill_lists_box();
+    ui_fill_lists_lst_empty();
+    ui_fill_lists_mov_empty();
+    ui_fill_stats_lst_empty();
+    ui_fill_stats_mov_empty();
+    ui_fill_stats_cmp_empty();
+    ui_fill_stats_all_empty();
 
     /* add widgets to main vbox */
     gtk_box_pack_start(GTK_BOX(vbox), menubar, FALSE, FALSE, 0);

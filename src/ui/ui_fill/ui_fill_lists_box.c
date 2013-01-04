@@ -49,8 +49,33 @@ static double find_rating(char *string) {
 }
 
 
-/* parse new boxoffice list */
-int menu_signal_update_box() {
+void ui_fill_lists_box_empty() {
+
+    int i = 0;
+    char temp[50];
+
+    for(i = 0; i < 50; i++) {
+
+        sprintf(temp, "%d", i+1);
+        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 0, i, 
+            temp);
+        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
+            "0.0");
+        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, 
+            "0");
+        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 3, i, 
+            "N/A");
+        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 4, i, 
+            "N/A");
+        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 5, i, 
+            "0");
+        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 6, i, 
+            "$0");
+    }
+}
+
+
+int ui_fill_lists_box() {
 
     int i = 0;
 
@@ -66,7 +91,7 @@ int menu_signal_update_box() {
         /* update boxoffice tab size */
         gtk_custom_table_resize(nb_tab_boxoffice, -1, rows);
 
-        for(i = 0; i < gtk_custom_table_get_rows(nb_tab_boxoffice); i++) {
+        for(i = 0; i < rows; i++) {
 
             double imdb = strtod(results[i][5], NULL);
             double year = strtol(results[i][3], NULL, 10);
@@ -77,24 +102,18 @@ int menu_signal_update_box() {
             sprintf(temp, "%d", i + 1);
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 0, i, 
                 temp);
-
             sprintf(temp, "%1.2f", imdb);
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
                 temp);
-
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, 
                 "0");
-
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 3, i, 
                 results[i][1]);
-
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 4, i, 
                 results[i][2]);
-
             sprintf(temp, "%d", (int)year);
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 5, i, 
                 temp);
-
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 6, i, 
                 results[i][4]);
 
@@ -120,28 +139,8 @@ int menu_signal_update_box() {
 
         return 1;
     }
-    /* no boxoffice file on disk, add default values.. */
-    else {
 
-        for(i = 0; i < 50; i++) {
-
-            sprintf(temp, "%d", i+1);
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 0, i, 
-                temp);
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
-                "0.0");
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, 
-                "0");
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 3, i, 
-                "N/A");
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 4, i, 
-                "N/A");
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 5, i, 
-                "0");
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 6, i, 
-                "$0");
-        }
-    }
+    ui_fill_lists_box_empty();
 
     return 0;
 }

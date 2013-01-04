@@ -25,15 +25,64 @@
 #include "ui/table/gtk_custom_table.h"
 
 
-void open_movie_stats(char ****results, int rows) {
+void ui_fill_stats_mov_empty() {
 
-    double stats[STATS_Y][STATS_X];
-    double total[TOTAL_Y][TOTAL_X];
+    int i = 0;
+    int j = 0;
 
-    memset(stats, 0, sizeof(stats));
-    memset(total, 0, sizeof(total));
+    char temp[10];
 
-    ui_fill_stats(results, rows, stats, total, STATS_M);
+    for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
+
+        sprintf(temp, "%d", (j + 1));
+
+        gtk_custom_table_set_cell_text(nb_tab_statistics, 0, i, 
+            temp);
+        gtk_custom_table_set_cell_text(nb_tab_statistics, 1, i, 
+            "0.00");
+        gtk_custom_table_set_cell_text(nb_tab_statistics, 2, i, 
+            "0.00");
+        gtk_custom_table_set_cell_text(nb_tab_statistics, 3, i, 
+            "0");
+        gtk_custom_table_set_cell_text(nb_tab_statistics, 4, i, 
+            "0.00 %");
+        gtk_custom_table_set_cell_text(nb_tab_statistics, 5, i, 
+            "0");
+        gtk_custom_table_set_cell_text(nb_tab_statistics, 6, i, 
+            "0.00");
+        gtk_custom_table_set_cell_text(nb_tab_statistics, 7, i, 
+            "0.00");
+
+        /* set cell colors */
+        gtk_custom_table_set_cell_color(nb_tab_statistics, 0, i, 
+            colors[j]);
+        gtk_custom_table_set_cell_color(nb_tab_statistics, 3, i, 
+            graph_bg);
+    }
+    
+    gtk_custom_table_set_foot_text(nb_tab_statistics, 0, 
+        "0.00");
+    gtk_custom_table_set_foot_text(nb_tab_statistics, 1, 
+        "0.00");
+    gtk_custom_table_set_foot_text(nb_tab_statistics, 2, 
+        "0.00");
+    gtk_custom_table_set_foot_text(nb_tab_statistics, 3, 
+        "");
+    gtk_custom_table_set_foot_text(nb_tab_statistics, 4, 
+        "0.00 %");
+    gtk_custom_table_set_foot_text(nb_tab_statistics, 5, 
+        "0");
+    gtk_custom_table_set_foot_text(nb_tab_statistics, 6, 
+        "0.00");
+    gtk_custom_table_set_foot_text(nb_tab_statistics, 7, 
+        "0.00");
+
+    gtk_custom_table_set_graph_color_col(nb_tab_statistics, 3, 
+        graph_fg1);
+}
+
+
+void ui_fill_stats_mov_fill(Stats *s, int rows) {
 
     gtk_custom_table_sort(nb_tab_statistics, 0, 
         GTK_CUSTOM_TABLE_DESC);
@@ -43,42 +92,41 @@ void open_movie_stats(char ****results, int rows) {
 
     char temp[100];
 
-    /* add statistics to widget table */
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
         
         /* add imdb value to table */
-        sprintf(temp, "%1.2f", stats[i][IMDB_AVG]);
+        sprintf(temp, "%1.2f", s->stats[i][IMDB]);
         gtk_custom_table_set_cell_text(nb_tab_statistics, 1, j, 
             temp);
 
         /* add flux value to table */
-        sprintf(temp, stats[i][FLUX_AVG] == 0.0 ? "%1.2f" : "%+1.2f", 
-            stats[i][FLUX_AVG]);
+        sprintf(temp, s->stats[i][FLUX] == 0.0 ? "%1.2f" : "%+1.2f", 
+            s->stats[i][FLUX]);
         gtk_custom_table_set_cell_text(nb_tab_statistics, 2, j, 
             temp);
 
         /* add graph value to table */
-        sprintf(temp, "%1.0f", stats[i][GRAPH_WIDTH]);
+        sprintf(temp, "%1.0f", s->graph[i][SIZE]);
         gtk_custom_table_set_cell_text(nb_tab_statistics, 3, j, 
             temp);
 
         /* add percent value to table */
-        sprintf(temp, "%2.2f %%", stats[i][PERCENTAGE]);
+        sprintf(temp, "%2.2f %%", s->graph[i][CENT]);
         gtk_custom_table_set_cell_text(nb_tab_statistics, 4, j, 
             temp);
 
         /* add votes value to table */
-        sprintf(temp, "%1.0f", stats[i][VOTES]);
+        sprintf(temp, "%1.0f", s->stats_cnt[i][VOTE]);
         gtk_custom_table_set_cell_text(nb_tab_statistics, 5, j, 
             temp);
 
         /* add runtime value to table */
-        sprintf(temp, "%1.2f", stats[i][TIME_AVG]);
+        sprintf(temp, "%1.2f", s->stats[i][TIME]);
         gtk_custom_table_set_cell_text(nb_tab_statistics, 6, j, 
             temp);
 
         /* add year value to table */
-        sprintf(temp, "%1.2f", stats[i][YEAR_AVG]);
+        sprintf(temp, "%1.2f", s->stats[i][YEAR]);
         gtk_custom_table_set_cell_text(nb_tab_statistics, 7, j, 
             temp);
 
@@ -90,26 +138,26 @@ void open_movie_stats(char ****results, int rows) {
 
         /* add new background color to imdb rating */
         gtk_custom_table_set_cell_color(nb_tab_statistics, 1, j, 
-            colors[(int)stats[i][IMDB_AVG] > 0 ? 
-                (int)stats[i][IMDB_AVG] - 1 : 0]);
+            colors[(int)s->stats[i][IMDB] > 0 ? 
+                (int)s->stats[i][IMDB] - 1 : 0]);
 
         /* add new background color to flux */
         gtk_custom_table_set_cell_color(nb_tab_statistics, 2, j, 
-            colors[stats[i][FLUX_AVG] > 0 ? 8 : 1]);
+            colors[s->stats[i][FLUX] > 0 ? 8 : 1]);
     }
 
     /* add statistics footer vote average */
-    sprintf(temp, "%2.2f", total[VOTE_TOT][0] / total[VOTE_TOT][1]);
+    sprintf(temp, "%2.2f", s->total[VOTE]);
     gtk_custom_table_set_foot_text(nb_tab_statistics, 0, 
         temp);
 
     /* add statistics footer imdb average */
-    sprintf(temp, "%2.2f", total[IMDB_TOT][0] / total[IMDB_TOT][1]);
+    sprintf(temp, "%2.2f", s->total[IMDB]);
     gtk_custom_table_set_foot_text(nb_tab_statistics, 1, 
         temp);
 
     /* add statistics footer flux average */
-    sprintf(temp, "%+2.2f", total[FLUX_TOT][0] / total[FLUX_TOT][1]);
+    sprintf(temp, "%+2.2f", s->total[FLUX]);
     gtk_custom_table_set_foot_text(nb_tab_statistics, 2, 
         temp);
 
@@ -127,12 +175,12 @@ void open_movie_stats(char ****results, int rows) {
         temp);
 
     /* add statistics footer runtime average */
-    sprintf(temp, "%4.2f", total[TIME_TOT][0] / total[TIME_TOT][1]);
+    sprintf(temp, "%4.2f", s->total[TIME]);
     gtk_custom_table_set_foot_text(nb_tab_statistics, 6, 
         temp);
 
     /* add statistics footer year average */
-    sprintf(temp, "%4.2f", total[YEAR_TOT][0] / total[YEAR_TOT][1]);
+    sprintf(temp, "%4.2f", s->total[YEAR]);
     gtk_custom_table_set_foot_text(nb_tab_statistics, 7, 
         temp);
 

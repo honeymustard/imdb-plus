@@ -21,53 +21,88 @@
 #ifndef _UI_FILL_
 #define _UI_FILL_
 
-int menu_signal_update_box();
-int menu_signal_update_bot();
-int menu_signal_update_top();
+#include "ui/table/gtk_custom_table.h"
 
-void open_allstats(double allstats[5], int row, int rows);
-void open_compare(GtkWidget *current, GtkWidget *other);
-void open_list(char ****results, int rows);
-void open_movies(char ****results, int rows);
-void open_movie_stats(char ****results, int rows);
-void open_list_stats(char ****results, int rows);
+#define LST_TOP 0
+#define LST_BOT 1
+#define LST_BOX 2
 
-#define STATS_M 1
-#define STATS_L 0
-#define STATS_Y 10
-#define STATS_X 13
-#define TOTAL_Y 5
-#define TOTAL_X 2
+typedef struct movie_row {
 
-void fill_sanitize(double *v, double *i, double *t, double *y);
-void ui_fill_calc(int rows, double stats[][STATS_X]);
-void ui_fill_stats(char ****results, int rows, double stats[][STATS_X], 
-    double total[][TOTAL_X], int type);
+    char id[50];
+    char title[200];
+    char vote_str[10];
+    char imdb_str[10];
+    char time_str[10];
+    char year_str[10];
+
+    double vote;
+    double imdb;
+    double time;
+    double year;
+
+} Movie;
+
+typedef struct stats {
+
+    double graph[10][2];
+    double stats[10][6];
+    double total[6];
+    double lists[3][6];
+
+    double stats_amt[10][5];
+    double stats_cnt[10][6];
+    double total_amt[5];
+    double total_cnt[6];
+    double lists_amt[3][5];
+    double lists_cnt[3][6];
+
+
+} Stats;
+
+
+void ui_fill_lists_lst(char ****results, int rows);
+void ui_fill_lists_mov(char ****results, int rows);
+int  ui_fill_lists_box();
+int  ui_fill_lists_bot();
+int  ui_fill_lists_top();
+
+void ui_fill_lists_top_empty();
+void ui_fill_lists_bot_empty();
+void ui_fill_lists_box_empty();
+void ui_fill_lists_lst_empty();
+void ui_fill_lists_mov_empty();
+
+void ui_fill_stats_lst_empty();
+void ui_fill_stats_mov_empty();
+void ui_fill_stats_cmp_empty();
+void ui_fill_stats_all_empty();
+
+void ui_fill_stats_mov_fill(Stats *s, int rows);
+void ui_fill_stats_lst_fill(Stats *s, int rows);
+void ui_fill_stats_cmp_fill(Stats *s, int rows);
+void ui_fill_stats_all_fill(Stats *s, int rows, int key, int row);
+
+void ui_fill_stats_avg_calc(Stats *s, int rows);
+void ui_fill_stats_mov_calc(Stats *s, Movie *m, char **row);
+void ui_fill_stats_lst_calc(Stats *s, Movie *m, char **row);
+void ui_fill_stats_all_calc(Stats *s, int row1, int row2, int row3);
+void ui_fill_stats_cmp_calc(GtkWidget *table1, GtkWidget *table2);
+
+enum GRAPH {
+
+    CENT,
+    SIZE, 
+};
 
 enum STATS {
 
-    VOTES, 
-    PERCENTAGE, 
-    GRAPH_WIDTH, 
-    VOTE_AVG, 
-    IMDB_AVG, 
-    FLUX_AVG, 
-    TIME_AVG, 
-    YEAR_AVG, 
-    VOTE_CNT, 
-    IMDB_CNT, 
-    TIME_CNT, 
-    YEAR_CNT, 
-    FLUX_CNT
-};
-
-enum TOTAL {
-
-    VOTE_TOT, 
-    IMDB_TOT, 
-    TIME_TOT, 
-    YEAR_TOT, 
-    FLUX_TOT
+    VOTE, 
+    IMDB, 
+    TIME, 
+    YEAR, 
+    FLUX, 
+    ROWS, 
 };
 
 #endif

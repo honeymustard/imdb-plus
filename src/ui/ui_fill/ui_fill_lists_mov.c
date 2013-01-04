@@ -24,7 +24,34 @@
 #include "ui/table/gtk_custom_table.h"
 
 
-void open_movies(char ****results, int rows) {
+void ui_fill_lists_mov_empty() {
+
+    int i = 0;
+    char temp[10];
+
+    for(i = 0; i < 50; i++) {
+
+        sprintf(temp, "%d", i+1);
+
+        gtk_custom_table_set_cell_text(nb_tab_mymovies, 0, i, 
+            temp);
+        gtk_custom_table_set_cell_text(nb_tab_mymovies, 1, i, 
+            "0.0");
+        gtk_custom_table_set_cell_text(nb_tab_mymovies, 2, i, 
+            "0");
+        gtk_custom_table_set_cell_text(nb_tab_mymovies, 3, i, 
+            "N/A");
+        gtk_custom_table_set_cell_text(nb_tab_mymovies, 4, i, 
+            "N/A");
+        gtk_custom_table_set_cell_text(nb_tab_mymovies, 5, i, 
+            "0");
+        gtk_custom_table_set_cell_text(nb_tab_mymovies, 6, i, 
+            "0");
+    }
+}
+
+
+void ui_fill_lists_mov(char ****results, int rows) {
     
     int i = 0;
     int j = 0;
@@ -65,20 +92,10 @@ void open_movies(char ****results, int rows) {
             not_app);
     }
 
-    double allstats[3][5];
-    memset(allstats, 0, sizeof(allstats));
-
-    double vote = 0;
-    double imdb = 0;
-    double time = 0;
-    double year = 0;
+    Movie *movie = malloc(sizeof(Movie));
+    Stats *stats = malloc(sizeof(Stats));
 
     char temp[100];
-
-    char str_vote[10];
-    char str_imdb[10];
-    char str_time[10];
-    char str_year[10];
 
     /* update mymovies tab with new data */
     gtk_custom_table_resize(nb_tab_mymovies, -1, rows - 1);
@@ -86,38 +103,24 @@ void open_movies(char ****results, int rows) {
     /* add text to widget table */
     for(i = 1, j = 0; i < rows; i++, j++) {
 
-        /* make results numeric */
-        vote = strtol((*results)[i][8], NULL, 10);
-        imdb = strtod((*results)[i][9], NULL);
-        time = strtol((*results)[i][10], NULL, 10);
-        year = strtol((*results)[i][11], NULL, 10);
-
-        fill_sanitize(&vote, &imdb, &time, &year);
-
-        char *id = (*results)[i][1];
-        char *title = (*results)[i][5];
-
-        sprintf(str_vote, "%d", (int)vote);
-        sprintf(str_imdb, "%1.1f", imdb);
-        sprintf(str_time, "%d", (int)time);
-        sprintf(str_year, "%d", (int)year);
+        ui_fill_stats_mov_calc(stats, movie, (*results)[i]);
 
         /* add text to cells */
         sprintf(temp, "%d", i);
         gtk_custom_table_set_cell_text(nb_tab_mymovies, 0, j, 
             temp);
         gtk_custom_table_set_cell_text(nb_tab_mymovies, 1, j, 
-            str_imdb);
+            movie->imdb_str);
         gtk_custom_table_set_cell_text(nb_tab_mymovies, 2, j, 
-            str_vote);
+            movie->vote_str);
         gtk_custom_table_set_cell_text(nb_tab_mymovies, 3, j, 
-            id);
+            movie->id);
         gtk_custom_table_set_cell_text(nb_tab_mymovies, 4, j, 
-            title);
+            movie->title);
         gtk_custom_table_set_cell_text(nb_tab_mymovies, 5, j, 
-            str_time);
+            movie->time_str);
         gtk_custom_table_set_cell_text(nb_tab_mymovies, 6, j, 
-            str_year);
+            movie->year_str);
 
         /* set background colors */
         gtk_custom_table_set_cell_color(nb_tab_mymovies, 1, j, 
@@ -127,94 +130,69 @@ void open_movies(char ****results, int rows) {
 
         /* set cell colors for imdb and vote values */
         gtk_custom_table_set_cell_color(nb_tab_mymovies, 1, j, 
-            (int)imdb > 0 ? colors[(int)imdb - 1] : not_app);
+            (int)movie->imdb > 0 ? colors[(int)movie->imdb - 1] : not_app);
         gtk_custom_table_set_cell_color(nb_tab_mymovies, 2, j, 
-            (int)vote > 0 ? colors[(int)vote - 1] : not_app);
+            (int)movie->vote > 0 ? colors[(int)movie->vote - 1] : not_app);
 
         int index = 0;
 
         /* add 'my rating' to top250 tab */
-        if((index = gtk_custom_table_get_indexof(nb_tab_top250, id)) >= 0) {
+        if((index = gtk_custom_table_get_indexof(nb_tab_top250, 
+                movie->id)) >= 0) {
 
             gtk_custom_table_set_cell_text(nb_tab_top250, 2, 
-                index, str_vote);
+                index, movie->vote_str);
 
             gtk_custom_table_set_cell_color(nb_tab_top250, 2, 
-                index, colors[(int)vote > 0 ? (int)vote - 1 : 0]);
+                index, colors[(int)movie->vote > 0 ? (int)movie->vote - 1 : 0]);
         }
 
         /* add 'my rating' to bottom100 tab if applicable */
-        if((index = gtk_custom_table_get_indexof(nb_tab_bot100, id)) >= 0) {
+        if((index = gtk_custom_table_get_indexof(nb_tab_bot100, 
+                movie->id)) >= 0) {
 
             /* set cell values */
             gtk_custom_table_set_cell_text(nb_tab_bot100, 2, 
-                index, str_vote);
+                index, movie->vote_str);
 
             gtk_custom_table_set_cell_color(nb_tab_bot100, 2, 
-                index, colors[(int)vote > 0 ? (int)vote - 1 : 0]);
+                index, colors[(int)movie->vote > 0 ? (int)movie->vote - 1 : 0]);
         }
 
         /* add 'my rating' and imdb-rating to boxoffice */
-        if((index = gtk_custom_table_get_indexof(nb_tab_boxoffice, id)) >= 0) {
+        if((index = gtk_custom_table_get_indexof(nb_tab_boxoffice, 
+                movie->id)) >= 0) {
 
             /* set cell values */
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, 
-                index, str_imdb);
+                index, movie->imdb_str);
             gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, 
-                index, str_vote);
+                index, movie->vote_str);
 
             /* set cell colors */
             gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, 
-                index, colors[(int)imdb > 0 ? (int)imdb - 1 : 0]);
+                index, colors[(int)movie->imdb > 0 ? (int)movie->imdb - 1 : 0]);
             gtk_custom_table_set_cell_color(nb_tab_boxoffice, 2, 
-                index, colors[(int)vote > 0 ? (int)vote - 1 : 0]);
+                index, colors[(int)movie->vote > 0 ? (int)movie->vote - 1 : 0]);
         }
 
         /* add 'my rating' to lists tab if applicable */
-        if((index = gtk_custom_table_get_indexof(nb_tab_lists, id)) >= 0) {
+        if((index = gtk_custom_table_get_indexof(nb_tab_lists, 
+                movie->id)) >= 0) {
 
             gtk_custom_table_set_cell_text(nb_tab_lists, 2, 
-                index, str_vote);
+                index, movie->vote_str);
             gtk_custom_table_set_cell_color(nb_tab_lists, 2, 
-                index, colors[(int)vote > 0 ? (int)vote - 1 : 0]);
-        }
-        
-        /* add to allstats tab if applicable */
-        if(gtk_custom_table_get_indexof(nb_tab_top250, id) >= 0) {
-
-            allstats[0][0] += 1;
-            allstats[0][1] += vote;
-            allstats[0][2] += imdb;
-            allstats[0][3] += time;
-            allstats[0][4] += year;
-        }
-
-        if(gtk_custom_table_get_indexof(nb_tab_bot100, id) >= 0) {
-
-            allstats[1][0] += 1;
-            allstats[1][1] += vote;
-            allstats[1][2] += imdb;
-            allstats[1][3] += time;
-            allstats[1][4] += year;
-        }
-
-        if(gtk_custom_table_get_indexof(nb_tab_boxoffice, id) >= 0) {
-
-            allstats[2][0] += 1;
-            allstats[2][1] += vote;
-            allstats[2][2] += imdb;
-            allstats[2][3] += time;
-            allstats[2][4] += year;
+                index, colors[(int)movie->vote > 0 ? (int)movie->vote - 1 : 0]);
         }
     }
 
-    /* add statistical data to allstats */
-    open_allstats(allstats[0], 1, 
-        gtk_custom_table_get_rows(nb_tab_top250));
-    open_allstats(allstats[1], 5, 
-        gtk_custom_table_get_rows(nb_tab_bot100));
-    open_allstats(allstats[2], 9, 
-        gtk_custom_table_get_rows(nb_tab_boxoffice));
+    ui_fill_stats_avg_calc(stats, rows);
+    ui_fill_stats_mov_fill(stats, rows);
+    ui_fill_stats_all_calc(stats, 1, 5, 9);
+
+    free(stats);
+    free(movie);
 
     /* set sortable and sort by index */
     gtk_custom_table_set_sortable(nb_tab_mymovies, TRUE);

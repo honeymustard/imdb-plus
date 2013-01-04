@@ -144,7 +144,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
             if(parse_file(get_global(CONST_TOP_TMP), 
                 get_global(CONST_TOP_CSV), pattern_top250)) {
                 
-                if(menu_signal_update_top()) {
+                if(ui_fill_lists_top()) {
                     topstat = "OK";
                 }
             }
@@ -156,7 +156,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
             if(parse_file(get_global(CONST_BOT_TMP), 
                 get_global(CONST_BOT_CSV), pattern_bot100)) {
 
-                if(menu_signal_update_bot()) {
+                if(ui_fill_lists_bot()) {
                     botstat = "OK";
                 }
             }
@@ -209,7 +209,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
 
                 free_memory(results, cols, rows);
 
-                if(menu_signal_update_box()) {
+                if(ui_fill_lists_box()) {
                     boxstat = "OK";
                 }
             }

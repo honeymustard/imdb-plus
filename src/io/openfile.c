@@ -49,8 +49,7 @@ int open_file(char *filename) {
     if(strcmp("IMDb Rating", results[0][9]) == 0) {
 
         set_global(CONST_OPEN_M, filename);
-        open_movie_stats(&results, rows);
-        open_movies(&results, rows);
+        ui_fill_lists_mov(&results, rows);
 
         has_open_movies = 1;
     }
@@ -58,8 +57,7 @@ int open_file(char *filename) {
     else {
 
         set_global(CONST_OPEN_L, filename);
-        open_list_stats(&results, rows);
-        open_list(&results, rows);
+        ui_fill_lists_lst(&results, rows);
 
         has_open_lists = 1;
     }
@@ -68,7 +66,8 @@ int open_file(char *filename) {
 
     /* fill comparison tab if applicable */
     if(has_open_movies && has_open_lists) {
-        open_compare(nb_tab_mymovies, nb_tab_lists);
+
+        ui_fill_stats_cmp_calc(nb_tab_mymovies, nb_tab_lists);
     }
         
     gtk_custom_table_refresh(window);

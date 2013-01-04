@@ -2,15 +2,13 @@
 ## TODO
 
 **Considerations**
-* add lists directory to enforce separation of lists/movies files
+* none
 
 **Improvements**
-* top lists. which list films appear in top lists also?
+* add a compare tab so one can see intersected movies list
 
 **Non-Urgent fixes**
-* make various fields with no value more consistent
 * add or remove null values from lists, do i need a 0 row?
-* fix allstats
 * rpm build-script needs updating
 
 **Urget fixes**
