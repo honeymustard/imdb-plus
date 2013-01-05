@@ -67,7 +67,7 @@ int open_file(char *filename) {
     /* fill comparison tab if applicable */
     if(has_open_mov && has_open_lst) {
 
-        ui_fill_stats_cmp_calc(nb_tab_mymovies, nb_tab_lists);
+        ui_fill_lists_cmp(nb_tab_mymovies, nb_tab_lists);
     }
         
     gtk_custom_table_refresh(window);

@@ -77,6 +77,16 @@ char *nb_tab_compare_headers[TABLE_COMPR_COLS] = {
     "Year", 
 };
 
+char *nb_tab_lists_cmp_headers[TABLE_MYCMP_COLS] = {
+    "#", 
+    "IMDb", 
+    "Vote", 
+    "IMDb ID", 
+    "Title", 
+    "Runtime", 
+    "Year", 
+};
+
 char *nb_tab_top250_headers[TABLE_TP250_COLS] = {
     "#", 
     "IMDb", 
@@ -151,6 +161,12 @@ void ui_set_headers() {
     for(i = 0; i < TABLE_COMPR_COLS; i++) {
         gtk_custom_table_set_head_text(nb_tab_compare, i, 
             nb_tab_compare_headers[i]);
+    }
+
+    /* set my-comp headers */
+    for(i = 0; i < TABLE_MYCMP_COLS; i++) {
+        gtk_custom_table_set_head_text(nb_tab_lists_cmp, i, 
+            nb_tab_lists_cmp_headers[i]);
     }
 
     /* set top 250 headers */

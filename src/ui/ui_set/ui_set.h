@@ -24,7 +24,6 @@
 void ui_set_init();
 void ui_set_headers();
 void ui_set_meta();
-void ui_set_tables();
 void ui_set_tabs();
 void ui_set_menu();
 void ui_set_destroy();
@@ -34,6 +33,7 @@ void ui_set_destroy();
 #define TABLE_LSTST_COLS 8
 #define TABLE_MYLST_COLS 7
 #define TABLE_COMPR_COLS 8
+#define TABLE_MYCMP_COLS 7
 #define TABLE_TP250_COLS 7
 #define TABLE_BT100_COLS 7
 #define TABLE_BOXOF_COLS 7
@@ -43,6 +43,8 @@ char *nb_tab_statistics_headers[TABLE_STATS_COLS];
 char *nb_tab_mymovies_headers[TABLE_MYMOV_COLS];
 char *nb_tab_lists_stats_headers[TABLE_LSTST_COLS];
 char *nb_tab_mylists_headers[TABLE_MYLST_COLS];
+char *nb_tab_compare_headers[TABLE_COMPR_COLS];
+char *nb_tab_lists_cmp_headers[TABLE_MYCMP_COLS];
 char *nb_tab_top250_headers[TABLE_TP250_COLS];
 char *nb_tab_bot100_headers[TABLE_BT100_COLS];
 char *nb_tab_boxoffice_headers[TABLE_BOXOF_COLS];

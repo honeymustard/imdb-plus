@@ -48,6 +48,10 @@ int nb_tab_compare_cols[TABLE_COMPR_COLS] = {
     60, 60, 60, -1, 85, 85, 85, 85
 };
 
+int nb_tab_lists_cmp_cols[TABLE_MYCMP_COLS] = {
+    60, 60, 60, 100, -1, 80, 55
+};
+
 int nb_tab_top250_cols[TABLE_TP250_COLS] = {
     60, 60, 60, 100, -1, 55, 80 
 };
@@ -106,6 +110,8 @@ void ui_set_init() {
         50, 500, 500, nb_tab_mylists_cols);
     nb_tab_compare = gtk_custom_table_new(TABLE_COMPR_COLS, 
         10, 500, 500, nb_tab_compare_cols);
+    nb_tab_lists_cmp = gtk_custom_table_new(TABLE_MYCMP_COLS, 
+        50, 500, 500, nb_tab_lists_cmp_cols);
     nb_tab_top250 = gtk_custom_table_new(TABLE_TP250_COLS, 
         250, 500, 500, nb_tab_top250_cols);
     nb_tab_bot100 = gtk_custom_table_new(TABLE_BT100_COLS, 
@@ -125,6 +131,8 @@ void ui_set_init() {
     ui_fill_lists_box();
     ui_fill_lists_lst_empty();
     ui_fill_lists_mov_empty();
+    ui_fill_lists_cmp_empty();
+
     ui_fill_stats_lst_empty();
     ui_fill_stats_mov_empty();
     ui_fill_stats_cmp_empty();

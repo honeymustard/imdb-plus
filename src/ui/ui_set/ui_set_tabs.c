@@ -29,6 +29,7 @@ void ui_set_tabs() {
     nb_tab_lists_stats_vbox = gtk_vbox_new(FALSE, 0);
     nb_tab_lists_vbox = gtk_vbox_new(FALSE, 0);
     nb_tab_compare_vbox = gtk_vbox_new(FALSE, 0);
+    nb_tab_lists_cmp_vbox = gtk_vbox_new(FALSE, 0);
     nb_tab_top250_vbox = gtk_vbox_new(FALSE, 0);
     nb_tab_bot100_vbox = gtk_vbox_new(FALSE, 0);
     nb_tab_boxoffice_vbox = gtk_vbox_new(FALSE, 0);
@@ -40,6 +41,7 @@ void ui_set_tabs() {
     nb_lists_stats_scroll = gtk_scrolled_window_new(NULL, NULL);
     nb_lists_scroll = gtk_scrolled_window_new(NULL, NULL);
     nb_compare_scroll = gtk_scrolled_window_new(NULL, NULL);
+    nb_lists_cmp_scroll = gtk_scrolled_window_new(NULL, NULL);
     nb_top250_scroll = gtk_scrolled_window_new(NULL, NULL);
     nb_bot100_scroll = gtk_scrolled_window_new(NULL, NULL);
     nb_boxoffice_scroll = gtk_scrolled_window_new(NULL, NULL);
@@ -54,7 +56,9 @@ void ui_set_tabs() {
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_lists_scroll), 
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_compare_scroll), 
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_compare_scroll), 
+        GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_lists_cmp_scroll), 
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(nb_top250_scroll), 
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -71,6 +75,7 @@ void ui_set_tabs() {
     nb_lists_stats_view = gtk_viewport_new(NULL, NULL);
     nb_lists_view = gtk_viewport_new(NULL, NULL);
     nb_compare_view = gtk_viewport_new(NULL, NULL);
+    nb_lists_cmp_view = gtk_viewport_new(NULL, NULL);
     nb_top250_view = gtk_viewport_new(NULL, NULL);
     nb_bot100_view = gtk_viewport_new(NULL, NULL);
     nb_boxoffice_view = gtk_viewport_new(NULL, NULL);
@@ -87,6 +92,8 @@ void ui_set_tabs() {
         nb_tab_lists);
     gtk_container_add(GTK_CONTAINER(nb_compare_view), 
         nb_tab_compare);
+    gtk_container_add(GTK_CONTAINER(nb_lists_cmp_view), 
+        nb_tab_lists_cmp);
     gtk_container_add(GTK_CONTAINER(nb_top250_view), 
         nb_tab_top250);
     gtk_container_add(GTK_CONTAINER(nb_bot100_view), 
@@ -106,6 +113,8 @@ void ui_set_tabs() {
     gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_lists_view), 
         GTK_SHADOW_NONE);
     gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_compare_view), 
+        GTK_SHADOW_NONE);
+    gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_lists_cmp_view), 
         GTK_SHADOW_NONE);
     gtk_viewport_set_shadow_type(GTK_VIEWPORT(nb_top250_view), 
         GTK_SHADOW_NONE);
@@ -127,6 +136,8 @@ void ui_set_tabs() {
         nb_lists_view); 
     gtk_container_add(GTK_CONTAINER(nb_compare_scroll), 
         nb_compare_view); 
+    gtk_container_add(GTK_CONTAINER(nb_lists_cmp_scroll), 
+        nb_lists_cmp_view); 
     gtk_container_add(GTK_CONTAINER(nb_top250_scroll), 
         nb_top250_view); 
     gtk_container_add(GTK_CONTAINER(nb_bot100_scroll), 
@@ -147,6 +158,8 @@ void ui_set_tabs() {
         nb_lists_scroll, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(nb_tab_compare_vbox), 
         nb_compare_scroll, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(nb_tab_lists_cmp_vbox), 
+        nb_lists_cmp_scroll, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(nb_tab_top250_vbox), 
         nb_top250_scroll, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(nb_tab_bot100_vbox), 
@@ -167,6 +180,8 @@ void ui_set_tabs() {
         nb_tab_lists_vbox, gtk_label_new("My Lists"));
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
         nb_tab_compare_vbox, gtk_label_new("Compare Stats"));
+    gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
+        nb_tab_lists_cmp_vbox, gtk_label_new("Compare"));
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
         nb_tab_top250_vbox, gtk_label_new("Top 250"));
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 

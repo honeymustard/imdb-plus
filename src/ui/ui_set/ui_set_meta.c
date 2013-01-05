@@ -29,6 +29,8 @@ void ui_set_meta() {
         TRUE);
     gtk_custom_table_set_column_prime(nb_tab_lists, 3, 
         TRUE);
+    gtk_custom_table_set_column_prime(nb_tab_lists_cmp, 3, 
+        TRUE);
     gtk_custom_table_set_column_prime(nb_tab_top250, 3, 
         TRUE);
     gtk_custom_table_set_column_prime(nb_tab_bot100, 3, 
@@ -50,6 +52,8 @@ void ui_set_meta() {
     gtk_custom_table_set_column_index(nb_tab_mymovies, 0, 
         TRUE);
     gtk_custom_table_set_column_index(nb_tab_lists, 0, 
+        TRUE);
+    gtk_custom_table_set_column_index(nb_tab_lists_cmp, 0, 
         TRUE);
 
     /* override default font */
@@ -184,6 +188,19 @@ void ui_set_meta() {
     gtk_custom_table_set_column_alignment(nb_tab_lists, 5, 
         PANGO_ALIGN_RIGHT);
     gtk_custom_table_set_column_alignment(nb_tab_lists, 6, 
+        PANGO_ALIGN_RIGHT);
+
+    gtk_custom_table_set_column_alignment(nb_tab_lists_cmp, 0, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_lists_cmp, 1, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_lists_cmp, 2, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_lists_cmp, 3, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_lists_cmp, 5, 
+        PANGO_ALIGN_RIGHT);
+    gtk_custom_table_set_column_alignment(nb_tab_lists_cmp, 6, 
         PANGO_ALIGN_RIGHT);
 }
 

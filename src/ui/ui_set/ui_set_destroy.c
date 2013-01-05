@@ -69,6 +69,7 @@ void ui_set_destroy() {
     gtk_custom_table_free(nb_tab_lists_stats);
     gtk_custom_table_free(nb_tab_lists);
     gtk_custom_table_free(nb_tab_compare);
+    gtk_custom_table_free(nb_tab_lists_cmp);
     gtk_custom_table_free(nb_tab_top250);
     gtk_custom_table_free(nb_tab_bot100);
     gtk_custom_table_free(nb_tab_boxoffice);
