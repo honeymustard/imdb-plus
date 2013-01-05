@@ -217,7 +217,6 @@ static void ui_fill_stats_calc(Stats *s, Movie *m, char **row, int key) {
     sprintf(m->time_str, "%d", (int)m->time);
     sprintf(m->year_str, "%d", (int)m->year);
 
-    ui_fill_sanitize(m);
     ui_fill_addentry(s, m, key);
     ui_fill_addlists(s, m, row[1]);
 }
@@ -236,6 +235,7 @@ void ui_fill_stats_mov_calc(Stats *s, Movie *m, char **row) {
     m->time = strtol(row[10], NULL, 10);
     m->year = strtol(row[11], NULL, 10);
 
+    ui_fill_sanitize(m);
     ui_fill_stats_calc(s, m, row, m->vote > 0 ? (int)m->vote - 1 : 0);
 }
 
@@ -253,6 +253,7 @@ void ui_fill_stats_lst_calc(Stats *s, Movie *m, char **row) {
     m->time = strtol(row[9], NULL, 10);
     m->year = strtol(row[10], NULL, 10);
  
-    ui_fill_stats_calc(s, m, row, (int)m->imdb);
+    ui_fill_sanitize(m);
+    ui_fill_stats_calc(s, m, row, (int)m->imdb >= 10 ? 9 : (int)m->imdb);
 }
 
