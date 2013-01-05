@@ -183,8 +183,6 @@ void ui_fill_stats_all_fill(Stats *s, int row1, int row2, int row3) {
         gtk_custom_table_set_cell_text(nb_tab_allstats, 1, rows[i], 
             temp);
 
-
-
         /* set third column, flux */
         if(s->lists[i][IMDB] > 0 && s->lists[i][VOTE] > 0) {
 
