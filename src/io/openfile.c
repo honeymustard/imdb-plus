@@ -26,8 +26,8 @@
 #include "io/readfile.h"
 
 
-int has_open_movies = 0;
-int has_open_lists = 0;
+int has_open_mov = 0;
+int has_open_lst = 0;
 
 
 /**
@@ -51,7 +51,7 @@ int open_file(char *filename) {
         set_global(CONST_OPEN_M, filename);
         ui_fill_lists_mov(&results, rows);
 
-        has_open_movies = 1;
+        has_open_mov = 1;
     }
     /* file is a list of some kind */
     else {
@@ -59,13 +59,13 @@ int open_file(char *filename) {
         set_global(CONST_OPEN_L, filename);
         ui_fill_lists_lst(&results, rows);
 
-        has_open_lists = 1;
+        has_open_lst = 1;
     }
 
     free_memory(results, cols, rows);
 
     /* fill comparison tab if applicable */
-    if(has_open_movies && has_open_lists) {
+    if(has_open_mov && has_open_lst) {
 
         ui_fill_stats_cmp_calc(nb_tab_mymovies, nb_tab_lists);
     }
