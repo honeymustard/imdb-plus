@@ -46,8 +46,8 @@ char *nb_tab_mymovies_headers[TABLE_MYMOV_COLS] = {
 };
 
 char *nb_tab_lists_stats_headers[TABLE_LSTST_COLS] = {
-    "IMDb", 
     "N/A", 
+    "IMDb", 
     "N/A", 
     "IMDb Ratings", 
     "Percent", 
@@ -67,8 +67,8 @@ char *nb_tab_mylists_headers[TABLE_MYLST_COLS] = {
 };
 
 char *nb_tab_compare_headers[TABLE_COMPR_COLS] = {
-    "IMDb", 
     "Vote", 
+    "IMDb", 
     "Flux", 
     "My Movies / My Lists Comparison", 
     "Percent", 
@@ -108,8 +108,8 @@ char *nb_tab_boxoffice_headers[TABLE_BOXOF_COLS] = {
 };
 
 char *nb_tab_allstats_headers[TABLE_ALLST_COLS] = {
-    "IMDb", 
     "Vote", 
+    "IMDb", 
     "Flux", 
     "Completion", 
     "", 

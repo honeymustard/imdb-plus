@@ -166,7 +166,7 @@ void ui_set_tabs() {
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
         nb_tab_lists_vbox, gtk_label_new("My Lists"));
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
-        nb_tab_compare_vbox, gtk_label_new("Compare"));
+        nb_tab_compare_vbox, gtk_label_new("Compare Stats"));
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
         nb_tab_top250_vbox, gtk_label_new("Top 250"));
     gtk_notebook_append_page(GTK_NOTEBOOK(nb), 
