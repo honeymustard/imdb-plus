@@ -25,6 +25,10 @@
 #include "ui/table/gtk_custom_table.h"
 
 
+/**
+ * sanitize the values of a movie entry
+ * @param Movie *m    movie in which to sanitize
+ */
 static void ui_fill_sanitize(Movie *m) {
 
     m->vote = m->vote >= 0.0 && m->vote <= 10.0 ? m->vote : 0.0;
@@ -34,15 +38,12 @@ static void ui_fill_sanitize(Movie *m) {
 }
 
 
-static int ui_fill_calckey(double imdb) {
-
-    int imdb_k = (int)imdb;
-
-    return ((imdb - imdb_k) * 10) > 5 ? 
-             imdb_k : imdb_k > 0 ? imdb_k - 1 : 0;
-}
-
-
+/**
+ * add a movie entry to a stats object at key
+ * @param Stats *s    current stats object
+ * @param Movie *m    movie entry object to be added
+ * @param int k       the key indice to use..
+ */
 static void ui_fill_addentry(Stats *s, Movie *m, int k) {
 
     /* add up averages */
@@ -77,6 +78,12 @@ static void ui_fill_addentry(Stats *s, Movie *m, int k) {
 }
 
 
+/**
+ * add a movie entry to a stats object if present in top-lists
+ * @param Stats *s    current stats object
+ * @param Movie *m    movie entry object to be added
+ * @param char *id    id of the current movie entry
+ */
 static void ui_fill_addlists(Stats *s, Movie *m, char *id) {
 
     int lists[3];
@@ -107,6 +114,11 @@ static void ui_fill_addlists(Stats *s, Movie *m, char *id) {
 }
 
 
+/**
+ * calculate all valid averages for a stats object
+ * @param Stats *s    current stats object
+ * @param int rows    number of rows in table
+ */
 void ui_fill_stats_avg_calc(Stats *s, int rows) {
 
     int i = 0;
@@ -164,23 +176,15 @@ void ui_fill_stats_avg_calc(Stats *s, int rows) {
 }
 
 
-void ui_fill_stats_all_calc(Stats *s, int row1, int row2, int row3) {
-
-    ui_fill_stats_all_fill(s, gtk_custom_table_get_rows(nb_tab_top250), 
-        LST_TOP, row1);
-    ui_fill_stats_all_fill(s, gtk_custom_table_get_rows(nb_tab_bot100), 
-        LST_BOT, row2);
-    ui_fill_stats_all_fill(s, gtk_custom_table_get_rows(nb_tab_boxoffice), 
-        LST_BOX, row3);
-}
-
-
+/**
+ * calculate comparison intersection statistics..
+ */
 void ui_fill_stats_cmp_calc(GtkWidget *table1, GtkWidget *table2) {
 
     int i = 0;
 
     Movie *m = malloc(sizeof(Movie));
-    Stats *s = malloc(sizeof(Stats));
+    Stats *s = calloc(1, sizeof(Stats));
 
     int total_rows = 0;
     int table_rows = gtk_custom_table_get_rows(table1);
@@ -198,21 +202,28 @@ void ui_fill_stats_cmp_calc(GtkWidget *table1, GtkWidget *table2) {
         m->time = atof(gtk_custom_table_get_cell_text(table1, 5, i));
         m->year = atof(gtk_custom_table_get_cell_text(table1, 6, i));
 
-        ui_fill_addentry(s, m, ui_fill_calckey(m->imdb));
+        ui_fill_addentry(s, m, (int)m->imdb);
         ui_fill_addlists(s, m, id);
 
         total_rows++;
     }
     
     ui_fill_stats_avg_calc(s, total_rows);
-    ui_fill_stats_all_calc(s, 3, 7, 11);
     ui_fill_stats_cmp_fill(s, total_rows);
+    ui_fill_stats_all_fill(s, 3, 7, 11);
 
     free(m);
     free(s);
 }
 
 
+/**
+ * fill a stats object with movie values from a row
+ * @param Stats *s      current stats object
+ * @param Movie *m      current movie object
+ * @param char **row    row with movie values
+ * @pararm int key      key index for stats array
+ */
 static void ui_fill_stats_calc(Stats *s, Movie *m, char **row, int key) {
 
     strcpy(m->id, row[1]);
@@ -229,6 +240,12 @@ static void ui_fill_stats_calc(Stats *s, Movie *m, char **row, int key) {
 }
 
 
+/**
+ * fill a stats object with movie values from a row
+ * @param Stats *s      current stats object
+ * @param Movie *m      current movie object
+ * @param char **row    row with movie values
+ */
 void ui_fill_stats_mov_calc(Stats *s, Movie *m, char **row) {
 
     m->vote = strtol(row[8], NULL, 10);
@@ -240,6 +257,12 @@ void ui_fill_stats_mov_calc(Stats *s, Movie *m, char **row) {
 }
 
 
+/**
+ * fill a stats object with movie values from a row
+ * @param Stats *s      current stats object
+ * @param Movie *m      current movie object
+ * @param char **row    row with movie values
+ */
 void ui_fill_stats_lst_calc(Stats *s, Movie *m, char **row) {
 
     m->vote = 0;
@@ -247,6 +270,6 @@ void ui_fill_stats_lst_calc(Stats *s, Movie *m, char **row) {
     m->time = strtol(row[9], NULL, 10);
     m->year = strtol(row[10], NULL, 10);
  
-    ui_fill_stats_calc(s, m, row, ui_fill_calckey(m->imdb));
+    ui_fill_stats_calc(s, m, row, (int)m->imdb);
 }
 

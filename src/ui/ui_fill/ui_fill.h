@@ -81,12 +81,11 @@ void ui_fill_stats_all_empty();
 void ui_fill_stats_mov_fill(Stats *s, int rows);
 void ui_fill_stats_lst_fill(Stats *s, int rows);
 void ui_fill_stats_cmp_fill(Stats *s, int rows);
-void ui_fill_stats_all_fill(Stats *s, int rows, int key, int row);
+void ui_fill_stats_all_fill(Stats *s, int row1, int row2, int row3);
 
 void ui_fill_stats_avg_calc(Stats *s, int rows);
 void ui_fill_stats_mov_calc(Stats *s, Movie *m, char **row);
 void ui_fill_stats_lst_calc(Stats *s, Movie *m, char **row);
-void ui_fill_stats_all_calc(Stats *s, int row1, int row2, int row3);
 void ui_fill_stats_cmp_calc(GtkWidget *table1, GtkWidget *table2);
 
 enum GRAPH {

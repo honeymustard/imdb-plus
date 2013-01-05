@@ -116,7 +116,7 @@ void ui_fill_stats_mov_fill(Stats *s, int rows) {
             temp);
 
         /* add votes value to table */
-        sprintf(temp, "%1.0f", s->stats_cnt[i][VOTE]);
+        sprintf(temp, "%1.0f", s->stats_cnt[i][ROWS]);
         gtk_custom_table_set_cell_text(nb_tab_statistics, 5, j, 
             temp);
 

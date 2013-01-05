@@ -28,11 +28,15 @@ void ui_fill_stats_cmp_empty() {
 
     int i = 0;
     int j = 0;
+    
+    char temp[10];
 
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
 
+        sprintf(temp, "%d", (j + 1));
+
         gtk_custom_table_set_cell_text(nb_tab_compare, 0, i, 
-            "0.00");
+            temp);
         gtk_custom_table_set_cell_text(nb_tab_compare, 1, i, 
             "0.00");
         gtk_custom_table_set_cell_text(nb_tab_compare, 2, i, 
@@ -49,16 +53,18 @@ void ui_fill_stats_cmp_empty() {
             "0.00");
 
         /* set cell colors */
+        gtk_custom_table_set_cell_color(nb_tab_compare, 0, i, 
+            colors[j]);
         gtk_custom_table_set_cell_color(nb_tab_compare, 3, i, 
             graph_bg);
     }
     
     gtk_custom_table_set_foot_text(nb_tab_compare, 0, 
-        "0.00");
+        "N/A");
     gtk_custom_table_set_foot_text(nb_tab_compare, 1, 
         "0.00");
     gtk_custom_table_set_foot_text(nb_tab_compare, 2, 
-        "0.00");
+        "N/A");
     gtk_custom_table_set_foot_text(nb_tab_compare, 3, 
         "");
     gtk_custom_table_set_foot_text(nb_tab_compare, 4, 
@@ -87,16 +93,16 @@ void ui_fill_stats_cmp_fill(Stats *s, int rows) {
 
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
         
-        /* add imdb value to table */
-        double imdb = s->stats[i][IMDB] > 0 ?  
-            s->stats[i][IMDB] : i + 1;
-
-        sprintf(temp, "%1.2f", imdb);
+        /* add vote value to table */
+        sprintf(temp, "%1.2f", s->stats[i][VOTE]);
         gtk_custom_table_set_cell_text(nb_tab_compare, 0, j, 
             temp);
 
-        /* add vote value to table */
-        sprintf(temp, "%1.2f", s->stats[i][VOTE]);
+        /* add imdb value to table */
+        double imdb = s->stats[i][IMDB] > 0 ?  
+            s->stats[i][IMDB] : i;
+
+        sprintf(temp, "%1.2f", imdb);
         gtk_custom_table_set_cell_text(nb_tab_compare, 1, j, 
             temp);
 
@@ -117,7 +123,7 @@ void ui_fill_stats_cmp_fill(Stats *s, int rows) {
             temp);
 
         /* add votes value to table */
-        sprintf(temp, "%1.0f", s->stats_cnt[i][VOTE]);
+        sprintf(temp, "%1.0f", s->stats_cnt[i][ROWS]);
         gtk_custom_table_set_cell_text(nb_tab_compare, 5, j, 
             temp);
 
@@ -133,18 +139,16 @@ void ui_fill_stats_cmp_fill(Stats *s, int rows) {
 
         /* add new background color to vote rating */
         gtk_custom_table_set_cell_color(nb_tab_compare, 0, j, 
-            colors[(int)s->stats[i][IMDB] < 10 && 
-                (int)s->stats[i][IMDB] > 0 ? 
-                (int)s->stats[i][IMDB] - 1 : 1]);
-
-        gtk_custom_table_set_cell_color(nb_tab_compare, 1, j, 
             colors[(int)s->stats[i][VOTE] < 10 && 
                 (int)s->stats[i][VOTE] > 0 ? 
                 (int)s->stats[i][VOTE] - 1 : 1]);
 
+        gtk_custom_table_set_cell_color(nb_tab_compare, 1, j, 
+            colors[(int)imdb]);
+
         /* add new background color to flux */
         gtk_custom_table_set_cell_color(nb_tab_compare, 2, j, 
-            colors[(int)s->stats[i][FLUX] > 0 ? 8 : 1]);
+            colors[s->stats[i][FLUX] > 0 ? 8 : 1]);
     }
 
     /* add statistics footer vote average */

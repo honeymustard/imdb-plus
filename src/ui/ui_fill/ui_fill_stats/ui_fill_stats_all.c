@@ -113,149 +113,168 @@ void ui_fill_stats_all_empty() {
 }
 
 
-void ui_fill_stats_all_fill(Stats *s, int rows, int key, int row) {
+void ui_fill_stats_all_fill(Stats *s, int row1, int row2, int row3) {
+
+    int i = 0;
+
+    int rows[3];
+
+    rows[0] = row1;
+    rows[1] = row2;
+    rows[2] = row3;
+
+    int rows_count[3];
+
+    rows_count[0] = gtk_custom_table_get_rows(nb_tab_top250);
+    rows_count[1] = gtk_custom_table_get_rows(nb_tab_bot100);
+    rows_count[2] = gtk_custom_table_get_rows(nb_tab_boxoffice);
 
     char temp[100];
 
-    /* reset background colors */
-    gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 0, row, 
-        FALSE);
-    gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 1, row, 
-        FALSE);
-    gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 2, row, 
-        FALSE);
+    for(i = 0; i < 3; i++) {
 
-    /* set first column, imdb */
-    if(s->lists[key][IMDB] > 0) {
+        /* reset background colors */
+        gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 0, rows[i], 
+            FALSE);
+        gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 1, rows[i], 
+            FALSE);
+        gtk_custom_table_set_cell_color_enable(nb_tab_allstats, 2, rows[i], 
+            FALSE);
 
-        sprintf(temp, "%1.2f", s->lists[key][IMDB]);
+        /* set first column, vote */
+        if(s->lists[i][VOTE] > 0) {
 
-        gtk_custom_table_set_cell_alignment(nb_tab_allstats, 0, row, 
-            PANGO_ALIGN_RIGHT);
-    }
-    else {
+            sprintf(temp, "%1.2f", s->lists[i][VOTE]);
 
-        strcpy(temp, "N/A");
+            gtk_custom_table_set_cell_alignment(nb_tab_allstats, 0, rows[i], 
+                PANGO_ALIGN_RIGHT);
+        }
+        else {
 
-        gtk_custom_table_set_cell_color(nb_tab_allstats, 0, row, 
-            not_app);
-        gtk_custom_table_set_cell_alignment(nb_tab_allstats, 0, row, 
-            PANGO_ALIGN_CENTER);
-    }
+            strcpy(temp, "N/A");
 
-    gtk_custom_table_set_cell_text(nb_tab_allstats, 0, row, 
-        temp);
+            gtk_custom_table_set_cell_color(nb_tab_allstats, 0, rows[i], 
+                not_app);
+            gtk_custom_table_set_cell_alignment(nb_tab_allstats, 0, rows[i], 
+                PANGO_ALIGN_CENTER);
+        }
 
-    /* set second column, vote */
-    if(s->lists[key][VOTE] > 0) {
+        gtk_custom_table_set_cell_text(nb_tab_allstats, 0, rows[i], 
+            temp);
 
-        sprintf(temp, "%1.2f", s->lists[key][VOTE]);
+        /* set second column, imdb */
+        if(s->lists[i][IMDB] > 0) {
 
-        gtk_custom_table_set_cell_alignment(nb_tab_allstats, 1, row, 
-            PANGO_ALIGN_RIGHT);
-    }
-    else {
+            sprintf(temp, "%1.2f", s->lists[i][IMDB]);
 
-        strcpy(temp, "N/A");
+            gtk_custom_table_set_cell_alignment(nb_tab_allstats, 1, rows[i], 
+                PANGO_ALIGN_RIGHT);
+        }
+        else {
 
-        gtk_custom_table_set_cell_color(nb_tab_allstats, 1, row, 
-            not_app);
-        gtk_custom_table_set_cell_alignment(nb_tab_allstats, 1, row, 
-            PANGO_ALIGN_CENTER);
-    }
+            strcpy(temp, "N/A");
 
-    gtk_custom_table_set_cell_text(nb_tab_allstats, 1, row, 
-        temp);
+            gtk_custom_table_set_cell_color(nb_tab_allstats, 1, rows[i], 
+                not_app);
+            gtk_custom_table_set_cell_alignment(nb_tab_allstats, 1, rows[i], 
+                PANGO_ALIGN_CENTER);
+        }
 
-    /* set third column, flux */
-    if(s->lists[key][IMDB] > 0 && s->lists[key][VOTE] > 0) {
+        gtk_custom_table_set_cell_text(nb_tab_allstats, 1, rows[i], 
+            temp);
 
-        sprintf(temp, s->lists[key][FLUX] == 0 ? "%1.2f" : "%+1.2f", 
-            s->lists[key][FLUX]);
 
-        gtk_custom_table_set_cell_alignment(nb_tab_allstats, 2, row, 
-            PANGO_ALIGN_RIGHT);
-    }
-    else {
 
-        strcpy(temp, "N/A");
+        /* set third column, flux */
+        if(s->lists[i][IMDB] > 0 && s->lists[i][VOTE] > 0) {
 
-        gtk_custom_table_set_cell_color(nb_tab_allstats, 2, row, 
-            not_app);
-        gtk_custom_table_set_cell_alignment(nb_tab_allstats, 2, row, 
-            PANGO_ALIGN_CENTER);
-    }
+            sprintf(temp, s->lists[i][FLUX] == 0 ? "%1.2f" : "%+1.2f", 
+                s->lists[i][FLUX]);
 
-    gtk_custom_table_set_cell_text(nb_tab_allstats, 2, row, 
-        temp);
+            gtk_custom_table_set_cell_alignment(nb_tab_allstats, 2, rows[i], 
+                PANGO_ALIGN_RIGHT);
+        }
+        else {
 
-    /* set graph width */
-    sprintf(temp, "%d", (int)s->lists_cnt[key][ROWS] > 0 ? 
-        (int)(100.0 / (rows / s->lists_cnt[key][ROWS])) : 0);
-    gtk_custom_table_set_cell_text(nb_tab_allstats, 3, row, 
-        temp);
+            strcpy(temp, "N/A");
 
-    /* set percentage */
-    sprintf(temp, "%1.2f %%", (int)s->lists_cnt[key][ROWS] > 0 ? 
-        s->lists_cnt[key][ROWS] / (rows / 100.0) : 0.0);
-    gtk_custom_table_set_cell_text(nb_tab_allstats, 5, row, 
-        temp);
+            gtk_custom_table_set_cell_color(nb_tab_allstats, 2, rows[i], 
+                not_app);
+            gtk_custom_table_set_cell_alignment(nb_tab_allstats, 2, rows[i], 
+                PANGO_ALIGN_CENTER);
+        }
 
-    /* set movies count */
-    sprintf(temp, "%d/%d", (int)s->lists_cnt[key][ROWS], rows);
-    gtk_custom_table_set_cell_text(nb_tab_allstats, 6, row, 
-        temp);
+        gtk_custom_table_set_cell_text(nb_tab_allstats, 2, rows[i], 
+            temp);
 
-    /* set runtime */
-    sprintf(temp, "%1.2f", s->lists[key][TIME]);
-    gtk_custom_table_set_cell_text(nb_tab_allstats, 7, row, 
-        temp);
+        /* set graph width */
+        sprintf(temp, "%d", (int)s->lists_cnt[i][ROWS] > 0 ? 
+            (int)(100.0 / (rows_count[i] / s->lists_cnt[i][ROWS])) : 0);
+        gtk_custom_table_set_cell_text(nb_tab_allstats, 3, rows[i], 
+            temp);
 
-    /* set year */
-    sprintf(temp, "%1.2f", s->lists[key][YEAR]);
-    gtk_custom_table_set_cell_text(nb_tab_allstats, 8, row, 
-        temp);
+        /* set percentage */
+        sprintf(temp, "%1.2f %%", (int)s->lists_cnt[i][ROWS] > 0 ? 
+            s->lists_cnt[i][ROWS] / (rows_count[i] / 100.0) : 0.0);
+        gtk_custom_table_set_cell_text(nb_tab_allstats, 5, rows[i], 
+            temp);
 
-    int imdb = (int)s->lists[key][IMDB];
-    int vote = (int)s->lists[key][VOTE];
+        /* set movies count */
+        sprintf(temp, "%d/%d", (int)s->lists_cnt[i][ROWS], rows_count[i]);
+        gtk_custom_table_set_cell_text(nb_tab_allstats, 6, rows[i], 
+            temp);
 
-    if(s->lists[key][IMDB] > 0) {
-        gtk_custom_table_set_cell_color(nb_tab_allstats, 0, row, 
-            colors[imdb < 10 && imdb > 0 ? imdb - 1 : 1]);
-    }
+        /* set runtime */
+        sprintf(temp, "%1.2f", s->lists[i][TIME]);
+        gtk_custom_table_set_cell_text(nb_tab_allstats, 7, rows[i], 
+            temp);
 
-    if(s->lists[key][VOTE] > 0) {
-        gtk_custom_table_set_cell_color(nb_tab_allstats, 1, row, 
-            colors[vote < 10 && vote > 0 ? vote - 1 : 1 ]);
-    }
+        /* set year */
+        sprintf(temp, "%1.2f", s->lists[i][YEAR]);
+        gtk_custom_table_set_cell_text(nb_tab_allstats, 8, rows[i], 
+            temp);
 
-    if(s->lists[key][IMDB] > 0 && s->lists[key][VOTE] > 0) {
-        gtk_custom_table_set_cell_color(nb_tab_allstats, 2, row, 
-            colors[s->lists[key][FLUX] > 0 ? 8 : 1]);
-    }
+        int imdb = (int)s->lists[i][IMDB];
+        int vote = (int)s->lists[i][VOTE];
 
-    int cent = s->lists_cnt[key][ROWS] / (rows / 100.0);
+        /* set cell colors */
+        if(s->lists[i][VOTE] > 0) {
+            gtk_custom_table_set_cell_color(nb_tab_allstats, 0, rows[i], 
+                colors[vote < 10 && vote > 0 ? vote - 1 : 1 ]);
+        }
 
-    char *awards[] = {
-        AWARD_GOLD, 
-        AWARD_SILVER, 
-        AWARD_BRONZE, 
-        RIBBON_GOLD, 
-        RIBBON_SILVER, 
-        RIBBON_BRONZE
-    };
+        if(s->lists[i][IMDB] > 0) {
+            gtk_custom_table_set_cell_color(nb_tab_allstats, 1, rows[i], 
+                colors[imdb < 10 && imdb > 0 ? imdb - 1 : 1]);
+        }
 
-    if(cent > 0 ) {
+        if(s->lists[i][IMDB] > 0 && s->lists[i][VOTE] > 0) {
+            gtk_custom_table_set_cell_color(nb_tab_allstats, 2, rows[i], 
+                colors[s->lists[i][FLUX] > 0 ? 8 : 1]);
+        }
 
-        gtk_custom_table_set_cell_bg_image(nb_tab_allstats, 4, row, 
-          cent == 100 ? awards[0] : 
-          cent >= 80  ? awards[1] : 
-          cent >= 60  ? awards[2] : 
-          cent >= 40  ? awards[3] : 
-          cent >= 20  ? awards[4] : 
-          cent > 0    ? awards[5] : 
-          awards[5]);
+        int cent = s->lists_cnt[i][ROWS] / (rows_count[i] / 100.0);
+
+        char *awards[] = {
+            AWARD_GOLD, 
+            AWARD_SILVER, 
+            AWARD_BRONZE, 
+            RIBBON_GOLD, 
+            RIBBON_SILVER, 
+            RIBBON_BRONZE
+        };
+
+        if(cent > 0 ) {
+
+            gtk_custom_table_set_cell_bg_image(nb_tab_allstats, 4, rows[i], 
+              cent == 100 ? awards[0] : 
+              cent >= 80  ? awards[1] : 
+              cent >= 60  ? awards[2] : 
+              cent >= 40  ? awards[3] : 
+              cent >= 20  ? awards[4] : 
+              cent > 0    ? awards[5] : 
+              awards[5]);
+        }
     }
 }
-
 

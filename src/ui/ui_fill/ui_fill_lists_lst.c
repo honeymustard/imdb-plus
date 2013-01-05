@@ -59,19 +59,16 @@ void ui_fill_lists_lst(char ****results, int rows) {
     int j = 0;
 
     Movie *movie = malloc(sizeof(Movie));
-    Stats *stats = malloc(sizeof(Stats));
+    Stats *stats = calloc(1, sizeof(Stats));
 
     char temp[100];
 
-    /* update lists tab with new data */
     gtk_custom_table_resize(nb_tab_lists, -1, rows - 1);
 
-    /* add text to widget table */
     for(i = 1, j = 0; i < rows; i++, j++) {
 
         ui_fill_stats_lst_calc(stats, movie, (*results)[i]);
 
-        /* add text to cells */
         sprintf(temp, "%d", i);
         gtk_custom_table_set_cell_text(nb_tab_lists, 0, j, 
             temp);
@@ -131,7 +128,7 @@ void ui_fill_lists_lst(char ****results, int rows) {
 
     ui_fill_stats_avg_calc(stats, rows);
     ui_fill_stats_lst_fill(stats, rows);
-    ui_fill_stats_all_calc(stats, 2, 6, 10);
+    ui_fill_stats_all_fill(stats, 2, 6, 10);
 
     free(stats);
     free(movie);

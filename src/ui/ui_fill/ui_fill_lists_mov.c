@@ -93,7 +93,7 @@ void ui_fill_lists_mov(char ****results, int rows) {
     }
 
     Movie *movie = malloc(sizeof(Movie));
-    Stats *stats = malloc(sizeof(Stats));
+    Stats *stats = calloc(1, sizeof(Stats));
 
     char temp[100];
 
@@ -189,7 +189,7 @@ void ui_fill_lists_mov(char ****results, int rows) {
 
     ui_fill_stats_avg_calc(stats, rows);
     ui_fill_stats_mov_fill(stats, rows);
-    ui_fill_stats_all_calc(stats, 1, 5, 9);
+    ui_fill_stats_all_fill(stats, 1, 5, 9);
 
     free(stats);
     free(movie);
