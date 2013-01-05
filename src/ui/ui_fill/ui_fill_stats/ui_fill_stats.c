@@ -88,9 +88,9 @@ static void ui_fill_addlists(Stats *s, Movie *m, char *id) {
 
     int lists[3];
 
-    lists[LST_TOP] = gtk_custom_table_get_indexof(nb_tab_top250, id) >= 0;
-    lists[LST_BOT] = gtk_custom_table_get_indexof(nb_tab_bot100, id) >= 0;
-    lists[LST_BOX] = gtk_custom_table_get_indexof(nb_tab_boxoffice, id) >= 0;
+    lists[0] = gtk_custom_table_get_indexof(nb_tab_top250, id) >= 0;
+    lists[1] = gtk_custom_table_get_indexof(nb_tab_bot100, id) >= 0;
+    lists[2] = gtk_custom_table_get_indexof(nb_tab_boxoffice, id) >= 0;
 
     int i = 0;
 
@@ -179,41 +179,24 @@ void ui_fill_stats_avg_calc(Stats *s, int rows) {
 /**
  * calculate comparison intersection statistics..
  */
-void ui_fill_stats_cmp_calc(GtkWidget *table1, GtkWidget *table2) {
+void ui_fill_stats_cmp_calc(Stats *s, Movie *m, int row, 
+    GtkWidget *table, char *id) {
 
-    int i = 0;
+    m->vote = atof(gtk_custom_table_get_cell_text(table, 2, row));
+    m->imdb = atof(gtk_custom_table_get_cell_text(table, 1, row));
+    m->time = atof(gtk_custom_table_get_cell_text(table, 5, row));
+    m->year = atof(gtk_custom_table_get_cell_text(table, 6, row));
 
-    Movie *m = malloc(sizeof(Movie));
-    Stats *s = calloc(1, sizeof(Stats));
+    strcpy(m->id, id);
+    strcpy(m->title, gtk_custom_table_get_cell_text(table, 4, row));
 
-    int total_rows = 0;
-    int table_rows = gtk_custom_table_get_rows(table1);
+    sprintf(m->vote_str, "%d", (int)m->vote);
+    sprintf(m->imdb_str, "%1.1f", m->imdb);
+    sprintf(m->time_str, "%d", (int)m->time);
+    sprintf(m->year_str, "%d", (int)m->year);
 
-    for(i = 0; i < table_rows; i++) {
-        
-        char *id = gtk_custom_table_get_cell_text(table1, 3, i);
-
-        if(gtk_custom_table_get_indexof(table2, id) < 0) {
-            continue;
-        }
-        
-        m->vote = atof(gtk_custom_table_get_cell_text(table1, 2, i));
-        m->imdb = atof(gtk_custom_table_get_cell_text(table1, 1, i));
-        m->time = atof(gtk_custom_table_get_cell_text(table1, 5, i));
-        m->year = atof(gtk_custom_table_get_cell_text(table1, 6, i));
-
-        ui_fill_addentry(s, m, m->vote > 0 ? (int)m->vote - 1 : 0);
-        ui_fill_addlists(s, m, id);
-
-        total_rows++;
-    }
-    
-    ui_fill_stats_avg_calc(s, total_rows);
-    ui_fill_stats_cmp_fill(s, total_rows);
-    ui_fill_stats_all_fill(s, 3, 7, 11);
-
-    free(m);
-    free(s);
+    ui_fill_addentry(s, m, m->vote > 0 ? (int)m->vote - 1 : 0);
+    ui_fill_addlists(s, m, id);
 }
 
 

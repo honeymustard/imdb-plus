@@ -21,11 +21,9 @@
 #ifndef _UI_FILL_
 #define _UI_FILL_
 
+
 #include "ui/table/gtk_custom_table.h"
 
-#define LST_TOP 0
-#define LST_BOT 1
-#define LST_BOX 2
 
 typedef struct movie_row {
 
@@ -42,6 +40,7 @@ typedef struct movie_row {
     double year;
 
 } Movie;
+
 
 typedef struct stats {
 
@@ -63,15 +62,18 @@ typedef struct stats {
 
 void ui_fill_lists_lst(char ****results, int rows);
 void ui_fill_lists_mov(char ****results, int rows);
+void ui_fill_lists_cmp(GtkWidget *table1, GtkWidget *table2);
+
 int  ui_fill_lists_box();
 int  ui_fill_lists_bot();
 int  ui_fill_lists_top();
 
+void ui_fill_lists_lst_empty();
+void ui_fill_lists_mov_empty();
+void ui_fill_lists_cmp_empty();
 void ui_fill_lists_top_empty();
 void ui_fill_lists_bot_empty();
 void ui_fill_lists_box_empty();
-void ui_fill_lists_lst_empty();
-void ui_fill_lists_mov_empty();
 
 void ui_fill_stats_lst_empty();
 void ui_fill_stats_mov_empty();
@@ -86,23 +88,11 @@ void ui_fill_stats_all_fill(Stats *s, int row1, int row2, int row3);
 void ui_fill_stats_avg_calc(Stats *s, int rows);
 void ui_fill_stats_mov_calc(Stats *s, Movie *m, char **row);
 void ui_fill_stats_lst_calc(Stats *s, Movie *m, char **row);
-void ui_fill_stats_cmp_calc(GtkWidget *table1, GtkWidget *table2);
+void ui_fill_stats_cmp_calc(Stats *s, Movie *m, int row, 
+    GtkWidget *table, char *id);
 
-enum GRAPH {
-
-    CENT,
-    SIZE, 
-};
-
-enum STATS {
-
-    VOTE, 
-    IMDB, 
-    TIME, 
-    YEAR, 
-    FLUX, 
-    ROWS, 
-};
+enum GRAPH { CENT, SIZE };
+enum STATS { VOTE, IMDB, TIME, YEAR, FLUX, ROWS };
 
 #endif
 
