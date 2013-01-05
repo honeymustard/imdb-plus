@@ -60,11 +60,11 @@ void ui_fill_stats_cmp_empty() {
     }
     
     gtk_custom_table_set_foot_text(nb_tab_compare, 0, 
-        "N/A");
+        "0.00");
     gtk_custom_table_set_foot_text(nb_tab_compare, 1, 
         "0.00");
     gtk_custom_table_set_foot_text(nb_tab_compare, 2, 
-        "N/A");
+        "0.00");
     gtk_custom_table_set_foot_text(nb_tab_compare, 3, 
         "");
     gtk_custom_table_set_foot_text(nb_tab_compare, 4, 
@@ -93,11 +93,6 @@ void ui_fill_stats_cmp_fill(Stats *s, int rows) {
 
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
         
-        /* add vote value to table */
-        sprintf(temp, "%1.2f", s->stats[i][VOTE]);
-        gtk_custom_table_set_cell_text(nb_tab_compare, 0, j, 
-            temp);
-
         /* add imdb value to table */
         double imdb = s->stats[i][IMDB] > 0 ?  
             s->stats[i][IMDB] : i;
@@ -136,12 +131,6 @@ void ui_fill_stats_cmp_fill(Stats *s, int rows) {
         sprintf(temp, "%1.2f", s->stats[i][YEAR]);
         gtk_custom_table_set_cell_text(nb_tab_compare, 7, j, 
             temp);
-
-        /* add new background color to vote rating */
-        gtk_custom_table_set_cell_color(nb_tab_compare, 0, j, 
-            colors[(int)s->stats[i][VOTE] < 10 && 
-                (int)s->stats[i][VOTE] > 0 ? 
-                (int)s->stats[i][VOTE] - 1 : 1]);
 
         gtk_custom_table_set_cell_color(nb_tab_compare, 1, j, 
             colors[(int)imdb]);

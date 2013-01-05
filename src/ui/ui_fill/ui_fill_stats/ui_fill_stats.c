@@ -202,7 +202,7 @@ void ui_fill_stats_cmp_calc(GtkWidget *table1, GtkWidget *table2) {
         m->time = atof(gtk_custom_table_get_cell_text(table1, 5, i));
         m->year = atof(gtk_custom_table_get_cell_text(table1, 6, i));
 
-        ui_fill_addentry(s, m, (int)m->imdb);
+        ui_fill_addentry(s, m, m->vote > 0 ? (int)m->vote - 1 : 0);
         ui_fill_addlists(s, m, id);
 
         total_rows++;
