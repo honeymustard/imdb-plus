@@ -28,27 +28,29 @@ void ui_set_tabs();
 void ui_set_menu();
 void ui_set_destroy();
 
-#define TABLE_STATS_COLS 8
-#define TABLE_MYMOV_COLS 7
-#define TABLE_LSTST_COLS 8
-#define TABLE_MYLST_COLS 7
-#define TABLE_COMPR_COLS 8
-#define TABLE_MYCMP_COLS 7
-#define TABLE_TP250_COLS 7
-#define TABLE_BT100_COLS 7
-#define TABLE_BOXOF_COLS 7
-#define TABLE_ALLST_COLS 9
+#define COLS_STATS_MOV 8
+#define COLS_STATS_LST 8
+#define COLS_STATS_CMP 8
+#define COLS_STATS_ALL 9
 
-char *nb_tab_statistics_headers[TABLE_STATS_COLS];
-char *nb_tab_mymovies_headers[TABLE_MYMOV_COLS];
-char *nb_tab_lists_stats_headers[TABLE_LSTST_COLS];
-char *nb_tab_mylists_headers[TABLE_MYLST_COLS];
-char *nb_tab_compare_headers[TABLE_COMPR_COLS];
-char *nb_tab_lists_cmp_headers[TABLE_MYCMP_COLS];
-char *nb_tab_top250_headers[TABLE_TP250_COLS];
-char *nb_tab_bot100_headers[TABLE_BT100_COLS];
-char *nb_tab_boxoffice_headers[TABLE_BOXOF_COLS];
-char *nb_tab_allstats_headers[TABLE_ALLST_COLS];
+#define COLS_LISTS_MOV 7
+#define COLS_LISTS_LST 7
+#define COLS_LISTS_CMP 7
+#define COLS_LISTS_TOP 7
+#define COLS_LISTS_BOT 7
+#define COLS_LISTS_BOX 7
+
+char *nb_stats_mov_headers[COLS_STATS_MOV];
+char *nb_stats_lst_headers[COLS_STATS_LST];
+char *nb_stats_cmp_headers[COLS_STATS_CMP];
+char *nb_stats_all_headers[COLS_STATS_ALL];
+
+char *nb_lists_mov_headers[COLS_LISTS_MOV];
+char *nb_lists_lst_headers[COLS_LISTS_LST];
+char *nb_lists_cmp_headers[COLS_LISTS_CMP];
+char *nb_lists_top_headers[COLS_LISTS_TOP];
+char *nb_lists_bot_headers[COLS_LISTS_BOT];
+char *nb_lists_box_headers[COLS_LISTS_BOX];
 
 #endif
 

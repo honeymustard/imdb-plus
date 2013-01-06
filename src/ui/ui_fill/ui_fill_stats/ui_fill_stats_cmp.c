@@ -35,55 +35,55 @@ void ui_fill_stats_cmp_empty() {
 
         sprintf(temp, "%d", (j + 1));
 
-        gtk_custom_table_set_cell_text(nb_tab_compare, 0, i, 
+        gtk_custom_table_set_cell_text(nb_stats_cmp_tab, 0, i, 
             temp);
-        gtk_custom_table_set_cell_text(nb_tab_compare, 1, i, 
+        gtk_custom_table_set_cell_text(nb_stats_cmp_tab, 1, i, 
             "0.00");
-        gtk_custom_table_set_cell_text(nb_tab_compare, 2, i, 
+        gtk_custom_table_set_cell_text(nb_stats_cmp_tab, 2, i, 
             "0.00");
-        gtk_custom_table_set_cell_text(nb_tab_compare, 3, i, 
+        gtk_custom_table_set_cell_text(nb_stats_cmp_tab, 3, i, 
             "0");
-        gtk_custom_table_set_cell_text(nb_tab_compare, 4, i, 
+        gtk_custom_table_set_cell_text(nb_stats_cmp_tab, 4, i, 
             "0.00 %");
-        gtk_custom_table_set_cell_text(nb_tab_compare, 5, i, 
+        gtk_custom_table_set_cell_text(nb_stats_cmp_tab, 5, i, 
             "0");
-        gtk_custom_table_set_cell_text(nb_tab_compare, 6, i, 
+        gtk_custom_table_set_cell_text(nb_stats_cmp_tab, 6, i, 
             "0.00");
-        gtk_custom_table_set_cell_text(nb_tab_compare, 7, i, 
+        gtk_custom_table_set_cell_text(nb_stats_cmp_tab, 7, i, 
             "0.00");
 
         /* set cell colors */
-        gtk_custom_table_set_cell_color(nb_tab_compare, 0, i, 
+        gtk_custom_table_set_cell_color(nb_stats_cmp_tab, 0, i, 
             colors[j]);
-        gtk_custom_table_set_cell_color(nb_tab_compare, 3, i, 
+        gtk_custom_table_set_cell_color(nb_stats_cmp_tab, 3, i, 
             graph_bg);
     }
     
-    gtk_custom_table_set_foot_text(nb_tab_compare, 0, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 0, 
         "0.00");
-    gtk_custom_table_set_foot_text(nb_tab_compare, 1, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 1, 
         "0.00");
-    gtk_custom_table_set_foot_text(nb_tab_compare, 2, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 2, 
         "0.00");
-    gtk_custom_table_set_foot_text(nb_tab_compare, 3, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 3, 
         "");
-    gtk_custom_table_set_foot_text(nb_tab_compare, 4, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 4, 
         "0.00 %");
-    gtk_custom_table_set_foot_text(nb_tab_compare, 5, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 5, 
         "0");
-    gtk_custom_table_set_foot_text(nb_tab_compare, 6, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 6, 
         "0.00");
-    gtk_custom_table_set_foot_text(nb_tab_compare, 7, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 7, 
         "0.00");
 
-    gtk_custom_table_set_graph_color_col(nb_tab_compare, 3, 
+    gtk_custom_table_set_graph_color_col(nb_stats_cmp_tab, 3, 
         graph_fg3);
 }
 
 
 void ui_fill_stats_cmp_fill(Stats *s, int rows) {
 
-    gtk_custom_table_sort(nb_tab_compare, 0, 
+    gtk_custom_table_sort(nb_stats_cmp_tab, 0, 
         GTK_CUSTOM_TABLE_DESC);
 
     int i = 0;
@@ -98,87 +98,87 @@ void ui_fill_stats_cmp_fill(Stats *s, int rows) {
             s->stats[i][IMDB] : i;
 
         sprintf(temp, "%1.2f", imdb);
-        gtk_custom_table_set_cell_text(nb_tab_compare, 1, j, 
+        gtk_custom_table_set_cell_text(nb_stats_cmp_tab, 1, j, 
             temp);
 
         /* add flux value to table */
         sprintf(temp, s->stats[i][FLUX] == 0.0 ? 
             "%1.2f" : "%+1.2f", s->stats[i][FLUX]);
-        gtk_custom_table_set_cell_text(nb_tab_compare, 2, j, 
+        gtk_custom_table_set_cell_text(nb_stats_cmp_tab, 2, j, 
             temp);
 
         /* add graph value to table */
         sprintf(temp, "%1.0f", s->graph[i][SIZE]);
-        gtk_custom_table_set_cell_text(nb_tab_compare, 3, j, 
+        gtk_custom_table_set_cell_text(nb_stats_cmp_tab, 3, j, 
             temp);
 
         /* add percent value to table */
         sprintf(temp, "%2.2f %%", s->graph[i][CENT]);
-        gtk_custom_table_set_cell_text(nb_tab_compare, 4, j, 
+        gtk_custom_table_set_cell_text(nb_stats_cmp_tab, 4, j, 
             temp);
 
         /* add votes value to table */
         sprintf(temp, "%1.0f", s->stats_cnt[i][ROWS]);
-        gtk_custom_table_set_cell_text(nb_tab_compare, 5, j, 
+        gtk_custom_table_set_cell_text(nb_stats_cmp_tab, 5, j, 
             temp);
 
         /* add runtime value to table */
         sprintf(temp, "%1.2f", s->stats[i][TIME]);
-        gtk_custom_table_set_cell_text(nb_tab_compare, 6, j, 
+        gtk_custom_table_set_cell_text(nb_stats_cmp_tab, 6, j, 
             temp);
 
         /* add year value to table */
         sprintf(temp, "%1.2f", s->stats[i][YEAR]);
-        gtk_custom_table_set_cell_text(nb_tab_compare, 7, j, 
+        gtk_custom_table_set_cell_text(nb_stats_cmp_tab, 7, j, 
             temp);
 
-        gtk_custom_table_set_cell_color(nb_tab_compare, 1, j, 
+        gtk_custom_table_set_cell_color(nb_stats_cmp_tab, 1, j, 
             colors[(int)imdb]);
 
         /* add new background color to flux */
-        gtk_custom_table_set_cell_color(nb_tab_compare, 2, j, 
+        gtk_custom_table_set_cell_color(nb_stats_cmp_tab, 2, j, 
             colors[s->stats[i][FLUX] > 0 ? 8 : 1]);
     }
 
     /* add statistics footer vote average */
     sprintf(temp, "%2.2f", s->total[VOTE]);
-    gtk_custom_table_set_foot_text(nb_tab_compare, 0, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 0, 
         temp);
 
     /* add statistics footer imdb average */
     sprintf(temp, "%2.2f", s->total[IMDB]);
-    gtk_custom_table_set_foot_text(nb_tab_compare, 1, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 1, 
         temp);
 
     /* add statistics footer flux average */
     sprintf(temp, "%+2.2f", s->total[FLUX]);
-    gtk_custom_table_set_foot_text(nb_tab_compare, 2, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 2, 
         temp);
 
     /* add statistics footer vote info */
     sprintf(temp, "%d movies intersect", rows);
-    gtk_custom_table_set_foot_text(nb_tab_compare, 3, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 3, 
         temp);
 
     /* add statistics footer percent total */
-    gtk_custom_table_set_foot_text(nb_tab_compare, 4, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 4, 
         "100.00 %");
 
     /* add statistics footer votes total */
     sprintf(temp, "%d", rows);
-    gtk_custom_table_set_foot_text(nb_tab_compare, 5, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 5, 
         temp);
 
     /* add statistics footer runtime average */
     sprintf(temp, "%4.2f", s->total[TIME]);
-    gtk_custom_table_set_foot_text(nb_tab_compare, 6, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 6, 
         temp);
 
     /* add statistics footer year average */
     sprintf(temp, "%4.2f", s->total[YEAR]);
-    gtk_custom_table_set_foot_text(nb_tab_compare, 7, 
+    gtk_custom_table_set_foot_text(nb_stats_cmp_tab, 7, 
         temp);
 
-    gtk_custom_table_set_sortable(nb_tab_compare, TRUE);
+    gtk_custom_table_set_sortable(nb_stats_cmp_tab, TRUE);
 }
 

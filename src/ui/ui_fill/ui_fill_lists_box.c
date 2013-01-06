@@ -40,10 +40,10 @@ static double find_rating(char *string) {
 
     double n = 0;
 
-    if (n <= 0) n = find_entry(nb_tab_mymovies, string);
-    if (n <= 0) n = find_entry(nb_tab_top250, string);
-    if (n <= 0) n = find_entry(nb_tab_bot100, string);
-    if (n <= 0) n = find_entry(nb_tab_lists, string);
+    if (n <= 0) n = find_entry(nb_lists_mov_tab, string);
+    if (n <= 0) n = find_entry(nb_lists_top_tab, string);
+    if (n <= 0) n = find_entry(nb_lists_lst_tab, string);
+    if (n <= 0) n = find_entry(nb_lists_bot_tab, string);
 
     return n > 0 ? n : 0;
 }
@@ -57,19 +57,19 @@ void ui_fill_lists_box_empty() {
     for(i = 0; i < 50; i++) {
 
         sprintf(temp, "%d", i+1);
-        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 0, i, 
+        gtk_custom_table_set_cell_text(nb_lists_box_tab, 0, i, 
             temp);
-        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
+        gtk_custom_table_set_cell_text(nb_lists_box_tab, 1, i, 
             "0.0");
-        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, 
+        gtk_custom_table_set_cell_text(nb_lists_box_tab, 2, i, 
             "0");
-        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 3, i, 
+        gtk_custom_table_set_cell_text(nb_lists_box_tab, 3, i, 
             "N/A");
-        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 4, i, 
+        gtk_custom_table_set_cell_text(nb_lists_box_tab, 4, i, 
             "N/A");
-        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 5, i, 
+        gtk_custom_table_set_cell_text(nb_lists_box_tab, 5, i, 
             "0");
-        gtk_custom_table_set_cell_text(nb_tab_boxoffice, 6, i, 
+        gtk_custom_table_set_cell_text(nb_lists_box_tab, 6, i, 
             "$0");
     }
 }
@@ -89,7 +89,7 @@ int ui_fill_lists_box() {
         && cols == 6) {
 
         /* update boxoffice tab size */
-        gtk_custom_table_resize(nb_tab_boxoffice, -1, rows);
+        gtk_custom_table_resize(nb_lists_box_tab, -1, rows);
 
         for(i = 0; i < rows; i++) {
 
@@ -100,21 +100,21 @@ int ui_fill_lists_box() {
             year = year > 1800 && year < 2200 ? year : 0;
 
             sprintf(temp, "%d", i + 1);
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 0, i, 
+            gtk_custom_table_set_cell_text(nb_lists_box_tab, 0, i, 
                 temp);
             sprintf(temp, "%1.2f", imdb);
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
+            gtk_custom_table_set_cell_text(nb_lists_box_tab, 1, i, 
                 temp);
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 2, i, 
+            gtk_custom_table_set_cell_text(nb_lists_box_tab, 2, i, 
                 "0");
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 3, i, 
+            gtk_custom_table_set_cell_text(nb_lists_box_tab, 3, i, 
                 results[i][1]);
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 4, i, 
+            gtk_custom_table_set_cell_text(nb_lists_box_tab, 4, i, 
                 results[i][2]);
             sprintf(temp, "%d", (int)year);
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 5, i, 
+            gtk_custom_table_set_cell_text(nb_lists_box_tab, 5, i, 
                 temp);
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 6, i, 
+            gtk_custom_table_set_cell_text(nb_lists_box_tab, 6, i, 
                 results[i][4]);
 
             /* get imdb ratings from other tables */
@@ -122,20 +122,20 @@ int ui_fill_lists_box() {
             n = n > 0 ? n : imdb;
 
             sprintf(temp, "%1.1f", n);
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, i, 
+            gtk_custom_table_set_cell_text(nb_lists_box_tab, 1, i, 
                 temp);
 
             /* set cell colors */
-            gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, i, 
+            gtk_custom_table_set_cell_color(nb_lists_box_tab, 1, i, 
                 n <= 0 ? not_app : colors[(int)n - 1]);
-            gtk_custom_table_set_cell_color(nb_tab_boxoffice, 2, i, not_app);
+            gtk_custom_table_set_cell_color(nb_lists_box_tab, 2, i, not_app);
         }
 
         free_memory(results, cols, rows);
 
-        gtk_custom_table_set_sortable(nb_tab_boxoffice, TRUE);
-        gtk_custom_table_sort(nb_tab_boxoffice, 0, GTK_CUSTOM_TABLE_ASC);
-        gtk_custom_table_set_column_font(nb_tab_boxoffice, 4, TEXT_FONT); 
+        gtk_custom_table_set_sortable(nb_lists_box_tab, TRUE);
+        gtk_custom_table_sort(nb_lists_box_tab, 0, GTK_CUSTOM_TABLE_ASC);
+        gtk_custom_table_set_column_font(nb_lists_box_tab, 4, TEXT_FONT); 
 
         return 1;
     }

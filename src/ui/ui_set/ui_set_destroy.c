@@ -25,7 +25,7 @@
 
 void ui_set_destroy() {
 
-    gtk_custom_table_sort(nb_tab_boxoffice, 0, GTK_CUSTOM_TABLE_ASC);
+    gtk_custom_table_sort(nb_lists_box_tab, 0, GTK_CUSTOM_TABLE_ASC);
 
     /* write boxoffice values back to file */ 
     FILE *fp_out = fopen(get_global(CONST_BOX_CSV), "wb");
@@ -33,13 +33,13 @@ void ui_set_destroy() {
     int i = 0;
     int j = 0;
 
-    int cols = gtk_custom_table_get_cols(nb_tab_boxoffice);
-    int rows = gtk_custom_table_get_rows(nb_tab_boxoffice);
+    int cols = gtk_custom_table_get_cols(nb_lists_box_tab);
+    int rows = gtk_custom_table_get_rows(nb_lists_box_tab);
 
     for(i = 0; i < rows; i++) {
 
         char **results = NULL;
-        gtk_custom_table_get_row(nb_tab_boxoffice, i, &results);
+        gtk_custom_table_get_row(nb_lists_box_tab, i, &results);
 
         for(j = 0; j < cols; j++) {
 
@@ -64,14 +64,16 @@ void ui_set_destroy() {
     fclose(fp_out);
 
     /* free table memory explicitly */
-    gtk_custom_table_free(nb_tab_statistics);
-    gtk_custom_table_free(nb_tab_mymovies);
-    gtk_custom_table_free(nb_tab_lists_stats);
-    gtk_custom_table_free(nb_tab_lists);
-    gtk_custom_table_free(nb_tab_compare);
-    gtk_custom_table_free(nb_tab_lists_cmp);
-    gtk_custom_table_free(nb_tab_top250);
-    gtk_custom_table_free(nb_tab_bot100);
-    gtk_custom_table_free(nb_tab_boxoffice);
+    gtk_custom_table_free(nb_stats_mov_tab);
+    gtk_custom_table_free(nb_stats_lst_tab);
+    gtk_custom_table_free(nb_stats_cmp_tab);
+    gtk_custom_table_free(nb_stats_all_tab);
+
+    gtk_custom_table_free(nb_lists_mov_tab);
+    gtk_custom_table_free(nb_lists_lst_tab);
+    gtk_custom_table_free(nb_lists_cmp_tab);
+    gtk_custom_table_free(nb_lists_top_tab);
+    gtk_custom_table_free(nb_lists_bot_tab);
+    gtk_custom_table_free(nb_lists_box_tab);
 }
 

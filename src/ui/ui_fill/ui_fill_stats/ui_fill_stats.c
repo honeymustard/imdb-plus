@@ -88,9 +88,9 @@ static void ui_fill_addlists(Stats *s, Movie *m, char *id) {
 
     int lists[3];
 
-    lists[0] = gtk_custom_table_get_indexof(nb_tab_top250, id) >= 0;
-    lists[1] = gtk_custom_table_get_indexof(nb_tab_bot100, id) >= 0;
-    lists[2] = gtk_custom_table_get_indexof(nb_tab_boxoffice, id) >= 0;
+    lists[0] = gtk_custom_table_get_indexof(nb_lists_top_tab, id) >= 0;
+    lists[1] = gtk_custom_table_get_indexof(nb_lists_bot_tab, id) >= 0;
+    lists[2] = gtk_custom_table_get_indexof(nb_lists_box_tab, id) >= 0;
 
     int i = 0;
 

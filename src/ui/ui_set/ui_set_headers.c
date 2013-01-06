@@ -23,8 +23,7 @@
 #include "ui/table/gtk_custom_table.h"
 
 
-/* table headers */
-char *nb_tab_statistics_headers[TABLE_STATS_COLS] = {
+char *nb_stats_mov_headers[COLS_STATS_MOV] = {
     "Vote", 
     "IMDb", 
     "Flux", 
@@ -35,17 +34,7 @@ char *nb_tab_statistics_headers[TABLE_STATS_COLS] = {
     "Year", 
 };
 
-char *nb_tab_mymovies_headers[TABLE_MYMOV_COLS] = {
-    "#", 
-    "IMDb", 
-    "Vote", 
-    "IMDb ID", 
-    "Title", 
-    "Runtime", 
-    "Year", 
-};
-
-char *nb_tab_lists_stats_headers[TABLE_LSTST_COLS] = {
+char *nb_stats_lst_headers[COLS_STATS_LST] = {
     "N/A", 
     "IMDb", 
     "N/A", 
@@ -56,17 +45,7 @@ char *nb_tab_lists_stats_headers[TABLE_LSTST_COLS] = {
     "Year", 
 };
 
-char *nb_tab_mylists_headers[TABLE_MYLST_COLS] = {
-    "#", 
-    "IMDb", 
-    "Vote", 
-    "IMDb ID", 
-    "Title", 
-    "Runtime", 
-    "Year", 
-};
-
-char *nb_tab_compare_headers[TABLE_COMPR_COLS] = {
+char *nb_stats_cmp_headers[COLS_STATS_CMP] = {
     "Vote", 
     "IMDb", 
     "Flux", 
@@ -77,47 +56,7 @@ char *nb_tab_compare_headers[TABLE_COMPR_COLS] = {
     "Year", 
 };
 
-char *nb_tab_lists_cmp_headers[TABLE_MYCMP_COLS] = {
-    "#", 
-    "IMDb", 
-    "Vote", 
-    "IMDb ID", 
-    "Title", 
-    "Runtime", 
-    "Year", 
-};
-
-char *nb_tab_top250_headers[TABLE_TP250_COLS] = {
-    "#", 
-    "IMDb", 
-    "Vote", 
-    "IMDb ID", 
-    "Title", 
-    "Year", 
-    "Votes", 
-};
-
-char *nb_tab_bot100_headers[TABLE_BT100_COLS] = {
-    "#", 
-    "IMDb", 
-    "Vote", 
-    "IMDb ID", 
-    "Title", 
-    "Year", 
-    "Votes", 
-};
-
-char *nb_tab_boxoffice_headers[TABLE_BOXOF_COLS] = {
-    "#", 
-    "IMDb", 
-    "Vote", 
-    "IMDb ID", 
-    "Title", 
-    "Year", 
-    "Gross", 
-};
-
-char *nb_tab_allstats_headers[TABLE_ALLST_COLS] = {
+char *nb_stats_all_headers[COLS_STATS_ALL] = {
     "Vote", 
     "IMDb", 
     "Flux", 
@@ -129,62 +68,63 @@ char *nb_tab_allstats_headers[TABLE_ALLST_COLS] = {
     "Year",
 };
 
+char *nb_lists_mov_headers[COLS_LISTS_MOV] = {
+    "#", "IMDb", "Vote", "IMDb ID", "Title", "Runtime", "Year", 
+};
 
-void ui_set_headers() {
+char *nb_lists_lst_headers[COLS_LISTS_LST] = {
+    "#", "IMDb", "Vote", "IMDb ID", "Title", "Runtime", "Year", 
+};
+
+char *nb_lists_cmp_headers[COLS_LISTS_CMP] = {
+    "#", "IMDb", "Vote", "IMDb ID", "Title", "Runtime", "Year", 
+};
+
+char *nb_lists_top_headers[COLS_LISTS_TOP] = {
+    "#", "IMDb", "Vote", "IMDb ID", "Title", "Year", "Votes", 
+};
+
+char *nb_lists_bot_headers[COLS_LISTS_BOT] = {
+    "#", "IMDb", "Vote", "IMDb ID", "Title", "Year", "Votes", 
+};
+
+char *nb_lists_box_headers[COLS_LISTS_BOX] = {
+    "#", "IMDb", "Vote", "IMDb ID", "Title", "Year", "Gross", 
+};
+
+
+/* convenience function for header application */
+static void ui_apply_headers(GtkWidget *tab, char **headers, int cols) {
 
     int i = 0;
 
-    /* set statistics headers */
-    for(i = 0; i < TABLE_STATS_COLS; i++) {
-        gtk_custom_table_set_head_text(nb_tab_statistics, i, 
-            nb_tab_statistics_headers[i]);
-    }
+    for(i = 0; i < cols; i++) {
 
-    /* set my-movies headers */
-    for(i = 0; i < TABLE_MYMOV_COLS; i++) {
-        gtk_custom_table_set_head_text(nb_tab_mymovies, i, 
-            nb_tab_mymovies_headers[i]);
+        gtk_custom_table_set_head_text(tab, i, headers[i]);
     }
-    /* set lists stats headers */
-    for(i = 0; i < TABLE_LSTST_COLS; i++) {
-        gtk_custom_table_set_head_text(nb_tab_lists_stats, i, 
-            nb_tab_lists_stats_headers[i]);
-    }
+}
 
-    /* set my-lists headers */
-    for(i = 0; i < TABLE_MYLST_COLS; i++) {
-        gtk_custom_table_set_head_text(nb_tab_lists, i, 
-            nb_tab_mylists_headers[i]);
-    }
 
-    /* set compare headers */
-    for(i = 0; i < TABLE_COMPR_COLS; i++) {
-        gtk_custom_table_set_head_text(nb_tab_compare, i, 
-            nb_tab_compare_headers[i]);
-    }
+void ui_set_headers() {
 
-    /* set my-comp headers */
-    for(i = 0; i < TABLE_MYCMP_COLS; i++) {
-        gtk_custom_table_set_head_text(nb_tab_lists_cmp, i, 
-            nb_tab_lists_cmp_headers[i]);
-    }
+    ui_apply_headers(nb_stats_mov_tab, nb_stats_mov_headers, 
+        COLS_STATS_MOV);
+    ui_apply_headers(nb_stats_lst_tab, nb_stats_lst_headers, 
+        COLS_STATS_LST);
+    ui_apply_headers(nb_stats_cmp_tab, nb_stats_cmp_headers, 
+        COLS_STATS_CMP);
 
-    /* set top 250 headers */
-    for(i = 0; i < TABLE_TP250_COLS; i++) {
-        gtk_custom_table_set_head_text(nb_tab_top250, i, 
-            nb_tab_top250_headers[i]);
-    }
-
-    /* set bottom 100 headers */
-    for(i = 0; i < TABLE_BT100_COLS; i++) {
-        gtk_custom_table_set_head_text(nb_tab_bot100, i, 
-            nb_tab_bot100_headers[i]);
-    }
-
-    /* set boxoffice headers */
-    for(i = 0; i < TABLE_BOXOF_COLS; i++) {
-        gtk_custom_table_set_head_text(nb_tab_boxoffice, i, 
-            nb_tab_boxoffice_headers[i]);
-    }
+    ui_apply_headers(nb_lists_mov_tab, nb_lists_mov_headers, 
+        COLS_LISTS_MOV);
+    ui_apply_headers(nb_lists_lst_tab, nb_lists_lst_headers, 
+        COLS_LISTS_LST);
+    ui_apply_headers(nb_lists_cmp_tab, nb_lists_cmp_headers, 
+        COLS_LISTS_CMP);
+    ui_apply_headers(nb_lists_top_tab, nb_lists_top_headers, 
+        COLS_LISTS_TOP);
+    ui_apply_headers(nb_lists_bot_tab, nb_lists_bot_headers, 
+        COLS_LISTS_BOT);
+    ui_apply_headers(nb_lists_box_tab, nb_lists_box_headers, 
+        COLS_LISTS_BOX);
 }
 

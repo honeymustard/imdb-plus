@@ -191,12 +191,12 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
                             fprintf(fp_out, "\"%s\",", results[i][j]);
                         }
 
-                        index = gtk_custom_table_get_indexof(nb_tab_boxoffice, 
+                        index = gtk_custom_table_get_indexof(nb_lists_box_tab, 
                             results[i][1]);
                             
                         if(index >= 0) {
                             fprintf(fp_out, "\"%s\"\n", 
-                                gtk_custom_table_get_cell_text(nb_tab_boxoffice, 
+                                gtk_custom_table_get_cell_text(nb_lists_box_tab, 
                                     1, index));
                         }
                         else {
@@ -242,7 +242,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
             strlen(botstat) + strlen(boxstat) + 1);
 
         sprintf(temp, format, topstat, botstat, boxstat);
-        gtk_statusbar_push(GTK_STATUSBAR(status), 1, temp);
+        gtk_statusbar_push(GTK_STATUSBAR(stat), 1, temp);
 
         gtk_custom_table_refresh(window);
     }

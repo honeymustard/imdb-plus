@@ -25,66 +25,66 @@
 void ui_set_meta() {
 
     /* set primary columns to enable quick searches */
-    gtk_custom_table_set_column_prime(nb_tab_mymovies, 3, 
+    gtk_custom_table_set_column_prime(nb_lists_mov_tab, 3, 
         TRUE);
-    gtk_custom_table_set_column_prime(nb_tab_lists, 3, 
+    gtk_custom_table_set_column_prime(nb_lists_lst_tab, 3, 
         TRUE);
-    gtk_custom_table_set_column_prime(nb_tab_lists_cmp, 3, 
+    gtk_custom_table_set_column_prime(nb_lists_cmp_tab, 3, 
         TRUE);
-    gtk_custom_table_set_column_prime(nb_tab_top250, 3, 
+    gtk_custom_table_set_column_prime(nb_lists_top_tab, 3, 
         TRUE);
-    gtk_custom_table_set_column_prime(nb_tab_bot100, 3, 
+    gtk_custom_table_set_column_prime(nb_lists_bot_tab, 3, 
         TRUE);
-    gtk_custom_table_set_column_prime(nb_tab_boxoffice, 3, 
+    gtk_custom_table_set_column_prime(nb_lists_box_tab, 3, 
         TRUE);
 
     /* mark a column as being a graph */
-    gtk_custom_table_set_column_graph(nb_tab_statistics, 3, 
+    gtk_custom_table_set_column_graph(nb_stats_mov_tab, 3, 
         TRUE);
-    gtk_custom_table_set_column_graph(nb_tab_lists_stats, 3, 
+    gtk_custom_table_set_column_graph(nb_stats_lst_tab, 3, 
         TRUE);
-    gtk_custom_table_set_column_graph(nb_tab_compare, 3, 
+    gtk_custom_table_set_column_graph(nb_stats_cmp_tab, 3, 
         TRUE);
-    gtk_custom_table_set_column_graph(nb_tab_allstats, 3, 
+    gtk_custom_table_set_column_graph(nb_stats_all_tab, 3, 
         TRUE);
 
     /* set automatic column numbering */
-    gtk_custom_table_set_column_index(nb_tab_mymovies, 0, 
+    gtk_custom_table_set_column_index(nb_lists_mov_tab, 0, 
         TRUE);
-    gtk_custom_table_set_column_index(nb_tab_lists, 0, 
+    gtk_custom_table_set_column_index(nb_lists_lst_tab, 0, 
         TRUE);
-    gtk_custom_table_set_column_index(nb_tab_lists_cmp, 0, 
+    gtk_custom_table_set_column_index(nb_lists_cmp_tab, 0, 
         TRUE);
 
     /* override default font */
-    gtk_custom_table_set_foot_cell_font(nb_tab_statistics, 3, 
+    gtk_custom_table_set_foot_cell_font(nb_stats_mov_tab, 3, 
         TEXT_FONT); 
-    gtk_custom_table_set_foot_cell_font(nb_tab_lists_stats, 3, 
+    gtk_custom_table_set_foot_cell_font(nb_stats_lst_tab, 3, 
         TEXT_FONT); 
-    gtk_custom_table_set_foot_cell_font(nb_tab_compare, 3, 
+    gtk_custom_table_set_foot_cell_font(nb_stats_cmp_tab, 3, 
         TEXT_FONT); 
  
     /* set font alignments */
-    gtk_custom_table_set_column_alignment(nb_tab_statistics, 3, 
+    gtk_custom_table_set_column_alignment(nb_stats_mov_tab, 3, 
         PANGO_ALIGN_LEFT);
-    gtk_custom_table_set_column_alignment(nb_tab_lists_stats, 3, 
+    gtk_custom_table_set_column_alignment(nb_stats_lst_tab, 3, 
         PANGO_ALIGN_LEFT);
-    gtk_custom_table_set_column_alignment(nb_tab_compare, 3, 
+    gtk_custom_table_set_column_alignment(nb_stats_cmp_tab, 3, 
         PANGO_ALIGN_LEFT);
-    gtk_custom_table_set_column_alignment(nb_tab_allstats, 3, 
+    gtk_custom_table_set_column_alignment(nb_stats_all_tab, 3, 
         PANGO_ALIGN_LEFT);
 
-    gtk_custom_table_set_column_alignment(nb_tab_top250, 4, 
+    gtk_custom_table_set_column_alignment(nb_lists_mov_tab, 4, 
         PANGO_ALIGN_LEFT);
-    gtk_custom_table_set_column_alignment(nb_tab_bot100, 4, 
+    gtk_custom_table_set_column_alignment(nb_lists_lst_tab, 4, 
         PANGO_ALIGN_LEFT);
-    gtk_custom_table_set_column_alignment(nb_tab_boxoffice, 4, 
+    gtk_custom_table_set_column_alignment(nb_lists_cmp_tab, 4, 
         PANGO_ALIGN_LEFT);
-    gtk_custom_table_set_column_alignment(nb_tab_mymovies, 4, 
+    gtk_custom_table_set_column_alignment(nb_lists_top_tab, 4, 
         PANGO_ALIGN_LEFT);
-    gtk_custom_table_set_column_alignment(nb_tab_lists, 4, 
+    gtk_custom_table_set_column_alignment(nb_lists_bot_tab, 4, 
         PANGO_ALIGN_LEFT);
-    gtk_custom_table_set_column_alignment(nb_tab_lists_cmp, 4, 
+    gtk_custom_table_set_column_alignment(nb_lists_box_tab, 4, 
         PANGO_ALIGN_LEFT);
 }
 

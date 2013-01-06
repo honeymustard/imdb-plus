@@ -35,19 +35,19 @@ void ui_fill_lists_lst_empty() {
 
         sprintf(temp, "%d", i+1);
 
-        gtk_custom_table_set_cell_text(nb_tab_lists, 0, i, 
+        gtk_custom_table_set_cell_text(nb_lists_lst_tab, 0, i, 
             temp);
-        gtk_custom_table_set_cell_text(nb_tab_lists, 1, i, 
+        gtk_custom_table_set_cell_text(nb_lists_lst_tab, 1, i, 
             "0.0");
-        gtk_custom_table_set_cell_text(nb_tab_lists, 2, i, 
+        gtk_custom_table_set_cell_text(nb_lists_lst_tab, 2, i, 
             "0");
-        gtk_custom_table_set_cell_text(nb_tab_lists, 3, i, 
+        gtk_custom_table_set_cell_text(nb_lists_lst_tab, 3, i, 
             "N/A");
-        gtk_custom_table_set_cell_text(nb_tab_lists, 4, i, 
+        gtk_custom_table_set_cell_text(nb_lists_lst_tab, 4, i, 
             "N/A");
-        gtk_custom_table_set_cell_text(nb_tab_lists, 5, i, 
+        gtk_custom_table_set_cell_text(nb_lists_lst_tab, 5, i, 
             "0");
-        gtk_custom_table_set_cell_text(nb_tab_lists, 6, i, 
+        gtk_custom_table_set_cell_text(nb_lists_lst_tab, 6, i, 
             "0");
     }
 }
@@ -63,65 +63,65 @@ void ui_fill_lists_lst(char ****results, int rows) {
 
     char temp[100];
 
-    gtk_custom_table_resize(nb_tab_lists, -1, rows - 1);
+    gtk_custom_table_resize(nb_lists_lst_tab, -1, rows - 1);
 
     for(i = 1, j = 0; i < rows; i++, j++) {
 
         ui_fill_stats_lst_calc(stats, movie, (*results)[i]);
 
         sprintf(temp, "%d", i);
-        gtk_custom_table_set_cell_text(nb_tab_lists, 0, j, 
+        gtk_custom_table_set_cell_text(nb_lists_lst_tab, 0, j, 
             temp);
-        gtk_custom_table_set_cell_text(nb_tab_lists, 1, j, 
+        gtk_custom_table_set_cell_text(nb_lists_lst_tab, 1, j, 
             movie->imdb_str); 
-        gtk_custom_table_set_cell_text(nb_tab_lists, 2, j, 
+        gtk_custom_table_set_cell_text(nb_lists_lst_tab, 2, j, 
             "0");
-        gtk_custom_table_set_cell_text(nb_tab_lists, 3, j, 
+        gtk_custom_table_set_cell_text(nb_lists_lst_tab, 3, j, 
             movie->id);
-        gtk_custom_table_set_cell_text(nb_tab_lists, 4, j, 
+        gtk_custom_table_set_cell_text(nb_lists_lst_tab, 4, j, 
             movie->title);
-        gtk_custom_table_set_cell_text(nb_tab_lists, 5, j, 
+        gtk_custom_table_set_cell_text(nb_lists_lst_tab, 5, j, 
             movie->time_str);
-        gtk_custom_table_set_cell_text(nb_tab_lists, 6, j, 
+        gtk_custom_table_set_cell_text(nb_lists_lst_tab, 6, j, 
             movie->year_str);
 
         /* set background colors */
-        gtk_custom_table_set_cell_color(nb_tab_lists, 1, j, 
+        gtk_custom_table_set_cell_color(nb_lists_lst_tab, 1, j, 
             not_app);
-        gtk_custom_table_set_cell_color(nb_tab_lists, 2, j, 
+        gtk_custom_table_set_cell_color(nb_lists_lst_tab, 2, j, 
             not_app);
 
         /* set cell colors for imdb and vote values */
-        gtk_custom_table_set_cell_color(nb_tab_lists, 1, j, 
+        gtk_custom_table_set_cell_color(nb_lists_lst_tab, 1, j, 
             (int)movie->imdb > 0 ? colors[(int)movie->imdb - 1] : not_app);
-        gtk_custom_table_set_cell_color(nb_tab_lists, 2, j, 
+        gtk_custom_table_set_cell_color(nb_lists_lst_tab, 2, j, 
             not_app);
 
         int index = 0;
 
         /* add 'my rating' to lists tab if applicable */
-        if((index = gtk_custom_table_get_indexof(nb_tab_mymovies, 
+        if((index = gtk_custom_table_get_indexof(nb_lists_mov_tab, 
                 movie->id)) >= 0) {
             
-            char *rating = gtk_custom_table_get_cell_text(nb_tab_mymovies, 2, 
+            char *rating = gtk_custom_table_get_cell_text(nb_lists_mov_tab, 2, 
                 index);
 
             /* add new background color to rating */
-            gtk_custom_table_set_cell_text(nb_tab_lists, 2, j, 
+            gtk_custom_table_set_cell_text(nb_lists_lst_tab, 2, j, 
                 rating);
 
-            gtk_custom_table_set_cell_color(nb_tab_lists, 2, j, 
+            gtk_custom_table_set_cell_color(nb_lists_lst_tab, 2, j, 
                 atoi(rating) > 0 ? colors[atoi(rating) - 1] : not_app);
         }
 
         /* add imdb-rating to boxoffice tab if applicable */
-        if((index = gtk_custom_table_get_indexof(nb_tab_boxoffice, 
+        if((index = gtk_custom_table_get_indexof(nb_lists_box_tab, 
                 movie->id)) >= 0) {
 
-            gtk_custom_table_set_cell_text(nb_tab_boxoffice, 1, 
+            gtk_custom_table_set_cell_text(nb_lists_box_tab, 1, 
                 index, movie->imdb_str);
 
-            gtk_custom_table_set_cell_color(nb_tab_boxoffice, 1, 
+            gtk_custom_table_set_cell_color(nb_lists_box_tab, 1, 
                 index, colors[(int)movie->imdb > 0 ? (int)movie->imdb - 1 : 0]);
         }
     }
@@ -134,8 +134,8 @@ void ui_fill_lists_lst(char ****results, int rows) {
     free(movie);
 
     /* set sortable and sort by index */
-    gtk_custom_table_set_sortable(nb_tab_lists, TRUE);
-    gtk_custom_table_sort(nb_tab_lists, 0, GTK_CUSTOM_TABLE_ASC);
-    gtk_custom_table_set_column_font(nb_tab_lists, 4, TEXT_FONT); 
+    gtk_custom_table_set_sortable(nb_lists_lst_tab, TRUE);
+    gtk_custom_table_sort(nb_lists_lst_tab, 0, GTK_CUSTOM_TABLE_ASC);
+    gtk_custom_table_set_column_font(nb_lists_lst_tab, 4, TEXT_FONT); 
 }
 

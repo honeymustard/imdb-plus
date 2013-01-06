@@ -33,19 +33,19 @@ void ui_fill_lists_cmp_empty() {
 
         sprintf(temp, "%d", i+1);
 
-        gtk_custom_table_set_cell_text(nb_tab_lists_cmp, 0, i, 
+        gtk_custom_table_set_cell_text(nb_lists_cmp_tab, 0, i, 
             temp);
-        gtk_custom_table_set_cell_text(nb_tab_lists_cmp, 1, i, 
+        gtk_custom_table_set_cell_text(nb_lists_cmp_tab, 1, i, 
             "0.0");
-        gtk_custom_table_set_cell_text(nb_tab_lists_cmp, 2, i, 
+        gtk_custom_table_set_cell_text(nb_lists_cmp_tab, 2, i, 
             "0");
-        gtk_custom_table_set_cell_text(nb_tab_lists_cmp, 3, i, 
+        gtk_custom_table_set_cell_text(nb_lists_cmp_tab, 3, i, 
             "N/A");
-        gtk_custom_table_set_cell_text(nb_tab_lists_cmp, 4, i, 
+        gtk_custom_table_set_cell_text(nb_lists_cmp_tab, 4, i, 
             "N/A");
-        gtk_custom_table_set_cell_text(nb_tab_lists_cmp, 5, i, 
+        gtk_custom_table_set_cell_text(nb_lists_cmp_tab, 5, i, 
             "0");
-        gtk_custom_table_set_cell_text(nb_tab_lists_cmp, 6, i, 
+        gtk_custom_table_set_cell_text(nb_lists_cmp_tab, 6, i, 
             "0");
     }
 }
@@ -85,36 +85,36 @@ void ui_fill_lists_cmp(GtkWidget *table1, GtkWidget *table2) {
         total_rows++;
     }
 
-    gtk_custom_table_resize(nb_tab_lists_cmp, -1, total_rows);
+    gtk_custom_table_resize(nb_lists_cmp_tab, -1, total_rows);
 
     for(i = 0; i < total_rows; i++) {
 
-        gtk_custom_table_set_cell_text(nb_tab_lists_cmp, 1, i, 
+        gtk_custom_table_set_cell_text(nb_lists_cmp_tab, 1, i, 
             movies[i]->imdb_str);
-        gtk_custom_table_set_cell_text(nb_tab_lists_cmp, 2, i, 
+        gtk_custom_table_set_cell_text(nb_lists_cmp_tab, 2, i, 
             movies[i]->vote_str);
-        gtk_custom_table_set_cell_text(nb_tab_lists_cmp, 3, i, 
+        gtk_custom_table_set_cell_text(nb_lists_cmp_tab, 3, i, 
             movies[i]->id);
-        gtk_custom_table_set_cell_text(nb_tab_lists_cmp, 4, i, 
+        gtk_custom_table_set_cell_text(nb_lists_cmp_tab, 4, i, 
             movies[i]->title);
-        gtk_custom_table_set_cell_text(nb_tab_lists_cmp, 5, i, 
+        gtk_custom_table_set_cell_text(nb_lists_cmp_tab, 5, i, 
             movies[i]->time_str);
-        gtk_custom_table_set_cell_text(nb_tab_lists_cmp, 6, i, 
+        gtk_custom_table_set_cell_text(nb_lists_cmp_tab, 6, i, 
             movies[i]->year_str);
 
         /* set background colors */
-        gtk_custom_table_set_cell_color(nb_tab_lists_cmp, 1, i, 
+        gtk_custom_table_set_cell_color(nb_lists_cmp_tab, 1, i, 
             not_app);
-        gtk_custom_table_set_cell_color(nb_tab_lists_cmp, 2, i, 
+        gtk_custom_table_set_cell_color(nb_lists_cmp_tab, 2, i, 
             not_app);
 
         int imdb = (int)movies[i]->imdb;
         int vote = (int)movies[i]->vote;
 
         /* set cell colors for imdb and vote values */
-        gtk_custom_table_set_cell_color(nb_tab_lists_cmp, 1, i, 
+        gtk_custom_table_set_cell_color(nb_lists_cmp_tab, 1, i, 
             imdb > 0 ? colors[imdb - 1] : not_app);
-        gtk_custom_table_set_cell_color(nb_tab_lists_cmp, 2, i, 
+        gtk_custom_table_set_cell_color(nb_lists_cmp_tab, 2, i, 
             vote > 0 ? colors[vote - 1] : not_app);
 
         free(movies[i]);
@@ -130,15 +130,15 @@ void ui_fill_lists_cmp(GtkWidget *table1, GtkWidget *table2) {
     free(movie);
 
     /* set sortable and sort by index */
-    gtk_custom_table_set_sortable(nb_tab_lists_cmp, TRUE);
-    gtk_custom_table_sort(nb_tab_lists_cmp, 2, GTK_CUSTOM_TABLE_DESC);
-    gtk_custom_table_set_column_font(nb_tab_lists_cmp, 4, TEXT_FONT); 
+    gtk_custom_table_set_sortable(nb_lists_cmp_tab, TRUE);
+    gtk_custom_table_sort(nb_lists_cmp_tab, 2, GTK_CUSTOM_TABLE_DESC);
+    gtk_custom_table_set_column_font(nb_lists_cmp_tab, 4, TEXT_FONT); 
 
     for(i = 0; i < total_rows; i++) {
 
         sprintf(temp, "%d", i + 1);
 
-        gtk_custom_table_set_cell_text(nb_tab_lists_cmp, 0, i, 
+        gtk_custom_table_set_cell_text(nb_lists_cmp_tab, 0, i, 
             temp);
     }
 }

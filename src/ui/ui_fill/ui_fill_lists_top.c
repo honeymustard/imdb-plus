@@ -40,19 +40,19 @@ void ui_fill_lists_top_empty() {
 
         sprintf(temp, "%d", i+1);
 
-        gtk_custom_table_set_cell_text(nb_tab_top250, 0, i, 
+        gtk_custom_table_set_cell_text(nb_lists_top_tab, 0, i, 
             temp);
-        gtk_custom_table_set_cell_text(nb_tab_top250, 1, i, 
+        gtk_custom_table_set_cell_text(nb_lists_top_tab, 1, i, 
             "0.0");
-        gtk_custom_table_set_cell_text(nb_tab_top250, 2, i, 
+        gtk_custom_table_set_cell_text(nb_lists_top_tab, 2, i, 
             "N/A");
-        gtk_custom_table_set_cell_text(nb_tab_top250, 3, i, 
+        gtk_custom_table_set_cell_text(nb_lists_top_tab, 3, i, 
             "0");
-        gtk_custom_table_set_cell_text(nb_tab_top250, 4, i, 
+        gtk_custom_table_set_cell_text(nb_lists_top_tab, 4, i, 
             "N/A");
-        gtk_custom_table_set_cell_text(nb_tab_top250, 5, i, 
+        gtk_custom_table_set_cell_text(nb_lists_top_tab, 5, i, 
             "0");
-        gtk_custom_table_set_cell_text(nb_tab_top250, 6, i, 
+        gtk_custom_table_set_cell_text(nb_lists_top_tab, 6, i, 
             "0");
     }
 }
@@ -80,36 +80,36 @@ static int ui_fill_top(char *filename) {
             year = year > 1800 && year < 2200 ? year : 0;
 
             sprintf(temp, "%d", i + 1);
-            gtk_custom_table_set_cell_text(nb_tab_top250, 0, i, 
+            gtk_custom_table_set_cell_text(nb_lists_top_tab, 0, i, 
                 temp);
             sprintf(temp, "%1.1f", imdb);
-            gtk_custom_table_set_cell_text(nb_tab_top250, 1, i, 
+            gtk_custom_table_set_cell_text(nb_lists_top_tab, 1, i, 
                 temp);
-            gtk_custom_table_set_cell_text(nb_tab_top250, 2, i, 
+            gtk_custom_table_set_cell_text(nb_lists_top_tab, 2, i, 
                 "0");
-            gtk_custom_table_set_cell_text(nb_tab_top250, 3, i, 
+            gtk_custom_table_set_cell_text(nb_lists_top_tab, 3, i, 
                 results[i][2]);
-            gtk_custom_table_set_cell_text(nb_tab_top250, 4, i, 
+            gtk_custom_table_set_cell_text(nb_lists_top_tab, 4, i, 
                 results[i][3]);
             sprintf(temp, "%d", (int)year);
-            gtk_custom_table_set_cell_text(nb_tab_top250, 5, i, 
+            gtk_custom_table_set_cell_text(nb_lists_top_tab, 5, i, 
                 temp);
-            gtk_custom_table_set_cell_text(nb_tab_top250, 6, i, 
+            gtk_custom_table_set_cell_text(nb_lists_top_tab, 6, i, 
                 results[i][5]);
 
             /* set cell colors */
-            gtk_custom_table_set_cell_color(nb_tab_top250, 1, i, 
+            gtk_custom_table_set_cell_color(nb_lists_top_tab, 1, i, 
                 colors[(int)imdb]); 
 
-            gtk_custom_table_set_cell_color(nb_tab_top250, 2, i, 
+            gtk_custom_table_set_cell_color(nb_lists_top_tab, 2, i, 
                 not_app);
         }
 
         free_memory(results, cols, rows);
 
-        gtk_custom_table_set_sortable(nb_tab_top250, TRUE);
-        gtk_custom_table_sort(nb_tab_top250, 0, GTK_CUSTOM_TABLE_ASC);
-        gtk_custom_table_set_column_font(nb_tab_top250, 4, TEXT_FONT); 
+        gtk_custom_table_set_sortable(nb_lists_top_tab, TRUE);
+        gtk_custom_table_sort(nb_lists_top_tab, 0, GTK_CUSTOM_TABLE_ASC);
+        gtk_custom_table_set_column_font(nb_lists_top_tab, 4, TEXT_FONT); 
 
         return 1;
     }
