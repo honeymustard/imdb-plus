@@ -27,7 +27,7 @@
 void menu_signal_quit(GtkWidget *widget, gpointer data) {
     
     gtk_main_quit();
-    ui_set_destroy();
+    ui_set_free();
     free_globals();
 }
 

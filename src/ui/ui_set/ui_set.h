@@ -22,11 +22,11 @@
 #define _UI_SET_
 
 void ui_set_init();
-void ui_set_headers();
+void ui_set_head();
 void ui_set_meta();
 void ui_set_tabs();
 void ui_set_menu();
-void ui_set_destroy();
+void ui_set_free();
 
 #define COLS_STATS_MOV 8
 #define COLS_STATS_LST 8

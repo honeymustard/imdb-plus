@@ -116,7 +116,6 @@ void ui_set_init() {
         10, 500, 500, nb_stats_cmp_cols);
     nb_stats_all_tab = gtk_custom_table_new(COLS_STATS_ALL, 
         12, 500, 500, nb_stats_all_cols);
-
     nb_lists_mov_tab = gtk_custom_table_new(COLS_LISTS_MOV, 
         50, 500, 500, nb_lists_mov_cols);
     nb_lists_lst_tab = gtk_custom_table_new(COLS_LISTS_LST, 
@@ -130,7 +129,7 @@ void ui_set_init() {
     nb_lists_box_tab = gtk_custom_table_new(COLS_LISTS_BOX, 
         50, 500, 500, nb_lists_box_cols);
 
-    ui_set_headers();
+    ui_set_head();
     ui_set_meta();
     ui_set_tabs();
     ui_set_menu();

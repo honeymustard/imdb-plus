@@ -23,7 +23,7 @@
 #include "ui/table/gtk_custom_table.h"
 
 
-void ui_set_destroy() {
+void ui_set_free() {
 
     gtk_custom_table_sort(nb_lists_box_tab, 0, GTK_CUSTOM_TABLE_ASC);
 
@@ -63,12 +63,10 @@ void ui_set_destroy() {
 
     fclose(fp_out);
 
-    /* free table memory explicitly */
     gtk_custom_table_free(nb_stats_mov_tab);
     gtk_custom_table_free(nb_stats_lst_tab);
     gtk_custom_table_free(nb_stats_cmp_tab);
     gtk_custom_table_free(nb_stats_all_tab);
-
     gtk_custom_table_free(nb_lists_mov_tab);
     gtk_custom_table_free(nb_lists_lst_tab);
     gtk_custom_table_free(nb_lists_cmp_tab);

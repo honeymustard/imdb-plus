@@ -105,7 +105,7 @@ static void ui_apply_headers(GtkWidget *tab, char **headers, int cols) {
 }
 
 
-void ui_set_headers() {
+void ui_set_head() {
 
     ui_apply_headers(nb_stats_mov_tab, nb_stats_mov_headers, 
         COLS_STATS_MOV);
