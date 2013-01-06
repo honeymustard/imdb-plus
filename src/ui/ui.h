@@ -55,7 +55,6 @@ GtkWidget *nb,
         *nb_stats_all_scroll, 
             *nb_stats_all_view, 
                 *nb_stats_all_tab, 
-
     *nb_lists_mov_vbox, 
         *nb_lists_mov_scroll, 
             *nb_lists_mov_view, 

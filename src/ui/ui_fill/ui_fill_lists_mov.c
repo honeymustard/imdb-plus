@@ -188,8 +188,9 @@ void ui_fill_lists_mov(char ****results, int rows) {
     }
 
     ui_fill_stats_avg_calc(stats, rows);
-    ui_fill_stats_mov_fill(stats, rows);
-    ui_fill_stats_all_fill(stats, 1, 5, 9);
+
+    ui_fill_stats_mov(stats, rows);
+    ui_fill_stats_all(stats, 1, 5, 9);
 
     free(stats);
     free(movie);

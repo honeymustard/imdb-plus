@@ -25,7 +25,7 @@
 #include "ui/table/gtk_custom_table.h"
 
 
-typedef struct movie_row {
+typedef struct movie {
 
     char id[50];
     char title[200];
@@ -56,35 +56,34 @@ typedef struct stats {
     double lists_amt[3][5];
     double lists_cnt[3][6];
 
-
 } Stats;
 
 
-void ui_fill_lists_lst(char ****results, int rows);
-void ui_fill_lists_mov(char ****results, int rows);
-void ui_fill_lists_cmp(GtkWidget *table1, GtkWidget *table2);
-
+/* fill tabs with new data */
 int  ui_fill_lists_box();
 int  ui_fill_lists_bot();
 int  ui_fill_lists_top();
+void ui_fill_lists_lst(char ****results, int rows);
+void ui_fill_lists_mov(char ****results, int rows);
+void ui_fill_lists_cmp(GtkWidget *table1, GtkWidget *table2);
+void ui_fill_stats_mov(Stats *s, int rows);
+void ui_fill_stats_lst(Stats *s, int rows);
+void ui_fill_stats_cmp(Stats *s, int rows);
+void ui_fill_stats_all(Stats *s, int row1, int row2, int row3);
 
+/* fill tabs with default data */
 void ui_fill_lists_lst_empty();
 void ui_fill_lists_mov_empty();
 void ui_fill_lists_cmp_empty();
 void ui_fill_lists_top_empty();
 void ui_fill_lists_bot_empty();
 void ui_fill_lists_box_empty();
-
 void ui_fill_stats_lst_empty();
 void ui_fill_stats_mov_empty();
 void ui_fill_stats_cmp_empty();
 void ui_fill_stats_all_empty();
 
-void ui_fill_stats_mov_fill(Stats *s, int rows);
-void ui_fill_stats_lst_fill(Stats *s, int rows);
-void ui_fill_stats_cmp_fill(Stats *s, int rows);
-void ui_fill_stats_all_fill(Stats *s, int row1, int row2, int row3);
-
+/* fill stats object with data */
 void ui_fill_stats_avg_calc(Stats *s, int rows);
 void ui_fill_stats_mov_calc(Stats *s, Movie *m, char **row);
 void ui_fill_stats_lst_calc(Stats *s, Movie *m, char **row);

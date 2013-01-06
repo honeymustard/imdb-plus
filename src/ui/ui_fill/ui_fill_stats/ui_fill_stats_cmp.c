@@ -81,7 +81,7 @@ void ui_fill_stats_cmp_empty() {
 }
 
 
-void ui_fill_stats_cmp_fill(Stats *s, int rows) {
+void ui_fill_stats_cmp(Stats *s, int rows) {
 
     gtk_custom_table_sort(nb_stats_cmp_tab, 0, 
         GTK_CUSTOM_TABLE_DESC);

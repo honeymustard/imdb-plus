@@ -127,8 +127,9 @@ void ui_fill_lists_lst(char ****results, int rows) {
     }
 
     ui_fill_stats_avg_calc(stats, rows);
-    ui_fill_stats_lst_fill(stats, rows);
-    ui_fill_stats_all_fill(stats, 2, 6, 10);
+
+    ui_fill_stats_lst(stats, rows);
+    ui_fill_stats_all(stats, 2, 6, 10);
 
     free(stats);
     free(movie);

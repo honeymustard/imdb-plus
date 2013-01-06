@@ -113,7 +113,6 @@ void ui_set_head() {
         COLS_STATS_LST);
     ui_apply_headers(nb_stats_cmp_tab, nb_stats_cmp_headers, 
         COLS_STATS_CMP);
-
     ui_apply_headers(nb_lists_mov_tab, nb_lists_mov_headers, 
         COLS_LISTS_MOV);
     ui_apply_headers(nb_lists_lst_tab, nb_lists_lst_headers, 

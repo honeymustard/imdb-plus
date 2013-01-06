@@ -82,7 +82,7 @@ void ui_fill_stats_lst_empty() {
 }
 
 
-void ui_fill_stats_lst_fill(Stats *s, int rows) {
+void ui_fill_stats_lst(Stats *s, int rows) {
 
     gtk_custom_table_sort(nb_stats_lst_tab, 0, 
         GTK_CUSTOM_TABLE_DESC);

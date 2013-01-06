@@ -82,7 +82,7 @@ void ui_fill_stats_mov_empty() {
 }
 
 
-void ui_fill_stats_mov_fill(Stats *s, int rows) {
+void ui_fill_stats_mov(Stats *s, int rows) {
 
     gtk_custom_table_sort(nb_stats_mov_tab, 0, 
         GTK_CUSTOM_TABLE_DESC);

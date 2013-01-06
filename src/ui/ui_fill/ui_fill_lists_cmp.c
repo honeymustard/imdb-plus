@@ -123,8 +123,9 @@ void ui_fill_lists_cmp(GtkWidget *table1, GtkWidget *table2) {
     free(movies);
 
     ui_fill_stats_avg_calc(stats, total_rows);
-    ui_fill_stats_cmp_fill(stats, total_rows);
-    ui_fill_stats_all_fill(stats, 3, 7, 11);
+
+    ui_fill_stats_cmp(stats, total_rows);
+    ui_fill_stats_all(stats, 3, 7, 11);
 
     free(stats);
     free(movie);

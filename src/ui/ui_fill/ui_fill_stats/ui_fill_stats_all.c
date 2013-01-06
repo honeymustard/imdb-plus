@@ -113,7 +113,7 @@ void ui_fill_stats_all_empty() {
 }
 
 
-void ui_fill_stats_all_fill(Stats *s, int row1, int row2, int row3) {
+void ui_fill_stats_all(Stats *s, int row1, int row2, int row3) {
 
     int i = 0;
 
