@@ -134,6 +134,9 @@ void ui_set_init() {
     ui_set_tabs();
     ui_set_menu();
 
+    gtk_notebook_set_tab_pos(GTK_NOTEBOOK(nb), GTK_POS_TOP);
+    gtk_notebook_set_show_tabs(GTK_NOTEBOOK(nb), TRUE);
+
     ui_fill_lists_top();
     ui_fill_lists_bot();
     ui_fill_lists_box();

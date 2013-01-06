@@ -32,7 +32,6 @@ void ui_set_free();
 #define COLS_STATS_LST 8
 #define COLS_STATS_CMP 8
 #define COLS_STATS_ALL 9
-
 #define COLS_LISTS_MOV 7
 #define COLS_LISTS_LST 7
 #define COLS_LISTS_CMP 7
@@ -40,11 +39,21 @@ void ui_set_free();
 #define COLS_LISTS_BOT 7
 #define COLS_LISTS_BOX 7
 
+#define NAME_STATS_MOV "Movies Stats"
+#define NAME_STATS_LST "Lists Stats"
+#define NAME_STATS_CMP "Compare Stats"
+#define NAME_STATS_ALL "Allstats"
+#define NAME_LISTS_MOV "My Movies"
+#define NAME_LISTS_LST "My Lists"
+#define NAME_LISTS_CMP "Compare"
+#define NAME_LISTS_TOP "Top 250"
+#define NAME_LISTS_BOT "Bottom 100"
+#define NAME_LISTS_BOX "Boxoffice"
+
 char *nb_stats_mov_headers[COLS_STATS_MOV];
 char *nb_stats_lst_headers[COLS_STATS_LST];
 char *nb_stats_cmp_headers[COLS_STATS_CMP];
 char *nb_stats_all_headers[COLS_STATS_ALL];
-
 char *nb_lists_mov_headers[COLS_LISTS_MOV];
 char *nb_lists_lst_headers[COLS_LISTS_LST];
 char *nb_lists_cmp_headers[COLS_LISTS_CMP];

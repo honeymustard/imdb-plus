@@ -19,8 +19,10 @@
 
 
 #include "ui/ui.h"
+#include "ui/ui_set/ui_set.h"
 
 
+/* minor convenience function for tabs-creation */
 static void ui_set_make(char *title, GtkWidget *tab, GtkWidget *vbox, 
     GtkWidget *scroll, GtkWidget *view) {
 
@@ -40,29 +42,25 @@ static void ui_set_make(char *title, GtkWidget *tab, GtkWidget *vbox,
 
 void ui_set_tabs() {
     
-    ui_set_make("Movies Stats", nb_stats_mov_tab, nb_stats_mov_vbox, 
+    ui_set_make(NAME_STATS_MOV, nb_stats_mov_tab, nb_stats_mov_vbox, 
         nb_stats_mov_scroll, nb_stats_mov_view);
-    ui_set_make("My Movies", nb_lists_mov_tab, nb_lists_mov_vbox, 
+    ui_set_make(NAME_LISTS_MOV, nb_lists_mov_tab, nb_lists_mov_vbox, 
         nb_lists_mov_scroll, nb_lists_mov_view);
-    ui_set_make("Lists Stats", nb_stats_lst_tab, nb_stats_lst_vbox, 
+    ui_set_make(NAME_STATS_LST, nb_stats_lst_tab, nb_stats_lst_vbox, 
         nb_stats_lst_scroll, nb_stats_lst_view);
-    ui_set_make("My Lists", nb_lists_lst_tab, nb_lists_lst_vbox, 
+    ui_set_make(NAME_LISTS_LST, nb_lists_lst_tab, nb_lists_lst_vbox, 
         nb_lists_lst_scroll, nb_lists_lst_view);
-    ui_set_make("Compare Stats", nb_stats_cmp_tab, nb_stats_cmp_vbox, 
+    ui_set_make(NAME_STATS_CMP, nb_stats_cmp_tab, nb_stats_cmp_vbox, 
         nb_stats_cmp_scroll, nb_stats_cmp_view);
-    ui_set_make("Compare", nb_lists_cmp_tab, nb_lists_cmp_vbox, 
+    ui_set_make(NAME_LISTS_CMP, nb_lists_cmp_tab, nb_lists_cmp_vbox, 
         nb_lists_cmp_scroll, nb_lists_cmp_view);
-    ui_set_make("Top 250", nb_lists_top_tab, nb_lists_top_vbox, 
+    ui_set_make(NAME_LISTS_TOP, nb_lists_top_tab, nb_lists_top_vbox, 
         nb_lists_top_scroll, nb_lists_top_view);
-    ui_set_make("Bottom 100", nb_lists_bot_tab, nb_lists_bot_vbox, 
+    ui_set_make(NAME_LISTS_BOT, nb_lists_bot_tab, nb_lists_bot_vbox, 
         nb_lists_bot_scroll, nb_lists_bot_view);
-    ui_set_make("Boxoffice", nb_lists_box_tab, nb_lists_box_vbox, 
+    ui_set_make(NAME_LISTS_BOX, nb_lists_box_tab, nb_lists_box_vbox, 
         nb_lists_box_scroll, nb_lists_box_view);
-    ui_set_make("Allstats", nb_stats_all_tab, nb_stats_all_vbox, 
+    ui_set_make(NAME_STATS_ALL, nb_stats_all_tab, nb_stats_all_vbox, 
         nb_stats_all_scroll, nb_stats_all_view);
-
-
-    gtk_notebook_set_tab_pos(GTK_NOTEBOOK(nb), GTK_POS_TOP);
-    gtk_notebook_set_show_tabs(GTK_NOTEBOOK(nb), TRUE);
 }
 
