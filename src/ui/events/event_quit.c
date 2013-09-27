@@ -18,9 +18,9 @@
 *****************************************************************************/
 
 
-#include "globals.h"
-#include "ui/ui.h"
-#include "ui/ui_set/ui_set.h"
+#include "ui/globals/globals.h"
+#include "ui/widgets/widgets.h"
+#include "ui/widgets/set/set.h"
 
 
 /* main window quit event.. */

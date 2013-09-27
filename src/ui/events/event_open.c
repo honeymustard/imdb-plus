@@ -21,13 +21,56 @@
 #include <stdlib.h>
 #include <string.h>
 #include "main.h"
-#include "globals.h"
-#include "ui/ui.h"
+#include "ui/globals/globals.h"
+#include "ui/widgets/widgets.h"
 #include "io/openfile.h"
 
 
+
+/* simple basename: full filename - foldername -> buffer */
+static void file_basename(char *filename, char *folder, char **buffer) {
+
+    int i = 0;
+    int j = 0;
+
+    *buffer = malloc((strlen(filename) - strlen(folder)) + 1);
+
+    for(i = strlen(folder) + 1, j = 0; i < strlen(filename); ++i, j++) {
+        (*buffer)[j] = filename[i];
+    }
+
+    (*buffer)[j] = '\0';
+}
+
+
+/* chop filename down to length and place it in a buffer */
+static void file_truncate(char *filename, char **buffer, int length) {
+
+    *buffer = malloc(length + 1);
+
+    strncpy(*buffer, filename, length);
+
+    if(strlen(filename) > length) {
+        (*buffer)[length--] = '\0';
+        (*buffer)[length--] = '.';
+        (*buffer)[length--] = '.';
+        (*buffer)[length--] = '.';
+    }
+}
+
+
+/* prefix a filename and place it in a buffer */
+static void file_prefixer(char *filename, char *prefix, char **buffer) {
+
+    *buffer = malloc(strlen(filename) + strlen(prefix) + 1);
+
+    strcpy(*buffer, prefix);
+    strcat(*buffer, filename);
+}
+
+
 /* open a ratings/list file from dialog */
-void menu_signal_open(GtkWidget *widget, gpointer data) {
+void menu_signal_open(GtkWidget *widget, int type) {
 
     GtkWidget *dialog;
 
@@ -51,12 +94,32 @@ void menu_signal_open(GtkWidget *widget, gpointer data) {
     /* run filechooser dialog */
     if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
 
-        char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-        
+        GtkFileChooser *fc = GTK_FILE_CHOOSER(dialog);
+
+        char *filename = gtk_file_chooser_get_filename(fc);
+        char *foldername = gtk_file_chooser_get_current_folder(fc);
+
+        char *file_base = NULL;
+        char *file_tabs = NULL;
+        char *file_stat = NULL;
+
+        file_basename(filename, foldername, &file_base);
+        set_global(CONST_OPEN_R, file_base);
+
+        file_truncate(file_base, &file_tabs, 15);
+        set_global(CONST_OPEN_T, file_tabs);
+
+        file_prefixer(file_tabs, "Stats: ", &file_stat);
+        set_global(CONST_OPEN_S, file_stat);
+
+        free(file_base);
+        free(file_tabs);
+        free(file_stat);
+       
         char *stat_tmp = malloc(25 + strlen(filename));
 
         /* attempt to open ratings file */
-        if(open_file(filename)) {
+        if(open_file(filename, type)) {
             sprintf(stat_tmp, "Opened file: %s", filename);
         }
         else {
@@ -72,4 +135,14 @@ void menu_signal_open(GtkWidget *widget, gpointer data) {
     gtk_widget_destroy(dialog);
 }
 
+
+void menu_signal_open_mov(GtkWidget *widget, gpointer data) {
+
+    menu_signal_open(widget, TAB1);
+}
+
+void menu_signal_open_lst(GtkWidget *widget, gpointer data) {
+
+    menu_signal_open(widget, TAB2);
+}
 

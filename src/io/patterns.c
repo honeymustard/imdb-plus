@@ -60,4 +60,3 @@ char *pattern_boxoffice_win = "\
 <td align=right>([0-9,\\$]{1,20})</(td)>\r\n\
 </tr>\r\n";
 
-

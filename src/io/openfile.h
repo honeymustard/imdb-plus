@@ -21,8 +21,12 @@
 #ifndef _OPENFILE_
 #define _OPENFILE_
 
-char *current_open_file;
-int open_file(char *filename);
+#include "ui/widgets/widgets.h"
+
+#define TAB1 0
+#define TAB2 1
+
+int open_file(char *filename, int type);
 
 #endif
 

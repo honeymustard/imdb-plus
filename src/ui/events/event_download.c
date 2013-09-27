@@ -21,8 +21,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "main.h"
-#include "globals.h"
-#include "ui/ui.h"
+#include "ui/globals/globals.h"
+#include "ui/widgets/widgets.h"
 #include "io/download.h"
 #include "io/openfile.h"
 
@@ -98,7 +98,8 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
     int opened_file = 0;
 
     /* attempt to open fresh ratings */
-    if(dl->status == DL_STATUS_OK && (opened_file = open_file(save))) {
+    if(dl->status == DL_STATUS_OK && 
+        (opened_file = open_file(save, TAB1))) {
 
         info = "finished";
         adjustment = 120;

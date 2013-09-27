@@ -19,8 +19,8 @@
 
 
 #include "main.h"
-#include "globals.h"
-#include "ui/ui.h"
+#include "ui/globals/globals.h"
+#include "ui/widgets/widgets.h"
 
 
 /* credits aka self-praise */

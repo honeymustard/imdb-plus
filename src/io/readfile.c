@@ -25,32 +25,26 @@
 
 
 /**
- * free memory from temporary char array..
- * @param char ***results    array to be freed
- * @param int cols           cols in array
- * @param int rows           rows in array
- * @return                   returns 1
+ * free memory from occupied by results..
+ * @param ResultList **list    list to be freed
  */
-int free_memory(char ***results, int cols, int rows) {
+void readfile_free(ResultList *list) {
  
     int i = 0;
     int j = 0;
 
-    /* free memory occupied by results.. */
-    for(i = 0; i < rows; i++) {
-        for(j = 0; j < cols; j++) {
+    for(i = 0; i < list->rows; i++) {
+        for(j = 0; j < list->cols; j++) {
 
-            if(results[i][j] != NULL) {
-                free(results[i][j]);
+            if(list->results[i][j] != NULL) {
+                free(list->results[i][j]);
             }
         }
 
-        free(results[i]); 
+        free(list->results[i]); 
     }
 
-    free(results);
-
-    return 1;
+    free(list->results);
 }
 
 
@@ -239,13 +233,11 @@ int calc_cols(char *buffer) {
 
 /**
  * open a file and decore html unicode point to utf8..
- * @param char *filename      file to be opened
- * @param int *cols           store col amount
- * @param int *rows           store row amount
- * @param char ****results    handle for saved results
- * @return                    returns 1 on success, else 0
+ * @param ResultList **list    handle for saved results
+ * @param char *filename       file to be opened
+ * @return                     returns 1 on success, else 0
  */
-int read_file(char *filename, int *cols, int *rows, char ****results) {
+int readfile(ResultList *list, char *filename) {
         
     FILE *fp = fopen(filename, "rb");
         
@@ -261,30 +253,29 @@ int read_file(char *filename, int *cols, int *rows, char ****results) {
     /* determine amount of lines */
     while(fgets(buffer, 512, fp) != NULL) {
         
-        if(*rows == 0) {
-            *cols = calc_cols(buffer);
+        if(list->rows == 0) {
+            list->cols = calc_cols(buffer);
         }
 
-        (*rows)++;
+        list->rows++;
     }
 
-    if(*cols < 2) {
+    if(list->cols < 2) {
 
         fclose(fp);
         return 0;
     }
 
-    /* reset */
     fseek(fp, 0, SEEK_SET);
 
-    (*results) = malloc(sizeof(char *) * (*rows));
+    list->results = malloc(sizeof(char *) * list->rows);
     
-    for(i = 0; i < (*rows); i++) {
+    for(i = 0; i < list->rows; i++) {
 
-        (*results)[i] = malloc(sizeof(char *) * (*cols));
+        list->results[i] = malloc(sizeof(char *) * list->cols);
 
-        for(j = 0; j < (*cols); j++) {
-            (*results)[i][j] = NULL;
+        for(j = 0; j < list->cols; j++) {
+            list->results[i][j] = NULL;
         }
     }
 
@@ -293,7 +284,7 @@ int read_file(char *filename, int *cols, int *rows, char ****results) {
     /* copy all lines into table buffer */
     while(fgets(buffer, 512, fp) != NULL) {
 
-        if(!parse_line((*results)[lines++], buffer)) {
+        if(!parse_line(list->results[lines++], buffer)) {
             fclose(fp);
             return 0;
         }

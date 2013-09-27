@@ -18,59 +18,50 @@
 *****************************************************************************/
 
 
-#include "globals.h"
-#include "ui/ui.h"
-#include "ui/ui_fill/ui_fill.h"
+#include "ui/globals/globals.h"
+#include "ui/widgets/widgets.h"
+#include "ui/widgets/fill/fill.h"
 #include "ui/table/gtk_custom_table.h"
 #include "io/openfile.h"
 #include "io/readfile.h"
 
 
-int has_open_mov = 0;
-int has_open_lst = 0;
-
+int tab1 = 0;
+int tab2 = 0;
 
 /**
  * read and parse a ratings file or list..
  * @param char *filename    file to open..
  */
-int open_file(char *filename) {
+int open_file(char *filename, int type) {
 
-    int cols = 0;
-    int rows = 0;
-
-    char ***results = NULL;
+    ResultList *list = calloc(1, sizeof(ResultList));
     
-    if(!read_file(filename, &cols, &rows, &results) || cols < 10) {
+    if(!readfile(list, filename) || list->cols < 10) {
         return 0;
     }
+    
+    set_global(CONST_OPEN_L, filename);
+    set_global(CONST_OPEN_M, filename);
 
-    /* file is a personal ratings file */
-    if(strcmp("IMDb Rating", results[0][9]) == 0) {
-
-        set_global(CONST_OPEN_M, filename);
-        ui_fill_lists_mov(&results, rows);
-
-        has_open_mov = 1;
+    if(type == TAB1) {
+        tab1 = 1;
+        ui_fill_lists_mov(list, nb_lists_mov_tab, nb_stats_mov_tab, type);
     }
-    /* file is a list of some kind */
     else {
-
-        set_global(CONST_OPEN_L, filename);
-        ui_fill_lists_lst(&results, rows);
-
-        has_open_lst = 1;
+        tab2 = 1;
+        ui_fill_lists_mov(list, nb_lists_lst_tab, nb_stats_lst_tab, type);
     }
 
-    free_memory(results, cols, rows);
+    readfile_free(list);
 
     /* fill comparison tab if applicable */
-    if(has_open_mov && has_open_lst) {
+    if(tab1 && tab2) {
 
         ui_fill_lists_cmp(nb_lists_mov_tab, nb_lists_lst_tab);
     }
         
-    gtk_custom_table_refresh(window);
+    gtk_custom_table_refresh(mwin);
 
     return 1;
 }

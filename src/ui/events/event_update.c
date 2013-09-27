@@ -19,9 +19,9 @@
 
 
 #include "main.h"
-#include "globals.h"
-#include "ui/ui.h"
-#include "ui/ui_fill/ui_fill.h"
+#include "ui/globals/globals.h"
+#include "ui/widgets/widgets.h"
+#include "ui/widgets/fill/fill.h"
 #include "ui/table/gtk_custom_table.h"
 #include "io/readfile.h"
 #include "io/openfile.h"
@@ -144,7 +144,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
             if(parse_file(get_global(CONST_TOP_TMP), 
                 get_global(CONST_TOP_CSV), pattern_top250)) {
                 
-                if(ui_fill_lists_top()) {
+                if(ui_fill_lists_top_update()) {
                     topstat = "OK";
                 }
             }
@@ -156,7 +156,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
             if(parse_file(get_global(CONST_BOT_TMP), 
                 get_global(CONST_BOT_CSV), pattern_bot100)) {
 
-                if(ui_fill_lists_bot()) {
+                if(ui_fill_lists_bot_update()) {
                     botstat = "OK";
                 }
             }
@@ -171,32 +171,30 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
                 get_global(CONST_BOX_CSV), pattern_boxoffice_win)) {
                 
                 /* add extra column to boxoffice file */
-                int cols = 0;
-                int rows = 0;
                 int index = 0;
 
-                char ***results;
+                ResultList *list = malloc(sizeof(ResultList));
                 
-                if(read_file(get_global(CONST_BOX_CSV), &cols, &rows, &results)) {
+                if(readfile(list, get_global(CONST_BOX_CSV))) {
 
                     FILE *fp_out = fopen(get_global(CONST_BOX_CSV), "wb");
                     
                     int i = 0;
                     int j = 0;
 
-                    for(i = 0; i < rows; i++) {
+                    for(i = 0; i < list->rows; i++) {
 
-                        for(j = 0; j < cols; j++) {
+                        for(j = 0; j < list->cols; j++) {
 
-                            fprintf(fp_out, "\"%s\",", results[i][j]);
+                            fprintf(fp_out, "\"%s\",", list->results[i][j]);
                         }
 
-                        index = gtk_custom_table_get_indexof(nb_lists_box_tab, 
-                            results[i][1]);
+                        index = gtk_custom_table_get_indexof(nb_lists_box_tab->table, 
+                            list->results[i][1]);
                             
                         if(index >= 0) {
                             fprintf(fp_out, "\"%s\"\n", 
-                                gtk_custom_table_get_cell_text(nb_lists_box_tab, 
+                                gtk_custom_table_get_cell_text(nb_lists_box_tab->table, 
                                     1, index));
                         }
                         else {
@@ -207,9 +205,10 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
                     fclose(fp_out);
                 }
 
-                free_memory(results, cols, rows);
+                free(list);
+                readfile_free(list);
 
-                if(ui_fill_lists_box()) {
+                if(ui_fill_lists_box_update()) {
                     boxstat = "OK";
                 }
             }
@@ -226,16 +225,18 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         free(dl_box);
 
         /* re-open files to update other tabs */
+        /*
         char *open_movie_file = get_global(CONST_OPEN_M);
         char *open_lists_file = get_global(CONST_OPEN_L);
 
         if(open_movie_file != NULL) {
-            open_file(open_movie_file);
+            openfile(open_movie_file);
         }
 
         if(open_lists_file != NULL) {
-            open_file(open_lists_file);
+            openfile(open_lists_file);
         }
+        */
 
         /* set new statusbar message */
         char *temp = malloc(strlen(format) + strlen(topstat) + 
@@ -244,7 +245,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         sprintf(temp, format, topstat, botstat, boxstat);
         gtk_statusbar_push(GTK_STATUSBAR(stat), 1, temp);
 
-        gtk_custom_table_refresh(window);
+        gtk_custom_table_refresh(mwin);
     }
     
     gtk_widget_destroy(dialog);

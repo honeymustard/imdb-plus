@@ -23,7 +23,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include "main.h"
-#include "globals.h"
+#include "ui/globals/globals.h"
 #include "io/paths.h"
 
 

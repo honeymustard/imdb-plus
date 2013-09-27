@@ -24,8 +24,16 @@
 #define HEX_D_OFF 0x30
 #define HEX_C_OFF 0x41
 
-int read_file(char *filename, int *cols, int *rows, char ****results);
-int free_memory(char ***results, int cols, int rows);
+typedef struct result {
+
+    int rows;
+    int cols;
+    char ***results;
+
+} ResultList;
+
+int  readfile(ResultList *list, char *filename);
+void readfile_free(ResultList *list);
 
 #endif
 
