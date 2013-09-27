@@ -19,17 +19,19 @@
 
 # Program variables..
 EXECUTE = imdb-plus
-VERSION = 0.0.8
-SOURCES = Makefile TODO.md README.md COPYING src misc share scripts
-WININST = lib share COPYING *.dll misc\setup.iss $(EXECUTE).exe
+VERSION = 0.1.0
+SOURCES = Makefile TODO.md README.md LICENSE src misc share scripts
+WININST = lib share LICENSE misc\setup.iss $(EXECUTE).exe
 CFLAGS  = -c -Wall -MMD -MP -Isrc
 LDFLAGS = -Wl,--as-needed
-OBJSDIR = obj
 CC      = gcc
 
 # Program source and object files..
 CCFILES = $(shell find ./src/ -name "*.c")
-OBJECTS = $(addprefix $(OBJSDIR)/,$(notdir $(patsubst %.c,%.o,$(CCFILES))))
+OBJECTS = $(patsubst %.c,%.o,$(CCFILES))
+DDFILES = $(patsubst %.o,%.d,$(OBJECTS))
+
+-include $(DDFILES)
 
 ###############################################################################
 # Standard linux build..
@@ -62,7 +64,7 @@ linux: OS = LINUX
 linux: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
 linux: PACKAGES = $(GTK2) -lcurl -lgthread-2.0
 linux: CFLAGS += $(PACKAGES)
-linux: output $(OBJECTS)
+linux: $(OBJECTS)
 	$(CC) $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES)
 
 # Make install..
@@ -138,8 +140,9 @@ windows: GTK2 = $(shell pkg-config.exe --libs --cflags gtk+-win32-2.0)
 windows: PATHS = -I$(MINGW)\include -I$(MINGW)\bin -L$(MINGW)\lib 
 windows: PACKAGES = $(PATHS) $(GTK2) -lcurl -lpcre
 windows: CFLAGS += $(PACKAGES)
-windows: OBJECTS += ./obj/resfile.o
-windows: output $(OBJECTS) ./obj/resfile.o
+windows: RESFILE = resfile.o
+windows: OBJECTS += $(RESFILE)
+windows: $(OBJECTS)
 	$(CC) $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES) $(WINDOWS)
 
 # MinGW build..
@@ -156,13 +159,10 @@ mingw32-clean: clean
 #
 ###############################################################################
 
-.PHONY : output clean
+.PHONY : clean
 
-output:
-	-@test -d $(OBJSDIR) || mkdir -p $(OBJSDIR)
-
-clean: output
-	-@rm $(EXECUTE) ./$(OBJSDIR)/* 2>/dev/null && \
+clean:
+	-@rm $(EXECUTE) $(OBJECTS) $(DDFILES) 2>/dev/null && \
     echo "it's clean" || echo "it's already clean"
 
 ###############################################################################
@@ -170,23 +170,15 @@ clean: output
 #
 ###############################################################################
 
--include $(OBJECTS:.o=.d)
+%/main.o: %/main.c
+	$(CC) $(CFLAGS) $< -o $@ -DVERSION=\"$(VERSION)\"
 
-define find-source 
-    $(filter %/$1.c, $(CCFILES)) 
-endef
+%/paths.o: %/paths.c
+	$(CC) $(CFLAGS) $< -o $@ -D$(OS)
 
-obj/main.o: $(call find-source,main)
-	$(CC) $(CFLAGS) ./$< -o $@ -DVERSION=\"$(VERSION)\"
+resfile.o:
+	windres -o obj/resfile.o misc/resources.rc
 
-obj/paths.o: $(call find-source,paths)
-	$(CC) $(CFLAGS) ./$< -o $@ -D$(OS)
-
-obj/resfile.o:
-	windres -o ./obj/resfile.o ./misc/resources.rc
-
-obj/%.o: $(call find-source,$*)
-	$(CC) $(CFLAGS) $(strip $(call find-source,$*)) -o $@
-
-obj/%.d:
+%.o: %.c
+	$(CC) $(CFLAGS) $< -o $@
 
