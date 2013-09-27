@@ -18,8 +18,8 @@
 *****************************************************************************/
 
 
-#ifndef _UI_FILL_
-#define _UI_FILL_
+#ifndef _FILL_
+#define _FILL_
 
 
 #include "io/readfile.h"

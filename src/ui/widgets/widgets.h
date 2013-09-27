@@ -18,8 +18,8 @@
 *****************************************************************************/
 
 
-#ifndef _UI_
-#define _UI_
+#ifndef _WIDGETS_
+#define _WIDGETS_
 
 #define TEXT_FONT "sans 10"
 

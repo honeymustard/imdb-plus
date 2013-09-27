@@ -18,8 +18,8 @@
 *****************************************************************************/
 
 
-#ifndef _UI_SET_
-#define _UI_SET_
+#ifndef _SET_
+#define _SET_
 
 void ui_set_init();
 void ui_set_head();
