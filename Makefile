@@ -1,13 +1,13 @@
-###############################################################################
+########################################################################
 #
-# Copyright (C) 2011-2012  Adrian Solumsmo
+# Copyright (C) 2011-2013  Adrian Solumsmo
 # 
-# imdb-plus program is free software: you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 # 
-# imdb-plus program is distributed in the hope that it will be useful,
+# This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
@@ -15,13 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-###############################################################################
+########################################################################
 
 # Program variables..
 EXECUTE = imdb-plus
 VERSION = 0.1.0
+PROGRAM = $(EXECUTE)-$(VERSION)
 SOURCES = Makefile TODO.md README.md LICENSE src misc share scripts
-WININST = lib share LICENSE misc\setup.iss $(EXECUTE).exe
+WININST = C:\GTK+\bin\*.dll lib share LICENSE misc\setup.iss $(EXECUTE).exe
 CFLAGS  = -c -Wall -MMD -MP -Isrc
 LDFLAGS = -Wl,--as-needed
 CC      = gcc
@@ -40,7 +41,7 @@ DDFILES = $(patsubst %.o,%.d,$(OBJECTS))
 #
 ###############################################################################
 
-.PHONY : all debug linux install uninstall build build-deb build-rpm dist
+.PHONY : all debug linux install uninstall build build-deb build-rpm
 
 # Install paths..
 DIR_USR = $(DESTDIR)/usr
@@ -92,12 +93,6 @@ uninstall:
 	-@rm -f /usr/bin/$(EXECUTE)
 	-@echo "$(EXECUTE) uninstalled successfully"
 
-# Make dist archive..
-dist: CURRENT = $(EXECUTE)-$(VERSION)
-dist:
-	-@gzip -f -c ./misc/$(EXECUTE).1 > ./misc/$(EXECUTE).1.gz
-	-@tar -zcf $(CURRENT).tar.gz -X ./misc/exclude $(SOURCES)
-
 # Make build..
 build:
 	-@echo "Choose a specific linux build.."
@@ -115,7 +110,7 @@ build-rpm: dist
 ###############################################################################
 # Standard windows build: 
 #
-# Cygwin, MinGW, Gnuwin32 PCRE, Powershell, libcurl, GTK+, 7za.exe, ISSC.exe
+# Cygwin, MinGW, Gnuwin32 PCRE, libcurl, GTK+, ISSC.exe
 #
 # @usage: mingw32-make [ mingw32-[ make | debug | clean | build ] ]
 #
@@ -146,10 +141,8 @@ windows: $(OBJECTS)
 	$(CC) $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES) $(WINDOWS)
 
 # MinGW build..
-mingw32-build: mingw32-make
-mingw32-build:
-	-@powershell -command "& .\scripts\build-win.ps1 \
-		$(EXECUTE) $(VERSION) '$(SOURCES)' '$(WININST)' build-win"
+mingw32-build: mingw32-make dist
+	-@sh ./scripts/build-win.sh $(EXECUTE) $(VERSION) $(WININST) build-win
 
 # MinGW clean..
 mingw32-clean: clean
@@ -159,7 +152,12 @@ mingw32-clean: clean
 #
 ###############################################################################
 
-.PHONY : clean
+.PHONY : clean dist
+
+dist: CURRENT = $(EXECUTE)-$(VERSION)
+dist:
+	-@gzip -f -c ./misc/$(EXECUTE).1 > ./misc/$(EXECUTE).1.gz
+	-@tar -zcf $(CURRENT).tar.gz -X ./misc/exclude $(SOURCES)
 
 clean:
 	-@rm $(EXECUTE) $(OBJECTS) $(DDFILES) 2>/dev/null && \
