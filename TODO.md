@@ -11,7 +11,7 @@
 * multiple programs running boxoffice values..?
 
 **Non-Urgent fixes**
-* rpm build-script needs updating
+* rpm build-script needs updating and testing
 * flux sorting does not sort 0.00 rows correctly / 
   flux footer row produces +0.00 values
 * down-arrow click scrolls a bit too far

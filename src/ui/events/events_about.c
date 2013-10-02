@@ -31,14 +31,14 @@ const char *APP_AUTH[2] = {
 
 /* default license */
 const char *APP_LICN = "\
-Copyright \xc2\xa9 imdb-plus  Adrian Solumsmo\n\
+Copyright \xc2\xa9 2011-2013  Adrian Solumsmo\n\
 \n\
-imdb-plus program is free software: you can redistribute it and/or modify\n\
+This program is free software: you can redistribute it and/or modify\n\
 it under the terms of the GNU General Public License as published by\n\
 the Free Software Foundation, either version 3 of the License, or\n\
 (at your option) any later version.\n\
 \n\
-imdb-plus program is distributed in the hope that it will be useful,\n\
+This program is distributed in the hope that it will be useful,\n\
 but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
 GNU General Public License for more details.\n\

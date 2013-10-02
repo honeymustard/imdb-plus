@@ -22,7 +22,7 @@ EXECUTE = imdb-plus
 VERSION = 0.1.0
 PROGRAM = $(EXECUTE)-$(VERSION)
 SOURCES = Makefile TODO.md README.md LICENSE src misc share scripts
-WININST = C:\GTK+\bin\*.dll lib share LICENSE misc\setup.iss $(EXECUTE).exe
+WININST = *.dll lib share LICENSE misc/setup.iss $(EXECUTE).exe
 CFLAGS  = -c -Wall -MMD -MP -Isrc
 LDFLAGS = -Wl,--as-needed
 CC      = gcc
@@ -135,14 +135,13 @@ windows: GTK2 = $(shell pkg-config.exe --libs --cflags gtk+-win32-2.0)
 windows: PATHS = -I$(MINGW)\include -I$(MINGW)\bin -L$(MINGW)\lib 
 windows: PACKAGES = $(PATHS) $(GTK2) -lcurl -lpcre
 windows: CFLAGS += $(PACKAGES)
-windows: RESFILE = resfile.o
-windows: OBJECTS += $(RESFILE)
-windows: $(OBJECTS)
+windows: OBJECTS += resfile.o
+windows: $(OBJECTS) resfile.o
 	$(CC) $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES) $(WINDOWS)
 
 # MinGW build..
 mingw32-build: mingw32-make dist
-	-@sh ./scripts/build-win.sh $(EXECUTE) $(VERSION) $(WININST) build-win
+	-@sh ./scripts/build-win.sh $(EXECUTE) $(VERSION) "$(WININST)" build-win
 
 # MinGW clean..
 mingw32-clean: clean
@@ -154,10 +153,9 @@ mingw32-clean: clean
 
 .PHONY : clean dist
 
-dist: CURRENT = $(EXECUTE)-$(VERSION)
 dist:
 	-@gzip -f -c ./misc/$(EXECUTE).1 > ./misc/$(EXECUTE).1.gz
-	-@tar -zcf $(CURRENT).tar.gz -X ./misc/exclude $(SOURCES)
+	-@tar -zcf $(PROGRAM).tar.gz -X ./misc/exclude $(SOURCES)
 
 clean:
 	-@rm $(EXECUTE) $(OBJECTS) $(DDFILES) 2>/dev/null && \
@@ -175,7 +173,7 @@ clean:
 	$(CC) $(CFLAGS) $< -o $@ -D$(OS)
 
 resfile.o:
-	windres -o obj/resfile.o misc/resources.rc
+	windres -o resfile.o misc/resources.rc
 
 %.o: %.c
 	$(CC) $(CFLAGS) $< -o $@

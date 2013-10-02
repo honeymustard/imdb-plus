@@ -21,12 +21,12 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile=.\COPYING
+LicenseFile=LICENSE
 OutputDir=.\
 OutputBaseFilename={#MyAppName}-{#MyAppVersion}-setup
 Compression=lzma
 SolidCompression=yes
-SetupIconFile=.\share\icons\imdb-plus.ico
+SetupIconFile=share\icons\imdb-plus.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
