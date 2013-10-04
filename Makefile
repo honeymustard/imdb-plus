@@ -34,8 +34,6 @@ CCFILES = $(shell find ./src/ -name "*.c")
 OBJECTS = $(patsubst %.c,%.o,$(CCFILES))
 DDFILES = $(patsubst %.o,%.d,$(OBJECTS))
 
--include $(DDFILES)
-
 ###############################################################################
 # Standard linux build..
 #
@@ -177,4 +175,6 @@ resfile.o:
 
 %.o: %.c
 	$(CC) $(CFLAGS) $< -o $@
+
+-include $(DDFILES)
 
