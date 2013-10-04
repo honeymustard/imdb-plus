@@ -19,59 +19,48 @@
 #
 ########################################################################
 
-###############################################################
-#
-# Make windows exe/src builds:
-#
-# This script is run by Makefile: mingw32-make mingw32-build
-#
-###############################################################
 
-
-# make sure script is run from toplevel makefile only..
 if [ $# -lt 4 ]; then
     echo "Error: Script expected more arguments!"
     exit
 fi
 
+# make sure script is run from toplevel only..
 if [ "$4" != "build-win" ]; then
     echo "Error: Script should be run by toplevel Makefile!"
     exit
 fi
 
 # variables from makefile..
-PROGRAM=$1
+PROGRAM=$1-$2
 VERSION=$2
 INSTALL=$3
 
-# long-form program name..
-PROGRAM="$PROGRAM-$VERSION"
-
 # build directory..
-DIR_BUILD="build/$PROGRAM/$PROGRAM-win"
+DIR_HOST="build/$PROGRAM/$PROGRAM-win"
 
 # make environment
-[ -d $DIR_BUILD ] || mkdir -p $DIR_BUILD
+[ -d $DIR_HOST ] || mkdir -p $DIR_HOST
 
-if [ ! -d $DIR_BUILD ]; then
+if [ ! -d $DIR_HOST ]; then
     echo "Error: build directory couldn't be created"
     exit
 fi
 
-rm -Rf "$DIR_BUILD/*"
+rm -Rf "$DIR_HOST/*"
 
 # move source package
-mv "$PROGRAM.tar.gz" $DIR_BUILD
+mv "$PROGRAM.tar.gz" $DIR_HOST
 
 # copy install files
-cp -R $INSTALL $DIR_BUILD
+cp -R $INSTALL $DIR_HOST
 
 # run setup script..
-iscc "$DIR_BUILD/setup.iss" /dMyAppVersion=$VERSION
+iscc "$DIR_HOST/setup.iss" /dMyAppVersion=$VERSION
 
-cd $DIR_BUILD && tar -czf "$PROGRAM-setup.tar.gz" "$PROGRAM-setup.exe" && cd -
+cd $DIR_HOST && tar -czf "$PROGRAM-setup.tar.gz" "$PROGRAM-setup.exe" && cd -
 
-find $DIR_BUILD/* ! -name "*.tar.gz" -delete
+find $DIR_HOST/* ! -name "*.tar.gz" -delete
 
 echo "$PROGRAM.exe: build completed"
 

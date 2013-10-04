@@ -4,10 +4,10 @@ Priority: extra
 Maintainer: Adrian Solumsmo <adrian.solumsmo@gmail.com>
 Build-Depends: debhelper (>= 7.0.50~)
 Standards-Version: 3.9.1
-Homepage: http://www.sourceforge.net/projects/imdb-plus
+Homepage: https://www.github.com/honeymustard/imdb-plus
 
 Package: imdb-plus
 Architecture: any 
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: A bold re-imagining of the imdb
+Description: bold re-imagining of the imdb
  imdb-plus is a graphical tool for viewing imdb vote history statistics

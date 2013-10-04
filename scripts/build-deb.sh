@@ -19,19 +19,11 @@
 #
 ########################################################################
 
-########################################################
-#
-# Make linux deb/src builds:
-#
-# This script is run by Makefile. make build-deb.
-#
-########################################################
 
-
-# export credentials to match gpg key..
-DEBEMAIL="adrian.solumsmo@gmail.com"
-DEBFULLNAME="Adrian Solumsmo"
-export DEBEMAIL DEBFULLNAME
+if [ $# -lt 3 ]; then
+    echo "Error: Script expected more arguments!"
+    exit
+fi
 
 # make sure script is run from toplevel only..
 if [ "$3" != "build-deb" ]; then 
@@ -39,69 +31,78 @@ if [ "$3" != "build-deb" ]; then
     exit
 fi
 
-# make build directory if not available..
-if [ ! -d "build" ]; then
-    mkdir "build"
+# export credentials to match gpg key..
+DEBEMAIL="adrian.solumsmo@gmail.com"
+DEBFULLNAME="Adrian Solumsmo"
+export DEBEMAIL DEBFULLNAME
+
+PROGRAM=$1-$2
+VERSION=$2
+CALLDIR=$PWD
+
+# build directory..
+DIR_HOST="build/$PROGRAM/$PROGRAM-deb"
+DIR_TEMP="build/$PROGRAM/$PROGRAM-deb/$PROGRAM"
+
+# make environment
+[ -d $DIR_HOST ] || mkdir -p $DIR_HOST
+
+if [ ! -d $DIR_HOST ]; then
+    echo "Error: build directory couldn't be created"
+    exit
 fi
-   
-cd ./build 
 
-# make new folder to suit program-version..
-if [ ! -d "$1-$2" ]; then
-    mkdir $1-$2
-fi
+rm -Rf $DIR_HOST/*
 
-cd ./$1-$2
+# make temp dir..
+[ -d $DIR_TEMP ] || mkdir -p $DIR_TEMP
 
-# make deb dir so not to interfere with other builds..
-if [ ! -d "$1-$2-deb" ]; then
-    mkdir $1-$2-deb
-fi
-
-cd $1-$2-deb
-rm -Rf ./*
-
-# make version dir..
-if [ ! -d "$1-$2" ]; then
-    mkdir $1-$2
+if [ ! -d $DIR_TEMP ]; then
+    echo "Error: temp directory couldn't be created"
+    exit
 fi
 
 # dist tar was made by make. move it here.
-mv ../../../$1-$2.tar.gz .
+mv "$PROGRAM.tar.gz" "$DIR_HOST/$1_$2.orig.tar.gz"
 
-cd $1-$2
+cd $DIR_TEMP
 
 # extract that bad-boy.. zing.
-tar -zxf ../$1-$2.tar.gz 
+tar -zxf "../$1_$2.orig.tar.gz"
 
 # do dh_make to setup deb package structure..
-dh_make --single --copyright gpl3 -f ../$1-$2.tar.gz
+dh_make --yes --indep --copyright gpl3
+
+cd -
+
+DIR_DEB="$DIR_TEMP/debian"
 
 # remove example files..
-cd ./debian
-rm *.ex *EX
-cd ..
+cd $DIR_DEB && rm *.ex *EX && cd -
 
-# copy pre-made relevant files from top dir..
-cp ../../../../misc/changelog ./debian/changelog
+# copy pre-made relevant files from calldir..
+cp "$CALLDIR/misc/changelog" "$DIR_DEB/changelog"
+
+LOG_OUT="$DIR_DEB/changelog"
+LOG_TMP="$DIR_DEB/changelog.tmp"
 
 # copy version number into changelog..
-sed "s/imdb-plus (X\.X\.X-1)/imdb-plus ($2-1)/" <./debian/changelog >./debian/clog
-cat ./debian/clog > ./debian/changelog && rm ./debian/clog
+sed "s/$1 (X\.X\.X-1)/$1 ($2-1)/" < $LOG_OUT > $LOG_TMP
+cat $LOG_TMP > $LOG_OUT && rm $LOG_TMP
 
-cp ../../../../misc/control ./debian/control
-cp ../../../../misc/copyright ./debian/copyright
-cp ../../../../misc/rules ./debian/rules
-rm ./debian/README.Debian
-rm ./debian/README.source
-rm ./debian/docs
+cp "$CALLDIR/misc/control" "$DIR_DEB/control"
+cp "$CALLDIR/misc/copyright" "$DIR_DEB/copyright"
+cp "$CALLDIR/misc/rules" "$DIR_DEB/rules"
+rm "$DIR_DEB/README.Debian"
+rm "$DIR_DEB/README.source"
+rm "$DIR_DEB/docs"
 
 # build packages
-debuild
+cd $DIR_DEB && debuild -i -us -uc -b && cd -
 
 # do some cleaning..
-cd ..
-rm -Rf ./$1-$2
+rm -Rf $DIR_TEMP
+cd $DIR_HOST && rm *.build *.changes && cd -
 
-echo "$1-$2.deb: build completed"
+echo "$PROGRAM.deb: build completed"
 
