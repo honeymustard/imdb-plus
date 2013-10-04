@@ -23,7 +23,7 @@ VERSION = 0.1.0
 PROGRAM = $(EXECUTE)-$(VERSION)
 SOURCES = Makefile TODO.md README.md LICENSE src misc share scripts
 WININST = *.dll lib share LICENSE misc/setup.iss $(EXECUTE).exe
-DELFILE = *.exe *.o *.tar.gz $(EXECUTE) $(OBJECTS) $(DDFILES)
+DELFILE = *.exe *.o *.tar.gz misc/*.gz $(EXECUTE) $(OBJECTS) $(DDFILES)
 CFLAGS  = -c -Wall -MMD -MP -Isrc
 LDFLAGS = -Wl,--as-needed
 RESFILE = resfile.o
@@ -34,12 +34,12 @@ CCFILES = $(shell find ./src/ -name "*.c")
 OBJECTS = $(patsubst %.c,%.o,$(CCFILES))
 DDFILES = $(patsubst %.o,%.d,$(OBJECTS))
 
-###############################################################################
-# Standard linux build..
+########################################################################
+# Standard Linux build..
 #
-# @usage: make | make [ debug | clean | build-[deb|rpm] | dist | [un]install ]
+# make | make [ debug | clean | build-[deb|rpm] | dist | [un]install ]
 #
-###############################################################################
+########################################################################
 
 .PHONY : all debug linux install uninstall build build-deb build-rpm
 
@@ -69,7 +69,7 @@ linux: $(OBJECTS)
 	$(CC) $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES)
 
 # Make install..
-install: all
+install: all pack
 	-@test -d $(DIR_USR) || mkdir -p $(DIR_USR)
 	-@test -d $(DIR_BIN) || mkdir -p $(DIR_BIN)
 	-@test -d $(DIR_SHR) || mkdir -p $(DIR_SHR)
@@ -77,7 +77,6 @@ install: all
 	-@test -d $(DIR_PIX) || mkdir -p $(DIR_PIX)
 	-@test -d $(DIR_MAN) || mkdir -p $(DIR_MAN)
 	-@test -d $(DIR_MNP) || mkdir -p $(DIR_MNP)
-	-@gzip -f -c ./misc/$(EXECUTE).1 > ./misc/$(EXECUTE).1.gz
 	-@cp ./misc/$(EXECUTE).desktop $(DIR_APP)
 	-@cp ./misc/$(EXECUTE).1.gz $(DIR_MNP)
 	-@cp -R ./share/icons/imdb-plus $(DIR_PIX)
@@ -107,14 +106,14 @@ build-deb: dist
 build-rpm: dist
 	-@sh ./scripts/build-rpm.sh $(EXECUTE) $(VERSION) build-rpm
 
-###############################################################################
-# Standard windows build: 
+########################################################################
+# Standard Windows build: 
 #
 # Cygwin, MinGW, Gnuwin32 PCRE, libcurl, GTK+, ISSC.exe
 #
 # @usage: mingw32-make [ mingw32-[ make | debug | clean | build ] ]
 #
-###############################################################################
+########################################################################
 
 .PHONY : mingw32-make mingw32-debug mingw32-clean mingw32-build windows
 
@@ -145,24 +144,29 @@ mingw32-build: mingw32-make dist
 # MinGW clean..
 mingw32-clean: clean
 
-###############################################################################
+########################################################################
 # Shared targets..
 #
-###############################################################################
+########################################################################
 
-.PHONY : clean dist
+.PHONY : dist pack clean purge
 
-dist:
-	-@gzip -f -c ./misc/$(EXECUTE).1 > ./misc/$(EXECUTE).1.gz
+dist: pack
 	-@tar -zcf $(PROGRAM).tar.gz -X ./misc/exclude $(SOURCES)
+
+pack:
+	-@gzip -f -c ./misc/$(EXECUTE).1 > ./misc/$(EXECUTE).1.gz
 
 clean:
 	-@rm $(DELFILE) 2>/dev/null || echo "it's clean"
 
-###############################################################################
+purge:
+	-@find ./ -regex ".*\(\.swp\|\.swo\|~\|\.fuse.*\)" -delete
+
+########################################################################
 # Project targets..
 #
-###############################################################################
+########################################################################
 
 %/main.o: %/main.c
 	$(CC) $(CFLAGS) $< -o $@ -DVERSION=\"$(VERSION)\"
