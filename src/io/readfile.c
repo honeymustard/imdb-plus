@@ -233,9 +233,9 @@ int calc_cols(char *buffer) {
 
 /**
  * open a file and decore html unicode point to utf8..
- * @param ResultList **list    handle for saved results
- * @param char *filename       file to be opened
- * @return                     returns 1 on success, else 0
+ * @param ResultList *list    handle for saved results
+ * @param char *filename      file to be opened
+ * @return                    returns 1 on success, else 0
  */
 int readfile(ResultList *list, char *filename) {
         

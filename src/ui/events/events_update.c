@@ -93,6 +93,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         /* begin thread 2 */
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Bottom 100");
         gtk_adjustment_set_value(adj, 40);
+
         while(gtk_events_pending()) gtk_main_iteration();
 
         /* download bottom100 list */
@@ -111,6 +112,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         /* begin thread 3 */
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "All-time Boxoffice");
         gtk_adjustment_set_value(adj, 80);
+
         while(gtk_events_pending()) gtk_main_iteration();
 
         /* download boxoffice list */
@@ -128,6 +130,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
 
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Finished");
         gtk_adjustment_set_value(adj, 120);
+
         while(gtk_events_pending()) gtk_main_iteration();
 
         /* all threads have finished, do something with results */
@@ -174,6 +177,9 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
                 int index = 0;
 
                 ResultList *list = malloc(sizeof(ResultList));
+                list->rows = 0;
+                list->cols = 0;
+                list->results = NULL;
                 
                 if(readfile(list, get_global(CONST_BOX_CSV))) {
 
@@ -205,8 +211,8 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
                     fclose(fp_out);
                 }
 
-                free(list);
                 readfile_free(list);
+                free(list);
 
                 if(ui_fill_lists_box_update()) {
                     boxstat = "OK";
