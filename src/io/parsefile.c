@@ -55,6 +55,7 @@ int parse_file(char *filename, char *out_file, char *pattern) {
 
     regex_t re;
     regmatch_t match[10];
+    memset(match, '\0', sizeof(regmatch_t) * 10);
      
     /* compile regular expression pattern */
     if(regcomp(&re, pattern, REG_EXTENDED) != 0) {
@@ -67,6 +68,7 @@ int parse_file(char *filename, char *out_file, char *pattern) {
     /* open temporary output file */
     char *ext_temp = ".tmp";
     char *out_temp = malloc(strlen(out_file) + strlen(ext_temp) + 1);
+
     strcpy(out_temp, out_file);
     strcat(out_temp, ext_temp);
 

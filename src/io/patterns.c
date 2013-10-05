@@ -31,7 +31,7 @@ sans-serif\" size=\"-1\">([0-9]{1,2}\\.[0-9]{1,2})</font>\
 size=\"-1\"><a href=\"/title/(tt[0-9]{1,10})/\">(.{0,100})\
 </a> \\(([0-9]{4}).{0,4}\\)</font></td><td align=\"right\">\
 <font face=\"Arial, Helvetica, sans-serif\" size=\"-1\">\
-(([0-9]{1,4},[0-9]{1,4}))</font></td></tr>";
+(([0-9,]{1,12}))</font></td></tr>";
 
 /* bottom100 regex pattern */
 char *pattern_bot100 = "<font face=\"Arial, Helvetica, \
@@ -42,7 +42,7 @@ sans-serif\" size=\"-1\">([0-9]{1,2}\\.[0-9]{1,2})</font>\
 size=\"-1\"><a href=\"/title/(tt[0-9]{1,10})/\">(.{0,100})\
 </a> \\(([0-9]{4}.{0,4})\\)</font></td><td align=\"right\">\
 <font face=\"Arial, Helvetica, sans-serif\" size=\"-1\">\
-(([0-9]{1,4},[0-9]{1,4}))</font></td></tr>";
+(([0-9,]{1,12}))</font></td></tr>";
 
 /* boxoffice regex pattern */
 char *pattern_boxoffice = "\
