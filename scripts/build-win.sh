@@ -38,6 +38,7 @@ INSTALL=$3
 
 # build directory..
 DIR_HOST="build/$PROGRAM/$PROGRAM-win"
+DIR_TEMP="build/$PROGRAM/$PROGRAM-win/$PROGRAM"
 
 # make environment
 [ -d $DIR_HOST ] || mkdir -p $DIR_HOST
@@ -49,18 +50,26 @@ fi
 
 rm -Rf "$DIR_HOST/*"
 
+[ -d $DIR_TEMP ] || mkdir -p $DIR_TEMP
+
+if [ ! -d $DIR_TEMP ]; then
+    echo "Error: build directory couldn't be created"
+    exit
+fi
+
 # move source package
 mv "$PROGRAM.tar.gz" $DIR_HOST
 
 # copy install files
-cp -R $INSTALL $DIR_HOST
+cp -R $INSTALL $DIR_TEMP
 
 # run setup script..
-iscc "$DIR_HOST/setup.iss" /dMyAppVersion=$VERSION
+iscc "$DIR_TEMP/setup.iss" /dMyAppVersion=$VERSION
 
-cd $DIR_HOST && tar -czf "$PROGRAM-setup.tar.gz" "$PROGRAM-setup.exe" && cd -
+cd $DIR_TEMP && tar -czf "../$PROGRAM-setup.tar.gz" "$PROGRAM-setup.exe" && cd -
 
-find $DIR_HOST/* ! -name "*.tar.gz" -delete
+rm "$DIR_HOST/$PROGRAM.tar.gz"
+rm -Rf $DIR_TEMP
 
 echo "$PROGRAM.exe: build completed"
 
