@@ -7,14 +7,11 @@
 
 **Improvements**
 * make it possible to compare two ratings files..
-* test if basename with <libgen.h> works on windows
-* multiple programs running boxoffice values..?
 
 **Non-Urgent fixes**
 * rpm build-script needs updating and testing
 * flux sorting does not sort 0.00 rows correctly / 
   flux footer row produces +0.00 values
-* down-arrow click scrolls a bit too far
 * rating values must update on event_update
 
 **Urget fixes**

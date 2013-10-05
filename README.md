@@ -65,7 +65,7 @@ rigorously tested on all the intended platforms.
     
     or 
     
-    $ mingw32-make mingw32-build    # builds src, setup archives..
+    $ mingw32-make mingw32-build    # builds setup archive
 
 ## Copyright
 
