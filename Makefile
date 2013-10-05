@@ -131,7 +131,7 @@ mingw32-debug: windows
 windows: OS = WINDOWS
 windows: MINGW = C:\MinGW
 windows: GTK2 = $(shell pkg-config.exe --libs --cflags gtk+-win32-2.0)
-windows: PATHS = -I$(MINGW)\include -I$(MINGW)\bin -L$(MINGW)\lib 
+windows: PATHS = -I$(MINGW)\include -L$(MINGW)\lib 
 windows: PACKAGES = $(PATHS) $(GTK2) -lcurl -lpcre
 windows: CFLAGS += $(PACKAGES)
 windows: $(OBJECTS) resfile.o
