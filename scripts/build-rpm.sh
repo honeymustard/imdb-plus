@@ -19,14 +19,11 @@
 #
 ########################################################################
 
-########################################################
-#
-# Make linux rpm/src builds:
-#
-# This script is run by Makefile. make build-rpm.
-#
-########################################################
 
+if [ $# -lt 3 ]; then
+    echo "Error: Script expected more arguments!"
+    exit
+fi
 
 # make sure script is run from toplevel only..
 if [ "$3" != "build-rpm" ]; then 
@@ -34,90 +31,86 @@ if [ "$3" != "build-rpm" ]; then
     exit
 fi
 
-# make build directory if not available..
-if [ ! -d "build" ]; then
-    mkdir "build"
+PROGRAM=$1-$2
+VERSION=$2
+CALLDIR=$PWD
+
+# build directory..
+DIR_HOST="build/$PROGRAM/$PROGRAM-rpm"
+DIR_TEMP="build/$PROGRAM/$PROGRAM-rpm/temp"
+
+# make environment
+[ -d $DIR_HOST ] || mkdir -p $DIR_HOST
+
+if [ ! -d $DIR_HOST ]; then
+    echo "Error: build directory couldn't be created"
+    exit
 fi
 
-cd ./build
-   
-# make new folder to suit program-version..
-if [ ! -d "$1-$2" ]; then
-    mkdir $1-$2
-fi
-
-cd ./$1-$2
-
-# make deb dir so not to interfere with other builds..
-if [ ! -d "$1-$2-rpm" ]; then
-    mkdir $1-$2-rpm
-fi
-
-cd ./$1-$2-rpm
+rm -Rf "$DIR_HOST/*"
 
 # make version dir..
-if [ ! -d "$1-$2" ]; then
-    mkdir $1-$2
+[ ! -d $DIR_TEMP ] || mkdir $DIR_TEMP
+
+if [ ! -d $DIR_TEMP ]; then
+    echo "Error: temp directory couldn't be created"
+    exit
 fi
 
-cd ./$1-$2
+rm -Rf "$DIR_HOST/$PROGRAM/*"
 
-TOP_DIR=../../../..
-
-rm -Rf ./*
-
-mkdir "BUILD"
-mkdir "RPMS"
-mkdir "SOURCES"
-mkdir "SPECS"
-mkdir "SRPMS"
+########################### remove this..
+mkdir "$DIR_TEMP/BUILD"
+mkdir "$DIR_TEMP/RPMS"
+mkdir "$DIR_TEMP/SOURCES"
+mkdir "$DIR_TEMP/SPECS"
+mkdir "$DIR_TEMP/SRPMS"
 
 #rpmdev-setuptree
 
 # copy relevant files to build folder..
-cp $TOP_DIR/misc/$1.spec SPECS
-cp $TOP_DIR/$1-$2.tar.gz SOURCES
+cp "$CALLDIR/misc/$1.spec" "$DIR_TEMP/SPECS"
+cp "$CALLDIR/$1-$2.tar.gz" "$DIR_TEMP/SOURCES"
+
+FILE_SPEC="$DIR_TEMP/SPECS/$1.spec"
+FILE_TEMP="$DIR_TEMP/SPECS/$1.temp"
 
 # copy version number into spec..
-sed "s/X\.X\.X/$2/" <SPECS/$1.spec >SPECS/$1.tmp
-cat SPECS/$1.tmp > SPECS/$1.spec && rm SPECS/$1.tmp
-
-CWD=$PWD
-
-cd SPECS
+sed "s/X\.X\.X/$2/" < $FILE_SPEC > $FILE_TEMP
+cat $FILE_TEMP > $FILE_SPEC && rm $FILE_TEMP
 
 # Check RPM spec with lint..
-#if [ `rpmlint $1.spec | grep -c E:` -gt 0 ]; then
-#    echo "rpmlint exited with Error!"
-#    exit
-#fi
+if [ `rpmlint $FILE_SPEC | grep -c E:` -gt 0 ]; then
+    echo "rpmlint exited with Error!"
+    exit
+fi
 
-rpmbuild -ba $1.spec --define "_topdir $CWD"
+rpmbuild -ba $FILE_SPEC --define "_topdir $CALLDIR"
  
-cd .. 
-
 # clean/make LOGS directory..
-#if [ -d LOGS ]; then
-#    rm -R ./LOGS
-#fi
+[ ! -d "$DIR_TEMP/LOGS" ] || mkdir "$DIR_TEMP/LOGS"
 
-#mkdir LOGS
+if [ ! -d "$DIR_TEMP/LOGS" ]; then
+    echo "Error: logs directory couldn't be created"
+    exit
+fi
+
+rm -R "$DIR_TEMP/LOGS/*"
+
 
 # Check RPM source with mock..
-#`mock -r fedora-17-x86_64 --rebuild ./SRPMS/*.src.rpm --resultdir=./LOGS`
+`mock -r fedora-17-x86_64 --rebuild "$DIR_TEMP/SRPMS/*.src.rpm" --resultdir="$DIR_TEMP/LOGS"`
 
-#if [ `cat ./LOGS/state.log | grep -c "Finish: run"` -eq 0 ]; then
-#    echo "Mock exited with Error!"
-#    exit
-#fi
+if [ `cat "$DIR_TEMP/LOGS/state.log" | grep -c "Finish: run"` -eq 0 ]; then
+    echo "Mock exited with Error!"
+    exit
+fi
 
 # copy relevant rpm's..
-cp RPMS/x86_64/*.rpm ../
-cp SRPMS/*.rpm ../
+cp "$DIR_TEMP/RPMS/x86_64/*.rpm" $DIR_HOST
+cp "$DIR_TEMP/SRPMS/*.rpm" $DIR_HOST
 
-cd ..
+rm -Rf $DIR_TEMP
 
-#rm -rf $1-$2
-
-echo "$1-$2.rpm: build completed"
+echo "$PROGRAM.rpm: build completed"
 
