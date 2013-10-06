@@ -56,11 +56,11 @@ int nb_lists_cmp_cols[COLS_LISTS_CMP] = {
 };
 
 int nb_lists_top_cols[COLS_LISTS_TOP] = {
-    60, 60, 60, 100, -1, 55, 80 
+    60, 60, 60, 100, -1, 55, 100 
 };
 
 int nb_lists_bot_cols[COLS_LISTS_BOT] = {
-    60, 60, 60, 100, -1, 55, 80
+    60, 60, 60, 100, -1, 55, 100
 };
 
 int nb_lists_box_cols[COLS_LISTS_BOX] = {
