@@ -86,8 +86,13 @@ void ui_fill_lists_top(ResultList *list, NotebookTab *tab) {
         sprintf(temp, "%d", (int)year);
         gtk_custom_table_set_cell_text(tab->table, 5, i, 
             temp);
-        gtk_custom_table_set_cell_text(tab->table, 6, i, 
-            list->results[i][5]);
+
+        char *strip = gtk_custom_table_string_strip_alpha(list->results[i][5]);
+        char *value = gtk_custom_table_string_thousand_separator(strip);
+
+        gtk_custom_table_set_cell_text(tab->table, 6, i, value);
+
+        free(value);
 
         /* set cell colors */
         gtk_custom_table_set_cell_color(tab->table, 1, i, 

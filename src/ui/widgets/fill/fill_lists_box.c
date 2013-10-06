@@ -105,8 +105,13 @@ void ui_fill_lists_box(ResultList *list, NotebookTab *tab) {
         sprintf(temp, "%d", (int)year);
         gtk_custom_table_set_cell_text(tab->table, 5, i, 
             temp);
-        gtk_custom_table_set_cell_text(tab->table, 6, i, 
-            list->results[i][4]);
+
+        char *strip = gtk_custom_table_string_strip_alpha(list->results[i][4]);
+        char *value = gtk_custom_table_string_thousand_separator(strip);
+
+        gtk_custom_table_set_cell_text(tab->table, 6, i, value);
+
+        free(value);
 
         /* get imdb ratings from other tables */
         double n = find_rating(list->results[i][1]);

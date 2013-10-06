@@ -73,7 +73,6 @@ void ui_set_meta() {
         PANGO_ALIGN_LEFT);
     gtk_custom_table_set_column_alignment(nb_stats_all_tab->table, 3, 
         PANGO_ALIGN_LEFT);
-
     gtk_custom_table_set_column_alignment(nb_lists_mov_tab->table, 4, 
         PANGO_ALIGN_LEFT);
     gtk_custom_table_set_column_alignment(nb_lists_lst_tab->table, 4, 
@@ -86,5 +85,21 @@ void ui_set_meta() {
         PANGO_ALIGN_LEFT);
     gtk_custom_table_set_column_alignment(nb_lists_box_tab->table, 4, 
         PANGO_ALIGN_LEFT);
+
+    /* set sort types */
+    gtk_custom_table_set_column_format(nb_stats_mov_tab->table, 2, 
+        FORMAT_INTEGER_SIGNED);
+    gtk_custom_table_set_column_format(nb_stats_lst_tab->table, 2, 
+        FORMAT_INTEGER_SIGNED);
+    gtk_custom_table_set_column_format(nb_stats_cmp_tab->table, 2, 
+        FORMAT_INTEGER_SIGNED);
+    gtk_custom_table_set_column_format(nb_stats_all_tab->table, 2, 
+        FORMAT_INTEGER_SIGNED);
+    gtk_custom_table_set_column_format(nb_lists_top_tab->table, 6, 
+        FORMAT_INTEGER_UNSIGNED);
+    gtk_custom_table_set_column_format(nb_lists_bot_tab->table, 6, 
+        FORMAT_INTEGER_UNSIGNED);
+    gtk_custom_table_set_column_format(nb_lists_box_tab->table, 6, 
+        FORMAT_INTEGER_UNSIGNED);
 }
 

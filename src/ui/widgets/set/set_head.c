@@ -89,7 +89,7 @@ char *nb_lists_bot_headers[COLS_LISTS_BOT] = {
 };
 
 char *nb_lists_box_headers[COLS_LISTS_BOX] = {
-    "#", "IMDb", "Vote", "IMDb ID", "Title", "Year", "Gross", 
+    "#", "IMDb", "Vote", "IMDb ID", "Title", "Year", "Gross USD", 
 };
 
 
