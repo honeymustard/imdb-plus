@@ -3,10 +3,10 @@
 
 **Considerations**
 * set a *.csv file filter on filechooser dialog, 
-  not really necessary but would make app more solid
 
 **Improvements**
 * make it possible to compare two ratings files..
+* remove commas in table values to improve sorting
 
 **Non-Urgent fixes**
 * rpm build-script needs updating and testing
