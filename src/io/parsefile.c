@@ -46,24 +46,18 @@ int parse_file(char *filename, char *out_file, char *pattern) {
     fseek(fp, 0, SEEK_SET);
 
     char *buffer = malloc((int)len + 1);
-    memset(buffer, '\0', len+1);
-
-    const char *p = buffer;
     fread(buffer, 1, len, fp);
+    buffer[len] = '\0';
 
     fclose(fp);
 
     regex_t re;
     regmatch_t match[10];
-    memset(match, '\0', sizeof(regmatch_t) * 10);
      
     /* compile regular expression pattern */
     if(regcomp(&re, pattern, REG_EXTENDED) != 0) {
         return 0;
     }
-
-    int i = 0;
-    int j = 0;
 
     /* open temporary output file */
     char *ext_temp = ".tmp";
@@ -79,12 +73,16 @@ int parse_file(char *filename, char *out_file, char *pattern) {
     }
 
     /* file format for regex'd values */
-    char *array[2] = {
-        "\"%.*s\",", 
-        "\"%.*s\"\n"
-    };
+    char *format[2] = {"\"%.*s\",", "\"%.*s\"\n"};
+
+    int i = 0;
+    int j = 0;
 
     /* keep going while pattern has more matches */
+    /* valgrind will report a false positive error here */
+
+    const char *p = buffer;
+
     for(i = 0; (regexec(&re, p, re.re_nsub, match, 0) == 0); i++) {
 
         for(j = 1; j < re.re_nsub; j++) {
@@ -94,7 +92,7 @@ int parse_file(char *filename, char *out_file, char *pattern) {
             }
 
             /* last submatch in match, add end-of-line character */
-            fprintf(out_file_tmp, array[(j == (re.re_nsub - 1))], 
+            fprintf(out_file_tmp, format[(j == (re.re_nsub - 1))], 
                 match[j].rm_eo - match[j].rm_so, &p[match[j].rm_so]);
         }
 

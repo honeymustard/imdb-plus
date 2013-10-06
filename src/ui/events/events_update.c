@@ -32,7 +32,7 @@
 
 /* update lists from interwebs */
 void menu_signal_update(GtkWidget *widget, gpointer data) {
-    
+
     GtkWidget *dialog, *content;
 
     dialog = gtk_dialog_new_with_buttons(
@@ -148,6 +148,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
                 get_global(CONST_TOP_CSV), pattern_top250)) {
                 
                 if(ui_fill_lists_top_update()) {
+
                     topstat = "OK";
                 }
             }
@@ -176,10 +177,7 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
                 /* add extra column to boxoffice file */
                 int index = 0;
 
-                ResultList *list = malloc(sizeof(ResultList));
-                list->rows = 0;
-                list->cols = 0;
-                list->results = NULL;
+                ResultList *list = calloc(1, sizeof(ResultList));
                 
                 if(readfile(list, get_global(CONST_BOX_CSV))) {
 
