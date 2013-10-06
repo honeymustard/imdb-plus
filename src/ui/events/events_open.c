@@ -87,6 +87,12 @@ void menu_signal_open(GtkWidget *widget, int type) {
     gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), 
         get_global(CONST_DOWN));
 
+    /* set a new file filter to limit types */
+    GtkFileFilter *filter = gtk_file_filter_new();
+    gtk_file_filter_set_name(filter, "*.csv");
+    gtk_file_filter_add_pattern(filter, "*.csv");
+    gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+
     /* set position and icon */
     gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
     gtk_window_set_icon_from_file(GTK_WINDOW(dialog), APP_ICON, NULL);
