@@ -34,7 +34,7 @@ void *download(void *download) {
     CURL *curl;
     CURLcode curl_res;
 
-    struct download *down = (struct download *)download;
+    Download *down = (Download *)download;
 
     /* set default status to failed */
     down->status = DL_STATUS_NB;
@@ -65,6 +65,7 @@ void *download(void *download) {
         curl_easy_getinfo(curl, CURLINFO_SIZE_DOWNLOAD, &down->length);
 
         fclose(tmp);
+
         curl_easy_cleanup(curl);
 
     }

@@ -26,14 +26,15 @@
 #define DL_STATUS_NB 0
 
 /* struct for file downloads */
-struct download {
+typedef struct download {
     
     char *url;
     char *saveas;
     int status;
     long http_code;
     double length;
-};
+
+} Download;
 
 void *download(void *download);
 

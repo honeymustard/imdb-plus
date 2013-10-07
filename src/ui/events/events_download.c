@@ -30,6 +30,7 @@
 GtkAdjustment *adj;
 GtkWidget *pbar, *label, *entry;
 
+
 /* download new ratings file response handler */
 void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
 
@@ -74,14 +75,15 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
     gtk_label_set_text(GTK_LABEL(label), "Downloading ratings..\n");
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), pbar_text);
     gtk_adjustment_set_value(adj, 20);
+
     while(gtk_events_pending()) gtk_main_iteration();
 
     /* download new file */
-    struct download *dl = malloc(sizeof (struct download));
-    dl->url = load;
-    dl->saveas = save;
+    Download *down = malloc(sizeof(Download));
+    down->url = load;
+    down->saveas = save;
 
-    GThread *thread = g_thread_create(&download, dl, TRUE, NULL);
+    GThread *thread = g_thread_create(&download, down, TRUE, NULL);
 
     if(thread == 0) {
         g_warning("can't create the thread");
@@ -90,7 +92,7 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
     g_thread_join(thread);
 
     char *temp = NULL;
-    char *stat = NULL;
+    char *note = NULL;
     char *info = NULL;
 
     int adjustment = 0;
@@ -98,16 +100,16 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
     int opened_file = 0;
 
     /* attempt to open fresh ratings */
-    if(dl->status == DL_STATUS_OK && 
+    if(down->status == DL_STATUS_OK && 
         (opened_file = open_file(save, TAB1))) {
 
         info = "finished";
         adjustment = 120;
 
-        stat = "DL OK: Opened ratings file: ";
+        note = "DL OK: Opened ratings file: ";
 
-        temp = malloc(strlen(stat) + strlen(save) + 1);
-        strcpy(temp, stat),
+        temp = malloc(strlen(note) + strlen(save) + 1);
+        strcpy(temp, note),
         strcat(temp, save);
     }
     else {
@@ -118,41 +120,41 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
         remove(save);
 
         /* download failed, could not download file */
-        if(dl->status == DL_STATUS_NB) {
+        if(down->status == DL_STATUS_NB) {
 
-            stat = "DL ERR: Unable to download file";
+            note = "DL ERR: Unable to download file";
 
-            temp = malloc(strlen(stat) + 1);
-            strcpy(temp, stat);
+            temp = malloc(strlen(note) + 1);
+            strcpy(temp, note);
         }
         /* download succeeded, but with an error code */
-        else if(dl->http_code > 0) {
+        else if(down->http_code > 0) {
 
-            stat = "DL ERR: Unable to download file: ";
+            note = "DL ERR: Unable to download file: ";
 
             char error[20];
-            sprintf(error, "%ld", dl->http_code);
+            sprintf(error, "%ld", down->http_code);
 
-            temp = malloc(strlen(stat) + strlen(error) + 1);
-            strcpy(temp, stat);
+            temp = malloc(strlen(note) + strlen(error) + 1);
+            strcpy(temp, note);
             strcat(temp, error);
         }
         /* download succeeded, but could not open ratings */
         else if(!opened_file) {
 
-            stat = "DL ERR: Unable to open file: ";
+            note = "DL ERR: Unable to open file: ";
 
-            temp = malloc(strlen(stat) + strlen(save) + 1);
-            strcpy(temp, stat);
-            strcpy(temp, save);
+            temp = malloc(strlen(note) + strlen(save) + 1);
+            strcpy(temp, note);
+            strcat(temp, save);
         }
         /* download succeeded, but an unknown error occured */
         else {
 
-            stat = "DL ERR: Unknown error";
+            note = "DL ERR: Unknown error";
 
-            temp = malloc(strlen(stat) + 1);
-            strcpy(temp, stat);
+            temp = malloc(strlen(note) + 1);
+            strcpy(temp, note);
         }
     }
 
@@ -162,10 +164,11 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
 
     /* push and update statusbar */
     gtk_statusbar_push(GTK_STATUSBAR(stat), 1, temp);
+
     while(gtk_events_pending()) gtk_main_iteration();
 
     free(temp);
-    free(dl);
+    free(down);
 
     gtk_widget_destroy(dialog);
 }
