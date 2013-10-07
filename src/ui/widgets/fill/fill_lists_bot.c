@@ -92,6 +92,7 @@ void ui_fill_lists_bot(ResultList *list, NotebookTab *tab) {
 
         gtk_custom_table_set_cell_text(tab->table, 6, i, value);
 
+        free(strip);
         free(value);
 
         /* set cell colors */

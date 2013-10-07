@@ -111,6 +111,7 @@ void ui_fill_lists_box(ResultList *list, NotebookTab *tab) {
 
         gtk_custom_table_set_cell_text(tab->table, 6, i, value);
 
+        free(strip);
         free(value);
 
         /* get imdb ratings from other tables */
