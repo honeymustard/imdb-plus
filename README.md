@@ -69,5 +69,5 @@ rigorously tested on all the intended platforms.
 
 ## Copyright
 
-Copyright &copy; 2011-2012 Adrian Solumsmo. See [LICENSE](https://github.com/honeymustard/imdb-plus/blob/master/LICENSE) for details.
+Copyright &copy; 2011-2013 Adrian Solumsmo. See [LICENSE](https://github.com/honeymustard/imdb-plus/blob/master/LICENSE) for details.
 
