@@ -6,19 +6,19 @@
   <td bgcolor="#EEEEFF"><b>imdb-plus on windows</b></td>
  <tr>
   <td>
-   <img width="240" height="180" 
+   <img width="220" height="160" 
     src="https://github.com/honeymustard/imdb-plus/raw/master/local/ss-debian.png" 
     alt="imdb-plus on debian"
    />
   </td>
   <td>
-   <img width="240" height="180" 
+   <img width="220" height="160" 
     src="https://github.com/honeymustard/imdb-plus/raw/master/local/ss-fedora.png" 
     alt="imdb-plus on fedora"
    />
   </td>
   <td>
-   <img width="240" height="180" 
+   <img width="220" height="160" 
     src="https://github.com/honeymustard/imdb-plus/raw/master/local/ss-windows.png" 
     alt="imdb-plus on windows"
    />
