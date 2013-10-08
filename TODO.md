@@ -5,8 +5,8 @@
 * none
 
 **Improvements**
-* make it possible to compare two ratings files..
 * make ratings download remember last value entered
+* add another column to allow for two open ratings files
 
 **Non-Urgent fixes**
 * rpm build-script needs testing
