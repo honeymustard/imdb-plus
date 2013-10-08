@@ -6,6 +6,7 @@
 
 **Improvements**
 * make it possible to compare two ratings files..
+* make ratings download remember last value entered
 
 **Non-Urgent fixes**
 * rpm build-script needs testing
