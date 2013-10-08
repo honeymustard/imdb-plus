@@ -22,29 +22,33 @@
 #define _GLOBALS_
 
 /* global constants */
-#define CONST_HOME    1
-#define CONST_DOWN    2
-#define CONST_TOP_TMP 3
-#define CONST_TOP_CSV 4
-#define CONST_TOP_URL 5
-#define CONST_BOT_TMP 6
-#define CONST_BOT_CSV 7
-#define CONST_BOT_URL 8
-#define CONST_BOX_TMP 9
-#define CONST_BOX_CSV 10
-#define CONST_BOX_URL 11
-#define CONST_RAT_URL 12 
-#define CONST_VERSION 13
-#define CONST_OPEN_M  14
-#define CONST_OPEN_L  15
-#define CONST_OPEN_R  16
-#define CONST_OPEN_T  17
-#define CONST_OPEN_S  18
-#define CONST_EOL     19
+typedef enum {
 
-char *get_global(int global);
-void set_global(int global, char *value);
-void free_globals();
+    CONST_HOME,
+    CONST_DOWN,
+    CONST_TOP_TMP,
+    CONST_TOP_CSV,
+    CONST_TOP_URL,
+    CONST_BOT_TMP,
+    CONST_BOT_CSV,
+    CONST_BOT_URL,
+    CONST_BOX_TMP,
+    CONST_BOX_CSV,
+    CONST_BOX_URL,
+    CONST_RAT_URL,
+    CONST_VERSION,
+    CONST_OPEN_R,
+    CONST_OPEN_T,
+    CONST_OPEN_S,
+    CONST_EOL
+
+} Global;
+
+
+void   globals_init();
+char * globals_get(Global global);
+void   globals_set(Global global, char *value);
+void   globals_free();
 
 #endif
 

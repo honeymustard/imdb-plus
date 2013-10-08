@@ -23,68 +23,58 @@
 #include "globals.h"
 
 
-int initiated = 0;
-
-char *constants[CONST_EOL];
+char *globals[CONST_EOL];
 
 
 /**
  * initiates global constants array to NULL..
  */
-void init_globals() {
+void globals_init() {
 
-    if(initiated) return;
-    
     int i = 0;
 
     for(i = 0; i < CONST_EOL; i++) {
-        constants[i] = NULL;
+        globals[i] = NULL;
     }
-        
-    initiated = 1;
 }
 
 
 /**
  * gets a stored global variable..
- * @param int global     global id
+ * @param Global global     global id
  */
-char *get_global(int global) {
+char *globals_get(Global global) {
 
-    init_globals();
-
-    return constants[global];
+    return globals[global];
 }
 
 
 /**
  * sets a global variable to a value..
- * @param int global     global id
- * @param char *value    string value
+ * @param Global global     global id
+ * @param char *value       string value
  */
-void set_global(int global, char *value) {
+void globals_set(Global global, char *value) {
 
-    init_globals();
-
-    if(constants[global] != NULL) {
-        free(constants[global]);
+    if(globals[global] != NULL) {
+        free(globals[global]);
     }
 
-    constants[global] = malloc(strlen(value) + 1);
-    strcpy(constants[global], value);
+    globals[global] = malloc(strlen(value) + 1);
+    strcpy(globals[global], value);
 }
 
 
 /**
  * free all global variables..
  */
-void free_globals() { 
+void globals_free() { 
 
     int i = 0;
 
     for(i = 0; i < CONST_EOL; i++) {
-        if(constants[i] != NULL) {
-            free(constants[i]);
+        if(globals[i] != NULL) {
+            free(globals[i]);
         }
     }
 } 
