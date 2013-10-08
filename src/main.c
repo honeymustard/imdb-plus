@@ -36,8 +36,10 @@ int main(int argc, char *argv[]) {
     g_thread_init(NULL);
     gtk_init(&argc, &argv);
 
+    globals_init();
+
     /* set version global */
-    set_global(CONST_VERSION, VERSION);
+    globals_set(CONST_VERSION, VERSION);
 
     /* set paths */
     char *path = NULL;
@@ -46,8 +48,8 @@ int main(int argc, char *argv[]) {
     make_paths(&path, &down);
     make_filenames(path);
 
-    set_global(CONST_HOME, path);
-    set_global(CONST_DOWN, down);
+    globals_set(CONST_HOME, path);
+    globals_set(CONST_DOWN, down);
 
     free(path);
     free(down);

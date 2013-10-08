@@ -44,7 +44,7 @@ static void ui_fill_sanitize(Movie *m) {
  * @param Movie *m    movie entry object to be added
  * @param int k       the key indice to use..
  */
-static void ui_fill_addentry(Stats *s, Movie *m, int k) {
+static void ui_fill_add_stat(Stats *s, Movie *m, int k) {
 
     /* add up averages */
     s->stats_amt[k][VOTE] += m->vote;
@@ -82,15 +82,17 @@ static void ui_fill_addentry(Stats *s, Movie *m, int k) {
  * add a movie entry to a stats object if present in top-lists
  * @param Stats *s    current stats object
  * @param Movie *m    movie entry object to be added
- * @param char *id    id of the current movie entry
  */
-static void ui_fill_addlists(Stats *s, Movie *m, char *id) {
+static void ui_fill_add_list(Stats *s, Movie *m) {
 
     int lists[3];
 
-    lists[0] = gtk_custom_table_get_indexof(nb_lists_top_tab->table, id) >= 0;
-    lists[1] = gtk_custom_table_get_indexof(nb_lists_bot_tab->table, id) >= 0;
-    lists[2] = gtk_custom_table_get_indexof(nb_lists_box_tab->table, id) >= 0;
+    lists[0] = gtk_custom_table_get_indexof(nb_lists_top_tab->table, 
+        m->id_str) >= 0;
+    lists[1] = gtk_custom_table_get_indexof(nb_lists_bot_tab->table, 
+        m->id_str) >= 0;
+    lists[2] = gtk_custom_table_get_indexof(nb_lists_box_tab->table, 
+        m->id_str) >= 0;
 
     int i = 0;
 
@@ -178,83 +180,21 @@ void ui_fill_stats_avg(Stats *s) {
 
 
 /**
- * calculate comparison intersection statistics..
+ * fill a stats object with movie values
+ * @param Stats *s    current stats object
+ * @param Movie *m    current movie object
+ * @param int key     index for stats array
  */
-void ui_fill_stats_cmp_calc(Stats *s, Movie *m, int row, 
-    NotebookTab *tab, char *id) {
+void ui_fill_stats_add(Stats *s, Movie *m, int key) {
 
-    m->vote = atof(gtk_custom_table_get_cell_text(tab->table, 2, row));
-    m->imdb = atof(gtk_custom_table_get_cell_text(tab->table, 1, row));
-    m->time = atof(gtk_custom_table_get_cell_text(tab->table, 5, row));
-    m->year = atof(gtk_custom_table_get_cell_text(tab->table, 6, row));
-
-    strcpy(m->id, id);
-    strcpy(m->title, gtk_custom_table_get_cell_text(tab->table, 4, row));
+    ui_fill_sanitize(m);
 
     sprintf(m->vote_str, "%d", (int)m->vote);
     sprintf(m->imdb_str, "%1.1f", m->imdb);
     sprintf(m->time_str, "%d", (int)m->time);
     sprintf(m->year_str, "%d", (int)m->year);
 
-    ui_fill_addentry(s, m, m->vote > 0 ? (int)m->vote - 1 : 0);
-    ui_fill_addlists(s, m, id);
-}
-
-
-/**
- * fill a stats object with movie values from a row
- * @param Stats *s      current stats object
- * @param Movie *m      current movie object
- * @param char **row    row with movie values
- * @pararm int key      key index for stats array
- */
-static void ui_fill_stats_calc(Stats *s, Movie *m, char **row, int key) {
-
-    strcpy(m->id, row[1]);
-    strcpy(m->title, row[5]);
-
-    sprintf(m->vote_str, "%d", (int)m->vote);
-    sprintf(m->imdb_str, "%1.1f", m->imdb);
-    sprintf(m->time_str, "%d", (int)m->time);
-    sprintf(m->year_str, "%d", (int)m->year);
-
-    ui_fill_addentry(s, m, key);
-    ui_fill_addlists(s, m, row[1]);
-}
-
-
-/**
- * fill a stats object with movie values from a row
- * @param Stats *s      current stats object
- * @param Movie *m      current movie object
- * @param char **row    row with movie values
- */
-void ui_fill_stats_mov_calc(Stats *s, Movie *m, char **row) {
-
-    m->vote = strtol(row[8], NULL, 10);
-    m->imdb = strtod(row[9], NULL);
-    m->time = strtol(row[10], NULL, 10);
-    m->year = strtol(row[11], NULL, 10);
-
-    ui_fill_sanitize(m);
-    ui_fill_stats_calc(s, m, row, m->vote > 0 ? (int)m->vote - 1 : 0);
-}
-
-
-/**
- * fill a stats object with movie values from a row
- * @param Stats *s      current stats object
- * @param Movie *m      current movie object
- * @param char **row    row with movie values
- */
-void ui_fill_stats_lst_calc(Stats *s, Movie *m, char **row) {
-
-    m->vote = 0;
-    m->imdb = strtod(row[8], NULL);
-    m->time = strtol(row[9], NULL, 10);
-    m->year = strtol(row[10], NULL, 10);
- 
-    ui_fill_sanitize(m);
-    ui_fill_stats_calc(s, m, row, (int)m->imdb >= 10 ? 9 : (int)m->imdb);
+    ui_fill_add_stat(s, m, key);
+    ui_fill_add_list(s, m);
 }
 

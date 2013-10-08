@@ -24,12 +24,11 @@
 #include "ui/widgets/widgets.h"
 
 /* main window events */
-void menu_signal_about(GtkWidget *widget, gpointer data);
-void menu_signal_open_mov(GtkWidget *widget, gpointer data);
-void menu_signal_open_lst(GtkWidget *widget, gpointer data);
-void menu_signal_new(GtkWidget *widget, gpointer data);
-void menu_signal_update(GtkWidget *widget, gpointer data);
-void menu_signal_quit(GtkWidget *widget, gpointer data);
+void menu_signal_about(gpointer data);
+void menu_signal_open(gpointer data);
+void menu_signal_down(gpointer data);
+void menu_signal_update(gpointer data);
+void menu_signal_quit(gpointer data);
 
 #endif
 

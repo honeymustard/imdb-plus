@@ -25,6 +25,7 @@
 /* minor convenience function for tab-creation */
 static void ui_set_make(char *title, NotebookTab *tab) {
 
+    tab->filename = NULL;
     tab->vbox = gtk_vbox_new(FALSE, 0);
     tab->scroll = gtk_scrolled_window_new(NULL, NULL);
     tab->view = gtk_viewport_new(NULL, NULL);
@@ -41,6 +42,17 @@ static void ui_set_make(char *title, NotebookTab *tab) {
 
 
 void ui_set_tabs() {
+
+    tabs[0] = nb_stats_mov_tab;
+    tabs[1] = nb_stats_lst_tab;
+    tabs[2] = nb_stats_cmp_tab;
+    tabs[3] = nb_stats_all_tab;
+    tabs[4] = nb_lists_mov_tab;
+    tabs[5] = nb_lists_lst_tab;
+    tabs[6] = nb_lists_cmp_tab;
+    tabs[7] = nb_lists_top_tab;
+    tabs[8] = nb_lists_bot_tab;
+    tabs[9] = nb_lists_box_tab;
     
     ui_set_make(NAME_STATS_MOV, nb_stats_mov_tab); 
     ui_set_make(NAME_LISTS_MOV, nb_lists_mov_tab); 

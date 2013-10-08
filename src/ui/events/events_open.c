@@ -70,13 +70,15 @@ static void file_prefixer(char *filename, char *prefix, char **buffer) {
 
 
 /* open a ratings/list file from dialog */
-void menu_signal_open(GtkWidget *widget, int type) {
+void menu_signal_open(gpointer data) {
+
+    NotebookTab *tab = (NotebookTab *)data;
 
     GtkWidget *dialog;
 
     dialog = gtk_file_chooser_dialog_new(
         "Open File", 
-        GTK_WINDOW(widget), 
+        GTK_WINDOW(mwin->parent), 
         GTK_FILE_CHOOSER_ACTION_OPEN,
         GTK_STOCK_CANCEL, 
         GTK_RESPONSE_CANCEL,
@@ -85,7 +87,7 @@ void menu_signal_open(GtkWidget *widget, int type) {
         NULL);
 
     gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), 
-        get_global(CONST_DOWN));
+        globals_get(CONST_DOWN));
 
     /* set a new file filter to limit types */
     GtkFileFilter *filter = gtk_file_filter_new();
@@ -110,13 +112,13 @@ void menu_signal_open(GtkWidget *widget, int type) {
         char *file_stat = NULL;
 
         file_basename(filename, foldername, &file_base);
-        set_global(CONST_OPEN_R, file_base);
+        globals_set(CONST_OPEN_R, file_base);
 
         file_truncate(file_base, &file_tabs, 15);
-        set_global(CONST_OPEN_T, file_tabs);
+        globals_set(CONST_OPEN_T, file_tabs);
 
         file_prefixer(file_tabs, "Stats: ", &file_stat);
-        set_global(CONST_OPEN_S, file_stat);
+        globals_set(CONST_OPEN_S, file_stat);
 
         free(file_base);
         free(file_tabs);
@@ -125,7 +127,7 @@ void menu_signal_open(GtkWidget *widget, int type) {
         char *stat_tmp = malloc(25 + strlen(filename));
 
         /* attempt to open ratings file */
-        if(open_file(filename, type)) {
+        if(open_file(tab, filename)) {
             sprintf(stat_tmp, "Opened file: %s", filename);
         }
         else {
@@ -139,16 +141,5 @@ void menu_signal_open(GtkWidget *widget, int type) {
     }
 
     gtk_widget_destroy(dialog);
-}
-
-
-void menu_signal_open_mov(GtkWidget *widget, gpointer data) {
-
-    menu_signal_open(widget, TAB1);
-}
-
-void menu_signal_open_lst(GtkWidget *widget, gpointer data) {
-
-    menu_signal_open(widget, TAB2);
 }
 

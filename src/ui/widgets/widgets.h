@@ -39,6 +39,7 @@ GtkWidget *mwin, *stat, *vbox, *hbox, *note;
 
 typedef struct NotebookTab {
 
+    char *filename;
     GtkWidget *vbox; 
     GtkWidget *scroll; 
     GtkWidget *view; 
@@ -46,6 +47,7 @@ typedef struct NotebookTab {
 
 } NotebookTab;
 
+#define NB_TABS 10
 
 NotebookTab *nb_stats_mov_tab;
 NotebookTab *nb_stats_lst_tab;
@@ -57,6 +59,8 @@ NotebookTab *nb_lists_cmp_tab;
 NotebookTab *nb_lists_top_tab;
 NotebookTab *nb_lists_bot_tab;
 NotebookTab *nb_lists_box_tab;
+
+NotebookTab *tabs[NB_TABS];
 
 
 GtkWidget *menu, 

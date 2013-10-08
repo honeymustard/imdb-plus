@@ -114,16 +114,16 @@ void make_filenames(char *path) {
     strcat(box_csv, BOX_CSV);
 
     /* set global paths */
-    set_global(CONST_TOP_TMP, top_tmp);
-    set_global(CONST_TOP_CSV, top_csv);
-    set_global(CONST_TOP_URL, TOP_URL);
-    set_global(CONST_BOT_TMP, bot_tmp);
-    set_global(CONST_BOT_CSV, bot_csv);
-    set_global(CONST_BOT_URL, BOT_URL);
-    set_global(CONST_BOX_TMP, box_tmp);
-    set_global(CONST_BOX_CSV, box_csv);
-    set_global(CONST_BOX_URL, BOX_URL);
-    set_global(CONST_RAT_URL, RAT_URL);
+    globals_set(CONST_TOP_TMP, top_tmp);
+    globals_set(CONST_TOP_CSV, top_csv);
+    globals_set(CONST_TOP_URL, TOP_URL);
+    globals_set(CONST_BOT_TMP, bot_tmp);
+    globals_set(CONST_BOT_CSV, bot_csv);
+    globals_set(CONST_BOT_URL, BOT_URL);
+    globals_set(CONST_BOX_TMP, box_tmp);
+    globals_set(CONST_BOX_CSV, box_csv);
+    globals_set(CONST_BOX_URL, BOX_URL);
+    globals_set(CONST_RAT_URL, RAT_URL);
 
     free(top_tmp);
     free(top_csv);

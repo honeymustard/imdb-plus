@@ -23,10 +23,7 @@
 
 #include "ui/widgets/widgets.h"
 
-#define TAB1 0
-#define TAB2 1
-
-int open_file(char *filename, int type);
+int open_file(NotebookTab *tab, char *filename);
 
 #endif
 

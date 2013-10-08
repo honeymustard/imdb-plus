@@ -26,42 +26,128 @@
 #include "io/readfile.h"
 
 
-int tab1 = 0;
-int tab2 = 0;
-
-
 /**
  * read and parse a ratings file or list..
- * @param char *filename    file to open..
+ * @param NotebookTab *tab    open file in tab..
+ * @param char *filename      filename to open
  */
-int open_file(char *filename, int type) {
+int open_file(NotebookTab *tab, char *filename) {
+
+    if(filename == NULL) {
+        return 0;
+    }
 
     ResultList *list = calloc(1, sizeof(ResultList));
     
     if(!readfile(list, filename) || list->cols < 10) {
         return 0;
     }
-    
-    set_global(CONST_OPEN_L, filename);
-    set_global(CONST_OPEN_M, filename);
 
-    if(type == TAB1) {
-        tab1 = 1;
-        ui_fill_lists_mov(list, nb_lists_mov_tab, nb_stats_mov_tab, type);
+    State *state = calloc(1, sizeof(State));
+    state->stats = calloc(1, sizeof(Stats));
+
+    int rows[3][3] = {
+        {1, 5,  9}, 
+        {2, 6, 10}, 
+        {3, 7, 11}
+    };
+
+    int row = 0;
+
+    state->tab1 = tab;
+
+    if(tab == nb_lists_mov_tab) {
+
+        row = 0;
+
+        state->tab2 = nb_lists_lst_tab;
+        state->stat = nb_stats_mov_tab;
+    }
+    else if(tab == nb_lists_lst_tab) {
+
+        row = 1;
+
+        state->tab2 = nb_lists_mov_tab;
+        state->stat = nb_stats_lst_tab;
     }
     else {
-        tab2 = 1;
-        ui_fill_lists_mov(list, nb_lists_lst_tab, nb_stats_lst_tab, type);
+
+        return 0;
     }
+
+    /* attach filenames to tabs */
+    if(state->tab1->filename != NULL) {
+        free(state->tab1->filename);
+    }
+
+    if(state->stat->filename != NULL) {
+        free(state->stat->filename);
+    }
+
+    state->tab1->filename = malloc(strlen(filename) + 1);
+    strcpy(state->tab1->filename, filename);
+
+    state->stat->filename = malloc(strlen(filename) + 1);
+    strcpy(state->stat->filename, filename);
+
+    if(strcmp("IMDb Rating", list->results[0][9]) == 0) {
+
+        ui_fill_lists_mov(state, list);
+        ui_fill_stats_avg(state->stats);
+        ui_fill_stats_mov(state);
+        ui_fill_stats_all(state, rows[row]);
+    }
+    else {
+
+        ui_fill_lists_lst(state, list);
+        ui_fill_stats_avg(state->stats);
+        ui_fill_stats_lst(state);
+        ui_fill_stats_all(state, rows[row]);
+    }
+
+    GtkWidget *table_t = state->tab1->table;
+    GtkWidget *table_s = state->stat->table;
+
+    gtk_custom_table_set_sortable(table_t, TRUE);
+    gtk_custom_table_set_sortable(table_s, TRUE);
+    gtk_custom_table_sort(table_t, 0, GTK_CUSTOM_TABLE_ASC);
+    gtk_custom_table_set_column_font(table_t, 4, TEXT_FONT); 
 
     readfile_free(list);
 
     /* fill comparison tab if applicable */
-    if(tab1 && tab2) {
+    if(state->tab1->filename != NULL && 
+       state->tab2->filename != NULL) {
 
-        ui_fill_lists_cmp(nb_lists_mov_tab, nb_lists_lst_tab);
+        State *s = calloc(1, sizeof(State));
+        s->stats = calloc(1, sizeof(Stats));
+
+        s->tab1 = nb_lists_cmp_tab;
+        s->tab2 = nb_lists_mov_tab;
+        s->tab3 = nb_lists_lst_tab;
+        s->stat = nb_stats_cmp_tab;
+
+        ui_fill_lists_cmp(s);
+        ui_fill_stats_avg(s->stats);
+        ui_fill_stats_cmp(s);
+        ui_fill_stats_all(s, rows[2]);
+
+        table_t = s->tab1->table;
+        table_s = s->stat->table;
+
+        /* set sortable and sort by index */
+        gtk_custom_table_set_sortable(table_t, TRUE);
+        gtk_custom_table_set_sortable(table_s, TRUE);
+        gtk_custom_table_sort(table_t, 0, GTK_CUSTOM_TABLE_ASC);
+        gtk_custom_table_set_column_font(table_t, 4, TEXT_FONT); 
+
+        free(s->stats);
+        free(s);
     }
-        
+
+    free(state->stats);
+    free(state);
+   
     gtk_custom_table_refresh(mwin);
 
     return 1;

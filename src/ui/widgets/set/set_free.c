@@ -28,7 +28,7 @@ void ui_set_free() {
     gtk_custom_table_sort(nb_lists_box_tab->table, 0, GTK_CUSTOM_TABLE_ASC);
 
     /* write boxoffice values back to file */ 
-    FILE *fp_out = fopen(get_global(CONST_BOX_CSV), "wb");
+    FILE *fp_out = fopen(globals_get(CONST_BOX_CSV), "wb");
     
     int i = 0;
     int j = 0;
@@ -55,15 +55,14 @@ void ui_set_free() {
 
     fclose(fp_out);
 
-    gtk_custom_table_free(nb_stats_mov_tab->table);
-    gtk_custom_table_free(nb_stats_lst_tab->table);
-    gtk_custom_table_free(nb_stats_cmp_tab->table);
-    gtk_custom_table_free(nb_stats_all_tab->table);
-    gtk_custom_table_free(nb_lists_mov_tab->table);
-    gtk_custom_table_free(nb_lists_lst_tab->table);
-    gtk_custom_table_free(nb_lists_cmp_tab->table);
-    gtk_custom_table_free(nb_lists_top_tab->table);
-    gtk_custom_table_free(nb_lists_bot_tab->table);
-    gtk_custom_table_free(nb_lists_box_tab->table);
+    /* free data from tabs */
+    for(i = 0; i < NB_TABS; i++) {
+    
+        if(tabs[i]->filename != NULL) {
+            free(tabs[i]->filename);
+        }
+        
+        gtk_custom_table_free(tabs[i]->table);
+    }
 }
 

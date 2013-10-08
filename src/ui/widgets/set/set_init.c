@@ -72,11 +72,11 @@ static char *ui_set_create_title() {
 
     char *tmp = NULL;
 
-    tmp = malloc(strlen(APP_NAME) + strlen(get_global(CONST_VERSION)) + 2);
+    tmp = malloc(strlen(APP_NAME) + strlen(globals_get(CONST_VERSION)) + 2);
 
     strcpy(tmp, APP_NAME);
     strcat(tmp, "-");
-    strcat(tmp, get_global(CONST_VERSION));
+    strcat(tmp, globals_get(CONST_VERSION));
 
     return tmp;
 }

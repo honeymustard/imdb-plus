@@ -25,13 +25,13 @@
 
 /* credits aka self-praise */
 const char *APP_AUTH[2] = {
-    "Adrian Solumsmo <adrian.solumsmo@gmail.com>\n",
+    APP_MAIL "\n",
     NULL,
 };
 
 /* default license */
 const char *APP_LICN = "\
-Copyright \xc2\xa9 2011-2013  Adrian Solumsmo\n\
+" APP_COPY "\n\
 \n\
 This program is free software: you can redistribute it and/or modify\n\
 it under the terms of the GNU General Public License as published by\n\
@@ -50,7 +50,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.";
 /**
  * displays an about dialog on menu event..
  */
-void menu_signal_about(GtkWidget *widget, gpointer data) {
+void menu_signal_about(gpointer data) {
     
     GtkWidget *dialog = gtk_about_dialog_new();
 
@@ -58,7 +58,7 @@ void menu_signal_about(GtkWidget *widget, gpointer data) {
     gtk_about_dialog_set_name(GTK_ABOUT_DIALOG(dialog), 
         APP_NAME);
     gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), 
-        get_global(CONST_VERSION)); 
+        globals_get(CONST_VERSION)); 
     gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog), 
         APP_COPY);
     gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog), 

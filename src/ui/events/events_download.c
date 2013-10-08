@@ -32,7 +32,7 @@ GtkWidget *pbar, *label, *entry;
 
 
 /* download new ratings file response handler */
-void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
+void menu_signal_down_response(GtkWidget *dialog, int response, gpointer *data) {
 
     /* destroy dialog on these events */
     if((response == GTK_RESPONSE_CANCEL) || 
@@ -57,12 +57,12 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
 
     /* download from this url.. */
     char load[100];
-    strcpy(load, get_global(CONST_RAT_URL));
+    strcpy(load, globals_get(CONST_RAT_URL));
     strcat(load, entered);
 
     /* save to this path.. */
     char save[100];
-    strcpy(save, get_global(CONST_DOWN));
+    strcpy(save, globals_get(CONST_DOWN));
     strcat(save, entered);
     strcat(save, ".csv");
 
@@ -92,7 +92,7 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
     g_thread_join(thread);
 
     char *temp = NULL;
-    char *note = NULL;
+    char *sign = NULL;
     char *info = NULL;
 
     int adjustment = 0;
@@ -101,15 +101,15 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
 
     /* attempt to open fresh ratings */
     if(down->status == DL_STATUS_OK && 
-        (opened_file = open_file(save, TAB1))) {
+        (opened_file = open_file(nb_lists_mov_tab, save))) {
 
         info = "finished";
         adjustment = 120;
 
-        note = "DL OK: Opened ratings file: ";
+        sign = "DL OK: Opened ratings file: ";
 
-        temp = malloc(strlen(note) + strlen(save) + 1);
-        strcpy(temp, note),
+        temp = malloc(strlen(sign) + strlen(save) + 1);
+        strcpy(temp, sign),
         strcat(temp, save);
     }
     else {
@@ -122,39 +122,39 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
         /* download failed, could not download file */
         if(down->status == DL_STATUS_NB) {
 
-            note = "DL ERR: Unable to download file";
+            sign = "DL ERR: Unable to download file";
 
-            temp = malloc(strlen(note) + 1);
-            strcpy(temp, note);
+            temp = malloc(strlen(sign) + 1);
+            strcpy(temp, sign);
         }
         /* download succeeded, but with an error code */
         else if(down->http_code > 0) {
 
-            note = "DL ERR: Unable to download file: ";
+            sign = "DL ERR: Unable to download file: ";
 
             char error[20];
             sprintf(error, "%ld", down->http_code);
 
-            temp = malloc(strlen(note) + strlen(error) + 1);
-            strcpy(temp, note);
+            temp = malloc(strlen(sign) + strlen(error) + 1);
+            strcpy(temp, sign);
             strcat(temp, error);
         }
         /* download succeeded, but could not open ratings */
         else if(!opened_file) {
 
-            note = "DL ERR: Unable to open file: ";
+            sign = "DL ERR: Unable to open file: ";
 
-            temp = malloc(strlen(note) + strlen(save) + 1);
-            strcpy(temp, note);
+            temp = malloc(strlen(sign) + strlen(save) + 1);
+            strcpy(temp, sign);
             strcat(temp, save);
         }
         /* download succeeded, but an unknown error occured */
         else {
 
-            note = "DL ERR: Unknown error";
+            sign = "DL ERR: Unknown error";
 
-            temp = malloc(strlen(note) + 1);
-            strcpy(temp, note);
+            temp = malloc(strlen(sign) + 1);
+            strcpy(temp, sign);
         }
     }
 
@@ -175,11 +175,11 @@ void menu_signal_new_response(GtkWidget *dialog, int response, gpointer *data) {
 
 
 /* open new ratings download dialog */
-void menu_signal_new(GtkWidget *widget, gpointer data) {
+void menu_signal_down(gpointer data) {
     
     GtkWidget *dialog = gtk_dialog_new_with_buttons(
         "Download Ratings", 
-        GTK_WINDOW(widget->parent), 
+        GTK_WINDOW(mwin), 
         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, 
         GTK_STOCK_OK, 
         GTK_RESPONSE_OK, 
@@ -209,7 +209,7 @@ void menu_signal_new(GtkWidget *widget, gpointer data) {
     gtk_container_add(GTK_CONTAINER(content), vbox);
     
     g_signal_connect(dialog, "response", 
-        G_CALLBACK(menu_signal_new_response), NULL);
+        G_CALLBACK(menu_signal_down_response), NULL);
 
     gtk_container_set_border_width(GTK_CONTAINER(content->parent), 20);
     gtk_window_set_icon_from_file(GTK_WINDOW(dialog), APP_ICON, NULL);

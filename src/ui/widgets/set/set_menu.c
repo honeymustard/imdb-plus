@@ -89,11 +89,11 @@ void ui_set_menu() {
 
     /* attach callback functions to menu-items */
     gtk_signal_connect_object(GTK_OBJECT(menu_file_item_open), 
-        "activate", GTK_SIGNAL_FUNC(menu_signal_open_mov), (gpointer)mwin);
+        "activate", GTK_SIGNAL_FUNC(menu_signal_open), (gpointer)nb_lists_mov_tab);
     gtk_signal_connect_object(GTK_OBJECT(menu_file_item_compare), 
-        "activate", GTK_SIGNAL_FUNC(menu_signal_open_lst), (gpointer)mwin);
+        "activate", GTK_SIGNAL_FUNC(menu_signal_open), (gpointer)nb_lists_lst_tab);
     gtk_signal_connect_object(GTK_OBJECT(menu_file_item_new), 
-        "activate", GTK_SIGNAL_FUNC(menu_signal_new), (gpointer)mwin);
+        "activate", GTK_SIGNAL_FUNC(menu_signal_down), (gpointer)mwin);
     gtk_signal_connect_object(GTK_OBJECT(menu_file_item_exit), 
         "activate", GTK_SIGNAL_FUNC(menu_signal_quit), (gpointer)mwin);
     gtk_signal_connect_object(GTK_OBJECT(menu_edit_item_update), 

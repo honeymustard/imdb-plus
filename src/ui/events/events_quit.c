@@ -24,10 +24,10 @@
 
 
 /* main window quit event.. */
-void menu_signal_quit(GtkWidget *widget, gpointer data) {
+void menu_signal_quit(gpointer data) {
     
     gtk_main_quit();
     ui_set_free();
-    free_globals();
+    globals_free();
 }
 

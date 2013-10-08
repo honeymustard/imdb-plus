@@ -24,13 +24,14 @@
 
 #include "io/readfile.h"
 
+
 #define TYPE_MOV 0
 #define TYPE_LST 1
 
 typedef struct movie {
 
-    char id[50];
-    char title[200];
+    char id_str[50];
+    char name_str[200];
     char vote_str[10];
     char imdb_str[10];
     char time_str[10];
@@ -61,22 +62,30 @@ typedef struct stats {
 } Stats;
 
 
+typedef struct state {
+    
+    Stats *stats;
+    NotebookTab *tab1;
+    NotebookTab *tab2;
+    NotebookTab *tab3;
+    NotebookTab *stat;
+
+} State;
+
 /* fill tabs with new data */
 int  ui_fill_lists_box_update();
 int  ui_fill_lists_bot_update();
 int  ui_fill_lists_top_update();
-
-//void ui_fill_lists_lst(ResultList *list, NotebookTab *tab, Stats *s);
-void ui_fill_lists_mov(ResultList *list, NotebookTab *tab, 
-    NotebookTab *tab_stats, int type);
-void ui_fill_lists_top(ResultList *list, NotebookTab *tab);
-void ui_fill_lists_bot(ResultList *list, NotebookTab *tab);
-void ui_fill_lists_box(ResultList *list, NotebookTab *tab);
-void ui_fill_lists_cmp(NotebookTab *tab1, NotebookTab *tab2);
-void ui_fill_stats_mov(Stats *s, NotebookTab *tab);
-//void ui_fill_stats_lst(Stats *s, NotebookTab *tab);
-void ui_fill_stats_cmp(Stats *s);
-void ui_fill_stats_all(Stats *s, int row1, int row2, int row3);
+void ui_fill_lists_lst(State *state, ResultList *list);
+void ui_fill_lists_mov(State *state, ResultList *list);
+void ui_fill_lists_cmp(State *state);
+void ui_fill_lists_top(ResultList *list);
+void ui_fill_lists_bot(ResultList *list);
+void ui_fill_lists_box(ResultList *list);
+void ui_fill_stats_mov(State *state);
+void ui_fill_stats_lst(State *state);
+void ui_fill_stats_cmp(State *state);
+void ui_fill_stats_all(State *state, int rows[]);
 
 /* fill tabs with default data */
 void ui_fill_lists_lst_empty();
@@ -91,11 +100,8 @@ void ui_fill_stats_cmp_empty();
 void ui_fill_stats_all_empty();
 
 /* fill stats object with data */
-void ui_fill_stats_avg(Stats *s);
-void ui_fill_stats_mov_calc(Stats *s, Movie *m, char **row);
-void ui_fill_stats_lst_calc(Stats *s, Movie *m, char **row);
-void ui_fill_stats_cmp_calc(Stats *s, Movie *m, int row, 
-    NotebookTab *tab, char *id);
+void ui_fill_stats_avg(Stats *stats);
+void ui_fill_stats_add(Stats *stats, Movie *m, int key);
 
 enum GRAPH { CENT, SIZE };
 enum STATS { VOTE, IMDB, TIME, YEAR, FLUX, ROWS };

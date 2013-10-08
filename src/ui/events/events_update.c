@@ -30,14 +30,14 @@
 #include "io/patterns.h"
 
 
-/* update lists from interwebs */
-void menu_signal_update(GtkWidget *widget, gpointer data) {
+/* update lists from internet */
+void menu_signal_update(gpointer data) {
 
     GtkWidget *dialog, *content;
 
     dialog = gtk_dialog_new_with_buttons(
         "Update Lists", 
-        GTK_WINDOW(widget->parent), 
+        GTK_WINDOW(mwin->parent), 
         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, 
         GTK_STOCK_OK, 
         GTK_RESPONSE_ACCEPT, 
@@ -79,8 +79,8 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
 
         /* download top250 list */
         struct download *dl_top = malloc(sizeof (struct download));
-        dl_top->url = get_global(CONST_TOP_URL);
-        dl_top->saveas = get_global(CONST_TOP_TMP);
+        dl_top->url = globals_get(CONST_TOP_URL);
+        dl_top->saveas = globals_get(CONST_TOP_TMP);
 
         thread1 = g_thread_create(&download, dl_top, TRUE, NULL);
 
@@ -98,8 +98,8 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
 
         /* download bottom100 list */
         struct download *dl_bot = malloc(sizeof (struct download));
-        dl_bot->url = get_global(CONST_BOT_URL);
-        dl_bot->saveas = get_global(CONST_BOT_TMP);
+        dl_bot->url = globals_get(CONST_BOT_URL);
+        dl_bot->saveas = globals_get(CONST_BOT_TMP);
 
         thread2 = g_thread_create(&download, dl_bot, TRUE, NULL);
 
@@ -117,8 +117,8 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
 
         /* download boxoffice list */
         struct download *dl_box = malloc(sizeof (struct download));
-        dl_box->url = get_global(CONST_BOX_URL);
-        dl_box->saveas = get_global(CONST_BOX_TMP);
+        dl_box->url = globals_get(CONST_BOX_URL);
+        dl_box->saveas = globals_get(CONST_BOX_TMP);
 
         thread3 = g_thread_create(&download, dl_box, TRUE, NULL);
 
@@ -144,8 +144,8 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         /* attempt to parse top 250 list */
         if(dl_top->status == DL_STATUS_OK) {
 
-            if(parse_file(get_global(CONST_TOP_TMP), 
-                get_global(CONST_TOP_CSV), pattern_top250)) {
+            if(parse_file(globals_get(CONST_TOP_TMP), 
+                globals_get(CONST_TOP_CSV), pattern_top250)) {
                 
                 if(ui_fill_lists_top_update()) {
 
@@ -157,8 +157,8 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         /* attempt to parse bot 100 list */
         if(dl_bot->status == DL_STATUS_OK) {
 
-            if(parse_file(get_global(CONST_BOT_TMP), 
-                get_global(CONST_BOT_CSV), pattern_bot100)) {
+            if(parse_file(globals_get(CONST_BOT_TMP), 
+                globals_get(CONST_BOT_CSV), pattern_bot100)) {
 
                 if(ui_fill_lists_bot_update()) {
                     botstat = "OK";
@@ -169,19 +169,19 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         /* attempt to parse boxoffice list */
         if(dl_box->status == DL_STATUS_OK) {
 
-            if(parse_file(get_global(CONST_BOX_TMP), 
-                get_global(CONST_BOX_CSV), pattern_boxoffice) || 
-                parse_file(get_global(CONST_BOX_TMP), 
-                get_global(CONST_BOX_CSV), pattern_boxoffice_win)) {
+            if(parse_file(globals_get(CONST_BOX_TMP), 
+                globals_get(CONST_BOX_CSV), pattern_boxoffice) || 
+                parse_file(globals_get(CONST_BOX_TMP), 
+                globals_get(CONST_BOX_CSV), pattern_boxoffice_win)) {
                 
                 /* add extra column to boxoffice file */
                 int index = 0;
 
                 ResultList *list = calloc(1, sizeof(ResultList));
                 
-                if(readfile(list, get_global(CONST_BOX_CSV))) {
+                if(readfile(list, globals_get(CONST_BOX_CSV))) {
 
-                    FILE *fp_out = fopen(get_global(CONST_BOX_CSV), "wb");
+                    FILE *fp_out = fopen(globals_get(CONST_BOX_CSV), "wb");
                     
                     int i = 0;
                     int j = 0;
@@ -219,9 +219,9 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         }
 
         /* remove temp files */
-        remove(get_global(CONST_BOT_TMP));
-        remove(get_global(CONST_BOX_TMP));
-        remove(get_global(CONST_TOP_TMP));
+        remove(globals_get(CONST_BOT_TMP));
+        remove(globals_get(CONST_BOX_TMP));
+        remove(globals_get(CONST_TOP_TMP));
 
         /* free memory */
         free(dl_top);
@@ -229,18 +229,8 @@ void menu_signal_update(GtkWidget *widget, gpointer data) {
         free(dl_box);
 
         /* re-open files to update other tabs */
-        /*
-        char *open_movie_file = get_global(CONST_OPEN_M);
-        char *open_lists_file = get_global(CONST_OPEN_L);
-
-        if(open_movie_file != NULL) {
-            openfile(open_movie_file);
-        }
-
-        if(open_lists_file != NULL) {
-            openfile(open_lists_file);
-        }
-        */
+        open_file(nb_lists_mov_tab, nb_lists_mov_tab->filename);
+        open_file(nb_lists_lst_tab, nb_lists_lst_tab->filename);
 
         /* set new statusbar message */
         char *temp = malloc(strlen(format) + strlen(topstat) + 

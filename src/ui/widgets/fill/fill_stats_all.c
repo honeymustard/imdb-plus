@@ -26,13 +26,12 @@
 #include "ui/table/gtk_custom_table.h"
 
 
-#define ROSETTE DIR_ICON "rosette_red.png"
-
-
 void ui_fill_stats_all_empty() {
 
     int i = 0;
     int j = 0;
+
+    GtkWidget *table = nb_stats_all_tab->table;
 
     /* set all statistics table values */
     for(i = 0; i < 12; i++) {
@@ -42,86 +41,64 @@ void ui_fill_stats_all_empty() {
 
             for(j = 0; j < COLS_STATS_ALL; j++) {
 
-                gtk_custom_table_set_cell_text(nb_stats_all_tab->table, j, i, 
+                gtk_custom_table_set_cell_text(table, j, i, 
                     nb_stats_all_headers[j]);
-
-                gtk_custom_table_set_row_color(nb_stats_all_tab->table, i, 
-                    rgb_header);
+                gtk_custom_table_set_row_color(table, i, rgb_header);
             }
         }
         else {
 
-            gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 0, i, 
-                "0.00");
-            gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 1, i, 
-                "0.00");
-            gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 2, i, 
-                "0.00");
-            gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 3, i, 
-                "0");
-            gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 4, i, 
-                "");
-            gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 5, i, 
-                "0.00 %");
-            gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 6, i, 
-                "0 / 0");
-            gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 7, i, 
-                "0.00");
-            gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 8, i, 
-                "0.00");
+            gtk_custom_table_set_cell_text(table, 0, i, "0.00");
+            gtk_custom_table_set_cell_text(table, 1, i, "0.00");
+            gtk_custom_table_set_cell_text(table, 2, i, "0.00");
+            gtk_custom_table_set_cell_text(table, 3, i, "0");
+            gtk_custom_table_set_cell_text(table, 4, i, "");
+            gtk_custom_table_set_cell_text(table, 5, i, "0.00 %");
+            gtk_custom_table_set_cell_text(table, 6, i, "0 / 0");
+            gtk_custom_table_set_cell_text(table, 7, i, "0.00");
+            gtk_custom_table_set_cell_text(table, 8, i, "0.00");
 
             /* set cell colors */
-            gtk_custom_table_set_cell_color(nb_stats_all_tab->table, 3, i, 
-                graph_bg);
+            gtk_custom_table_set_cell_color(table, 3, i, graph_bg);
 
             double rank[] = {0.85, 0.20, 0.30};
 
             /* set cell colors */
-            gtk_custom_table_set_cell_color(nb_stats_all_tab->table, 4, i, 
-                rank);
+            gtk_custom_table_set_cell_color(table, 4, i, rank);
         }
 
-        if((i % 4) == 1) {
-            gtk_custom_table_set_graph_color_cell(nb_stats_all_tab->table, 3, i, 
-                graph_fg1);
-        }
+        switch(i % 4) {
 
-        if((i % 4) == 2) {
-            gtk_custom_table_set_graph_color_cell(nb_stats_all_tab->table, 3, i, 
-                graph_fg2);
-        }
+            case 1:
 
-        if((i % 4) == 3) {
-            gtk_custom_table_set_graph_color_cell(nb_stats_all_tab->table, 3, i, 
-                graph_fg3);
+                gtk_custom_table_set_graph_color_cell(table, 3, i, graph_fg1);
+                break;
+
+            case 2:
+
+                gtk_custom_table_set_graph_color_cell(table, 3, i, graph_fg2);
+                break;
+
+            case 3:
+
+                gtk_custom_table_set_graph_color_cell(table, 3, i, graph_fg3);
+                break;
         }
     } 
 
-    gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 3, 0, 
-        "Top 250");
-    gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 3, 4, 
-        "Bottom 100");
-    gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 3, 8, 
-        "Box Office");
+    gtk_custom_table_set_cell_text(table, 3, 0, "Top 250");
+    gtk_custom_table_set_cell_text(table, 3, 4, "Bottom 100");
+    gtk_custom_table_set_cell_text(table, 3, 8, "Box Office");
 
-    gtk_custom_table_set_cell_bg_image(nb_stats_all_tab->table, 4, 0, 
-        ROSETTE);
-    gtk_custom_table_set_cell_bg_image(nb_stats_all_tab->table, 4, 4, 
-        ROSETTE);
-    gtk_custom_table_set_cell_bg_image(nb_stats_all_tab->table, 4, 8, 
-        ROSETTE);
+    gtk_custom_table_set_cell_bg_image(table, 4, 0, ROSETTE);
+    gtk_custom_table_set_cell_bg_image(table, 4, 4, ROSETTE);
+    gtk_custom_table_set_cell_bg_image(table, 4, 8, ROSETTE);
 }
 
 
-void ui_fill_stats_all(Stats *s, int row1, int row2, int row3) {
+void ui_fill_stats_all(State *state, int rows[]) {
 
     int i = 0;
-
-    int rows[3];
-
-    rows[0] = row1;
-    rows[1] = row2;
-    rows[2] = row3;
 
     int rows_count[3];
 
@@ -129,16 +106,20 @@ void ui_fill_stats_all(Stats *s, int row1, int row2, int row3) {
     rows_count[1] = gtk_custom_table_get_rows(nb_lists_bot_tab->table);
     rows_count[2] = gtk_custom_table_get_rows(nb_lists_box_tab->table);
 
+    /* make some aliases */
+    Stats *s = state->stats;
+    GtkWidget *table1 = nb_stats_all_tab->table;
+
     char temp[100];
 
     for(i = 0; i < 3; i++) {
 
         /* reset background colors */
-        gtk_custom_table_set_cell_color_enable(nb_stats_all_tab->table, 0, rows[i], 
+        gtk_custom_table_set_cell_color_enable(table1, 0, rows[i], 
             FALSE);
-        gtk_custom_table_set_cell_color_enable(nb_stats_all_tab->table, 1, rows[i], 
+        gtk_custom_table_set_cell_color_enable(table1, 1, rows[i], 
             FALSE);
-        gtk_custom_table_set_cell_color_enable(nb_stats_all_tab->table, 2, rows[i], 
+        gtk_custom_table_set_cell_color_enable(table1, 2, rows[i], 
             FALSE);
 
         /* set first column, vote */
@@ -146,20 +127,20 @@ void ui_fill_stats_all(Stats *s, int row1, int row2, int row3) {
 
             sprintf(temp, "%1.2f", s->lists[i][VOTE]);
 
-            gtk_custom_table_set_cell_alignment(nb_stats_all_tab->table, 0, rows[i], 
+            gtk_custom_table_set_cell_alignment(table1, 0, rows[i], 
                 PANGO_ALIGN_RIGHT);
         }
         else {
 
             strcpy(temp, "N/A");
 
-            gtk_custom_table_set_cell_color(nb_stats_all_tab->table, 0, rows[i], 
+            gtk_custom_table_set_cell_color(table1, 0, rows[i], 
                 not_app);
-            gtk_custom_table_set_cell_alignment(nb_stats_all_tab->table, 0, rows[i], 
+            gtk_custom_table_set_cell_alignment(table1, 0, rows[i], 
                 PANGO_ALIGN_CENTER);
         }
 
-        gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 0, rows[i], 
+        gtk_custom_table_set_cell_text(table1, 0, rows[i], 
             temp);
 
         /* set second column, imdb */
@@ -167,20 +148,20 @@ void ui_fill_stats_all(Stats *s, int row1, int row2, int row3) {
 
             sprintf(temp, "%1.2f", s->lists[i][IMDB]);
 
-            gtk_custom_table_set_cell_alignment(nb_stats_all_tab->table, 1, rows[i], 
+            gtk_custom_table_set_cell_alignment(table1, 1, rows[i], 
                 PANGO_ALIGN_RIGHT);
         }
         else {
 
             strcpy(temp, "N/A");
 
-            gtk_custom_table_set_cell_color(nb_stats_all_tab->table, 1, rows[i], 
+            gtk_custom_table_set_cell_color(table1, 1, rows[i], 
                 not_app);
-            gtk_custom_table_set_cell_alignment(nb_stats_all_tab->table, 1, rows[i], 
+            gtk_custom_table_set_cell_alignment(table1, 1, rows[i], 
                 PANGO_ALIGN_CENTER);
         }
 
-        gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 1, rows[i], 
+        gtk_custom_table_set_cell_text(table1, 1, rows[i], 
             temp);
 
         /* set third column, flux */
@@ -189,47 +170,48 @@ void ui_fill_stats_all(Stats *s, int row1, int row2, int row3) {
             sprintf(temp, s->lists[i][FLUX] == 0 ? "%1.2f" : "%+1.2f", 
                 s->lists[i][FLUX]);
 
-            gtk_custom_table_set_cell_alignment(nb_stats_all_tab->table, 2, rows[i], 
+            gtk_custom_table_set_cell_alignment(table1, 2, rows[i], 
                 PANGO_ALIGN_RIGHT);
         }
         else {
 
             strcpy(temp, "N/A");
 
-            gtk_custom_table_set_cell_color(nb_stats_all_tab->table, 2, rows[i], 
+            gtk_custom_table_set_cell_color(table1, 2, rows[i], 
                 not_app);
-            gtk_custom_table_set_cell_alignment(nb_stats_all_tab->table, 2, rows[i], 
+            gtk_custom_table_set_cell_alignment(table1, 2, rows[i], 
                 PANGO_ALIGN_CENTER);
         }
 
-        gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 2, rows[i], 
+        gtk_custom_table_set_cell_text(table1, 2, rows[i], 
             temp);
 
         /* set graph width */
         sprintf(temp, "%d", (int)s->lists_cnt[i][ROWS] > 0 ? 
             (int)(100.0 / (rows_count[i] / s->lists_cnt[i][ROWS])) : 0);
-        gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 3, rows[i], 
+        gtk_custom_table_set_cell_text(table1, 3, rows[i], 
             temp);
 
         /* set percentage */
         sprintf(temp, "%1.2f %%", (int)s->lists_cnt[i][ROWS] > 0 ? 
             s->lists_cnt[i][ROWS] / (rows_count[i] / 100.0) : 0.0);
-        gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 5, rows[i], 
+        gtk_custom_table_set_cell_text(table1, 5, rows[i], 
             temp);
 
         /* set movies count */
-        sprintf(temp, "%d/%d", (int)s->lists_cnt[i][ROWS], rows_count[i]);
-        gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 6, rows[i], 
+        sprintf(temp, "%d/%d", (int)s->lists_cnt[i][ROWS], 
+            rows_count[i]);
+        gtk_custom_table_set_cell_text(table1, 6, rows[i], 
             temp);
 
         /* set runtime */
         sprintf(temp, "%1.2f", s->lists[i][TIME]);
-        gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 7, rows[i], 
+        gtk_custom_table_set_cell_text(table1, 7, rows[i], 
             temp);
 
         /* set year */
         sprintf(temp, "%1.2f", s->lists[i][YEAR]);
-        gtk_custom_table_set_cell_text(nb_stats_all_tab->table, 8, rows[i], 
+        gtk_custom_table_set_cell_text(table1, 8, rows[i], 
             temp);
 
         int imdb = (int)s->lists[i][IMDB];
@@ -237,41 +219,32 @@ void ui_fill_stats_all(Stats *s, int row1, int row2, int row3) {
 
         /* set cell colors */
         if(s->lists[i][VOTE] > 0) {
-            gtk_custom_table_set_cell_color(nb_stats_all_tab->table, 0, rows[i], 
+            gtk_custom_table_set_cell_color(table1, 0, rows[i], 
                 colors[vote < 10 && vote > 0 ? vote - 1 : 1 ]);
         }
 
         if(s->lists[i][IMDB] > 0) {
-            gtk_custom_table_set_cell_color(nb_stats_all_tab->table, 1, rows[i], 
+            gtk_custom_table_set_cell_color(table1, 1, rows[i], 
                 colors[imdb < 10 && imdb > 0 ? imdb - 1 : 1]);
         }
 
         if(s->lists[i][IMDB] > 0 && s->lists[i][VOTE] > 0) {
-            gtk_custom_table_set_cell_color(nb_stats_all_tab->table, 2, rows[i], 
+            gtk_custom_table_set_cell_color(table1, 2, rows[i], 
                 colors[s->lists[i][FLUX] > 0 ? 8 : 1]);
         }
 
         int cent = s->lists_cnt[i][ROWS] / (rows_count[i] / 100.0);
 
-        char *awards[] = {
-            AWARD_GOLD, 
-            AWARD_SILVER, 
-            AWARD_BRONZE, 
-            RIBBON_GOLD, 
-            RIBBON_SILVER, 
-            RIBBON_BRONZE
-        };
-
         if(cent > 0 ) {
 
-            gtk_custom_table_set_cell_bg_image(nb_stats_all_tab->table, 4, rows[i], 
-              cent == 100 ? awards[0] : 
-              cent >= 80  ? awards[1] : 
-              cent >= 60  ? awards[2] : 
-              cent >= 40  ? awards[3] : 
-              cent >= 20  ? awards[4] : 
-              cent > 0    ? awards[5] : 
-              awards[5]);
+            gtk_custom_table_set_cell_bg_image(table1, 4, rows[i], 
+              cent == 100 ? AWARD_GOLD : 
+              cent >= 80  ? AWARD_SILVER : 
+              cent >= 60  ? AWARD_BRONZE : 
+              cent >= 40  ? RIBBON_GOLD : 
+              cent >= 20  ? RIBBON_SILVER : 
+              cent > 0    ? RIBBON_BRONZE : 
+              RIBBON_BRONZE);
         }
     }
 }

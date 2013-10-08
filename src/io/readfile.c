@@ -238,7 +238,7 @@ int calc_cols(char *buffer) {
  * @return                    returns 1 on success, else 0
  */
 int readfile(ResultList *list, char *filename) {
-        
+
     FILE *fp = fopen(filename, "rb");
         
     if(!fp) {
