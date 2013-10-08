@@ -47,6 +47,7 @@
 #define APP_COPY "Copyright \xc2\xa9 2011-2013 Adrian Solumsmo"
 #define APP_DESC APP_NAME " is a statistical application for movie fans"
 #define APP_HOME "https://github.com/honeymustard/imdb-plus"
+#define APP_MAIL "Adrian Solumsmo <adrian.solumsmo@gmail.com>"
 
 /* filenames */
 #define TOP_TMP "top250.html"
