@@ -229,8 +229,8 @@ void menu_signal_update(gpointer data) {
         free(dl_box);
 
         /* re-open files to update other tabs */
-        open_file(nb_lists_mov_tab, nb_lists_mov_tab->filename);
-        open_file(nb_lists_lst_tab, nb_lists_lst_tab->filename);
+        open_file(nb_lists_mov_tab, globals_get(CONST_OPEN_MOV));
+        open_file(nb_lists_lst_tab, globals_get(CONST_OPEN_LST));
 
         /* set new statusbar message */
         char *temp = malloc(strlen(format) + strlen(topstat) + 

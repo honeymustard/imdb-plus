@@ -47,14 +47,16 @@ void ui_fill_lists_lst_empty() {
 }
 
 
+/**
+ * fill a tab with values from a list file
+ * @param State *state        current state
+ * @param ResultList *list    filelist with data
+ */
 void ui_fill_lists_lst(State *state, ResultList *list) {
 
     /* make some aliases */
     GtkWidget *table1 = state->tab1->table;
     GtkWidget *table2 = state->tab2->table;
-
-    gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(note), 
-        state->tab1->vbox, globals_get(CONST_OPEN_T));
 
     int i = 0;
     int j = 0;

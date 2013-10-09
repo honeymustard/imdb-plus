@@ -42,6 +42,7 @@ void globals_init() {
 /**
  * gets a stored global variable..
  * @param Global global     global id
+ * @return char *           returns global or NULL
  */
 char *globals_get(Global global) {
 

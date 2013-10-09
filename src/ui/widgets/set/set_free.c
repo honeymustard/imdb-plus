@@ -55,14 +55,16 @@ void ui_set_free() {
 
     fclose(fp_out);
 
-    /* free data from tabs */
-    for(i = 0; i < NB_TABS; i++) {
-    
-        if(tabs[i]->filename != NULL) {
-            free(tabs[i]->filename);
-        }
-        
-        gtk_custom_table_free(tabs[i]->table);
-    }
+    /* free data from tables */
+    gtk_custom_table_free(nb_stats_mov_tab->table);
+    gtk_custom_table_free(nb_stats_lst_tab->table);
+    gtk_custom_table_free(nb_stats_cmp_tab->table);
+    gtk_custom_table_free(nb_stats_all_tab->table);
+    gtk_custom_table_free(nb_lists_mov_tab->table);
+    gtk_custom_table_free(nb_lists_lst_tab->table);
+    gtk_custom_table_free(nb_lists_cmp_tab->table);
+    gtk_custom_table_free(nb_lists_top_tab->table);
+    gtk_custom_table_free(nb_lists_bot_tab->table);
+    gtk_custom_table_free(nb_lists_box_tab->table);
 }
 

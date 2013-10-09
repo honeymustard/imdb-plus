@@ -47,14 +47,16 @@ void ui_fill_lists_mov_empty() {
 }
 
 
+/**
+ * fill a tab with values from a list file
+ * @param State *state        current state
+ * @param ResultList *list    filelist with data
+ */
 void ui_fill_lists_mov(State *state, ResultList *list) {
 
     /* make some aliases */
     GtkWidget *table1 = state->tab1->table;
     GtkWidget *table2 = state->tab2->table;
-
-    gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(note), 
-        state->tab1->vbox, globals_get(CONST_OPEN_T));
 
     int i = 0;
     int j = 0;
@@ -68,31 +70,29 @@ void ui_fill_lists_mov(State *state, ResultList *list) {
             not_app);
     }
 
+    GtkWidget *top = nb_lists_top_tab->table;
+    GtkWidget *bot = nb_lists_bot_tab->table;
+    GtkWidget *box = nb_lists_box_tab->table;
+
     /* clear associated color from top250 */
-    for(i = 0; i < gtk_custom_table_get_rows(nb_lists_top_tab->table); i++) {
+    for(i = 0; i < gtk_custom_table_get_rows(top); i++) {
         
-        gtk_custom_table_set_cell_text(nb_lists_top_tab->table, 2, i, 
-            "0");
-        gtk_custom_table_set_cell_color(nb_lists_top_tab->table, 2, i, 
-            not_app);
+        gtk_custom_table_set_cell_text(top, 2, i, "0");
+        gtk_custom_table_set_cell_color(top, 2, i, not_app);
     }
 
     /* clear associated color from bot100 */
-    for(i = 0; i < gtk_custom_table_get_rows(nb_lists_bot_tab->table); i++) {
+    for(i = 0; i < gtk_custom_table_get_rows(bot); i++) {
         
-        gtk_custom_table_set_cell_text(nb_lists_bot_tab->table, 2, i, 
-            "0");
-        gtk_custom_table_set_cell_color(nb_lists_bot_tab->table, 2, i, 
-            not_app);
+        gtk_custom_table_set_cell_text(bot, 2, i, "0");
+        gtk_custom_table_set_cell_color(bot, 2, i, not_app);
     }
 
     /* clear associated color from boxoffice */
-    for(i = 0; i < gtk_custom_table_get_rows(nb_lists_box_tab->table); i++) {
+    for(i = 0; i < gtk_custom_table_get_rows(box); i++) {
         
-        gtk_custom_table_set_cell_text(nb_lists_box_tab->table, 2, i, 
-            "0");
-        gtk_custom_table_set_cell_color(nb_lists_box_tab->table, 2, i, 
-            not_app);
+        gtk_custom_table_set_cell_text(box, 2, i, "0");
+        gtk_custom_table_set_cell_color(box, 2, i, not_app);
     }
 
     Movie *movie = calloc(1, sizeof(Movie));

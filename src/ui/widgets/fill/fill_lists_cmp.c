@@ -47,11 +47,12 @@ void ui_fill_lists_cmp_empty() {
 }
 
 
+/**
+ * fill compare tab with values from other lists
+ * @param State *state    current state
+ */
 void ui_fill_lists_cmp(State *state) {
     
-    gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(note), 
-        state->tab1->vbox, globals_get(CONST_OPEN_T));
-
     /* make some aliases */
     GtkWidget *table1 = state->tab1->table;
     GtkWidget *table2 = state->tab2->table;

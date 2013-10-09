@@ -68,14 +68,8 @@ void ui_fill_stats_lst_empty() {
 void ui_fill_stats_lst(State *state) {
 
     /* make some convenient aliases */
-    NotebookTab *tab = state->stat;
     GtkWidget *table = state->stat->table;
     Stats *s = state->stats;
-
-    gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(note), 
-        tab->vbox, globals_get(CONST_OPEN_S));
-
-    gtk_custom_table_sort(table, 0, GTK_CUSTOM_TABLE_DESC);
 
     int i = 0;
     int j = 0;
@@ -83,6 +77,11 @@ void ui_fill_stats_lst(State *state) {
     char temp[100];
 
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
+
+        /* add vote value to table */
+        sprintf(temp, "%d", i + 1);
+        gtk_custom_table_set_cell_text(table, 0, j, 
+            temp);
 
         /* add imdb value to table */
         sprintf(temp, "%1.2f", s->stats[i][IMDB]);
@@ -120,6 +119,10 @@ void ui_fill_stats_lst(State *state) {
         gtk_custom_table_set_cell_text(table, 7, j, 
             temp);
 
+        /* add new background color to vote */
+        gtk_custom_table_set_cell_color(table, 0, j, 
+            colors[i]);
+
         /* add new background color to imdb rating */
         int imdb = s->stats[i][IMDB] > 0 ? 
             s->stats[i][IMDB] - 1 : 0;
@@ -146,7 +149,7 @@ void ui_fill_stats_lst(State *state) {
 
     /* add statistics footer vote info */
     gtk_custom_table_set_foot_text(table, 3, 
-        tab->filename);
+        globals_get(CONST_OPEN_BASENAME));
 
     /* add statistics footer percent total */
     gtk_custom_table_set_foot_text(table, 4, 

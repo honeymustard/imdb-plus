@@ -70,15 +70,18 @@ void ui_fill_stats_cmp(State *state) {
     GtkWidget *table = state->stat->table;
     Stats *s = state->stats;
 
-    gtk_custom_table_sort(table, 0, GTK_CUSTOM_TABLE_DESC);
-
     int i = 0;
     int j = 0;
 
     char temp[100];
 
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
-        
+ 
+        /* add vote value to table */
+        sprintf(temp, "%d", i + 1);
+        gtk_custom_table_set_cell_text(table, 0, j, 
+            temp);       
+
         /* add imdb value to table */
         sprintf(temp, "%1.2f", s->stats[i][IMDB]);
         gtk_custom_table_set_cell_text(table, 1, j, 
@@ -114,6 +117,10 @@ void ui_fill_stats_cmp(State *state) {
         sprintf(temp, "%1.2f", s->stats[i][YEAR]);
         gtk_custom_table_set_cell_text(table, 7, j, 
             temp);
+
+        /* add new background color to vote */
+        gtk_custom_table_set_cell_color(table, 0, j, 
+            colors[i]);
 
         /* add new background color to imdb_rating */
         int imdb = s->stats[i][IMDB] > 0 ? 

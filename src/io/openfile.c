@@ -26,6 +26,10 @@
 #include "io/readfile.h"
 
 
+static int cmp_one = 0;
+static int cmp_two = 0;
+
+
 /**
  * read and parse a ratings file or list..
  * @param NotebookTab *tab    open file in tab..
@@ -59,14 +63,18 @@ int open_file(NotebookTab *tab, char *filename) {
     if(tab == nb_lists_mov_tab) {
 
         row = 0;
+        cmp_one = 1;
 
+        globals_set(CONST_OPEN_MOV, filename);
         state->tab2 = nb_lists_lst_tab;
         state->stat = nb_stats_mov_tab;
     }
     else if(tab == nb_lists_lst_tab) {
 
         row = 1;
+        cmp_two = 1;
 
+        globals_set(CONST_OPEN_LST, filename);
         state->tab2 = nb_lists_mov_tab;
         state->stat = nb_stats_lst_tab;
     }
@@ -74,21 +82,6 @@ int open_file(NotebookTab *tab, char *filename) {
 
         return 0;
     }
-
-    /* attach filenames to tabs */
-    if(state->tab1->filename != NULL) {
-        free(state->tab1->filename);
-    }
-
-    if(state->stat->filename != NULL) {
-        free(state->stat->filename);
-    }
-
-    state->tab1->filename = malloc(strlen(filename) + 1);
-    strcpy(state->tab1->filename, filename);
-
-    state->stat->filename = malloc(strlen(filename) + 1);
-    strcpy(state->stat->filename, filename);
 
     if(strcmp("IMDb Rating", list->results[0][9]) == 0) {
 
@@ -110,14 +103,18 @@ int open_file(NotebookTab *tab, char *filename) {
 
     gtk_custom_table_set_sortable(table_t, TRUE);
     gtk_custom_table_set_sortable(table_s, TRUE);
+    gtk_custom_table_sort(table_s, 0, GTK_CUSTOM_TABLE_DESC);
     gtk_custom_table_sort(table_t, 0, GTK_CUSTOM_TABLE_ASC);
     gtk_custom_table_set_column_font(table_t, 4, TEXT_FONT); 
+    gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(note), 
+        state->tab1->vbox, globals_get(CONST_OPEN_TABSNAME));
+    gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(note), 
+        state->stat->vbox, globals_get(CONST_OPEN_STATNAME));
 
     readfile_free(list);
 
     /* fill comparison tab if applicable */
-    if(state->tab1->filename != NULL && 
-       state->tab2->filename != NULL) {
+    if(cmp_one && cmp_two) {
 
         State *s = calloc(1, sizeof(State));
         s->stats = calloc(1, sizeof(Stats));
@@ -138,6 +135,7 @@ int open_file(NotebookTab *tab, char *filename) {
         /* set sortable and sort by index */
         gtk_custom_table_set_sortable(table_t, TRUE);
         gtk_custom_table_set_sortable(table_s, TRUE);
+        gtk_custom_table_sort(table_s, 0, GTK_CUSTOM_TABLE_DESC);
         gtk_custom_table_sort(table_t, 0, GTK_CUSTOM_TABLE_ASC);
         gtk_custom_table_set_column_font(table_t, 4, TEXT_FONT); 
 

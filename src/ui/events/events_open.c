@@ -111,14 +111,17 @@ void menu_signal_open(gpointer data) {
         char *file_tabs = NULL;
         char *file_stat = NULL;
 
+        /* standard basename of filename */
         file_basename(filename, foldername, &file_base);
-        globals_set(CONST_OPEN_R, file_base);
+        globals_set(CONST_OPEN_BASENAME, file_base);
 
+        /* standard basename of filename with ellipsis */
         file_truncate(file_base, &file_tabs, 15);
-        globals_set(CONST_OPEN_T, file_tabs);
+        globals_set(CONST_OPEN_TABSNAME, file_tabs);
 
+        /* standard basename of filename prefixed with Stat */
         file_prefixer(file_tabs, "Stats: ", &file_stat);
-        globals_set(CONST_OPEN_S, file_stat);
+        globals_set(CONST_OPEN_STATNAME, file_stat);
 
         free(file_base);
         free(file_tabs);
@@ -128,9 +131,11 @@ void menu_signal_open(gpointer data) {
 
         /* attempt to open ratings file */
         if(open_file(tab, filename)) {
+
             sprintf(stat_tmp, "Opened file: %s", filename);
         }
         else {
+
             sprintf(stat_tmp, "Unable to open: %s", filename);
         }
 
