@@ -75,9 +75,7 @@ void ui_fill_lists_lst(State *state, ResultList *list) {
         movie->time = strtol(list->results[i][9], NULL, 10);
         movie->year = strtol(list->results[i][10], NULL, 10);
      
-        int key = (int)movie->imdb >= 10 ? 9 : (int)movie->imdb;
-
-        ui_fill_stats_add(state->stats, movie, key);
+        ui_fill_add_imdb(state->stats, movie);
 
         sprintf(temp, "%d", i);
         gtk_custom_table_set_cell_text(table1, 0, j, 

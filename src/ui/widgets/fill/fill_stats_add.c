@@ -29,10 +29,10 @@
  * sanitize the values of a movie entry
  * @param Movie *m    movie in which to sanitize
  */
-static void ui_fill_sanitize(Movie *m) {
+static void ui_fill_add_clip(Movie *m) {
 
-    m->vote = m->vote >= 0.0 && m->vote <= 10.0 ? m->vote : 0.0;
-    m->imdb = m->imdb >= 0.0 && m->imdb <= 10.0 ? m->imdb : 0.0;
+    m->vote = m->vote >= 1 && m->vote <= 10 ? m->vote: 0;
+    m->imdb = m->imdb >= 0.0 && m->imdb <= 10.0 ? m->imdb: 0.0;
     m->time = m->time >= 0.0 ? m->time : 0.0;
     m->year = m->year >= 1800.0 && m->year <= 2200.0 ? m->year : 0.0;
 }
@@ -45,6 +45,8 @@ static void ui_fill_sanitize(Movie *m) {
  * @param int k       the key indice to use..
  */
 static void ui_fill_add_stat(Stats *s, Movie *m, int k) {
+
+    if(k < 0) return;
 
     /* add up averages */
     s->stats_amt[k][VOTE] += m->vote;
@@ -180,21 +182,40 @@ void ui_fill_stats_avg(Stats *s) {
 
 
 /**
- * fill a stats object with movie values
- * @param Stats *s    current stats object
+ * copy movie values into string equivalents
  * @param Movie *m    current movie object
- * @param int key     index for stats array
  */
-void ui_fill_stats_add(Stats *s, Movie *m, int key) {
-
-    ui_fill_sanitize(m);
+void ui_fill_add_copy(Movie *m) {
 
     sprintf(m->vote_str, "%d", (int)m->vote);
     sprintf(m->imdb_str, "%1.1f", m->imdb);
     sprintf(m->time_str, "%d", (int)m->time);
     sprintf(m->year_str, "%d", (int)m->year);
+}
 
-    ui_fill_add_stat(s, m, key);
+/**
+ * fill a stats object with movie values using vote as a key
+ * @param Stats *s    current stats object
+ * @param Movie *m    current movie object
+ */
+void ui_fill_add_vote(Stats *s, Movie *m) {
+
+    ui_fill_add_clip(m);
+    ui_fill_add_copy(m);
+    ui_fill_add_stat(s, m, m->vote - 1);
+    ui_fill_add_list(s, m);
+}
+
+/**
+ * fill a stats object with movie values using imdb as a key
+ * @param Stats *s    current stats object
+ * @param Movie *m    current movie object
+ */
+void ui_fill_add_imdb(Stats *s, Movie *m) {
+
+    ui_fill_add_clip(m);
+    ui_fill_add_copy(m);
+    ui_fill_add_stat(s, m, m->imdb == 10.0 ? 9 : (int)m->imdb - 1);
     ui_fill_add_list(s, m);
 }
 

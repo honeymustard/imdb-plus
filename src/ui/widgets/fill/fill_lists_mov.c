@@ -113,9 +113,7 @@ void ui_fill_lists_mov(State *state, ResultList *list) {
         movie->time = strtol(list->results[i][10], NULL, 10);
         movie->year = strtol(list->results[i][11], NULL, 10);
 
-        int key = movie->vote > 0 ? (int)movie->vote - 1 : 0;
-
-        ui_fill_stats_add(state->stats, movie, key);
+        ui_fill_add_vote(state->stats, movie);
 
         /* add text to cells */
         sprintf(temp, "%d", i);

@@ -85,10 +85,7 @@ void ui_fill_stats_lst(State *state) {
     for(i = 0, j = 9; i < 10 && j >= 0; i++, j--) {
 
         /* add imdb value to table */
-        double imdb = s->stats[i][IMDB] > 0 ?  
-            s->stats[i][IMDB] : i;
-
-        sprintf(temp, "%1.2f", imdb);
+        sprintf(temp, "%1.2f", s->stats[i][IMDB]);
         gtk_custom_table_set_cell_text(table, 1, j, 
             temp);
         
@@ -124,8 +121,10 @@ void ui_fill_stats_lst(State *state) {
             temp);
 
         /* add new background color to imdb rating */
+        int imdb = s->stats[i][IMDB] > 0 ? 
+            s->stats[i][IMDB] - 1 : 0;
         gtk_custom_table_set_cell_color(table, 1, j, 
-            colors[(int)imdb]);
+            colors[imdb]);
 
         /* add new background color to flux */
         gtk_custom_table_set_cell_color(table, 2, j, 

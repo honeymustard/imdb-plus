@@ -101,7 +101,8 @@ void ui_fill_stats_all_empty();
 
 /* fill stats object with data */
 void ui_fill_stats_avg(Stats *stats);
-void ui_fill_stats_add(Stats *stats, Movie *m, int key);
+void ui_fill_add_vote(Stats *stats, Movie *m);
+void ui_fill_add_imdb(Stats *stats, Movie *m);
 
 enum GRAPH { CENT, SIZE };
 enum STATS { VOTE, IMDB, TIME, YEAR, FLUX, ROWS };
