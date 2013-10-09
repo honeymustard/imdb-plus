@@ -64,6 +64,10 @@ void ui_fill_stats_cmp_empty() {
 }
 
 
+/**
+ * compare stats from two lists
+ * @param State *state    current state object
+ */
 void ui_fill_stats_cmp(State *state) {
 
     /* make some convenient aliases */

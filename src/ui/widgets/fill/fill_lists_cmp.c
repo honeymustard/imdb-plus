@@ -88,7 +88,7 @@ void ui_fill_lists_cmp(State *state) {
         movie->time = atof(gtk_custom_table_get_cell_text(table2, 5, i));
         movie->year = atof(gtk_custom_table_get_cell_text(table2, 6, i));
 
-        ui_fill_add_vote(state->stats, movie);
+        ui_fill_add_imdb(state->stats, movie);
 
         movies[total_rows] = calloc(1, sizeof(Movie));
         memcpy(movies[total_rows], movie, sizeof(Movie));
