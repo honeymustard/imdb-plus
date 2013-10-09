@@ -119,69 +119,6 @@ static void ui_fill_add_list(Stats *s, Movie *m) {
 
 
 /**
- * calculate all valid averages for a stats object
- * @param Stats *s    current stats object
- * @param int rows    number of rows in table
- */
-void ui_fill_stats_avg(Stats *s) {
-
-    int i = 0;
-    int g = 0;
-
-    /* find graph width */
-    for(i = 0; i < 10; i++) {
-        g = s->stats_cnt[i][ROWS] > g ? s->stats_cnt[i][ROWS]: g;
-    }
-
-    /* calculate averages */
-    for(i = 0; i < 10; i++) {
-
-        s->graph[i][CENT] = s->stats_cnt[i][ROWS] > 0 ? 
-            (s->stats_cnt[i][ROWS] / s->total_cnt[ROWS]) * 100: 0; 
-        s->graph[i][SIZE] = s->stats_cnt[i][ROWS] > 0 ? 
-            100 / (g / s->stats_cnt[i][ROWS]) : 0;
-
-        s->stats[i][VOTE] = s->stats_cnt[i][VOTE] > 0 ? 
-            s->stats_amt[i][VOTE] / s->stats_cnt[i][VOTE] : 0;
-        s->stats[i][IMDB] = s->stats_cnt[i][IMDB] > 0 ? 
-            s->stats_amt[i][IMDB] / s->stats_cnt[i][IMDB] : 0;
-        s->stats[i][TIME] = s->stats_cnt[i][TIME] > 0 ? 
-            s->stats_amt[i][TIME] / s->stats_cnt[i][TIME] : 0;
-        s->stats[i][YEAR] = s->stats_cnt[i][YEAR] > 0 ? 
-            s->stats_amt[i][YEAR] / s->stats_cnt[i][YEAR] : 0;
-        s->stats[i][FLUX] = s->stats_cnt[i][FLUX] > 0 ? 
-            s->stats_amt[i][FLUX] / s->stats_cnt[i][FLUX] : 0;
-    }
-
-    for(i = 0; i < 3; i++) {
-
-        s->lists[i][VOTE] = s->lists_cnt[i][VOTE] > 0 ? 
-            s->lists_amt[i][VOTE] / s->lists_cnt[i][VOTE] : 0;
-        s->lists[i][IMDB] = s->lists_cnt[i][IMDB] > 0 ? 
-            s->lists_amt[i][IMDB] / s->lists_cnt[i][IMDB] : 0;
-        s->lists[i][TIME] = s->lists_cnt[i][TIME] > 0 ? 
-            s->lists_amt[i][TIME] / s->lists_cnt[i][TIME] : 0;
-        s->lists[i][YEAR] = s->lists_cnt[i][YEAR] > 0 ? 
-            s->lists_amt[i][YEAR] / s->lists_cnt[i][YEAR] : 0;
-        s->lists[i][FLUX] = s->lists_cnt[i][FLUX] > 0 ? 
-            s->lists_amt[i][FLUX] / s->lists_cnt[i][FLUX] : 0;
-    }
-
-    s->total[VOTE] = s->total_cnt[VOTE] > 0 ? 
-        s->total_amt[VOTE] / s->total_cnt[VOTE] : 0;
-    s->total[IMDB] = s->total_cnt[IMDB] > 0 ? 
-        s->total_amt[IMDB] / s->total_cnt[IMDB] : 0;
-    s->total[TIME] = s->total_cnt[TIME] > 0 ? 
-        s->total_amt[TIME] / s->total_cnt[TIME] : 0;
-    s->total[YEAR] = s->total_cnt[YEAR] > 0 ? 
-        s->total_amt[YEAR] / s->total_cnt[YEAR] : 0;
-    s->total[FLUX] = s->total_cnt[FLUX] > 0 ? 
-        s->total_amt[FLUX] / s->total_cnt[FLUX] : 0;
-    s->total[ROWS] = s->total_cnt[ROWS];
-}
-
-
-/**
  * copy movie values into string equivalents
  * @param Movie *m    current movie object
  */
