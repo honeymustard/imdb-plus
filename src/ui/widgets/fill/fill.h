@@ -25,8 +25,6 @@
 #include "io/readfile.h"
 
 
-#define TYPE_MOV 0
-#define TYPE_LST 1
 
 typedef struct movie {
 
@@ -51,7 +49,6 @@ typedef struct stats {
     double stats[10][6];
     double total[6];
     double lists[3][6];
-
     double stats_amt[10][5];
     double stats_cnt[10][6];
     double total_amt[5];
@@ -85,6 +82,7 @@ void ui_fill_lists_box(ResultList *list);
 void ui_fill_stats_mov(State *state);
 void ui_fill_stats_lst(State *state);
 void ui_fill_stats_cmp(State *state);
+void ui_fill_stats_avg(Stats *stats);
 void ui_fill_stats_all(State *state, int rows[]);
 
 /* fill tabs with default data */
@@ -100,7 +98,6 @@ void ui_fill_stats_cmp_empty();
 void ui_fill_stats_all_empty();
 
 /* fill stats object with data */
-void ui_fill_stats_avg(Stats *stats);
 void ui_fill_add_vote(Stats *stats, Movie *m);
 void ui_fill_add_imdb(Stats *stats, Movie *m);
 

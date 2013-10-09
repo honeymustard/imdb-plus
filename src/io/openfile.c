@@ -83,6 +83,7 @@ int open_file(NotebookTab *tab, char *filename) {
         return 0;
     }
 
+    /* opened file is a ratings list */
     if(strcmp("IMDb Rating", list->results[0][9]) == 0) {
 
         ui_fill_lists_mov(state, list);
@@ -90,6 +91,7 @@ int open_file(NotebookTab *tab, char *filename) {
         ui_fill_stats_mov(state);
         ui_fill_stats_all(state, rows[row]);
     }
+    /* opened file is a regular list */
     else {
 
         ui_fill_lists_lst(state, list);
@@ -98,6 +100,7 @@ int open_file(NotebookTab *tab, char *filename) {
         ui_fill_stats_all(state, rows[row]);
     }
 
+    /* sort and set tables and tabs */
     GtkWidget *table_t = state->tab1->table;
     GtkWidget *table_s = state->stat->table;
 
