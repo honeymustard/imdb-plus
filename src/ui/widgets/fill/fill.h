@@ -25,6 +25,12 @@
 #include "io/readfile.h"
 
 
+#define TOP_COLS 6
+#define TOP_ROWS 250
+#define BOT_COLS 6
+#define BOT_ROWS 100
+#define BOX_COLS 6
+
 
 typedef struct movie {
 
@@ -61,6 +67,8 @@ typedef struct stats {
 
 typedef struct state {
     
+    int tab1_vcol;
+    int tab2_vcol;
     Stats *stats;
     NotebookTab *tab1;
     NotebookTab *tab2;
@@ -97,9 +105,17 @@ void ui_fill_stats_mov_empty();
 void ui_fill_stats_cmp_empty();
 void ui_fill_stats_all_empty();
 
+/* fill tabs with data from other tabs */
+void ui_fill_lists_lst_add(State *state);
+void ui_fill_lists_mov_add(State *state);
+void ui_fill_lists_cmp_add(State *state);
+//void ui_fill_lists_top_add(State *state);
+//void ui_fill_lists_bot_add(State *state);
+void ui_fill_lists_box_add(State *state);
+
 /* fill stats object with data */
-void ui_fill_add_vote(Stats *stats, Movie *m);
-void ui_fill_add_imdb(Stats *stats, Movie *m);
+void ui_fill_stats_mov_add(Stats *stats, Movie *m);
+void ui_fill_stats_lst_add(Stats *stats, Movie *m);
 
 enum GRAPH { CENT, SIZE };
 enum STATS { VOTE, IMDB, TIME, YEAR, FLUX, ROWS };

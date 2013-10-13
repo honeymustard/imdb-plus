@@ -68,7 +68,7 @@ void menu_signal_update(gpointer data) {
 
     GThread *thread1, *thread2, *thread3;
 
-    /* someone pressed OK.. download some files */
+    /* pressed OK.. download some files */
     if(gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
 
         gtk_label_set_text(GTK_LABEL(label), "Downloading lists..\n");
@@ -134,7 +134,6 @@ void menu_signal_update(gpointer data) {
         while(gtk_events_pending()) gtk_main_iteration();
 
         /* all threads have finished, do something with results */
-
         char *topstat = "ERR";
         char *botstat = "ERR";
         char *boxstat = "ERR";

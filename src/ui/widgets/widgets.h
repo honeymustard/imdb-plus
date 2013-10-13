@@ -37,8 +37,12 @@
 
 GtkWidget *mwin, *stat, *vbox, *hbox, *note;
 
+typedef enum { TAB_TYPE_NONE, TAB_TYPE_MOV, TAB_TYPE_LST } ListType;
+
 typedef struct NotebookTab {
 
+    int is_open;
+    ListType type;
     GtkWidget *vbox; 
     GtkWidget *scroll; 
     GtkWidget *view; 

@@ -32,12 +32,12 @@ void ui_set_free();
 #define COLS_STATS_LST 8
 #define COLS_STATS_CMP 8
 #define COLS_STATS_ALL 9
-#define COLS_LISTS_MOV 7
-#define COLS_LISTS_LST 7
-#define COLS_LISTS_CMP 7
-#define COLS_LISTS_TOP 7
-#define COLS_LISTS_BOT 7
-#define COLS_LISTS_BOX 7
+#define COLS_LISTS_MOV 8
+#define COLS_LISTS_LST 8
+#define COLS_LISTS_CMP 8
+#define COLS_LISTS_TOP 8
+#define COLS_LISTS_BOT 8
+#define COLS_LISTS_BOX 8
 
 #define NAME_STATS_MOV "Stats"
 #define NAME_STATS_LST "Stats"

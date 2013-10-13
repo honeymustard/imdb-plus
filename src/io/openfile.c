@@ -26,10 +26,6 @@
 #include "io/readfile.h"
 
 
-static int cmp_one = 0;
-static int cmp_two = 0;
-
-
 /**
  * read and parse a ratings file or list..
  * @param NotebookTab *tab    open file in tab..
@@ -59,22 +55,27 @@ int open_file(NotebookTab *tab, char *filename) {
     int row = 0;
 
     state->tab1 = tab;
+    state->tab1->is_open = 1;
 
     if(tab == nb_lists_mov_tab) {
 
-        row = 0;
-        cmp_one = 1;
-
         globals_set(CONST_OPEN_MOV, filename);
+
+        row = 0;
+
+        state->tab1_vcol = 2;
+        state->tab2_vcol = 3;
         state->tab2 = nb_lists_lst_tab;
         state->stat = nb_stats_mov_tab;
     }
     else if(tab == nb_lists_lst_tab) {
 
-        row = 1;
-        cmp_two = 1;
-
         globals_set(CONST_OPEN_LST, filename);
+
+        row = 1;
+
+        state->tab1_vcol = 3;
+        state->tab2_vcol = 2;
         state->tab2 = nb_lists_mov_tab;
         state->stat = nb_stats_lst_tab;
     }
@@ -86,7 +87,9 @@ int open_file(NotebookTab *tab, char *filename) {
     /* opened file is a ratings list */
     if(strcmp("IMDb Rating", list->results[0][9]) == 0) {
 
+        tab->type = TAB_TYPE_MOV;
         ui_fill_lists_mov(state, list);
+        ui_fill_lists_mov_add(state);
         ui_fill_stats_avg(state->stats);
         ui_fill_stats_mov(state);
         ui_fill_stats_all(state, rows[row]);
@@ -94,13 +97,15 @@ int open_file(NotebookTab *tab, char *filename) {
     /* opened file is a regular list */
     else {
 
+        tab->type = TAB_TYPE_LST;
         ui_fill_lists_lst(state, list);
+        ui_fill_lists_lst_add(state);
         ui_fill_stats_avg(state->stats);
         ui_fill_stats_lst(state);
         ui_fill_stats_all(state, rows[row]);
     }
 
-    /* sort and set tables and tabs */
+    /* sort and set tables */
     GtkWidget *table_t = state->tab1->table;
     GtkWidget *table_s = state->stat->table;
 
@@ -108,7 +113,9 @@ int open_file(NotebookTab *tab, char *filename) {
     gtk_custom_table_set_sortable(table_s, TRUE);
     gtk_custom_table_sort(table_s, 0, GTK_CUSTOM_TABLE_DESC);
     gtk_custom_table_sort(table_t, 0, GTK_CUSTOM_TABLE_ASC);
-    gtk_custom_table_set_column_font(table_t, 4, TEXT_FONT); 
+    gtk_custom_table_set_column_font(table_t, 5, TEXT_FONT); 
+
+    /* set notebook titles */
     gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(note), 
         state->tab1->vbox, globals_get(CONST_OPEN_TABSNAME));
     gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(note), 
@@ -117,7 +124,7 @@ int open_file(NotebookTab *tab, char *filename) {
     readfile_free(list);
 
     /* fill comparison tab if applicable */
-    if(cmp_one && cmp_two) {
+    if(state->tab1->is_open && state->tab2->is_open) {
 
         State *s = calloc(1, sizeof(State));
         s->stats = calloc(1, sizeof(Stats));
@@ -128,6 +135,7 @@ int open_file(NotebookTab *tab, char *filename) {
         s->stat = nb_stats_cmp_tab;
 
         ui_fill_lists_cmp(s);
+        ui_fill_lists_cmp_add(s);
         ui_fill_stats_avg(s->stats);
         ui_fill_stats_cmp(s);
         ui_fill_stats_all(s, rows[2]);
@@ -140,7 +148,7 @@ int open_file(NotebookTab *tab, char *filename) {
         gtk_custom_table_set_sortable(table_s, TRUE);
         gtk_custom_table_sort(table_s, 0, GTK_CUSTOM_TABLE_DESC);
         gtk_custom_table_sort(table_t, 0, GTK_CUSTOM_TABLE_ASC);
-        gtk_custom_table_set_column_font(table_t, 4, TEXT_FONT); 
+        gtk_custom_table_set_column_font(table_t, 5, TEXT_FONT); 
 
         free(s->stats);
         free(s);

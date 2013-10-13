@@ -44,27 +44,27 @@ int nb_stats_all_cols[COLS_STATS_ALL] = {
 };
 
 int nb_lists_mov_cols[COLS_LISTS_MOV] = {
-    60, 60, 60, 100, -1, 80, 55
+    60, 60, 60, 60, 100, -1, 80, 55
 };
 
 int nb_lists_lst_cols[COLS_LISTS_LST] = {
-    60, 60, 60, 100, -1, 80, 55
+    60, 60, 60, 60, 100, -1, 80, 55
 };
 
 int nb_lists_cmp_cols[COLS_LISTS_CMP] = {
-    60, 60, 60, 100, -1, 80, 55
+    60, 60, 60, 60, 100, -1, 80, 55
 };
 
 int nb_lists_top_cols[COLS_LISTS_TOP] = {
-    60, 60, 60, 100, -1, 55, 100 
+    60, 60, 60, 60, 100, -1, 55, 100 
 };
 
 int nb_lists_bot_cols[COLS_LISTS_BOT] = {
-    60, 60, 60, 100, -1, 55, 100
+    60, 60, 60, 60, 100, -1, 55, 100
 };
 
 int nb_lists_box_cols[COLS_LISTS_BOX] = {
-    60, 60, 60, 100, -1, 55, 140, 
+    60, 60, 60, 60, 100, -1, 55, 140, 
 };
 
 

@@ -25,6 +25,8 @@
 /* minor convenience function for tab-creation */
 static void ui_set_make(char *title, NotebookTab *tab) {
 
+    tab->is_open = 0;
+    tab->type = TAB_TYPE_NONE;
     tab->vbox = gtk_vbox_new(FALSE, 0);
     tab->scroll = gtk_scrolled_window_new(NULL, NULL);
     tab->view = gtk_viewport_new(NULL, NULL);

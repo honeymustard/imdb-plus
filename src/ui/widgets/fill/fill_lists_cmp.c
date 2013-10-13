@@ -39,10 +39,11 @@ void ui_fill_lists_cmp_empty() {
         gtk_custom_table_set_cell_text(table, 0, i, temp);
         gtk_custom_table_set_cell_text(table, 1, i, "0.0");
         gtk_custom_table_set_cell_text(table, 2, i, "0");
-        gtk_custom_table_set_cell_text(table, 3, i, "N/A");
+        gtk_custom_table_set_cell_text(table, 3, i, "0");
         gtk_custom_table_set_cell_text(table, 4, i, "N/A");
-        gtk_custom_table_set_cell_text(table, 5, i, "0");
+        gtk_custom_table_set_cell_text(table, 5, i, "N/A");
         gtk_custom_table_set_cell_text(table, 6, i, "0");
+        gtk_custom_table_set_cell_text(table, 7, i, "0");
     }
 }
 
@@ -74,21 +75,26 @@ void ui_fill_lists_cmp(State *state) {
 
     for(i = 0; i < table_rows1; i++) {
 
-        char *id = gtk_custom_table_get_cell_text(table2, 3, i);
+        char *id = gtk_custom_table_get_cell_text(table2, 4, i);
 
         if(gtk_custom_table_get_indexof(table3, id) < 0) {
             continue;
         }
 
         strcpy(movie->id_str, id);
-        strcpy(movie->name_str, gtk_custom_table_get_cell_text(table2, 4, i));
+        strcpy(movie->name_str, gtk_custom_table_get_cell_text(table2, 5, i));
 
-        movie->vote = atof(gtk_custom_table_get_cell_text(table2, 2, i));
         movie->imdb = atof(gtk_custom_table_get_cell_text(table2, 1, i));
-        movie->time = atof(gtk_custom_table_get_cell_text(table2, 5, i));
-        movie->year = atof(gtk_custom_table_get_cell_text(table2, 6, i));
 
-        ui_fill_add_imdb(state->stats, movie);
+        int vote1 = atof(gtk_custom_table_get_cell_text(table2, 2, i));
+        int vote2 = atof(gtk_custom_table_get_cell_text(table2, 3, i));
+
+        movie->vote = vote1 > 0 ? vote1 : vote2;
+
+        movie->time = atof(gtk_custom_table_get_cell_text(table2, 6, i));
+        movie->year = atof(gtk_custom_table_get_cell_text(table2, 7, i));
+
+        ui_fill_stats_lst_add(state->stats, movie);
 
         movies[total_rows] = calloc(1, sizeof(Movie));
         memcpy(movies[total_rows], movie, sizeof(Movie));
@@ -102,35 +108,16 @@ void ui_fill_lists_cmp(State *state) {
 
         sprintf(temp, "%d", i + 1);
 
-        gtk_custom_table_set_cell_text(table1, 0, i, 
-            temp);
-        gtk_custom_table_set_cell_text(table1, 1, i, 
-            movies[i]->imdb_str);
+        gtk_custom_table_set_cell_text(table1, 0, i, temp);
+        gtk_custom_table_set_cell_text(table1, 1, i, movies[i]->imdb_str);
         gtk_custom_table_set_cell_text(table1, 2, i, 
-            movies[i]->vote_str);
+            state->tab2->type == TAB_TYPE_MOV ? movies[i]->vote_str : "0");
         gtk_custom_table_set_cell_text(table1, 3, i, 
-            movies[i]->id_str);
-        gtk_custom_table_set_cell_text(table1, 4, i, 
-            movies[i]->name_str);
-        gtk_custom_table_set_cell_text(table1, 5, i, 
-            movies[i]->time_str);
-        gtk_custom_table_set_cell_text(table1, 6, i, 
-            movies[i]->year_str);
-
-        /* set background colors */
-        gtk_custom_table_set_cell_color(table1, 1, i, 
-            not_app);
-        gtk_custom_table_set_cell_color(table1, 2, i, 
-            not_app);
-
-        int imdb = (int)movies[i]->imdb;
-        int vote = (int)movies[i]->vote;
-
-        /* set cell colors for imdb and vote values */
-        gtk_custom_table_set_cell_color(table1, 1, i, 
-            imdb > 0 ? colors[imdb - 1] : not_app);
-        gtk_custom_table_set_cell_color(table1, 2, i, 
-            vote > 0 ? colors[vote - 1] : not_app);
+            state->tab3->type == TAB_TYPE_MOV ? movies[i]->vote_str : "0");
+        gtk_custom_table_set_cell_text(table1, 4, i, movies[i]->id_str);
+        gtk_custom_table_set_cell_text(table1, 5, i, movies[i]->name_str);
+        gtk_custom_table_set_cell_text(table1, 6, i, movies[i]->time_str);
+        gtk_custom_table_set_cell_text(table1, 7, i, movies[i]->year_str);
 
         free(movies[i]);
     }

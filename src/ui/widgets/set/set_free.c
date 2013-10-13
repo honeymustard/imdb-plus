@@ -41,7 +41,7 @@ void ui_set_free() {
         for(j = 0; j < cols; j++) {
 
             /* skip columns not represented in file */
-            if(j == 1 || j == 2) {
+            if(j == 1 || j == 2 || j == 3) {
                 continue;
             }
 

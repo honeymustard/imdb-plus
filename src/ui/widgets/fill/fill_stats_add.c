@@ -29,7 +29,7 @@
  * sanitize the values of a movie entry
  * @param Movie *m    movie in which to sanitize
  */
-static void ui_fill_add_clip(Movie *m) {
+static void ui_fill_stats_add_clip(Movie *m) {
 
     m->vote = m->vote >= 1 && m->vote <= 10 ? m->vote: 0;
     m->imdb = m->imdb >= 0.0 && m->imdb <= 10.0 ? m->imdb: 0.0;
@@ -44,7 +44,7 @@ static void ui_fill_add_clip(Movie *m) {
  * @param Movie *m    movie entry object to be added
  * @param int k       the key indice to use..
  */
-static void ui_fill_add_stat(Stats *s, Movie *m, int k) {
+static void ui_fill_stats_add_stat(Stats *s, Movie *m, int k) {
 
     if(k < 0) return;
 
@@ -85,7 +85,7 @@ static void ui_fill_add_stat(Stats *s, Movie *m, int k) {
  * @param Stats *s    current stats object
  * @param Movie *m    movie entry object to be added
  */
-static void ui_fill_add_list(Stats *s, Movie *m) {
+static void ui_fill_stats_add_list(Stats *s, Movie *m) {
 
     int lists[3];
 
@@ -122,7 +122,7 @@ static void ui_fill_add_list(Stats *s, Movie *m) {
  * copy movie values into string equivalents
  * @param Movie *m    current movie object
  */
-void ui_fill_add_copy(Movie *m) {
+void ui_fill_stats_add_copy(Movie *m) {
 
     sprintf(m->vote_str, "%d", (int)m->vote);
     sprintf(m->imdb_str, "%1.1f", m->imdb);
@@ -135,12 +135,12 @@ void ui_fill_add_copy(Movie *m) {
  * @param Stats *s    current stats object
  * @param Movie *m    current movie object
  */
-void ui_fill_add_vote(Stats *s, Movie *m) {
+void ui_fill_stats_mov_add(Stats *s, Movie *m) {
 
-    ui_fill_add_clip(m);
-    ui_fill_add_copy(m);
-    ui_fill_add_stat(s, m, m->vote - 1);
-    ui_fill_add_list(s, m);
+    ui_fill_stats_add_clip(m);
+    ui_fill_stats_add_copy(m);
+    ui_fill_stats_add_stat(s, m, m->vote - 1);
+    ui_fill_stats_add_list(s, m);
 }
 
 /**
@@ -148,11 +148,11 @@ void ui_fill_add_vote(Stats *s, Movie *m) {
  * @param Stats *s    current stats object
  * @param Movie *m    current movie object
  */
-void ui_fill_add_imdb(Stats *s, Movie *m) {
+void ui_fill_stats_lst_add(Stats *s, Movie *m) {
 
-    ui_fill_add_clip(m);
-    ui_fill_add_copy(m);
-    ui_fill_add_stat(s, m, m->imdb == 10.0 ? 9 : (int)m->imdb - 1);
-    ui_fill_add_list(s, m);
+    ui_fill_stats_add_clip(m);
+    ui_fill_stats_add_copy(m);
+    ui_fill_stats_add_stat(s, m, m->imdb == 10.0 ? 9 : (int)m->imdb - 1);
+    ui_fill_stats_add_list(s, m);
 }
 

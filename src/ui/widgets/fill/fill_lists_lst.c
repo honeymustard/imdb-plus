@@ -39,10 +39,11 @@ void ui_fill_lists_lst_empty() {
         gtk_custom_table_set_cell_text(table, 0, i, temp);
         gtk_custom_table_set_cell_text(table, 1, i, "0.0");
         gtk_custom_table_set_cell_text(table, 2, i, "0");
-        gtk_custom_table_set_cell_text(table, 3, i, "N/A");
+        gtk_custom_table_set_cell_text(table, 3, i, "0");
         gtk_custom_table_set_cell_text(table, 4, i, "N/A");
-        gtk_custom_table_set_cell_text(table, 5, i, "0");
+        gtk_custom_table_set_cell_text(table, 5, i, "N/A");
         gtk_custom_table_set_cell_text(table, 6, i, "0");
+        gtk_custom_table_set_cell_text(table, 7, i, "0");
     }
 }
 
@@ -56,7 +57,6 @@ void ui_fill_lists_lst(State *state, ResultList *list) {
 
     /* make some aliases */
     GtkWidget *table1 = state->tab1->table;
-    GtkWidget *table2 = state->tab2->table;
 
     int i = 0;
     int j = 0;
@@ -65,6 +65,7 @@ void ui_fill_lists_lst(State *state, ResultList *list) {
 
     char temp[100];
 
+    /* update tab with new data */
     gtk_custom_table_resize(table1, -1, list->rows - 1);
 
     for(i = 1, j = 0; i < list->rows; i++, j++) {
@@ -77,67 +78,31 @@ void ui_fill_lists_lst(State *state, ResultList *list) {
         movie->time = strtol(list->results[i][9], NULL, 10);
         movie->year = strtol(list->results[i][10], NULL, 10);
      
-        ui_fill_add_imdb(state->stats, movie);
+        ui_fill_stats_lst_add(state->stats, movie);
 
+        /* add text to cells */
         sprintf(temp, "%d", i);
-        gtk_custom_table_set_cell_text(table1, 0, j, 
-            temp);
-        gtk_custom_table_set_cell_text(table1, 1, j, 
-            movie->imdb_str); 
-        gtk_custom_table_set_cell_text(table1, 2, j, 
-            "0");
-        gtk_custom_table_set_cell_text(table1, 3, j, 
-            movie->id_str);
-        gtk_custom_table_set_cell_text(table1, 4, j, 
-            movie->name_str);
-        gtk_custom_table_set_cell_text(table1, 5, j, 
-            movie->time_str);
-        gtk_custom_table_set_cell_text(table1, 6, j, 
-            movie->year_str);
+        gtk_custom_table_set_cell_text(table1, 0, j, temp);
+        gtk_custom_table_set_cell_text(table1, 1, j, movie->imdb_str); 
+        gtk_custom_table_set_cell_text(table1, 2, j, "0");
+        gtk_custom_table_set_cell_text(table1, 3, j, "0");
+        gtk_custom_table_set_cell_text(table1, 4, j, movie->id_str);
+        gtk_custom_table_set_cell_text(table1, 5, j, movie->name_str);
+        gtk_custom_table_set_cell_text(table1, 6, j, movie->time_str);
+        gtk_custom_table_set_cell_text(table1, 7, j, movie->year_str);
 
         /* set background colors */
-        gtk_custom_table_set_cell_color(table1, 1, j, 
-            not_app);
-        gtk_custom_table_set_cell_color(table1, 2, j, 
-            not_app);
+        gtk_custom_table_set_cell_color(table1, 1, j, not_app);
+        gtk_custom_table_set_cell_color(table1, 2, j, not_app);
+        gtk_custom_table_set_cell_color(table1, 3, j, not_app);
 
         /* set cell colors for imdb and vote values */
+        int imdb = (int)movie->imdb;
+
         gtk_custom_table_set_cell_color(table1, 1, j, 
-            (int)movie->imdb > 0 ? colors[(int)movie->imdb - 1] : not_app);
-        gtk_custom_table_set_cell_color(table1, 2, j, 
-            not_app);
-
-        int index = 0;
-
-        /* add 'my rating' to lists tab if applicable */
-        if((index = gtk_custom_table_get_indexof(table2, 
-                movie->id_str)) >= 0) {
-            
-            char *rating = gtk_custom_table_get_cell_text(table2, 2, 
-                index);
-
-            /* add new background color to rating */
-            gtk_custom_table_set_cell_text(table1, 2, j, 
-                rating);
-
-            gtk_custom_table_set_cell_color(table1, 2, j, 
-                atoi(rating) > 0 ? colors[atoi(rating) - 1] : not_app);
-        }
-
-        GtkWidget *tab_box = nb_lists_box_tab->table;
-
-        /* add imdb-rating to boxoffice tab if applicable */
-        if((index = gtk_custom_table_get_indexof(tab_box, 
-                movie->id_str)) >= 0) {
-
-            gtk_custom_table_set_cell_text(tab_box, 1, 
-                index, movie->imdb_str);
-
-            int color = (int)movie->imdb > 0 ? (int)movie->imdb - 1 : 0;
-
-            gtk_custom_table_set_cell_color(tab_box, 1, 
-                index, colors[color]);
-        }
+            imdb > 0 ? colors[imdb - 1] : not_app);
+        gtk_custom_table_set_cell_color(table1, 2, j, not_app);
+        gtk_custom_table_set_cell_color(table1, 3, j, not_app);
     }
 }
 

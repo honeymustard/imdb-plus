@@ -138,9 +138,8 @@ void ui_fill_stats_cmp(State *state) {
     }
 
     /* add statistics footer vote average */
-    sprintf(temp, "%2.2f", s->total[VOTE]);
     gtk_custom_table_set_foot_text(table, 0, 
-        temp);
+        "N/A");
 
     /* add statistics footer imdb average */
     sprintf(temp, "%2.2f", s->total[IMDB]);
