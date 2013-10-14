@@ -37,7 +37,7 @@ static void ui_set_make(char *title, NotebookTab *tab) {
     gtk_viewport_set_shadow_type(GTK_VIEWPORT(tab->view), GTK_SHADOW_NONE);
     gtk_container_add(GTK_CONTAINER(tab->scroll), tab->view); 
     gtk_box_pack_start(GTK_BOX(tab->vbox), tab->scroll, TRUE, TRUE, 0);
-    gtk_notebook_append_page(GTK_NOTEBOOK(note), tab->vbox, 
+    gtk_notebook_append_page(GTK_NOTEBOOK(mwin->note), tab->vbox, 
         gtk_label_new(title));
 }
 

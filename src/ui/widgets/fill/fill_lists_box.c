@@ -68,7 +68,7 @@ void ui_fill_lists_box(ResultList *list) {
 
         sprintf(temp, "%d", i + 1);
         gtk_custom_table_set_cell_text(table, 0, i, temp);
-        sprintf(temp, "%1.2f", imdb);
+        sprintf(temp, "%1.1f", imdb);
         gtk_custom_table_set_cell_text(table, 1, i, temp);
         gtk_custom_table_set_cell_text(table, 2, i, "0");
         gtk_custom_table_set_cell_text(table, 3, i, "0");

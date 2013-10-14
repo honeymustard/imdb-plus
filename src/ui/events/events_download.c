@@ -163,7 +163,7 @@ void menu_signal_down_response(GtkWidget *dialog, int response, gpointer *data) 
     gtk_adjustment_set_value(adj, adjustment);
 
     /* push and update statusbar */
-    gtk_statusbar_push(GTK_STATUSBAR(stat), 1, temp);
+    gtk_statusbar_push(GTK_STATUSBAR(mwin->stat), 1, temp);
 
     while(gtk_events_pending()) gtk_main_iteration();
 

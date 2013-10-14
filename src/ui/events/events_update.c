@@ -37,7 +37,7 @@ void menu_signal_update(gpointer data) {
 
     dialog = gtk_dialog_new_with_buttons(
         "Update Lists", 
-        GTK_WINDOW(mwin->parent), 
+        GTK_WINDOW(mwin->main->parent), 
         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, 
         GTK_STOCK_OK, 
         GTK_RESPONSE_ACCEPT, 
@@ -75,6 +75,7 @@ void menu_signal_update(gpointer data) {
 
         /* begin thread 1 */
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Top 250");
+
         while(gtk_events_pending()) gtk_main_iteration();
 
         /* download top250 list */
@@ -180,6 +181,8 @@ void menu_signal_update(gpointer data) {
                 
                 if(readfile(list, globals_get(CONST_BOX_CSV))) {
 
+                    GtkWidget *box = nb_lists_box_tab->table;
+
                     FILE *fp_out = fopen(globals_get(CONST_BOX_CSV), "wb");
                     
                     int i = 0;
@@ -192,13 +195,12 @@ void menu_signal_update(gpointer data) {
                             fprintf(fp_out, "\"%s\",", list->results[i][j]);
                         }
 
-                        index = gtk_custom_table_get_indexof(nb_lists_box_tab->table, 
+                        index = gtk_custom_table_get_indexof(box, 
                             list->results[i][1]);
                             
                         if(index >= 0) {
                             fprintf(fp_out, "\"%s\"\n", 
-                                gtk_custom_table_get_cell_text(nb_lists_box_tab->table, 
-                                    1, index));
+                                gtk_custom_table_get_cell_text(box, 1, index));
                         }
                         else {
                             fprintf(fp_out, "\"%s\"\n", "0.0");
@@ -236,9 +238,9 @@ void menu_signal_update(gpointer data) {
             strlen(botstat) + strlen(boxstat) + 1);
 
         sprintf(temp, format, topstat, botstat, boxstat);
-        gtk_statusbar_push(GTK_STATUSBAR(stat), 1, temp);
+        gtk_statusbar_push(GTK_STATUSBAR(mwin->stat), 1, temp);
 
-        gtk_custom_table_refresh(mwin);
+        gtk_custom_table_refresh(mwin->main);
     }
     
     gtk_widget_destroy(dialog);

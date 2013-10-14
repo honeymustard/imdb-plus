@@ -98,12 +98,10 @@ void ui_fill_lists_mov_add(State *state) {
             gtk_custom_table_set_cell_color(bot, col1, j, colors[vote_col]);
         }
 
-        /* add rating, imdb-rating to boxoffice */
+        /* add rating to boxoffice */
         if((j = gtk_custom_table_get_indexof(box, id)) >= 0) {
 
-            gtk_custom_table_set_cell_text(box, 1, j, imdb_str);
             gtk_custom_table_set_cell_text(box, col1, j, vote_str);
-            gtk_custom_table_set_cell_color(box, 1, j, colors[imdb_col]);
             gtk_custom_table_set_cell_color(box, col1, j, colors[vote_col]);
         }
 
@@ -189,13 +187,6 @@ void ui_fill_lists_lst_add(State *state) {
             gtk_custom_table_set_cell_color(table1, col2, i, 
                 vote_col2 > 0 ? colors[vote_col2 - 1] : not_app);
         }
-
-        /* add imdb-rating to boxoffice tab */
-        if((j = gtk_custom_table_get_indexof(box, id)) >= 0) {
-
-            gtk_custom_table_set_cell_text(box, 1, j, imdb_str);
-            gtk_custom_table_set_cell_color(box, 1, j, colors[imdb_col]);
-        }
     }
 }
 
@@ -252,37 +243,37 @@ void ui_fill_lists_box_add(ResultList *list) {
         double imdb = 0;
         char *id = list->results[i][1];
 
-        if (imdb <= 0) {
+        if(imdb <= 0) {
 
-            if((idex = gtk_custom_table_get_indexof(mov, id) >= 0)) {
-                imdb = atof(gtk_custom_table_get_cell_text(mov, 1, idex));
-            }
-        }
-
-        if (imdb <= 0) {
-     
-            if((idex = gtk_custom_table_get_indexof(top, id) >= 0)) {
+            if((idex = gtk_custom_table_get_indexof(top, id)) >= 0) {
                 imdb = atof(gtk_custom_table_get_cell_text(top, 1, idex));
             }
         }
 
-        if (imdb <= 0) {
+        if(imdb <= 0) {
      
-            if((idex = gtk_custom_table_get_indexof(bot, id) >= 0)) {
+            if((idex = gtk_custom_table_get_indexof(bot, id)) >= 0) {
                 imdb = atof(gtk_custom_table_get_cell_text(bot, 1, idex));
             }
         }
 
-        if (imdb <= 0) {
+        if(imdb <= 0) {
 
-            if((idex = gtk_custom_table_get_indexof(lst, id) >= 0)) {
+            if((idex = gtk_custom_table_get_indexof(mov, id)) >= 0) {
+                imdb = atof(gtk_custom_table_get_cell_text(mov, 1, idex));
+            }
+        }
+
+        if(imdb <= 0) {
+
+            if((idex = gtk_custom_table_get_indexof(lst, id)) >= 0) {
                 imdb = atof(gtk_custom_table_get_cell_text(lst, 1, idex));
             }
         }
 
         if(imdb > 0) {
 
-            sprintf(temp, "%1.2f", imdb);
+            sprintf(temp, "%1.1f", imdb);
             gtk_custom_table_set_cell_text(box, 1, i, temp);
             gtk_custom_table_set_cell_color(box, 1, i, colors[(int)imdb - 1]);
         }

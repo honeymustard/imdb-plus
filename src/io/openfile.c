@@ -116,9 +116,9 @@ int open_file(NotebookTab *tab, char *filename) {
     gtk_custom_table_set_column_font(table_t, 5, TEXT_FONT); 
 
     /* set notebook titles */
-    gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(note), 
+    gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(mwin->note), 
         state->tab1->vbox, globals_get(CONST_OPEN_TABSNAME));
-    gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(note), 
+    gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(mwin->note), 
         state->stat->vbox, globals_get(CONST_OPEN_STATNAME));
 
     readfile_free(list);
@@ -157,7 +157,8 @@ int open_file(NotebookTab *tab, char *filename) {
     free(state->stats);
     free(state);
    
-    gtk_custom_table_refresh(mwin);
+    ui_fill_lists_box_update();
+    gtk_custom_table_refresh(mwin->main);
 
     return 1;
 }

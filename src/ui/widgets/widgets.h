@@ -35,7 +35,33 @@
 #include <gtk/gtk.h>
 
 
-GtkWidget *mwin, *stat, *vbox, *hbox, *note;
+typedef struct MainWindow {
+    
+    GtkWidget *main; 
+    GtkWidget *stat; 
+    GtkWidget *vbox; 
+    GtkWidget *hbox; 
+    GtkWidget *note;
+
+    /* menu hierarchy */
+    GtkWidget *menu, 
+      *menu_file, 
+        *menu_file_item, 
+          *menu_file_item_open,
+          *menu_file_item_compare,
+          *menu_file_item_new,
+          *menu_file_item_space,
+          *menu_file_item_exit,
+      *menu_edit, 
+        *menu_edit_item, 
+          *menu_edit_item_update, 
+      *menu_help,
+        *menu_help_item, 
+          *menu_help_item_about;
+
+} MainWindow;
+
+MainWindow *mwin;
 
 typedef enum { TAB_TYPE_NONE, TAB_TYPE_MOV, TAB_TYPE_LST } ListType;
 
@@ -62,23 +88,6 @@ NotebookTab *nb_lists_cmp_tab;
 NotebookTab *nb_lists_top_tab;
 NotebookTab *nb_lists_bot_tab;
 NotebookTab *nb_lists_box_tab;
-
-
-/* menu hierarchy */
-GtkWidget *menu, 
-  *menu_file, 
-    *menu_file_item, 
-      *menu_file_item_open,
-      *menu_file_item_compare,
-      *menu_file_item_new,
-      *menu_file_item_space,
-      *menu_file_item_exit,
-  *menu_edit, 
-    *menu_edit_item, 
-      *menu_edit_item_update, 
-  *menu_help,
-    *menu_help_item, 
-      *menu_help_item_about;
 
 #endif
 

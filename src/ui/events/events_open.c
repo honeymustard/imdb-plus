@@ -78,7 +78,7 @@ void menu_signal_open(gpointer data) {
 
     dialog = gtk_file_chooser_dialog_new(
         "Open File", 
-        GTK_WINDOW(mwin->parent), 
+        GTK_WINDOW(mwin->main->parent), 
         GTK_FILE_CHOOSER_ACTION_OPEN,
         GTK_STOCK_CANCEL, 
         GTK_RESPONSE_CANCEL,
@@ -139,7 +139,7 @@ void menu_signal_open(gpointer data) {
             sprintf(stat_tmp, "Unable to open: %s", filename);
         }
 
-        gtk_statusbar_push(GTK_STATUSBAR(stat), 1, stat_tmp);
+        gtk_statusbar_push(GTK_STATUSBAR(mwin->stat), 1, stat_tmp);
 
         free(stat_tmp);
         free(filename);

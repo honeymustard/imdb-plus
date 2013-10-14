@@ -85,25 +85,26 @@ static char *ui_set_create_title() {
 void ui_set_init() {
 
     /* create a new window, set title and icon */
-    mwin = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    note = gtk_notebook_new();
-    stat = gtk_statusbar_new();
-    vbox = gtk_vbox_new(FALSE, 5);
-    hbox = gtk_hbox_new(FALSE, 5);
+    mwin = malloc(sizeof(MainWindow));
+    mwin->main = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    mwin->note = gtk_notebook_new();
+    mwin->stat = gtk_statusbar_new();
+    mwin->vbox = gtk_vbox_new(FALSE, 5);
+    mwin->hbox = gtk_hbox_new(FALSE, 5);
 
     char *title = ui_set_create_title();
 
-    gtk_window_set_title(GTK_WINDOW(mwin), title);
+    gtk_window_set_title(GTK_WINDOW(mwin->main), title);
 
     free(title);
 
-    gtk_window_set_icon_from_file(GTK_WINDOW(mwin), APP_ICON, NULL);
+    gtk_window_set_icon_from_file(GTK_WINDOW(mwin->main), APP_ICON, NULL);
 
     /* connect window signals to callbacks */
-    g_signal_connect(mwin, "destroy", 
+    g_signal_connect(mwin->main, "destroy", 
         G_CALLBACK(menu_signal_quit), NULL);
 
-    gtk_container_set_border_width(GTK_CONTAINER(mwin), 0);
+    gtk_container_set_border_width(GTK_CONTAINER(mwin->main), 0);
 
     /* initialize new table widgets */
     nb_stats_mov_tab = malloc(sizeof(NotebookTab));
@@ -143,8 +144,8 @@ void ui_set_init() {
     ui_set_tabs();
     ui_set_menu();
 
-    gtk_notebook_set_tab_pos(GTK_NOTEBOOK(note), GTK_POS_TOP);
-    gtk_notebook_set_show_tabs(GTK_NOTEBOOK(note), TRUE);
+    gtk_notebook_set_tab_pos(GTK_NOTEBOOK(mwin->note), GTK_POS_TOP);
+    gtk_notebook_set_show_tabs(GTK_NOTEBOOK(mwin->note), TRUE);
 
     ui_fill_lists_top_update();
     ui_fill_lists_bot_update();
@@ -158,18 +159,18 @@ void ui_set_init() {
     ui_fill_stats_all_empty();
 
     /* add widgets to main vbox */
-    gtk_box_pack_start(GTK_BOX(vbox), menu, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox), note, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox), stat, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(mwin->vbox), mwin->menu, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(mwin->vbox), mwin->note, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(mwin->vbox), mwin->stat, FALSE, FALSE, 0);
 
     /* push initial status message */
-    gtk_statusbar_push(GTK_STATUSBAR(stat), 1, 
+    gtk_statusbar_push(GTK_STATUSBAR(mwin->stat), 1, 
         "Hit Ctrl+D to download new ratings list, or Ctrl+O to open existing");
 
     /* last steps, show window */
-    gtk_container_add(GTK_CONTAINER(mwin), vbox);
-    gtk_window_set_default_size(GTK_WINDOW(mwin), 830, 460);
-    gtk_window_set_position(GTK_WINDOW(mwin), GTK_WIN_POS_CENTER);
-    gtk_widget_show_all(mwin);
+    gtk_container_add(GTK_CONTAINER(mwin->main), mwin->vbox);
+    gtk_window_set_default_size(GTK_WINDOW(mwin->main), 830, 460);
+    gtk_window_set_position(GTK_WINDOW(mwin->main), GTK_WIN_POS_CENTER);
+    gtk_widget_show_all(mwin->main);
 }
 
