@@ -230,43 +230,62 @@ void ui_fill_lists_cmp_add(State *state) {
     }
 }
 
-/*
-static double find_entry(NotebookTab *tab, char *string) {
- 
-    int index = gtk_custom_table_get_indexof(tab->table, string);
 
-    if(index >= 0) 
-        return atof(gtk_custom_table_get_cell_text(tab->table, 1, index));
-    else 
-        return 0;
+/**
+ * get imdb ratings from other lists
+ * @param ResultList *list    result list object
+ */
+void ui_fill_lists_box_add(ResultList *list) {
+
+    GtkWidget *box = nb_lists_box_tab->table;
+    GtkWidget *mov = nb_lists_mov_tab->table;
+    GtkWidget *top = nb_lists_top_tab->table;
+    GtkWidget *bot = nb_lists_bot_tab->table;
+    GtkWidget *lst = nb_lists_lst_tab->table;
+
+    int i = 0;
+    char temp[50];
+
+    for(i = 0; i < list->rows; i++) {
+
+        int idex = 0;
+        double imdb = 0;
+        char *id = list->results[i][1];
+
+        if (imdb <= 0) {
+
+            if((idex = gtk_custom_table_get_indexof(mov, id) >= 0)) {
+                imdb = atof(gtk_custom_table_get_cell_text(mov, 1, idex));
+            }
+        }
+
+        if (imdb <= 0) {
+     
+            if((idex = gtk_custom_table_get_indexof(top, id) >= 0)) {
+                imdb = atof(gtk_custom_table_get_cell_text(top, 1, idex));
+            }
+        }
+
+        if (imdb <= 0) {
+     
+            if((idex = gtk_custom_table_get_indexof(bot, id) >= 0)) {
+                imdb = atof(gtk_custom_table_get_cell_text(bot, 1, idex));
+            }
+        }
+
+        if (imdb <= 0) {
+
+            if((idex = gtk_custom_table_get_indexof(lst, id) >= 0)) {
+                imdb = atof(gtk_custom_table_get_cell_text(lst, 1, idex));
+            }
+        }
+
+        if(imdb > 0) {
+
+            sprintf(temp, "%1.2f", imdb);
+            gtk_custom_table_set_cell_text(box, 1, i, temp);
+            gtk_custom_table_set_cell_color(box, 1, i, colors[(int)imdb - 1]);
+        }
+    }
 }
 
-
-static double find_rating(char *string) {
-
-    double n = 0;
-
-    if (n <= 0) n = find_entry(nb_lists_mov_tab, string);
-    if (n <= 0) n = find_entry(nb_lists_top_tab, string);
-    if (n <= 0) n = find_entry(nb_lists_lst_tab, string);
-    if (n <= 0) n = find_entry(nb_lists_bot_tab, string);
-
-    return n > 0 ? n : 0;
-}
-
-
-
-void ui_fill_lists_box_add(State *state) {
-
-        // get imdb ratings from other tables
-        double n = find_rating(list->results[i][1]);
-        n = n > 0 ? n : imdb;
-
-        sprintf(temp, "%1.1f", n);
-        gtk_custom_table_set_cell_text(table, 1, i, temp);
-
-        gtk_custom_table_set_cell_color(table, 1, i, 
-            n <= 0 ? not_app : colors[(int)n - 1]);
-
-}
-*/

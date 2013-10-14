@@ -102,6 +102,7 @@ int ui_fill_lists_box_update() {
         && list->cols == BOX_COLS) {
         
         ui_fill_lists_box(list);
+        ui_fill_lists_box_add(list);
 
         GtkWidget *table = nb_lists_box_tab->table;
 

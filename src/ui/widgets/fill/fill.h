@@ -109,9 +109,7 @@ void ui_fill_stats_all_empty();
 void ui_fill_lists_lst_add(State *state);
 void ui_fill_lists_mov_add(State *state);
 void ui_fill_lists_cmp_add(State *state);
-//void ui_fill_lists_top_add(State *state);
-//void ui_fill_lists_bot_add(State *state);
-void ui_fill_lists_box_add(State *state);
+void ui_fill_lists_box_add(ResultList *list);
 
 /* fill stats object with data */
 void ui_fill_stats_mov_add(Stats *stats, Movie *m);
