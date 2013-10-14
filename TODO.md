@@ -6,7 +6,6 @@
 
 **Improvements**
 * make ratings download remember last value entered
-* make top lists imbibe values based on file timestamps
 * create unit tests for io operations
 * try removing libwimp to see if performance increases
 
