@@ -26,6 +26,49 @@
 
 
 /**
+ * clear ratings and colors from lists and tabs
+ * @param GtkWidget *table    table to clear from
+ * @param int col             column to clear from
+ */
+static void ui_fill_lists_clear(GtkWidget *table, int col) {
+
+    GtkWidget *top = nb_lists_top_tab->table;
+    GtkWidget *bot = nb_lists_bot_tab->table;
+    GtkWidget *box = nb_lists_box_tab->table;
+
+    int i = 0;
+
+    /* clear associated color from top250 */
+    for(i = 0; i < gtk_custom_table_get_rows(top); i++) {
+        
+        gtk_custom_table_set_cell_text(top, col, i, "0");
+        gtk_custom_table_set_cell_color(top, col, i, not_app);
+    }
+
+    /* clear associated color from bot100 */
+    for(i = 0; i < gtk_custom_table_get_rows(bot); i++) {
+        
+        gtk_custom_table_set_cell_text(bot, col, i, "0");
+        gtk_custom_table_set_cell_color(bot, col, i, not_app);
+    }
+
+    /* clear associated color from boxoffice */
+    for(i = 0; i < gtk_custom_table_get_rows(box); i++) {
+        
+        gtk_custom_table_set_cell_text(box, col, i, "0");
+        gtk_custom_table_set_cell_color(box, col, i, not_app);
+    }
+
+    /* clear associated color from other list */
+    for(i = 0; i < gtk_custom_table_get_rows(table); i++) {
+
+        gtk_custom_table_set_cell_text(table, col, i, "0");
+        gtk_custom_table_set_cell_color(table, col, i, not_app);
+    }
+}
+
+
+/**
  * exchange ratings with other lists
  * @param State *state    current state object
  */
@@ -44,44 +87,15 @@ void ui_fill_lists_mov_add(State *state) {
     int i = 0;
     int j = 0;
 
-    /* clear associated color from top250 */
-    for(i = 0; i < gtk_custom_table_get_rows(top); i++) {
-        
-        gtk_custom_table_set_cell_text(top, col1, i, "0");
-        gtk_custom_table_set_cell_color(top, col1, i, not_app);
-    }
-
-    /* clear associated color from bot100 */
-    for(i = 0; i < gtk_custom_table_get_rows(bot); i++) {
-        
-        gtk_custom_table_set_cell_text(bot, col1, i, "0");
-        gtk_custom_table_set_cell_color(bot, col1, i, not_app);
-    }
-
-    /* clear associated color from boxoffice */
-    for(i = 0; i < gtk_custom_table_get_rows(box); i++) {
-        
-        gtk_custom_table_set_cell_text(box, col1, i, "0");
-        gtk_custom_table_set_cell_color(box, col1, i, not_app);
-    }
-
-    /* clear associated color from other list */
-    for(i = 0; i < gtk_custom_table_get_rows(table2); i++) {
-
-        gtk_custom_table_set_cell_text(table2, col1, i, "0");
-        gtk_custom_table_set_cell_color(table2, col1, i, not_app);
-    }
+    ui_fill_lists_clear(table2, col1);
 
     for(i = 0; i < gtk_custom_table_get_rows(table1); i++) {
 
-        char *imdb_str = gtk_custom_table_get_cell_text(table1, 1, i);
         char *vote_str = gtk_custom_table_get_cell_text(table1, col1, i);
         char *id = gtk_custom_table_get_cell_text(table1, 4, i);
 
-        int imdb = atoi(imdb_str);
         int vote = atoi(vote_str);
 
-        int imdb_col = imdb > 0 ? imdb - 1 : 0;
         int vote_col = vote > 0 ? vote - 1 : 0;
 
         /* add rating to top250 tab */
@@ -131,9 +145,6 @@ void ui_fill_lists_lst_add(State *state) {
 
     GtkWidget *table1 = state->tab1->table;
     GtkWidget *table2 = state->tab2->table;
-    GtkWidget *top = nb_lists_top_tab->table;
-    GtkWidget *bot = nb_lists_bot_tab->table;
-    GtkWidget *box = nb_lists_box_tab->table;
     
     int col1 = state->tab1_vcol;
     int col2 = state->tab2_vcol;
@@ -141,41 +152,11 @@ void ui_fill_lists_lst_add(State *state) {
     int i = 0;
     int j = 0;
 
-    /* clear associated color from top250 */
-    for(i = 0; i < gtk_custom_table_get_rows(top); i++) {
-        
-        gtk_custom_table_set_cell_text(top, col1, i, "0");
-        gtk_custom_table_set_cell_color(top, col1, i, not_app);
-    }
-
-    /* clear associated color from bot100 */
-    for(i = 0; i < gtk_custom_table_get_rows(bot); i++) {
-        
-        gtk_custom_table_set_cell_text(bot, col1, i, "0");
-        gtk_custom_table_set_cell_color(bot, col1, i, not_app);
-    }
-
-    /* clear associated color from boxoffice */
-    for(i = 0; i < gtk_custom_table_get_rows(box); i++) {
-        
-        gtk_custom_table_set_cell_text(box, col1, i, "0");
-        gtk_custom_table_set_cell_color(box, col1, i, not_app);
-    }
-
-    /* clear values from other list */
-    for(i = 0; i < gtk_custom_table_get_rows(table2); i++) {
-        
-        gtk_custom_table_set_cell_text(table2, col1, i, "0");
-        gtk_custom_table_set_cell_color(table2, col1, i, not_app);
-    }
+    ui_fill_lists_clear(table2, col1);
 
     for(i = 0; i < gtk_custom_table_get_rows(table1); i++) {
 
-        char *imdb_str = gtk_custom_table_get_cell_text(table1, 1, i);
         char *id = gtk_custom_table_get_cell_text(table1, 4, i);
-
-        int imdb = atoi(imdb_str);
-        int imdb_col = imdb > 0 ? imdb - 1 : 0;
 
         /* add other rating to this tab */
         if((j = gtk_custom_table_get_indexof(table2, id)) >= 0) {
