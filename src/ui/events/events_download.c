@@ -179,7 +179,7 @@ void menu_signal_down(gpointer data) {
     
     GtkWidget *dialog = gtk_dialog_new_with_buttons(
         "Download Ratings", 
-        GTK_WINDOW(mwin), 
+        GTK_WINDOW(mwin->main->parent), 
         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, 
         GTK_STOCK_OK, 
         GTK_RESPONSE_OK, 

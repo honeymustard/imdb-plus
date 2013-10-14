@@ -69,27 +69,69 @@ char *nb_stats_all_headers[COLS_STATS_ALL] = {
 };
 
 char *nb_lists_mov_headers[COLS_LISTS_MOV] = {
-    "#", "IMDb", "Vote", "Vote", "IMDb ID", "Title", "Runtime", "Year", 
+    "#", 
+    "IMDb", 
+    "Vote", 
+    "Vote", 
+    "IMDb ID", 
+    "Title", 
+    "Runtime", 
+    "Year", 
 };
 
 char *nb_lists_lst_headers[COLS_LISTS_LST] = {
-    "#", "IMDb", "Vote", "Vote", "IMDb ID", "Title", "Runtime", "Year", 
+    "#", 
+    "IMDb", 
+    "Vote", 
+    "Vote", 
+    "IMDb ID", 
+    "Title", 
+    "Runtime", 
+    "Year", 
 };
 
 char *nb_lists_cmp_headers[COLS_LISTS_CMP] = {
-    "#", "IMDb", "Vote", "Vote", "IMDb ID", "Title", "Runtime", "Year", 
+    "#", 
+    "IMDb", 
+    "Vote", 
+    "Vote", 
+    "IMDb ID", 
+    "Title", 
+    "Runtime", 
+    "Year", 
 };
 
 char *nb_lists_top_headers[COLS_LISTS_TOP] = {
-    "#", "IMDb", "Vote", "Vote", "IMDb ID", "Title", "Year", "Votes", 
+    "#", 
+    "IMDb", 
+    "Vote", 
+    "Vote", 
+    "IMDb ID", 
+    "Title", 
+    "Year", 
+    "Votes", 
 };
 
 char *nb_lists_bot_headers[COLS_LISTS_BOT] = {
-    "#", "IMDb", "Vote", "Vote", "IMDb ID", "Title", "Year", "Votes", 
+    "#", 
+    "IMDb", 
+    "Vote", 
+    "Vote", 
+    "IMDb ID", 
+    "Title", 
+    "Year", 
+    "Votes", 
 };
 
 char *nb_lists_box_headers[COLS_LISTS_BOX] = {
-    "#", "IMDb", "Vote", "Vote", "IMDb ID", "Title", "Year", "Gross USD", 
+    "#", 
+    "IMDb", 
+    "Vote", 
+    "Vote", 
+    "IMDb ID", 
+    "Title", 
+    "Year", 
+    "Gross USD", 
 };
 
 

@@ -103,11 +103,8 @@ void ui_set_menu() {
         mwin->menu_help);
 
     /* add to main menubar */
-    gtk_menu_bar_append(GTK_MENU_BAR(mwin->menu), 
-        mwin->menu_file_item);
-    gtk_menu_bar_append(GTK_MENU_BAR(mwin->menu), 
-        mwin->menu_edit_item);
-    gtk_menu_bar_append(GTK_MENU_BAR(mwin->menu), 
-        mwin->menu_help_item);
+    gtk_menu_bar_append(GTK_MENU_BAR(mwin->menu), mwin->menu_file_item);
+    gtk_menu_bar_append(GTK_MENU_BAR(mwin->menu), mwin->menu_edit_item);
+    gtk_menu_bar_append(GTK_MENU_BAR(mwin->menu), mwin->menu_help_item);
 }
 

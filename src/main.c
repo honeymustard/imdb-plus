@@ -38,8 +38,9 @@ int main(int argc, char *argv[]) {
 
     globals_init();
 
-    /* set version global */
+    /* set global version and appname */
     globals_set(CONST_VERSION, VERSION);
+    globals_set(CONST_APPNAME, APP_NAME " - " VERSION);
 
     /* set paths */
     char *path = NULL;
