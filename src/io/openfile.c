@@ -24,6 +24,7 @@
 #include "ui/table/gtk_custom_table.h"
 #include "io/openfile.h"
 #include "io/readfile.h"
+#include <libgen.h>
 
 
 /**
@@ -56,6 +57,8 @@ int open_file(NotebookTab *tab, char *filename) {
 
     state->tab1 = tab;
     state->tab1->is_open = 1;
+
+    globals_set(CONST_OPEN_PTH, filename);
 
     if(tab == nb_lists_mov_tab) {
 
@@ -115,11 +118,23 @@ int open_file(NotebookTab *tab, char *filename) {
     gtk_custom_table_sort(table_t, 0, GTK_CUSTOM_TABLE_ASC);
     gtk_custom_table_set_column_font(table_t, 5, TEXT_FONT); 
 
+    char *filebase = basename(filename);
+    char filetabs[255];
+    char filestat[255];
+
+    printf("%s\n", filebase);
+
+    strcpy(filetabs, filebase); 
+    strcpy(&filetabs[15], "...");
+
+    strcpy(filestat, "Stats: ");
+    strcat(filestat, filetabs);
+
     /* set notebook titles */
     gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(mwin->note), 
-        state->tab1->vbox, globals_get(CONST_OPEN_TABSNAME));
+        state->tab1->vbox, filetabs);
     gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(mwin->note), 
-        state->stat->vbox, globals_get(CONST_OPEN_STATNAME));
+        state->stat->vbox, filestat);
 
     readfile_free(list);
 

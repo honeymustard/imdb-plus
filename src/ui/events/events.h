@@ -26,6 +26,7 @@
 /* main window events */
 void menu_signal_about(gpointer data);
 void menu_signal_open(gpointer data);
+void menu_signal_save(gpointer data);
 void menu_signal_down(gpointer data);
 void menu_signal_update(gpointer data);
 void menu_signal_quit(gpointer data);

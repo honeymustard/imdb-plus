@@ -26,31 +26,27 @@
 #include "io/openfile.h"
 
 
-/* open a list from dialog */
-void menu_signal_open(gpointer data) {
+/* save a list from dialog */
+void menu_signal_save(gpointer data) {
 
-    NotebookTab *tab = (NotebookTab *)data;
+    char *tmpfile = globals_get(CONST_OPEN_MOV);
 
     GtkWidget *dialog;
 
     dialog = gtk_file_chooser_dialog_new(
-        "Open File", 
+        "Save File", 
         GTK_WINDOW(mwin->main->parent), 
-        GTK_FILE_CHOOSER_ACTION_OPEN,
+        GTK_FILE_CHOOSER_ACTION_SAVE,
         GTK_STOCK_CANCEL, 
         GTK_RESPONSE_CANCEL,
-        GTK_STOCK_OPEN, 
+        GTK_STOCK_OK, 
         GTK_RESPONSE_OK,
         NULL);
 
     GtkFileChooser *fc = GTK_FILE_CHOOSER(dialog);
+    gtk_file_chooser_get_show_hidden(fc);
     gtk_file_chooser_set_current_folder(fc, globals_get(CONST_DOWN));
-
-    /* set a new file filter to limit types */
-    GtkFileFilter *filter = gtk_file_filter_new();
-    gtk_file_filter_set_name(filter, ".csv");
-    gtk_file_filter_add_pattern(filter, "*.csv");
-    gtk_file_chooser_add_filter(fc, filter);
+    gtk_file_chooser_set_current_name(fc, tmpfile);
 
     /* set position and icon */
     gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
@@ -62,8 +58,12 @@ void menu_signal_open(gpointer data) {
         char *filename = gtk_file_chooser_get_filename(fc);
         char *stat_tmp = malloc(25 + strlen(filename));
 
-        /* attempt to open ratings file */
-        if(open_file(tab, filename)) {
+        // check file-extension here..
+
+        rename(tmpfile, filename);
+
+        /* reopen file to reflect changes */
+        if(open_file(nb_lists_mov_tab, filename)) {
             sprintf(stat_tmp, "Opened file: %s", filename);
         }
         else {
@@ -74,6 +74,9 @@ void menu_signal_open(gpointer data) {
 
         free(stat_tmp);
         free(filename);
+
+        /* disable saving */
+        gtk_widget_set_sensitive(mwin->menu_file_item_save, FALSE);
     }
 
     gtk_widget_destroy(dialog);

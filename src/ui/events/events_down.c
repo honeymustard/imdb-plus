@@ -37,6 +37,7 @@ void menu_signal_down_response(GtkWidget *dialog, int response, gpointer *data) 
     /* destroy dialog on these events */
     if((response == GTK_RESPONSE_CANCEL) || 
        (response == GTK_RESPONSE_DELETE_EVENT)) {
+
         gtk_widget_destroy(dialog);
         return;
     }
@@ -56,15 +57,15 @@ void menu_signal_down_response(GtkWidget *dialog, int response, gpointer *data) 
     }
 
     /* download from this url.. */
-    char load[100];
+    char load[255];
     strcpy(load, globals_get(CONST_RAT_URL));
     strcat(load, entered);
 
     /* save to this path.. */
-    char save[100];
+    char save[255];
     strcpy(save, globals_get(CONST_DOWN));
     strcat(save, entered);
-    strcat(save, ".csv");
+    strcat(save, "-tmp.csv");
 
     /* set this progressbar message */
     char pbar_text[50];
@@ -100,8 +101,11 @@ void menu_signal_down_response(GtkWidget *dialog, int response, gpointer *data) 
     int opened_file = 0;
 
     /* attempt to open fresh ratings */
-    if(down->status == DL_STATUS_OK && 
+    if(down->status == DL_STATUS_OK &&
         (opened_file = open_file(nb_lists_mov_tab, save))) {
+
+        /* enable saving */
+        gtk_widget_set_sensitive(mwin->menu_file_item_save, TRUE);
 
         info = "finished";
         adjustment = 120;
@@ -194,7 +198,7 @@ void menu_signal_down(gpointer data) {
     pbar = gtk_progress_bar_new_with_adjustment(adj);
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Waiting..");
 
-    label = gtk_label_new("Enter IMDb ID i.e. 4854451\n");
+    label = gtk_label_new("Enter a unique IMDb id i.e. 4854451\n");
 
     gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
 

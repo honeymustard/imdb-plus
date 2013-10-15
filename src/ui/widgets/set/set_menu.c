@@ -51,19 +51,24 @@ void ui_set_menu() {
     /* create submenu items */
     mwin->menu_file_item_open = gtk_menu_item_new_with_mnemonic("_Open");
     mwin->menu_file_item_compare = gtk_menu_item_new_with_mnemonic("_Compare To");
-    mwin->menu_file_item_new = gtk_menu_item_new_with_mnemonic("_Download");
+    mwin->menu_file_item_down = gtk_menu_item_new_with_mnemonic("_Download");
+    mwin->menu_file_item_save = gtk_menu_item_new_with_mnemonic("_Save As..");
     mwin->menu_file_item_exit = gtk_menu_item_new_with_mnemonic("_Exit");
     mwin->menu_file_item_space = gtk_separator_menu_item_new();
     mwin->menu_edit_item_update = gtk_menu_item_new_with_mnemonic("_Update");
     mwin->menu_help_item_about = gtk_menu_item_new_with_mnemonic("_About");
+
+    gtk_widget_set_sensitive(mwin->menu_file_item_save, FALSE);
 
     /* add accelerator keys to menu */
     gtk_widget_add_accelerator(mwin->menu_file_item_open, "activate", 
         group_file, GDK_O, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(mwin->menu_file_item_compare, "activate", 
         group_file, GDK_L, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-    gtk_widget_add_accelerator(mwin->menu_file_item_new, "activate", 
+    gtk_widget_add_accelerator(mwin->menu_file_item_down, "activate", 
         group_file, GDK_D, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(mwin->menu_file_item_save, "activate", 
+        group_file, GDK_S, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(mwin->menu_file_item_exit, "activate", 
         group_file, GDK_Q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(mwin->menu_edit_item_update, "activate", 
@@ -74,7 +79,8 @@ void ui_set_menu() {
     /* append menu items to menus */
     gtk_menu_append(GTK_MENU(mwin->menu_file), mwin->menu_file_item_open);
     gtk_menu_append(GTK_MENU(mwin->menu_file), mwin->menu_file_item_compare);
-    gtk_menu_append(GTK_MENU(mwin->menu_file), mwin->menu_file_item_new);
+    gtk_menu_append(GTK_MENU(mwin->menu_file), mwin->menu_file_item_down);
+    gtk_menu_append(GTK_MENU(mwin->menu_file), mwin->menu_file_item_save);
     gtk_menu_append(GTK_MENU(mwin->menu_file), mwin->menu_file_item_space);
     gtk_menu_append(GTK_MENU(mwin->menu_file), mwin->menu_file_item_exit);
     gtk_menu_append(GTK_MENU(mwin->menu_edit), mwin->menu_edit_item_update);
@@ -85,8 +91,10 @@ void ui_set_menu() {
         "activate", GTK_SIGNAL_FUNC(menu_signal_open), (gpointer)nb_lists_mov_tab);
     gtk_signal_connect_object(GTK_OBJECT(mwin->menu_file_item_compare), 
         "activate", GTK_SIGNAL_FUNC(menu_signal_open), (gpointer)nb_lists_lst_tab);
-    gtk_signal_connect_object(GTK_OBJECT(mwin->menu_file_item_new), 
+    gtk_signal_connect_object(GTK_OBJECT(mwin->menu_file_item_down), 
         "activate", GTK_SIGNAL_FUNC(menu_signal_down), (gpointer)mwin->main);
+    gtk_signal_connect_object(GTK_OBJECT(mwin->menu_file_item_save), 
+        "activate", GTK_SIGNAL_FUNC(menu_signal_save), (gpointer)mwin->main);
     gtk_signal_connect_object(GTK_OBJECT(mwin->menu_file_item_exit), 
         "activate", GTK_SIGNAL_FUNC(menu_signal_quit), (gpointer)mwin->main);
     gtk_signal_connect_object(GTK_OBJECT(mwin->menu_edit_item_update), 

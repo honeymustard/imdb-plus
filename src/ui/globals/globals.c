@@ -61,8 +61,13 @@ void globals_set(Global global, char *value) {
         free(globals[global]);
     }
 
-    globals[global] = malloc(strlen(value) + 1);
-    strcpy(globals[global], value);
+    if(value == NULL) {
+        globals[global] = NULL;
+    }
+    else {
+        globals[global] = malloc(strlen(value) + 1);
+        strcpy(globals[global], value);
+    }
 }
 
 
