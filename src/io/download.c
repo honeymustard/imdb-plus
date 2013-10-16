@@ -49,6 +49,13 @@ void *download(void *download) {
 
     if(curl) {
 
+        /* set english headers */
+        struct curl_slist *head = NULL;
+     
+        head = curl_slist_append(head, "Accept-Charset: iso-8859-2");
+        head = curl_slist_append(head, "Accept-Language: en");
+
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, head);
         curl_easy_setopt(curl, CURLOPT_URL, down->url);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, tmp);
 
@@ -67,7 +74,6 @@ void *download(void *download) {
         fclose(tmp);
 
         curl_easy_cleanup(curl);
-
     }
 
     return NULL;
