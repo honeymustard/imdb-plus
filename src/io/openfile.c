@@ -58,9 +58,7 @@ int open_file(NotebookTab *tab, char *filename) {
     state->tab1 = tab;
     state->tab1->is_open = 1;
 
-    printf("file is: %s\n", filename);
-
-    globals_set(CONST_OPEN_PTH, filename);
+    globals_set(CONST_PATHNAME, filename);
 
     if(tab == nb_lists_mov_tab) {
 
@@ -88,6 +86,32 @@ int open_file(NotebookTab *tab, char *filename) {
 
         return 0;
     }
+
+    filename = globals_get(CONST_PATHNAME);
+
+    char *temp = malloc(strlen(filename));
+    strcpy(temp, filename);
+
+    char *filebase = basename(temp);
+
+    char filetabs[255];
+    char filestat[255];
+
+    strcpy(filetabs, filebase); 
+    strcpy(&filetabs[15], "...");
+
+    strcpy(filestat, "Stats: ");
+    strcat(filestat, filetabs);
+
+    globals_set(CONST_BASENAME, filebase);
+
+    /* set notebook titles */
+    gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(mwin->note), 
+        state->tab1->vbox, filetabs);
+    gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(mwin->note), 
+        state->stat->vbox, filestat);
+
+    free(temp);
 
     /* opened file is a ratings list */
     if(strcmp("IMDb Rating", list->results[0][9]) == 0) {
@@ -119,24 +143,6 @@ int open_file(NotebookTab *tab, char *filename) {
     gtk_custom_table_sort(table_s, 0, GTK_CUSTOM_TABLE_DESC);
     gtk_custom_table_sort(table_t, 0, GTK_CUSTOM_TABLE_ASC);
     gtk_custom_table_set_column_font(table_t, 5, TEXT_FONT); 
-
-    char *filebase = basename(filename);
-    char filetabs[255];
-    char filestat[255];
-
-    printf("%s\n", filebase);
-
-    strcpy(filetabs, filebase); 
-    strcpy(&filetabs[15], "...");
-
-    strcpy(filestat, "Stats: ");
-    strcat(filestat, filetabs);
-
-    /* set notebook titles */
-    gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(mwin->note), 
-        state->tab1->vbox, filetabs);
-    gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(mwin->note), 
-        state->stat->vbox, filestat);
 
     readfile_free(list);
 

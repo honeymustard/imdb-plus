@@ -57,17 +57,26 @@ char *globals_get(Global global) {
  */
 void globals_set(Global global, char *value) {
 
+    if(value == NULL) {
+
+        if(globals[global] != NULL) {
+            free(globals[global]);
+        }
+
+        globals[global] = NULL;
+
+        return;
+    }
+
+    /* global and value may be equal */
+    char *temp = malloc(strlen(value) + 1);
+    strcpy(temp, value);
+
     if(globals[global] != NULL) {
         free(globals[global]);
     }
 
-    if(value == NULL) {
-        globals[global] = NULL;
-    }
-    else {
-        globals[global] = malloc(strlen(value) + 1);
-        strcpy(globals[global], value);
-    }
+    globals[global] = temp;
 }
 
 
@@ -81,6 +90,7 @@ void globals_free() {
     for(i = 0; i < CONST_EOL; i++) {
         if(globals[i] != NULL) {
             free(globals[i]);
+            globals[i] = NULL;
         }
     }
 } 

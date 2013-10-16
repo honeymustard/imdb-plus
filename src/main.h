@@ -50,12 +50,12 @@
 #define APP_MAIL "Adrian Solumsmo <adrian.solumsmo@gmail.com>"
 
 /* filenames */
-#define TOP_TMP "top250.html"
-#define TOP_CSV "top250.csv"
-#define BOT_TMP "bottom100.html"
-#define BOT_CSV "bottom100.csv"
-#define BOX_TMP "boxoffice.html"
-#define BOX_CSV "boxoffice.csv" 
+#define TOP_TMP "top.html"
+#define TOP_CSV "top.csv"
+#define BOT_TMP "bot.html"
+#define BOT_CSV "bot.csv"
+#define BOX_TMP "box.html"
+#define BOX_CSV "box.csv" 
 
 /* urls */
 #define BOX_URL "http://akas.imdb.com/boxoffice/alltimegross?region=world-wide"

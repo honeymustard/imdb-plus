@@ -177,7 +177,7 @@ char * decode(char *buffer) {
  * @param char **container    array big enough to contain parsed values
  * @param char *buffer        line to be parsed
  * @param int cols            number of columns expected
- * @return int                returns 1
+ * @return int                returns 1 if number of cols was correct, else 0
  */
 int parse_line(char **container, char *buffer, int cols) {
 

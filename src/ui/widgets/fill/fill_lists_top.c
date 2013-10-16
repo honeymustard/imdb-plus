@@ -58,8 +58,8 @@ void ui_fill_lists_top(ResultList *list) {
 
     for(i = 0; i < list->rows; i++) {
 
-        double imdb = strtod(list->results[i][1], NULL);
-        double year = strtol(list->results[i][4], NULL, 10);
+        double imdb = strtod(list->results[i][4], NULL);
+        double year = strtol(list->results[i][3], NULL, 10);
 
         imdb = imdb >= 0 && imdb <= 10 ? imdb : 0;
         year = year > 1800 && year < 2200 ? year : 0;
@@ -70,8 +70,8 @@ void ui_fill_lists_top(ResultList *list) {
         gtk_custom_table_set_cell_text(table, 1, i, temp);
         gtk_custom_table_set_cell_text(table, 2, i, "0");
         gtk_custom_table_set_cell_text(table, 3, i, "0");
-        gtk_custom_table_set_cell_text(table, 4, i, list->results[i][2]);
-        gtk_custom_table_set_cell_text(table, 5, i, list->results[i][3]);
+        gtk_custom_table_set_cell_text(table, 4, i, list->results[i][1]);
+        gtk_custom_table_set_cell_text(table, 5, i, list->results[i][2]);
         sprintf(temp, "%d", (int)year);
         gtk_custom_table_set_cell_text(table, 6, i, temp);
 

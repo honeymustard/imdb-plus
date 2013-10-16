@@ -151,7 +151,7 @@ void ui_fill_stats_mov(State *state) {
 
     /* add statistics footer vote info */
     gtk_custom_table_set_foot_text(table, 3, 
-        globals_get(CONST_OPEN_PTH));
+        globals_get(CONST_BASENAME));
 
     /* add statistics footer percent total */
     gtk_custom_table_set_foot_text(table, 4, 

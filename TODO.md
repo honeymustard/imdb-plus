@@ -2,10 +2,11 @@
 ## TODO
 
 **Considerations**
-* none
+* make ratings download remember last value entered
 
 **Improvements**
-* make ratings download remember last value entered
+* make it possible to purge top lists, might they get corrupted
+* make top lists set default color on empty, update might fail..
 * create unit tests for io operations
 * try removing libwimp to see if performance increases
 
