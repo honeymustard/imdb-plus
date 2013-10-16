@@ -34,6 +34,7 @@ void readfile_free(ResultList *list) {
     int j = 0;
 
     for(i = 0; i < list->rows; i++) {
+
         for(j = 0; j < list->cols; j++) {
 
             if(list->results[i][j] != NULL) {
@@ -70,86 +71,104 @@ int is_0_to_f(char byte) {
 /**
  * decode entity in buffer at index i, return offset
  * @param char *buffer   string buffer with entity
- * @param int i          start index..
- * @return               returns string offset
+ * @return char *        returns newly allocated string
  */
-int entities_decode(char *buffer, int i) {
+char * decode(char *buffer) {
 
-    if(buffer[i++] != '&') {
-        return 0; 
-    }
+    char *needle = "&#x";
+    int length = strlen(needle);
 
-    if(buffer[i++] != '#') {
-        return 0; 
-    }
+    int len = strlen(buffer);
 
-    if(buffer[i++] != 'x') {
-        return 0; 
-    }
+    char *tmp = malloc(strlen(buffer) + 1);
+    strcpy(tmp, buffer);
 
-    if(buffer[i] != '\0' && buffer[i+1] != '\0' && buffer[i+2] == ';') {
+    while(1) {
+
+        buffer = strstr(buffer, needle);
+
+        if(buffer == NULL) {
+            free(buffer);
+            return tmp;
+        }
+
+        int tmp_len = len - strlen(buffer);
+
+        buffer = buffer + length;
         
-        unsigned char temp = 0;
+        if(buffer[0] != '\0' && 
+           buffer[1] != '\0' && 
+           buffer[2] != '\0' && 
+           buffer[2] == ';') {
+        
+            char curr = buffer[0];
+            char next = buffer[1];
+            char *copy = &buffer[3];
+            unsigned char temp = 0;
 
-        /* for conventional ascii chars */
-        if(is_0_to_9(buffer[i]) && is_0_to_f(buffer[i+1])) {
+            if(is_0_to_f(next)) {
 
-            temp = (buffer[i] - HEX_D_OFF) << 4;
-            temp |= buffer[i+1] - HEX_D_OFF;
+                /* for conventional ascii chars */
+                if(is_0_to_9(curr)) {
 
-            buffer[i+2] = temp;
+                    temp = (curr - HEX_D_OFF) << 4;
+                    temp |= next - HEX_D_OFF;
 
-            return 5;
+                    tmp[tmp_len] = temp;
+                    strcpy(&tmp[tmp_len+1], copy);
+
+                    len -= 5;
+                }
+                /* unicode point range A-B/0-F */
+                else if((curr >= 'A' && curr <= 'B')) {
+
+                    temp = ((curr + 10) - HEX_C_OFF) << 4;
+
+                    if(is_a_to_f(next)) {
+                        temp |= (next + 10) - HEX_C_OFF;
+                    }
+                    else {
+                        temp |= next - HEX_D_OFF;
+                    }
+
+                    tmp[tmp_len] = 0xC2;
+                    tmp[tmp_len+1] = temp;
+                    strcpy(&tmp[tmp_len+2], copy);
+
+                    len -= 4;
+                }
+                /* unicode point range C-F/0-F */
+                else if((curr >= 'C' && curr <= 'F')) {
+
+                    char values[] = {8, 9, 10, 11};
+
+                    temp = values[curr - (HEX_C_OFF + 2)] << 4;
+
+                    if(is_a_to_f(next)) {
+                        temp |= (next + 10) - HEX_C_OFF;
+                    }
+                    else {
+                        temp |= next - HEX_D_OFF;
+                    }
+
+                    tmp[tmp_len] = 0xC3;
+                    tmp[tmp_len+1] = temp;
+                    strcpy(&tmp[tmp_len+2], copy);
+
+                    len -= 4;
+                }
+                /* else, just add question mark */
+                else {
+
+                    tmp[tmp_len] = 0x3F;
+                    strcpy(&tmp[tmp_len+1], copy);
+                    len -= 5; 
+
+                    printf(" Unkown character found\n");
+                }
+            }
         }
-        /* unicode point range A-B/0-F */
-        else if((buffer[i] >= 'A' && buffer[i] <= 'B') && 
-            is_0_to_f(buffer[i+1])) {
-
-            temp = ((buffer[i] + 10) - HEX_C_OFF) << 4;
-
-            if(is_a_to_f(buffer[i+1])) {
-
-                temp |= (buffer[i+1] + 10) - HEX_C_OFF;
-            }
-            else {
-                temp |= buffer[i+1] - HEX_D_OFF;
-            }
-
-            buffer[++i] = 0xC2;
-            buffer[++i] = temp;
-
-            return 4;
-        }
-        /* unicode point range C-F/0-F */
-        else if((buffer[i] >= 'C' && buffer[i] <= 'F') && 
-            is_0_to_f(buffer[i+1])) {
-
-            char values[] = {8, 9, 10, 11};
-
-            temp = values[buffer[i] - (HEX_C_OFF + 2)] << 4;
-
-            if(is_a_to_f(buffer[i+1])) {
-
-                temp |= (buffer[i+1] + 10) - HEX_C_OFF;
-            }
-            else {
-                temp |= buffer[i+1] - HEX_D_OFF;
-            }
-
-            buffer[++i] = 0xC3;
-            buffer[++i] = temp;
-
-            return 4;
-        }
-         
-        /* else, just add question mark */
-        i += 2;
-        buffer[i] = 0x3F;
-
-        return 5;
     }    
-
-    return 0;
 }
 
 
@@ -157,77 +176,86 @@ int entities_decode(char *buffer, int i) {
  * parse a csv line and add values to buffer
  * @param char **container    array big enough to contain parsed values
  * @param char *buffer        line to be parsed
+ * @param int cols            number of columns expected
  * @return int                returns 1
  */
-int parse_line(char **container, char *buffer) {
+int parse_line(char **container, char *buffer, int cols) {
+
+    char *delim = "\",\"";
+
+    int delim_len = strlen(delim);
+    int total_len = strlen(buffer);
+
+    /* clip each end of original buffer */
+    char *temp = malloc(strlen(buffer));
+    strncpy(temp, &buffer[1], total_len - 3);
+    temp[total_len - 3] = '\0';
+
+    /* copy back into buffer */
+    strcpy(buffer, temp);
+
+    int offset = 0;
 
     int i = 0;
 
-    int values_parsed = 0;
+    for(i = 0; ; i++) {
+   
+        temp = strstr(temp, delim);
 
-    char temp[200];
-    memset(temp, '\0', 200);
+        int offset_old = offset;
 
-    for(i = 0; buffer[i] != '\0'; i++) {
+        offset = temp == NULL ? total_len : total_len - strlen(temp);
 
-        /* if symbol is a starting delimiter */
-        if(buffer[i] == '"' && buffer[i+1] != ',') {
+        int bytes = (offset - delim_len) - offset_old;
 
-            /* check for null indices */
-            if(buffer[++i] == '"') {
-                container[values_parsed] = malloc(2);
-                strcpy(container[values_parsed++], "0");
-                i++;
-                continue;
-            }
+        if(bytes == 0) {
 
-            /* add current indice to container array */
-            int temp_counter = 0;
-
-            while(buffer[i] != '"') {
-
-                if(buffer[i] == '&') {
-                    i += entities_decode(buffer, i);
-                }
-
-                temp[temp_counter++] = buffer[i++];
-            }
-             
-            temp[temp_counter] = '\0';
-
-            container[values_parsed] = malloc(strlen(temp) + 1);
-            strcpy(container[values_parsed++], temp);
+            container[i] = malloc(2);
+            strcpy(container[i], "0");
         }
-    }
+        else {
+            container[i] = malloc(bytes + 1);
+            strncpy(container[i], &buffer[offset_old], bytes);
+            container[i][bytes] = '\0';
+        }
 
-    return 1;
+        container[i] = decode(container[i]);
+
+        if(temp == NULL) {
+            break;
+        }
+
+        temp = temp + delim_len;
+    }
+    
+    free(temp);
+
+    return ++i == cols;
 }
 
 
 /**
- * calculate number of comma separated values..
- * @param char *buffer    string to check..
+ * calculate number of columns in a buffer..
+ * @param char *buffer    buffered line to check..
+ * @return int            returns number of columns
  */
 int calc_cols(char *buffer) {
 
+    char *needle = "\",\"";
+    int length = strlen(needle);
+    
     int i = 0;
-    int j = 0;
 
-    for(i = 0; buffer[i] != '\0'; i++) {
+    for(i = 0; ; i++) {
 
-        if(buffer[i] != '\0' && buffer[i] == '"') {
-            i++;
-            if(buffer[i] != '\0' && buffer[i] == ',') {
-                i++;
-                if(buffer[i] != '\0' && buffer[i] == '"') {
-                    i++;
-                    j++;
-                }
-            }
-        }
+        buffer = strstr(buffer, needle);
+
+        if(buffer == NULL) break;
+
+        buffer = buffer + length;
     }
 
-    return ++j;
+    return i+1;
 }
 
 
@@ -235,7 +263,7 @@ int calc_cols(char *buffer) {
  * open a file and decore html unicode point to utf8..
  * @param ResultList *list    handle for saved results
  * @param char *filename      file to be opened
- * @return                    returns 1 on success, else 0
+ * @return int                returns 1 on success, else 0
  */
 int readfile(ResultList *list, char *filename) {
 
@@ -245,50 +273,67 @@ int readfile(ResultList *list, char *filename) {
         return 0;
     }
 
-    int i = 0;
-    int j = 0;
+    char buffer[READ_SIZE];
+    memset(buffer, '\0', READ_SIZE);
 
-    char buffer[512];
+    int length = STEP_SIZE;
+    char *** temp = malloc(sizeof(char *) * length);
+
+    int cols = 0;
+    int rows = 0;
 
     /* determine amount of lines */
-    while(fgets(buffer, 512, fp) != NULL) {
+    while(fgets(buffer, sizeof(buffer), fp) != NULL) {
         
-        if(list->rows == 0) {
-            list->cols = calc_cols(buffer);
+        if(rows == 0) {
+            cols = calc_cols(buffer);
         }
 
-        list->rows++;
-    }
+        if(cols != calc_cols(buffer)) {
 
-    if(list->cols < 2) {
-
-        fclose(fp);
-        return 0;
-    }
-
-    fseek(fp, 0, SEEK_SET);
-
-    list->results = malloc(sizeof(char *) * list->rows);
-    
-    for(i = 0; i < list->rows; i++) {
-
-        list->results[i] = malloc(sizeof(char *) * list->cols);
-
-        for(j = 0; j < list->cols; j++) {
-            list->results[i][j] = NULL;
-        }
-    }
-
-    int lines = 0;
-
-    /* copy all lines into table buffer */
-    while(fgets(buffer, 512, fp) != NULL) {
-
-        if(!parse_line(list->results[lines++], buffer)) {
+            printf("Error: column widths didn't match \n");
             fclose(fp);
             return 0;
         }
+
+        if((rows % STEP_SIZE) == 0) {
+
+            length += STEP_SIZE;
+
+            char *** expand = realloc(temp, sizeof(char *) * length);
+
+            if(expand) {
+                temp = expand;
+            }
+            else {
+                exit(0);
+            }
+        }
+
+        temp[rows] = malloc(sizeof(char *) * cols);
+
+        int i = 0;
+
+        for(i = 0; i < cols; i++) {
+            temp[rows][i] = NULL;
+        }
+
+        if(!parse_line(temp[rows], buffer, cols)) {
+
+            printf("Error: failed to parse line %d\n", rows);
+            fclose(fp);
+            return 0;
+        }
+
+        rows++;
     }
+    
+    list->rows = rows;
+    list->cols = cols;
+
+    /* copy temp results into result-list */
+    list->results = malloc(sizeof(char *) * list->rows);
+    memcpy(list->results, temp, sizeof(char *) * list->rows);
 
     fclose(fp);
 

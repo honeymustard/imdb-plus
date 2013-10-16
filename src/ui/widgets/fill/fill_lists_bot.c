@@ -41,7 +41,7 @@ void ui_fill_lists_bot_empty() {
         gtk_custom_table_set_cell_text(table, 1, i, "0.0");
         gtk_custom_table_set_cell_text(table, 2, i, "0");
         gtk_custom_table_set_cell_text(table, 3, i, "0");
-        gtk_custom_table_set_cell_text(table, 4, i, "0");
+        gtk_custom_table_set_cell_text(table, 4, i, "N/A");
         gtk_custom_table_set_cell_text(table, 5, i, "N/A");
         gtk_custom_table_set_cell_text(table, 6, i, "0");
         gtk_custom_table_set_cell_text(table, 7, i, "0");

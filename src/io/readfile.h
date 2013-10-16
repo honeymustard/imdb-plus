@@ -21,8 +21,11 @@
 #ifndef _READFILE_
 #define _READFILE_
 
-#define HEX_D_OFF 0x30
-#define HEX_C_OFF 0x41
+#define READ_SIZE 512
+#define STEP_SIZE 256
+
+#define HEX_D_OFF 0x30 /* ascii offset to 0,1,2.. */
+#define HEX_C_OFF 0x41 /* ascii offset to A,B,C.. */
 
 typedef struct result {
 

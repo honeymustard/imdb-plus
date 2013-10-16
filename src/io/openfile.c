@@ -58,6 +58,8 @@ int open_file(NotebookTab *tab, char *filename) {
     state->tab1 = tab;
     state->tab1->is_open = 1;
 
+    printf("file is: %s\n", filename);
+
     globals_set(CONST_OPEN_PTH, filename);
 
     if(tab == nb_lists_mov_tab) {
