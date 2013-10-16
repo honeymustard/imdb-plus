@@ -74,6 +74,7 @@ void *download(void *download) {
         fclose(tmp);
 
         curl_easy_cleanup(curl);
+        curl_slist_free_all(head);
     }
 
     return NULL;
