@@ -306,6 +306,8 @@ int readfile(ResultList *list, char *filename) {
                 temp = expand;
             }
             else {
+
+                printf("Error: failed to realloc temp array\n");
                 exit(0);
             }
         }
