@@ -195,9 +195,10 @@ void menu_signal_update(gpointer data) {
                             fprintf(fp_out, "\"%s\",", list->results[i][j]);
                         }
 
+                        /* new list might be a different size */
                         index = gtk_custom_table_get_indexof(box, 
                             list->results[i][1]);
-                            
+
                         if(index >= 0) {
                             fprintf(fp_out, "\"%s\"\n", 
                                 gtk_custom_table_get_cell_text(box, 1, index));
@@ -208,14 +209,16 @@ void menu_signal_update(gpointer data) {
                     }
 
                     fclose(fp_out);
+
+                    if(ui_fill_lists_box_update()) {
+
+                        nb_lists_box_tab->has_changed = 1;
+                        boxstat = "OK";
+                    }
                 }
 
                 readfile_free(list);
                 free(list);
-
-                if(ui_fill_lists_box_update()) {
-                    boxstat = "OK";
-                }
             }
         }
 

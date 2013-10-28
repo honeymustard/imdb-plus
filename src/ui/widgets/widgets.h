@@ -21,16 +21,6 @@
 #ifndef _WIDGETS_
 #define _WIDGETS_
 
-#define TEXT_FONT "sans 10"
-
-#define ROSETTE       DIR_ICON "rosette_red.png"
-#define AWARD_GOLD    DIR_ICON "award_gold.png"
-#define AWARD_SILVER  DIR_ICON "award_silver.png"
-#define AWARD_BRONZE  DIR_ICON "award_bronze.png"
-#define RIBBON_GOLD   DIR_ICON "rosette_gold.png"
-#define RIBBON_SILVER DIR_ICON "rosette_silver.png"
-#define RIBBON_BRONZE DIR_ICON "rosette_bronze.png"
-
 
 #include <gtk/gtk.h>
 
@@ -56,6 +46,7 @@ typedef struct MainWindow {
       *menu_edit, 
         *menu_edit_item, 
           *menu_edit_item_update, 
+          *menu_edit_item_purge, 
       *menu_help,
         *menu_help_item, 
           *menu_help_item_about;
@@ -69,6 +60,7 @@ typedef enum { TAB_TYPE_NONE, TAB_TYPE_MOV, TAB_TYPE_LST } ListType;
 typedef struct NotebookTab {
 
     int is_open;
+    int has_changed;
     ListType type;
     GtkWidget *vbox; 
     GtkWidget *scroll; 

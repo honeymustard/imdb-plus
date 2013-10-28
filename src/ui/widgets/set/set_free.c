@@ -25,35 +25,40 @@
 
 void ui_set_free() {
 
-    gtk_custom_table_sort(nb_lists_box_tab->table, 0, GTK_CUSTOM_TABLE_ASC);
+    if(nb_lists_box_tab->has_changed) {
 
-    /* write boxoffice values back to file */ 
-    FILE *fp_out = fopen(globals_get(CONST_BOX_CSV), "wb");
-    
-    int i = 0;
-    int j = 0;
+        GtkWidget *table = nb_lists_box_tab->table;
 
-    int cols = gtk_custom_table_get_cols(nb_lists_box_tab->table);
-    int rows = gtk_custom_table_get_rows(nb_lists_box_tab->table);
+        gtk_custom_table_sort(table, 0, GTK_CUSTOM_TABLE_ASC);
 
-    for(i = 0; i < rows; i++) {
+        /* write boxoffice values back to file */ 
+        FILE *fp_out = fopen(globals_get(CONST_BOX_CSV), "wb");
+        
+        int i = 0;
+        int j = 0;
 
-        for(j = 0; j < cols; j++) {
+        int cols = gtk_custom_table_get_cols(table);
+        int rows = gtk_custom_table_get_rows(table);
 
-            /* skip columns not represented in file */
-            if(j == 1 || j == 2 || j == 3) {
-                continue;
+        for(i = 0; i < rows; i++) {
+
+            for(j = 0; j < cols; j++) {
+
+                /* skip columns not represented in file */
+                if(j == 1 || j == 2 || j == 3) {
+                    continue;
+                }
+
+                fprintf(fp_out, "\"%s\",", 
+                    gtk_custom_table_get_cell_text(table, j, i));
             }
 
-            fprintf(fp_out, "\"%s\",", 
-                gtk_custom_table_get_cell_text(nb_lists_box_tab->table, j, i));
+            fprintf(fp_out, "\"%s\"\n", 
+                gtk_custom_table_get_cell_text(table, 1, i));
         }
 
-        fprintf(fp_out, "\"%s\"\n", 
-            gtk_custom_table_get_cell_text(nb_lists_box_tab->table, 1, i));
+        fclose(fp_out);
     }
-
-    fclose(fp_out);
 
     /* free data from tables */
     gtk_custom_table_free(nb_stats_mov_tab->table);

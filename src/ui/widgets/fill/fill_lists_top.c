@@ -45,7 +45,14 @@ void ui_fill_lists_top_empty() {
         gtk_custom_table_set_cell_text(table, 5, i, "N/A");
         gtk_custom_table_set_cell_text(table, 6, i, "0");
         gtk_custom_table_set_cell_text(table, 7, i, "0");
+
+        /* set cell colors */
+        gtk_custom_table_set_cell_color(table, 1, i, not_app);
+        gtk_custom_table_set_cell_color(table, 2, i, not_app);
+        gtk_custom_table_set_cell_color(table, 3, i, not_app);
     }
+
+    gtk_custom_table_set_column_font(table, 5, PANGO_DEFAULT_FONT); 
 }
 
 
@@ -105,7 +112,7 @@ int ui_fill_lists_top_update() {
 
         gtk_custom_table_set_sortable(table, TRUE);
         gtk_custom_table_sort(table, 0, GTK_CUSTOM_TABLE_ASC);
-        gtk_custom_table_set_column_font(table, 5, TEXT_FONT); 
+        gtk_custom_table_set_column_font(table, 5, PANGO_CONTENT_FONT);
 
         readfile_free(list);
 

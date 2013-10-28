@@ -56,6 +56,7 @@ void ui_set_menu() {
     mwin->menu_file_item_exit = gtk_menu_item_new_with_mnemonic("_Exit");
     mwin->menu_file_item_space = gtk_separator_menu_item_new();
     mwin->menu_edit_item_update = gtk_menu_item_new_with_mnemonic("_Update");
+    mwin->menu_edit_item_purge = gtk_menu_item_new_with_mnemonic("_Purge Lists");
     mwin->menu_help_item_about = gtk_menu_item_new_with_mnemonic("_About");
 
     gtk_widget_set_sensitive(mwin->menu_file_item_save, FALSE);
@@ -73,6 +74,8 @@ void ui_set_menu() {
         group_file, GDK_Q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(mwin->menu_edit_item_update, "activate", 
         group_edit, GDK_U, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(mwin->menu_edit_item_purge, "activate", 
+        group_edit, GDK_P, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(mwin->menu_help_item_about, "activate", 
         group_help, GDK_A, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 
@@ -84,6 +87,7 @@ void ui_set_menu() {
     gtk_menu_append(GTK_MENU(mwin->menu_file), mwin->menu_file_item_space);
     gtk_menu_append(GTK_MENU(mwin->menu_file), mwin->menu_file_item_exit);
     gtk_menu_append(GTK_MENU(mwin->menu_edit), mwin->menu_edit_item_update);
+    gtk_menu_append(GTK_MENU(mwin->menu_edit), mwin->menu_edit_item_purge);
     gtk_menu_append(GTK_MENU(mwin->menu_help), mwin->menu_help_item_about);
 
     /* attach callback functions to menu-items */
@@ -99,6 +103,8 @@ void ui_set_menu() {
         "activate", GTK_SIGNAL_FUNC(menu_signal_quit), (gpointer)mwin->main);
     gtk_signal_connect_object(GTK_OBJECT(mwin->menu_edit_item_update), 
         "activate", GTK_SIGNAL_FUNC(menu_signal_update), (gpointer)mwin->main);
+    gtk_signal_connect_object(GTK_OBJECT(mwin->menu_edit_item_purge), 
+        "activate", GTK_SIGNAL_FUNC(menu_signal_purge), (gpointer)mwin->main);
     gtk_signal_connect_object(GTK_OBJECT(mwin->menu_help_item_about), 
         "activate", GTK_SIGNAL_FUNC(menu_signal_about), (gpointer)mwin->main);
 

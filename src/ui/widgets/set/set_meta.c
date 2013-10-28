@@ -56,9 +56,9 @@ void ui_set_meta() {
     gtk_custom_table_set_column_index(cmp_l, 0, TRUE);
 
     /* override default font */
-    gtk_custom_table_set_foot_cell_font(mov_s, 5, TEXT_FONT); 
-    gtk_custom_table_set_foot_cell_font(lst_s, 5, TEXT_FONT); 
-    gtk_custom_table_set_foot_cell_font(cmp_s, 5, TEXT_FONT); 
+    gtk_custom_table_set_foot_cell_font(mov_s, 5, PANGO_CONTENT_FONT); 
+    gtk_custom_table_set_foot_cell_font(lst_s, 5, PANGO_CONTENT_FONT); 
+    gtk_custom_table_set_foot_cell_font(cmp_s, 5, PANGO_CONTENT_FONT); 
  
     /* set font alignments */
     gtk_custom_table_set_column_alignment(mov_s, 3, PANGO_ALIGN_LEFT);

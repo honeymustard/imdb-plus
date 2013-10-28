@@ -18,19 +18,27 @@
  ***********************************************************************/
 
 
-#ifndef _EVENTS_
-#define _EVENTS_
-
+#include "ui/globals/globals.h"
 #include "ui/widgets/widgets.h"
+#include "ui/widgets/fill/fill.h"
+#include "ui/table/gtk_custom_table.h"
 
-/* main window events */
-void menu_signal_about(gpointer data);
-void menu_signal_open(gpointer data);
-void menu_signal_save(gpointer data);
-void menu_signal_down(gpointer data);
-void menu_signal_update(gpointer data);
-void menu_signal_purge(gpointer data);
-void menu_signal_quit(gpointer data);
 
-#endif
+/* purge top files from disk and reset lists */
+void menu_signal_purge(gpointer data) {
+    
+    /* delete files */
+    remove(globals_get(CONST_TOP_CSV));
+    remove(globals_get(CONST_BOT_CSV));
+    remove(globals_get(CONST_BOX_CSV));
+
+    ui_fill_lists_top_update();
+    ui_fill_lists_bot_update();
+    ui_fill_lists_box_update();
+
+    gtk_statusbar_push(GTK_STATUSBAR(mwin->stat), 1, 
+        "Downloaded lists have been purged");
+
+    gtk_custom_table_refresh(mwin->main);
+}
 

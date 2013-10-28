@@ -142,7 +142,7 @@ int open_file(NotebookTab *tab, char *filename) {
     gtk_custom_table_set_sortable(table_s, TRUE);
     gtk_custom_table_sort(table_s, 0, GTK_CUSTOM_TABLE_DESC);
     gtk_custom_table_sort(table_t, 0, GTK_CUSTOM_TABLE_ASC);
-    gtk_custom_table_set_column_font(table_t, 5, TEXT_FONT); 
+    gtk_custom_table_set_column_font(table_t, 5, PANGO_CONTENT_FONT);
 
     readfile_free(list);
 
@@ -171,7 +171,7 @@ int open_file(NotebookTab *tab, char *filename) {
         gtk_custom_table_set_sortable(table_s, TRUE);
         gtk_custom_table_sort(table_s, 0, GTK_CUSTOM_TABLE_DESC);
         gtk_custom_table_sort(table_t, 0, GTK_CUSTOM_TABLE_ASC);
-        gtk_custom_table_set_column_font(table_t, 5, TEXT_FONT); 
+        gtk_custom_table_set_column_font(table_t, 5, PANGO_CONTENT_FONT);
 
         free(s->stats);
         free(s);

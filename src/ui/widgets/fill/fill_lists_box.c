@@ -31,7 +31,11 @@ void ui_fill_lists_box_empty() {
     int i = 0;
     char temp[50];
 
+    nb_lists_box_tab->has_changed = 0;
+
     GtkWidget *table = nb_lists_box_tab->table;
+
+    gtk_custom_table_resize(table, -1, 50);
 
     for(i = 0; i < 50; i++) {
 
@@ -45,7 +49,14 @@ void ui_fill_lists_box_empty() {
         gtk_custom_table_set_cell_text(table, 5, i, "N/A");
         gtk_custom_table_set_cell_text(table, 6, i, "0");
         gtk_custom_table_set_cell_text(table, 7, i, "0");
+
+        /* set cell colors */
+        gtk_custom_table_set_cell_color(table, 1, i, not_app);
+        gtk_custom_table_set_cell_color(table, 2, i, not_app);
+        gtk_custom_table_set_cell_color(table, 3, i, not_app);
     }
+
+    gtk_custom_table_set_column_font(table, 5, PANGO_DEFAULT_FONT); 
 }
 
 
@@ -96,6 +107,8 @@ void ui_fill_lists_box(ResultList *list) {
 
 int ui_fill_lists_box_update() {
 
+    GtkWidget *table = nb_lists_box_tab->table;
+
     ResultList *list = calloc(1, sizeof(ResultList));
     
     if(readfile(list, globals_get(CONST_BOX_CSV)) 
@@ -104,11 +117,9 @@ int ui_fill_lists_box_update() {
         ui_fill_lists_box(list);
         ui_fill_lists_box_add(list);
 
-        GtkWidget *table = nb_lists_box_tab->table;
-
         gtk_custom_table_set_sortable(table, TRUE);
         gtk_custom_table_sort(table, 0, GTK_CUSTOM_TABLE_ASC);
-        gtk_custom_table_set_column_font(table, 5, TEXT_FONT); 
+        gtk_custom_table_set_column_font(table, 5, PANGO_CONTENT_FONT);
 
         readfile_free(list);
 
