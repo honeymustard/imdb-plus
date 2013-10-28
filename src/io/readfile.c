@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "io/readfile.h"
 
 
@@ -46,25 +47,6 @@ void readfile_free(ResultList *list) {
     }
 
     free(list->results);
-}
-
-
-/* function of minor convenience */
-int is_0_to_9(char byte) {
-    
-    return byte >= '0' && byte <= '9';
-}
-
-/* function of minor convenience */
-int is_a_to_f(char byte) {
-    
-    return byte >= 'A' && byte <= 'F';
-}
-
-/* function of minor convenience */
-int is_0_to_f(char byte) {
-
-   return is_0_to_9(byte) || is_a_to_f(byte);
 }
 
 
@@ -101,15 +83,15 @@ char * decode(char *buffer) {
            buffer[2] != '\0' && 
            buffer[2] == ';') {
         
-            char curr = buffer[0];
-            char next = buffer[1];
+            char curr = toupper(buffer[0]);
+            char next = toupper(buffer[1]);
             char *copy = &buffer[3];
             unsigned char temp = 0;
 
-            if(is_0_to_f(next)) {
+            if(isxdigit(next)) {
 
                 /* for conventional ascii chars */
-                if(is_0_to_9(curr)) {
+                if(isdigit(curr)) {
 
                     temp = (curr - HEX_D_OFF) << 4;
                     temp |= next - HEX_D_OFF;
@@ -124,7 +106,7 @@ char * decode(char *buffer) {
 
                     temp = ((curr + 10) - HEX_C_OFF) << 4;
 
-                    if(is_a_to_f(next)) {
+                    if(next >= 'A' && next <= 'F') {
                         temp |= (next + 10) - HEX_C_OFF;
                     }
                     else {
@@ -144,7 +126,7 @@ char * decode(char *buffer) {
 
                     temp = values[curr - (HEX_C_OFF + 2)] << 4;
 
-                    if(is_a_to_f(next)) {
+                    if(next >= 'A' && next <= 'F') {
                         temp |= (next + 10) - HEX_C_OFF;
                     }
                     else {

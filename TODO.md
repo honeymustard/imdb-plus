@@ -11,6 +11,7 @@
 * try removing libwimp to see if performance increases
 
 **Non-Urgent fixes**
+* make top lists revert to old settings not empty on update..
 * rpm build-script needs testing
 
 **Urget fixes**
