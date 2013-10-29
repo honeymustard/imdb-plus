@@ -6,7 +6,6 @@
 
 **Improvements**
 * create unit tests for io operations
-* try removing libwimp to see if performance increases
 
 **Non-Urgent fixes**
 * rpm build-script needs testing
