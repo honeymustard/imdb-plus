@@ -147,9 +147,8 @@ void ui_fill_stats_cmp(State *state) {
         temp);
 
     /* add statistics footer flux average */
-    sprintf(temp, "%+2.2f", s->total[FLUX]);
     gtk_custom_table_set_foot_text(table, 2, 
-        temp);
+        "N/A");
 
     /* add statistics footer vote info */
     sprintf(temp, "%d movies intersect", 

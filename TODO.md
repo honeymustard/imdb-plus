@@ -9,7 +9,6 @@
 
 **Non-Urgent fixes**
 * rpm build-script needs testing
-* intersection flux is off, wrong values used
 
 **Urget fixes**
 * none

@@ -152,6 +152,9 @@ int open_file(NotebookTab *tab, char *filename) {
         State *s = calloc(1, sizeof(State));
         s->stats = calloc(1, sizeof(Stats));
 
+        s->tab1_vcol = 2;
+        s->tab2_vcol = 3;
+
         s->tab1 = nb_lists_cmp_tab;
         s->tab2 = nb_lists_mov_tab;
         s->tab3 = nb_lists_lst_tab;
