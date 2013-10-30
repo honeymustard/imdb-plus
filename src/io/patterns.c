@@ -25,15 +25,15 @@
 char *pattern_top250 = "<td class=\"titleColumn\">([0-9]{1,3}).{0,10}\
 <a href=\"/title/(tt[0-9]{1,10})/.{0,50}\" title=\".{0,100}\".{0,5}>\
 (.{0,100})</a> <span class=\"secondaryInfo\">\\(([0-9]{4})\\)</span>\
-</td>.{0,20}<td class=\"ratingColumn\"><strong title=\"([0-9]{1,2}\\.\
-[0-9]{1,2}) based on (([0-9,]{1,12})) votes\">";
+</td>[\n|\r\n]{0,2}.{0,20}<td class=\"ratingColumn\"><strong title=\
+\"([0-9]{1,2}\\.[0-9]{1,2}) based on (([0-9,]{1,12})) votes\">";
 
 /* bottom100 regex pattern */
 char *pattern_bot100 = "<td class=\"titleColumn\">([0-9]{1,3}).{0,10}\
 <a href=\"/title/(tt[0-9]{1,10})/.{0,50}\" title=\".{0,100}\".{0,5}>\
 (.{0,100})</a> <span class=\"secondaryInfo\">\\(([0-9]{4})\\)</span>\
-</td>.{0,20}<td class=\"ratingColumn\"><strong title=\"([0-9]{1,2}\\.\
-[0-9]{1,2}) based on (([0-9,]{1,12})) votes\">";
+</td>[\n|\r\n]{0,2}.{0,20}<td class=\"ratingColumn\"><strong title=\
+\"([0-9]{1,2}\\.[0-9]{1,2}) based on (([0-9,]{1,12})) votes\">";
 
 /* boxoffice regex pattern */
 char *pattern_boxoffice = "\

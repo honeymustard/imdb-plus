@@ -273,7 +273,7 @@ int readfile(ResultList *list, char *filename) {
 
         if(cols != calc_cols(buffer)) {
 
-            printf("Error: column widths didn't match \n");
+            printf("Error: column widths didn't match\n");
             fclose(fp);
             return 0;
         }
@@ -311,7 +311,7 @@ int readfile(ResultList *list, char *filename) {
 
         rows++;
     }
-    
+
     list->rows = rows;
     list->cols = cols;
 
