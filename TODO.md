@@ -9,6 +9,7 @@
 
 **Non-Urgent fixes**
 * rpm build-script needs testing
+* make sure saved files have a valid extension
 
 **Urget fixes**
 * none
