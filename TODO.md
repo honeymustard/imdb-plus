@@ -10,6 +10,7 @@
 **Non-Urgent fixes**
 * rpm build-script needs testing
 * intersection flux is off, wrong values used
+* make sure missing images in allstats doesnt crash ui
 
 **Urget fixes**
 * none
