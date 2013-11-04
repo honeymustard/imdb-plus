@@ -35,8 +35,10 @@ typedef struct result {
 
 } ResultList;
 
-int  readfile(ResultList *list, char *filename);
-void readfile_free(ResultList *list);
+
+ResultList *readfile_new();
+int         readfile(ResultList *list, char *filename);
+void        readfile_free(ResultList *list);
 
 #endif
 

@@ -35,7 +35,7 @@ void menu_signal_open(gpointer data) {
 
     dialog = gtk_file_chooser_dialog_new(
         "Open File", 
-        GTK_WINDOW(mwin->main->parent), 
+        GTK_WINDOW(gtk_widget_get_parent(mwin->main)), 
         GTK_FILE_CHOOSER_ACTION_OPEN,
         GTK_STOCK_CANCEL, 
         GTK_RESPONSE_CANCEL,

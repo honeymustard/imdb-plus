@@ -26,8 +26,8 @@
 /* main window quit event.. */
 void menu_signal_quit(gpointer data) {
     
-    gtk_main_quit();
     ui_set_free();
     globals_free();
+    gtk_main_quit();
 }
 

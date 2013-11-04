@@ -37,7 +37,7 @@ void menu_signal_update(gpointer data) {
 
     dialog = gtk_dialog_new_with_buttons(
         "Update Lists", 
-        GTK_WINDOW(mwin->main->parent), 
+        GTK_WINDOW(gtk_widget_get_parent(mwin->main)), 
         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, 
         GTK_STOCK_OK, 
         GTK_RESPONSE_ACCEPT, 
@@ -51,17 +51,17 @@ void menu_signal_update(gpointer data) {
     content = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 
     /* create dialog widgets */
-    GtkAdjustment *adj = (GtkAdjustment*)gtk_adjustment_new(5, 0, 120, 0, 0, 0);
-    GtkWidget *pbar = gtk_progress_bar_new_with_adjustment(adj);
+    GtkWidget *pbar = gtk_progress_bar_new();
     GtkWidget *label = gtk_label_new("Download new lists?\n");
 
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Waiting..");
+    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(pbar), 0.1);
 
     /* add widgets to dialog */
     gtk_container_add(GTK_CONTAINER(content), label);
     gtk_container_add(GTK_CONTAINER(content), pbar);
 
-    gtk_container_set_border_width(GTK_CONTAINER(content->parent), 20);
+    gtk_container_set_border_width(GTK_CONTAINER(gtk_widget_get_parent(content)), 20);
     gtk_window_set_icon_from_file(GTK_WINDOW(dialog), APP_ICON, NULL);
 
     gtk_widget_show_all(GTK_WIDGET(dialog));
@@ -83,7 +83,7 @@ void menu_signal_update(gpointer data) {
         dl_top->url = globals_get(CONST_TOP_URL);
         dl_top->saveas = globals_get(CONST_TOP_TMP);
 
-        thread1 = g_thread_create(&download, dl_top, TRUE, NULL);
+        thread1 = g_thread_new("thread1", &download, dl_top);
 
         if(thread1 == 0) {
             g_warning("can't create the thread");
@@ -93,7 +93,7 @@ void menu_signal_update(gpointer data) {
 
         /* begin thread 2 */
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Bottom 100");
-        gtk_adjustment_set_value(adj, 40);
+        gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(pbar), 0.33);
 
         while(gtk_events_pending()) gtk_main_iteration();
 
@@ -102,7 +102,7 @@ void menu_signal_update(gpointer data) {
         dl_bot->url = globals_get(CONST_BOT_URL);
         dl_bot->saveas = globals_get(CONST_BOT_TMP);
 
-        thread2 = g_thread_create(&download, dl_bot, TRUE, NULL);
+        thread2 = g_thread_new("thread2", &download, dl_bot);
 
         if (thread2 == 0) {
             g_warning("can't create the thread");
@@ -112,7 +112,7 @@ void menu_signal_update(gpointer data) {
 
         /* begin thread 3 */
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "All-time Boxoffice");
-        gtk_adjustment_set_value(adj, 80);
+        gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(pbar), 0.66);
 
         while(gtk_events_pending()) gtk_main_iteration();
 
@@ -121,7 +121,7 @@ void menu_signal_update(gpointer data) {
         dl_box->url = globals_get(CONST_BOX_URL);
         dl_box->saveas = globals_get(CONST_BOX_TMP);
 
-        thread3 = g_thread_create(&download, dl_box, TRUE, NULL);
+        thread3 = g_thread_new("thread3", &download, dl_box);
 
         if(thread3 == 0) {
             g_warning("can't create the thread");
@@ -130,7 +130,7 @@ void menu_signal_update(gpointer data) {
         g_thread_join(thread3);
 
         gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Finished");
-        gtk_adjustment_set_value(adj, 120);
+        gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(pbar), 1.0);
 
         while(gtk_events_pending()) gtk_main_iteration();
 
@@ -177,7 +177,7 @@ void menu_signal_update(gpointer data) {
                 /* add extra column to boxoffice file */
                 int index = 0;
 
-                ResultList *list = calloc(1, sizeof(ResultList));
+                ResultList *list = readfile_new();
                 
                 if(readfile(list, globals_get(CONST_BOX_CSV))) {
 
@@ -218,7 +218,6 @@ void menu_signal_update(gpointer data) {
                 }
 
                 readfile_free(list);
-                free(list);
             }
         }
 

@@ -33,7 +33,6 @@
  */
 int main(int argc, char *argv[]) {
 
-    g_thread_init(NULL);
     gtk_init(&argc, &argv);
 
     globals_init();
@@ -58,10 +57,7 @@ int main(int argc, char *argv[]) {
     /* set default ui */
     ui_set_init();
 
-    /* init gtk main */
-    gdk_threads_enter();
     gtk_main();
-    gdk_threads_leave();
 
     return 0;
 }

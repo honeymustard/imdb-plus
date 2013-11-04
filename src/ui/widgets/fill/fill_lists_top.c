@@ -101,7 +101,9 @@ void ui_fill_lists_top(ResultList *list) {
 
 int ui_fill_lists_top_update() {
  
-    ResultList *list = calloc(1, sizeof(ResultList));
+    int retval = 0;
+
+    ResultList *list = readfile_new();
     
     if(readfile(list, globals_get(CONST_TOP_CSV)) 
         && list->cols == TOP_COLS && list->rows == TOP_ROWS) {
@@ -109,20 +111,19 @@ int ui_fill_lists_top_update() {
         ui_fill_lists_top(list);
 
         GtkWidget *table = nb_lists_top_tab->table;
-
         gtk_custom_table_set_sortable(table, TRUE);
         gtk_custom_table_sort(table, 0, GTK_CUSTOM_TABLE_ASC);
         gtk_custom_table_set_column_font(table, 5, PANGO_CONTENT_FONT);
 
-        readfile_free(list);
-
-        return 1;
+        retval = 1;
+    }
+    else {
+        
+        ui_fill_lists_top_empty();
     }
 
-    free(list);
+    readfile_free(list);
 
-    ui_fill_lists_top_empty();
-
-    return 0;
+    return retval;
 }
 

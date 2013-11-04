@@ -27,7 +27,6 @@
 #include "io/openfile.h"
 
 
-GtkAdjustment *adj;
 GtkWidget *pbar, *label, *entry;
 
 
@@ -75,7 +74,7 @@ void menu_signal_down_response(GtkWidget *dialog, int response, gpointer *data) 
 
     gtk_label_set_text(GTK_LABEL(label), "Downloading ratings..\n");
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), pbar_text);
-    gtk_adjustment_set_value(adj, 20);
+    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(pbar), 0.5);
 
     while(gtk_events_pending()) gtk_main_iteration();
 
@@ -84,7 +83,7 @@ void menu_signal_down_response(GtkWidget *dialog, int response, gpointer *data) 
     down->url = load;
     down->saveas = save;
 
-    GThread *thread = g_thread_create(&download, down, TRUE, NULL);
+    GThread *thread = g_thread_new("thread1", &download, down);
 
     if(thread == 0) {
         g_warning("can't create the thread");
@@ -96,7 +95,7 @@ void menu_signal_down_response(GtkWidget *dialog, int response, gpointer *data) 
     char *sign = NULL;
     char *info = NULL;
 
-    int adjustment = 0;
+    double adjustment = 0;
 
     int opened_file = 0;
 
@@ -108,7 +107,7 @@ void menu_signal_down_response(GtkWidget *dialog, int response, gpointer *data) 
         gtk_widget_set_sensitive(mwin->menu_file_item_save, TRUE);
 
         info = "finished";
-        adjustment = 120;
+        adjustment = 1.0;
 
         sign = "DL OK: Opened ratings file: ";
 
@@ -119,7 +118,7 @@ void menu_signal_down_response(GtkWidget *dialog, int response, gpointer *data) 
     else {
 
         info = "failed..";
-        adjustment = 5;
+        adjustment = 0.1;
               
         remove(save);
 
@@ -164,7 +163,7 @@ void menu_signal_down_response(GtkWidget *dialog, int response, gpointer *data) 
 
     /* set progressbar text and adjustment accordingly */
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), info);
-    gtk_adjustment_set_value(adj, adjustment);
+    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(pbar), adjustment);
 
     /* push and update statusbar */
     gtk_statusbar_push(GTK_STATUSBAR(mwin->stat), 1, temp);
@@ -183,7 +182,7 @@ void menu_signal_down(gpointer data) {
     
     GtkWidget *dialog = gtk_dialog_new_with_buttons(
         "Download Ratings", 
-        GTK_WINDOW(mwin->main->parent), 
+        GTK_WINDOW(gtk_widget_get_parent_window(mwin->main)), 
         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, 
         GTK_STOCK_OK, 
         GTK_RESPONSE_OK, 
@@ -192,11 +191,11 @@ void menu_signal_down(gpointer data) {
         NULL
     );
     
-    adj = (GtkAdjustment*)gtk_adjustment_new(5, 0, 120, 0, 0, 0);
-    GtkWidget *vbox = gtk_vbox_new(FALSE, 5);
+    GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 
-    pbar = gtk_progress_bar_new_with_adjustment(adj);
+    pbar = gtk_progress_bar_new();
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar), "Waiting..");
+    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(pbar), 0.1);
 
     label = gtk_label_new("Enter a unique IMDb id i.e. 4854451\n");
 
@@ -215,7 +214,7 @@ void menu_signal_down(gpointer data) {
     g_signal_connect(dialog, "response", 
         G_CALLBACK(menu_signal_down_response), NULL);
 
-    gtk_container_set_border_width(GTK_CONTAINER(content->parent), 20);
+    gtk_container_set_border_width(GTK_CONTAINER(gtk_widget_get_parent(content)), 20);
     gtk_window_set_icon_from_file(GTK_WINDOW(dialog), APP_ICON, NULL);
     gtk_widget_show_all(GTK_WIDGET(dialog));
 

@@ -22,7 +22,7 @@ EXECUTE = imdb-plus
 VERSION = 0.1.0
 PROGRAM = $(EXECUTE)-$(VERSION)
 SOURCES = Makefile TODO.md README.md LICENSE src misc share scripts
-WININST = *.dll lib share LICENSE misc/setup.iss $(EXECUTE).exe
+WININST = *.dll etc share LICENSE misc/setup.iss $(EXECUTE).exe
 DELFILE = *.exe *.o *.tar.gz misc/*.gz $(EXECUTE) $(OBJECTS) $(DDFILES)
 CFLAGS  = -c -Wall -MMD -MP -Isrc
 LDFLAGS = -Wl,--as-needed
@@ -62,7 +62,7 @@ debug: linux
 
 # Faux target..
 linux: OS = LINUX
-linux: GTK2 = `pkg-config --cflags --libs gtk+-2.0`
+linux: GTK2 = `pkg-config --cflags --libs gtk+-3.0`
 linux: PACKAGES = $(GTK2) -lcurl -lgthread-2.0
 linux: CFLAGS += $(PACKAGES)
 linux: $(OBJECTS)
@@ -130,7 +130,7 @@ mingw32-debug: windows
 # MinGW make..
 windows: OS = WINDOWS
 windows: MINGW = C:\MinGW
-windows: GTK2 = $(shell pkg-config.exe --libs --cflags gtk+-win32-2.0)
+windows: GTK2 = $(shell pkg-config.exe --libs --cflags gtk+-win32-3.0)
 windows: PATHS = -I$(MINGW)\include -L$(MINGW)\lib 
 windows: PACKAGES = $(PATHS) $(GTK2) -lcurl -lpcre
 windows: CFLAGS += $(PACKAGES)

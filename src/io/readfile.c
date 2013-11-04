@@ -26,8 +26,23 @@
 
 
 /**
+ * creates a new readfile list and returns it..
+ * @return ResultList *list    new list
+ */
+ResultList *readfile_new() {
+ 
+    ResultList *list = malloc(sizeof(ResultList));
+    list->rows = 0;
+    list->cols = 0;
+    list->results = NULL;
+
+    return list;
+}
+
+
+/**
  * free memory from occupied by results..
- * @param ResultList **list    list to be freed
+ * @param ResultList *list    list to be freed
  */
 void readfile_free(ResultList *list) {
  
@@ -46,14 +61,18 @@ void readfile_free(ResultList *list) {
         free(list->results[i]); 
     }
 
-    free(list->results);
+    if(list->results != NULL) {
+        free(list->results);
+    }
+
+    free(list);
 }
 
 
 /**
  * decode entity in buffer at index i, return offset
- * @param char *buffer   string buffer with entity
- * @return char *        returns newly allocated string
+ * @param char *buffer    string buffer with entity
+ * @return char *         returns newly allocated string
  */
 char * decode(char *buffer) {
 
@@ -65,27 +84,29 @@ char * decode(char *buffer) {
     char *tmp = malloc(strlen(buffer) + 1);
     strcpy(tmp, buffer);
 
+    char *temp = buffer;
+
     while(1) {
 
-        buffer = strstr(buffer, needle);
+        temp = strstr(temp, needle);
 
-        if(buffer == NULL) {
+        if(temp == NULL) {
             free(buffer);
             return tmp;
         }
 
-        int tmp_len = len - strlen(buffer);
+        int tmp_len = len - strlen(temp);
 
-        buffer = buffer + length;
+        temp = temp + length;
         
-        if(buffer[0] != '\0' && 
-           buffer[1] != '\0' && 
-           buffer[2] != '\0' && 
-           buffer[2] == ';') {
+        if(temp[0] != '\0' && 
+           temp[1] != '\0' && 
+           temp[2] != '\0' && 
+           temp[2] == ';') {
         
-            char curr = toupper(buffer[0]);
-            char next = toupper(buffer[1]);
-            char *copy = &buffer[3];
+            char curr = toupper(temp[0]);
+            char next = toupper(temp[1]);
+            char *copy = &temp[3];
             unsigned char temp = 0;
 
             if(isxdigit(next)) {
@@ -180,13 +201,15 @@ int parse_line(char **container, char *buffer, int cols) {
 
     int i = 0;
 
+    char *found = temp;
+
     for(i = 0; ; i++) {
    
-        temp = strstr(temp, delim);
+        found = strstr(found, delim);
 
         int offset_old = offset;
 
-        offset = temp == NULL ? total_len : total_len - strlen(temp);
+        offset = found == NULL ? total_len : total_len - strlen(found);
 
         int bytes = (offset - delim_len) - offset_old;
 
@@ -203,11 +226,11 @@ int parse_line(char **container, char *buffer, int cols) {
 
         container[i] = decode(container[i]);
 
-        if(temp == NULL) {
+        if(found == NULL) {
             break;
         }
 
-        temp = temp + delim_len;
+        found = found + delim_len;
     }
     
     free(temp);
@@ -318,6 +341,8 @@ int readfile(ResultList *list, char *filename) {
     /* copy temp results into result-list */
     list->results = malloc(sizeof(char *) * list->rows);
     memcpy(list->results, temp, sizeof(char *) * list->rows);
+
+    free(temp);
 
     fclose(fp);
 

@@ -107,9 +107,9 @@ void ui_fill_lists_box(ResultList *list) {
 
 int ui_fill_lists_box_update() {
 
-    GtkWidget *table = nb_lists_box_tab->table;
+    int retval = 0;
 
-    ResultList *list = calloc(1, sizeof(ResultList));
+    ResultList *list = readfile_new();
     
     if(readfile(list, globals_get(CONST_BOX_CSV)) 
         && list->cols == BOX_COLS) {
@@ -117,19 +117,20 @@ int ui_fill_lists_box_update() {
         ui_fill_lists_box(list);
         ui_fill_lists_box_add(list);
 
+        GtkWidget *table = nb_lists_box_tab->table;
         gtk_custom_table_set_sortable(table, TRUE);
         gtk_custom_table_sort(table, 0, GTK_CUSTOM_TABLE_ASC);
         gtk_custom_table_set_column_font(table, 5, PANGO_CONTENT_FONT);
 
-        readfile_free(list);
+        retval = 1;
+    }
+    else {
 
-        return 1;
+        ui_fill_lists_box_empty();
     }
 
-    free(list);
+    readfile_free(list);
 
-    ui_fill_lists_box_empty();
-
-    return 0;
+    return retval;
 }
 

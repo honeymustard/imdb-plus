@@ -35,8 +35,8 @@ void ui_set_init() {
     mwin->main = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     mwin->note = gtk_notebook_new();
     mwin->stat = gtk_statusbar_new();
-    mwin->vbox = gtk_vbox_new(FALSE, 5);
-    mwin->hbox = gtk_hbox_new(FALSE, 5);
+    mwin->vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+    mwin->hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 
     /* initiate main window */
     gtk_window_set_title(GTK_WINDOW(mwin->main), globals_get(CONST_APPNAME));

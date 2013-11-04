@@ -55,7 +55,7 @@ void menu_signal_about(gpointer data) {
     GtkWidget *dialog = gtk_about_dialog_new();
 
     /* show some interesting factoids */
-    gtk_about_dialog_set_name(GTK_ABOUT_DIALOG(dialog), 
+    gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), 
         APP_NAME);
     gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), 
         globals_get(CONST_VERSION)); 

@@ -35,7 +35,7 @@ void menu_signal_save(gpointer data) {
 
     dialog = gtk_file_chooser_dialog_new(
         "Save File", 
-        GTK_WINDOW(mwin->main->parent), 
+        GTK_WINDOW(gtk_widget_get_parent(mwin->main)), 
         GTK_FILE_CHOOSER_ACTION_SAVE,
         GTK_STOCK_CANCEL, 
         GTK_RESPONSE_CANCEL,

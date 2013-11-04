@@ -10,11 +10,11 @@
 **Non-Urgent fixes**
 * rpm build-script needs testing
 * make sure saved files have a valid extension
-* upgrade project to gtk3
+* make tables repaint when dialogs are hovering on windows
 
 **Urget fixes**
 * none
 
 **Known bugs**
-* none
+* tab-movement by arrow keys is buggy
 
