@@ -25,13 +25,13 @@
 
 /* credits aka self-praise */
 const char *APP_AUTH[2] = {
-    APP_MAIL "\n",
+    APP_MAIL,
     NULL,
 };
 
 /* default license */
 const char *APP_LICN = "\
-" APP_COPY "\n\
+\n" APP_COPY "\n\
 \n\
 This program is free software: you can redistribute it and/or modify\n\
 it under the terms of the GNU General Public License as published by\n\
@@ -44,7 +44,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
 GNU General Public License for more details.\n\
 \n\
 You should have received a copy of the GNU General Public License\n\
-along with this program.  If not, see <http://www.gnu.org/licenses/>.";
+along with this program.  If not, see <http://www.gnu.org/licenses/>.\n";
 
 
 /**
