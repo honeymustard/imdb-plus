@@ -37,25 +37,16 @@
 
 ## Binaries
 
-Binaries are **currently unavailable** due to the unstable nature of the project. 
-Once all features have been implemented and the program has been tested for 
-structure, integrity and efficiency, the program will be released.
-This initial testing phase will require the software to be built and also 
-rigorously tested on all the intended platforms.
+Binaries are **currently unavailable**. project is unstable.
 
 ## Compilation instructions
 
 **Linux:**
 
-    # Note: Requires GTK+, libcurl
+    # Note: Requires GTK+3, libcurl
     
     $ make
     $ sudo make install
-    
-    or
-    
-    $ make build-deb                # builds .deb package
-    $ make build-rpm                # builds .rpm package
     
 **Windows:**
 
@@ -63,10 +54,6 @@ rigorously tested on all the intended platforms.
     
     $ mingw32-make mingw32-make     # builds imdb-plus.exe
     
-    or 
-    
-    $ mingw32-make mingw32-build    # builds setup archive
-
 ## Copyright
 
 Copyright &copy; 2011-2013 Adrian Solumsmo. See [LICENSE](https://github.com/honeymustard/imdb-plus/blob/master/LICENSE) for details.
