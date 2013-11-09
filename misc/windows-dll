@@ -1,30 +1,37 @@
-# list of dll's required to run program on windows. 
-152K ./intl.dll
- 92K ./libasprintf-0.dll
-160K ./libatk-1.0-0.dll
-1.3M ./libcairo-2.dll
- 44K ./libcairo-gobject-2.dll
-180K ./libcairo-script-interpreter-2.dll
-260K ./libcurl.dll
-140K ./libexpat-1.dll
-276K ./libfontconfig-1.dll
- 60K ./libgailutil-18.dll
-108K ./libgcc_s_dw2-1.dll
-280K ./libgdk_pixbuf-2.0-0.dll
-912K ./libgdk-win32-2.0-0.dll
-1.2M ./libgio-2.0-0.dll
-1.2M ./libglib-2.0-0.dll
- 40K ./libgmodule-2.0-0.dll
-336K ./libgobject-2.0-0.dll
- 44K ./libgthread-2.0-0.dll
-4.8M ./libgtk-win32-2.0-0.dll
-328K ./libpango-1.0-0.dll
-104K ./libpangocairo-1.0-0.dll
-800K ./libpangoft2-1.0-0.dll
-108K ./libpangowin32-1.0-0.dll
-228K ./libpng14-14.dll
-140K ./pcre3.dll
-100K ./zlib1.dll
- 64K ./lib/gtk-2.0/2.10.0/engines/libpixmap.dll
-100K ./lib/gtk-2.0/2.10.0/engines/libwimp.dll
+# required windows dll's to run program
+ 186K ./libatk-1.0-0.dll
+ 909K ./libcairo-2.dll
+  54K ./libcairo-gobject-2.dll
+ 208K ./libcairo-script-interpreter-2.dll
+ 305K ./libcroco-0.6-3.dll
+ 260K ./libcurl.dll
+  65K ./libffi-6.dll
+ 337K ./libfontconfig-1.dll
+ 694K ./libfreetype-6.dll
+  76K ./libgailutil-3-0.dll
+ 749K ./libgdk-3-0.dll
+ 321K ./libgdk_pixbuf-2.0-0.dll
+ 1.7M ./libgio-2.0-0.dll
+ 1.5M ./libglib-2.0-0.dll
+  47K ./libgmodule-2.0-0.dll
+ 367K ./libgobject-2.0-0.dll
+  32K ./libgthread-2.0-0.dll
+ 5.8M ./libgtk-3-0.dll
+ 999K ./libiconv-2.dll
+ 164K ./libintl-8.dll
+ 398K ./libjasper-1.dll
+ 293K ./libjpeg-9.dll
+ 204K ./liblzma-5.dll
+ 393K ./libpango-1.0-0.dll
+ 118K ./libpangocairo-1.0-0.dll
+ 887K ./libpangoft2-1.0-0.dll
+ 126K ./libpangowin32-1.0-0.dll
+ 2.7M ./libpixman-1-0.dll
+ 256K ./libpng15-15.dll
+ 322K ./librsvg-2-2.dll
+ 549K ./libtiff-5.dll
+ 1.6M ./libxml2-2.dll
+ 137K ./pcre3.dll
+  80K ./pthreadGC2.dll
+  83K ./zlib1.dll
 
