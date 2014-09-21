@@ -24,7 +24,7 @@ PROGRAM = $(EXECUTE)-$(VERSION)
 SOURCES = Makefile TODO.md README.md LICENSE src misc share scripts
 WININST = *.dll etc share LICENSE misc/setup.iss $(EXECUTE).exe
 DELFILE = *.exe *.o *.tar.gz misc/*.gz $(EXECUTE) $(OBJECTS) $(DDFILES)
-CFLAGS  = -c -Wall -MMD -MP -Isrc
+CFLAGS  = -c -Wall -Wno-unused-local-typedefs -MMD -MP -Isrc
 LDFLAGS = -Wl,--as-needed
 RESFILE = resfile.o
 CC      = gcc
@@ -62,8 +62,8 @@ debug: linux
 
 # Faux target..
 linux: OS = LINUX
-linux: GTK2 = `pkg-config --cflags --libs gtk+-3.0`
-linux: PACKAGES = $(GTK2) -lcurl -lgthread-2.0
+linux: GTK3 = `pkg-config --cflags --libs gtk+-3.0`
+linux: PACKAGES = $(GTK3) -lcurl -lgthread-2.0
 linux: CFLAGS += $(PACKAGES)
 linux: $(OBJECTS)
 	$(CC) $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES)
@@ -109,7 +109,7 @@ build-rpm: dist
 ########################################################################
 # Standard Windows build: 
 #
-# Cygwin, MinGW, Gnuwin32 PCRE, libcurl, GTK+, ISSC.exe
+# MinGW, MSYS, Gnuwin32 PCRE, libcurl, GTK+3, ISSC.exe (build)
 #
 # @usage: mingw32-make [ mingw32-[ make | debug | clean | build ] ]
 #
@@ -129,10 +129,11 @@ mingw32-debug: windows
 
 # MinGW make..
 windows: OS = WINDOWS
-windows: MINGW = C:\MinGW
-windows: GTK2 = $(shell pkg-config.exe --libs --cflags gtk+-win32-3.0)
-windows: PATHS = -I$(MINGW)\include -L$(MINGW)\lib 
-windows: PACKAGES = $(PATHS) $(GTK2) -lcurl -lpcre
+windows: MINGW = -IC:\MinGW\include -LC:\MinGW\lib
+windows: CURL = -IC:\Curl\include -LC:\Curl -lcurl
+windows: PCRE = -IC:\GnuWin32\pcre\include -LC:\GnuWin32\pcre\lib -lpcre
+windows: GTK3 = $(shell pkg-config.exe --libs --cflags gtk+-win32-3.0)
+windows: PACKAGES = $(MINGW) $(CURL) $(PCRE) $(GTK3)
 windows: CFLAGS += $(PACKAGES)
 windows: $(OBJECTS) resfile.o
 	$(CC) $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES) $(WINDOWS)
