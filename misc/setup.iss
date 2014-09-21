@@ -3,7 +3,7 @@
 
 #define MyAppName "imdb-plus"
 #define MyAppPublisher "Adrian Solumsmo"
-#define MyAppURL "http://www.sourceforge.net/projects/imdb-plus"
+#define MyAppURL "https://github.com/honeymustard/imdb-plus"
 #define MyAppExeName "imdb-plus.exe"
 
 [Setup]
