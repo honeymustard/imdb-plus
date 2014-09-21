@@ -47,14 +47,27 @@ Binaries are **currently unavailable**. project is unstable.
     
     $ make
     $ sudo make install
+
+    or
+
+    $ make build-deb    # builds debian package
+    $ make build-rpm    # builds redhat package
     
 **Windows:**
 
     # Note: See Makefile for package requirements
     
     $ mingw32-make mingw32-make     # builds imdb-plus.exe
+
+    or
+
+    $ mingw32-make mingw32-build    # builds setup archive
+
+    # If MinGW complains about errors in winnt.h you should 
+    # remove the 'static' bit from the offending functions.
+    # Usually: GetCurrentFiber, GetFiberData, NtCurrentTeb
     
 ## Copyright
 
-Copyright &copy; 2011-2013 Adrian Solumsmo. See [LICENSE](https://github.com/honeymustard/imdb-plus/blob/master/LICENSE) for details.
+Copyright &copy; 2011-2014 Adrian Solumsmo. See [LICENSE](https://github.com/honeymustard/imdb-plus/blob/master/LICENSE) for details.
 
