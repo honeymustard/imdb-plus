@@ -66,7 +66,14 @@ cp -R $INSTALL $DIR_TEMP
 # run setup script..
 iscc "$DIR_TEMP/setup.iss" /dMyAppVersion=$VERSION
 
-cd $DIR_TEMP && tar -czf "../$PROGRAM-setup.tar.gz" "$PROGRAM-setup.exe" && cd -
+SETUP="$DIR_TEMP/$PROGRAM-setup.exe"
+
+if [ ! -f $SETUP ]; then
+    echo "Error: failed to create setup.exe"
+    exit
+fi
+
+cp $SETUP $DIR_HOST
 
 rm "$DIR_HOST/$PROGRAM.tar.gz"
 rm -Rf $DIR_TEMP
