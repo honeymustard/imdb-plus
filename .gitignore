@@ -9,7 +9,7 @@
 *.exe
 *.gz
 *.7z
-local
+other
 build
 imdb*
 
