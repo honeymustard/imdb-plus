@@ -183,7 +183,6 @@ int open_file(NotebookTab *tab, char *filename) {
     free(state->stats);
     free(state);
    
-    ui_fill_lists_box_update();
     gtk_custom_table_refresh(mwin->main);
 
     return 1;
