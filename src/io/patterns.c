@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (C) 2011-2013  Adrian Solumsmo
+ * Copyright (C) 2011-2014  Adrian Solumsmo
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,21 +22,55 @@
 
 
 /* top250 regex pattern */
-char *pattern_top250 = "<td class=\"titleColumn\">([0-9]{1,3}).{0,10}\
-<a href=\"/title/(tt[0-9]{1,10})/.{0,50}\" title=\".{0,100}\".{0,5}>\
-(.{0,100})</a> <span class=\"secondaryInfo\">\\(([0-9]{4})\\)</span>\
-</td>[\n|\r\n]{0,2}.{0,20}<td class=\"ratingColumn\"><strong title=\
-\"([0-9]{1,2}\\.[0-9]{1,2}) based on (([0-9,]{1,12})) votes\">";
+char *pattern_top = "\r\
+  <td class=\"titleColumn\">\r\
+    <span name=\"ir\" data-value=\"([0-9.]{1,12})\">.{0,5}</span>\r\
+    <a href=\"/title/(tt[0-9]{1,10})/.{0,50}\"\r\
+title=\".{0,100}\".{0,5}>(.{0,100})</a>\r\
+    <span name=\"rd\" data-value=\".{0,20}\" class=\"secondaryInfo\">\\(([0-9]{4})\\)</span>\r\
+  </td>\r\
+  <td class=\"ratingColumn\">\r\
+    <strong name=\"nv\" data-value=\"(([0-9]{1,12}))\" title=\".{0,100}\">.{0,5}</strong>\r\
+  </td>";
+
+/* top250 regex pattern with windows line-breaks */
+char *pattern_top_win = "\r\n\
+  <td class=\"titleColumn\">\r\n\
+    <span name=\"ir\" data-value=\"([0-9.]{1,12})\">.{0,5}</span>\r\n\
+    <a href=\"/title/(tt[0-9]{1,10})/.{0,50}\"\r\n\
+title=\".{0,100}\".{0,5}>(.{0,100})</a>\r\n\
+    <span name=\"rd\" data-value=\".{0,20}\" class=\"secondaryInfo\">\\(([0-9]{4})\\)</span>\r\n\
+  </td>\r\n\
+  <td class=\"ratingColumn\">\r\n\
+    <strong name=\"nv\" data-value=\"(([0-9]{1,12}))\" title=\".{0,100}\">.{0,5}</strong>\r\n\
+  </td>";
 
 /* bottom100 regex pattern */
-char *pattern_bot100 = "<td class=\"titleColumn\">([0-9]{1,3}).{0,10}\
-<a href=\"/title/(tt[0-9]{1,10})/.{0,50}\" title=\".{0,100}\".{0,5}>\
-(.{0,100})</a> <span class=\"secondaryInfo\">\\(([0-9]{4})\\)</span>\
-</td>[\n|\r\n]{0,2}.{0,20}<td class=\"ratingColumn\"><strong title=\
-\"([0-9]{1,2}\\.[0-9]{1,2}) based on (([0-9,]{1,12})) votes\">";
+char *pattern_bot = "\r\
+  <td class=\"titleColumn\">\r\
+    <span name=\"ir\" data-value=\"([0-9.]{1,12})\">.{0,5}</span>\r\
+    <a href=\"/title/(tt[0-9]{1,10})/.{0,50}\"\r\
+title=\".{0,100}\".{0,5}>(.{0,100})</a>\r\
+    <span name=\"rd\" data-value=\".{0,20}\" class=\"secondaryInfo\">\\(([0-9]{4})\\)</span>\r\
+  </td>\r\
+  <td class=\"ratingColumn\">\r\
+    <strong name=\"nv\" data-value=\"(([0-9]{1,12}))\" title=\".{0,100}\">.{0,5}</strong>\r\
+  </td>";
+
+/* bottom100 regex pattern with windows line-breaks */
+char *pattern_bot_win = "\r\n\
+  <td class=\"titleColumn\">\r\n\
+    <span name=\"ir\" data-value=\"([0-9.]{1,12})\">.{0,5}</span>\r\n\
+    <a href=\"/title/(tt[0-9]{1,10})/.{0,50}\"\r\n\
+title=\".{0,100}\".{0,5}>(.{0,100})</a>\r\n\
+    <span name=\"rd\" data-value=\".{0,20}\" class=\"secondaryInfo\">\\(([0-9]{4})\\)</span>\r\n\
+  </td>\r\n\
+  <td class=\"ratingColumn\">\r\n\
+    <strong name=\"nv\" data-value=\"(([0-9]{1,12}))\" title=\".{0,100}\">.{0,5}</strong>\r\n\
+  </td>";
 
 /* boxoffice regex pattern */
-char *pattern_boxoffice = "\
+char *pattern_box = "\
 <td align=right><b>([0-9]{1,3}).</b></td>\n\
 <td><a href=\"/title/(tt[0-9]{1,10})/\">(.{0,100})</a>\
  \\(([0-9]{4}).{0,2}\\)</td>\n\
@@ -44,7 +78,7 @@ char *pattern_boxoffice = "\
 </tr>\n";
 
 /* boxoffice regex pattern with windows line-breaks */
-char *pattern_boxoffice_win = "\
+char *pattern_box_win = "\
 <td align=right><b>([0-9]{1,3}).</b></td>\r\n\
 <td><a href=\"/title/(tt[0-9]{1,10})/\">(.{0,100})</a>\
  \\(([0-9]{4}).{0,2}\\)</td>\r\n\

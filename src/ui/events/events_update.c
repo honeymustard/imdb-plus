@@ -145,7 +145,9 @@ void menu_signal_update(gpointer data) {
         if(dl_top->status == DL_STATUS_OK) {
 
             if(parse_file(globals_get(CONST_TOP_TMP), 
-                globals_get(CONST_TOP_CSV), pattern_top250)) {
+                globals_get(CONST_TOP_CSV), pattern_top) || 
+                parse_file(globals_get(CONST_TOP_TMP), 
+                globals_get(CONST_TOP_CSV), pattern_top_win)) {
                 
                 if(ui_fill_lists_top_update()) {
 
@@ -158,7 +160,9 @@ void menu_signal_update(gpointer data) {
         if(dl_bot->status == DL_STATUS_OK) {
 
             if(parse_file(globals_get(CONST_BOT_TMP), 
-                globals_get(CONST_BOT_CSV), pattern_bot100)) {
+                globals_get(CONST_BOT_CSV), pattern_bot) || 
+                parse_file(globals_get(CONST_BOT_TMP), 
+                globals_get(CONST_BOT_CSV), pattern_bot_win)) {
 
                 if(ui_fill_lists_bot_update()) {
                     botstat = "OK";
@@ -170,9 +174,9 @@ void menu_signal_update(gpointer data) {
         if(dl_box->status == DL_STATUS_OK) {
 
             if(parse_file(globals_get(CONST_BOX_TMP), 
-                globals_get(CONST_BOX_CSV), pattern_boxoffice) || 
+                globals_get(CONST_BOX_CSV), pattern_box) || 
                 parse_file(globals_get(CONST_BOX_TMP), 
-                globals_get(CONST_BOX_CSV), pattern_boxoffice_win)) {
+                globals_get(CONST_BOX_CSV), pattern_box_win)) {
                 
                 /* add extra column to boxoffice file */
                 int index = 0;

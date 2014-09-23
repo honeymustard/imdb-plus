@@ -22,10 +22,12 @@
 #define _PATTERNS_
 
 /* regex patterns */
-char *pattern_top250;
-char *pattern_bot100;
-char *pattern_boxoffice;
-char *pattern_boxoffice_win;
+char *pattern_top;
+char *pattern_top_win;
+char *pattern_bot;
+char *pattern_bot_win;
+char *pattern_box;
+char *pattern_box_win;
 
 #endif
 
