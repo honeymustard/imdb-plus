@@ -57,7 +57,7 @@ all: CFLAGS += -O2 -DINSTALL
 all: linux
 
 # Make debug..
-debug: CFLAGS += -g
+debug: CFLAGS += -g -DDEBUG
 debug: linux
 
 # Faux target..
@@ -124,7 +124,7 @@ mingw32-make: windows
 
 # MinGW debug..
 mingw32-debug: WINDOWS = 
-mingw32-debug: CFLAGS += -g
+mingw32-debug: CFLAGS += -g -DDEBUG
 mingw32-debug: windows
 
 # MinGW make..
