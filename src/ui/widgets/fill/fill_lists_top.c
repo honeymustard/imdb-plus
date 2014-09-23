@@ -65,7 +65,7 @@ void ui_fill_lists_top(ResultList *list) {
 
     for(i = 0; i < list->rows; i++) {
 
-        double imdb = strtod(list->results[i][4], NULL);
+        double imdb = strtod(list->results[i][0], NULL);
         double year = strtol(list->results[i][3], NULL, 10);
 
         imdb = imdb >= 0 && imdb <= 10 ? imdb : 0;
@@ -82,7 +82,7 @@ void ui_fill_lists_top(ResultList *list) {
         sprintf(temp, "%d", (int)year);
         gtk_custom_table_set_cell_text(table, 6, i, temp);
 
-        char *strip = gtk_custom_table_string_strip_alpha(list->results[i][5]);
+        char *strip = gtk_custom_table_string_strip_alpha(list->results[i][4]);
         char *value = gtk_custom_table_string_thousand_separator(strip);
 
         gtk_custom_table_set_cell_text(table, 7, i, value);

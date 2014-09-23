@@ -29,13 +29,15 @@
 void ui_fill_lists_bot_empty() {
 
     int i = 0;
+    int j = BOT_ROWS;
+
     char temp[10];
 
     GtkWidget *table = nb_lists_bot_tab->table;
 
     for(i = 0; i < BOT_ROWS; i++) {
 
-        sprintf(temp, "%d", i+1);
+        sprintf(temp, "%d", j--);
 
         gtk_custom_table_set_cell_text(table, 0, i, temp);
         gtk_custom_table_set_cell_text(table, 1, i, "0.0");
@@ -58,6 +60,8 @@ void ui_fill_lists_bot_empty() {
 
 void ui_fill_lists_bot(ResultList *list) {
 
+    int rows = list->rows;
+
     int i = 0;
     char temp[50];
 
@@ -65,13 +69,13 @@ void ui_fill_lists_bot(ResultList *list) {
 
     for(i = 0; i < list->rows; i++) {
 
-        double imdb = strtod(list->results[i][4], NULL);
+        double imdb = strtod(list->results[i][0], NULL);
         double year = strtol(list->results[i][3], NULL, 10);
 
         imdb = imdb >= 0 && imdb <= 10 ? imdb : 0;
         year = year > 1800 && year < 2200 ? year : 0;
 
-        sprintf(temp, "%d", i + 1);
+        sprintf(temp, "%d", rows--);
         gtk_custom_table_set_cell_text(table, 0, i, temp);
         sprintf(temp, "%1.1f", imdb);
         gtk_custom_table_set_cell_text(table, 1, i, temp);
@@ -82,7 +86,7 @@ void ui_fill_lists_bot(ResultList *list) {
         sprintf(temp, "%d", (int)year);
         gtk_custom_table_set_cell_text(table, 6, i, temp);
 
-        char *strip = gtk_custom_table_string_strip_alpha(list->results[i][5]);
+        char *strip = gtk_custom_table_string_strip_alpha(list->results[i][4]);
         char *value = gtk_custom_table_string_thousand_separator(strip);
 
         gtk_custom_table_set_cell_text(table, 7, i, value);
@@ -112,7 +116,7 @@ int ui_fill_lists_bot_update() {
 
         GtkWidget *table = nb_lists_bot_tab->table;
         gtk_custom_table_set_sortable(table, TRUE);
-        gtk_custom_table_sort(table, 0, GTK_CUSTOM_TABLE_ASC);
+        gtk_custom_table_sort(table, 0, GTK_CUSTOM_TABLE_DESC);
         gtk_custom_table_set_column_font(table, 5, PANGO_CONTENT_FONT);
 
         retval = 1;

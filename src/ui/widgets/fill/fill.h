@@ -25,9 +25,9 @@
 #include "io/readfile.h"
 
 
-#define TOP_COLS 6
+#define TOP_COLS 5
 #define TOP_ROWS 250
-#define BOT_COLS 6
+#define BOT_COLS 5
 #define BOT_ROWS 100
 #define BOX_COLS 6
 
