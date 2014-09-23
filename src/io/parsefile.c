@@ -94,6 +94,11 @@ int parse_file(char *filename, char *out_file, char *pattern) {
             /* last submatch in match, add end-of-line character */
             fprintf(out_file_tmp, format[(j == (re.re_nsub - 1))], 
                 match[j].rm_eo - match[j].rm_so, &p[match[j].rm_so]);
+
+            #ifdef DEBUG
+            printf(format[(j == (re.re_nsub - 1))], 
+                match[j].rm_eo - match[j].rm_so, &p[match[j].rm_so]);
+            #endif
         }
 
         p += match[0].rm_eo;
