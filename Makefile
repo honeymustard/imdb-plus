@@ -1,6 +1,6 @@
 ########################################################################
 #
-# Copyright (C) 2011-2013  Adrian Solumsmo
+# Copyright (C) 2011-2014  Adrian Solumsmo
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 
 # Program variables..
 EXECUTE = imdb-plus
-VERSION = 0.1.0
+VERSION = 0.1.1
 PROGRAM = $(EXECUTE)-$(VERSION)
 SOURCES = Makefile TODO.md README.md LICENSE src misc share scripts
 WININST = *.dll etc share LICENSE misc/setup.iss $(EXECUTE).exe
