@@ -35,9 +35,12 @@
 * Supports vote histories with north of 100 000 votes..
 * View updated statistics for all official lists, and track your progress..
 
-## Binaries
+## Updates
 
-Binaries are **currently unavailable**. project is unstable.
+This project relies upon the consistency of data downloaded from the internet movie database. 
+Any changes that are made at the source will break the program and render all versions obsolete. 
+The program will then need to be patched manually. Therefore, some current features might be 
+omitted from future versions without notice.
 
 ## Compilation instructions
 
