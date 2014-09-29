@@ -28,12 +28,12 @@
 
 ## Features
 
-* Download and view personal vote history and statistics..
+* View personal vote history and vote statistics..
 * Download IMDb movie lists and compare them to your vote history..
-* Download official IMDb lists such as Top 250, Bottom 100, All-Time Boxoffice.
+* Download official IMDb lists such as Top 250, Bottom 100 and All-Time Boxoffice.
 * Compare personal vote history to IMDb lists and view intersection statistics.
-* Supports vote histories with north of 100 000 votes..
-* View updated statistics for all official lists, and track your progress..
+* Supports unlimited vote histories with north of 100 000 votes..
+* View updated statistics for all official lists and track your progress..
 
 ## Updates
 
@@ -41,6 +41,8 @@ This project relies upon the consistency of data downloaded from the internet mo
 Any changes that are made at the source will break the program and render all versions obsolete. 
 The program will then need to be patched manually. Therefore, some current features might be 
 omitted from future versions without notice.
+
+* 29/09/14: Ratings must now be exported from your IMDb account and imported manually.
 
 ## Compilation instructions
 
