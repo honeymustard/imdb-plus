@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (C) 2011-2013  Adrian Solumsmo
+ * Copyright (C) 2011-2014  Adrian Solumsmo
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +26,6 @@
 /* main window events */
 void menu_signal_about(gpointer data);
 void menu_signal_open(gpointer data);
-void menu_signal_save(gpointer data);
-void menu_signal_down(gpointer data);
 void menu_signal_update(gpointer data);
 void menu_signal_purge(gpointer data);
 void menu_signal_quit(gpointer data);

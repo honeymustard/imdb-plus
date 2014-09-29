@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (C) 2011-2013  Adrian Solumsmo
+ * Copyright (C) 2011-2014  Adrian Solumsmo
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,25 +51,17 @@ void ui_set_menu() {
     /* create submenu items */
     mwin->menu_file_item_open = gtk_menu_item_new_with_mnemonic("_Open");
     mwin->menu_file_item_compare = gtk_menu_item_new_with_mnemonic("_Compare To");
-    mwin->menu_file_item_down = gtk_menu_item_new_with_mnemonic("_Download");
-    mwin->menu_file_item_save = gtk_menu_item_new_with_mnemonic("_Save As..");
     mwin->menu_file_item_exit = gtk_menu_item_new_with_mnemonic("_Exit");
     mwin->menu_file_item_space = gtk_separator_menu_item_new();
     mwin->menu_edit_item_update = gtk_menu_item_new_with_mnemonic("_Update");
     mwin->menu_edit_item_purge = gtk_menu_item_new_with_mnemonic("_Purge Lists");
     mwin->menu_help_item_about = gtk_menu_item_new_with_mnemonic("_About");
 
-    gtk_widget_set_sensitive(mwin->menu_file_item_save, FALSE);
-
     /* add accelerator keys to menu */
     gtk_widget_add_accelerator(mwin->menu_file_item_open, "activate", 
         group_file, GDK_KEY_O, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(mwin->menu_file_item_compare, "activate", 
         group_file, GDK_KEY_L, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-    gtk_widget_add_accelerator(mwin->menu_file_item_down, "activate", 
-        group_file, GDK_KEY_D, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-    gtk_widget_add_accelerator(mwin->menu_file_item_save, "activate", 
-        group_file, GDK_KEY_S, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(mwin->menu_file_item_exit, "activate", 
         group_file, GDK_KEY_Q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(mwin->menu_edit_item_update, "activate", 
@@ -82,8 +74,6 @@ void ui_set_menu() {
     /* append menu items to menus */
     gtk_menu_shell_append(GTK_MENU_SHELL(mwin->menu_file), mwin->menu_file_item_open);
     gtk_menu_shell_append(GTK_MENU_SHELL(mwin->menu_file), mwin->menu_file_item_compare);
-    gtk_menu_shell_append(GTK_MENU_SHELL(mwin->menu_file), mwin->menu_file_item_down);
-    gtk_menu_shell_append(GTK_MENU_SHELL(mwin->menu_file), mwin->menu_file_item_save);
     gtk_menu_shell_append(GTK_MENU_SHELL(mwin->menu_file), mwin->menu_file_item_space);
     gtk_menu_shell_append(GTK_MENU_SHELL(mwin->menu_file), mwin->menu_file_item_exit);
     gtk_menu_shell_append(GTK_MENU_SHELL(mwin->menu_edit), mwin->menu_edit_item_update);
@@ -95,10 +85,6 @@ void ui_set_menu() {
         "activate", G_CALLBACK(menu_signal_open), (gpointer)nb_lists_mov_tab);
     g_signal_connect_swapped(G_OBJECT(mwin->menu_file_item_compare), 
         "activate", G_CALLBACK(menu_signal_open), (gpointer)nb_lists_lst_tab);
-    g_signal_connect_swapped(G_OBJECT(mwin->menu_file_item_down), 
-        "activate", G_CALLBACK(menu_signal_down), (gpointer)mwin->main);
-    g_signal_connect_swapped(G_OBJECT(mwin->menu_file_item_save), 
-        "activate", G_CALLBACK(menu_signal_save), (gpointer)mwin->main);
     g_signal_connect_swapped(G_OBJECT(mwin->menu_file_item_exit), 
         "activate", G_CALLBACK(menu_signal_quit), (gpointer)mwin->main);
     g_signal_connect_swapped(G_OBJECT(mwin->menu_edit_item_update), 

@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (C) 2011-2013  Adrian Solumsmo
+ * Copyright (C) 2011-2014  Adrian Solumsmo
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,8 +39,6 @@ typedef struct MainWindow {
         *menu_file_item, 
           *menu_file_item_open,
           *menu_file_item_compare,
-          *menu_file_item_down,
-          *menu_file_item_save, 
           *menu_file_item_space,
           *menu_file_item_exit,
       *menu_edit, 
