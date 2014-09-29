@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (C) 2011-2013  Adrian Solumsmo
+ * Copyright (C) 2011-2014  Adrian Solumsmo
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ void menu_signal_update(gpointer data) {
         while(gtk_events_pending()) gtk_main_iteration();
 
         /* download top250 list */
-        struct download *dl_top = malloc(sizeof (struct download));
+        Download *dl_top = malloc(sizeof(Download));
         dl_top->url = globals_get(CONST_TOP_URL);
         dl_top->saveas = globals_get(CONST_TOP_TMP);
 
@@ -98,7 +98,7 @@ void menu_signal_update(gpointer data) {
         while(gtk_events_pending()) gtk_main_iteration();
 
         /* download bottom100 list */
-        struct download *dl_bot = malloc(sizeof (struct download));
+        Download *dl_bot = malloc(sizeof(Download));
         dl_bot->url = globals_get(CONST_BOT_URL);
         dl_bot->saveas = globals_get(CONST_BOT_TMP);
 
@@ -117,7 +117,7 @@ void menu_signal_update(gpointer data) {
         while(gtk_events_pending()) gtk_main_iteration();
 
         /* download boxoffice list */
-        struct download *dl_box = malloc(sizeof (struct download));
+        Download *dl_box = malloc(sizeof(Download));
         dl_box->url = globals_get(CONST_BOX_URL);
         dl_box->saveas = globals_get(CONST_BOX_TMP);
 
