@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (C) 2011-2013  Adrian Solumsmo
+ * Copyright (C) 2011-2014  Adrian Solumsmo
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,35 @@ void ui_fill_stats_all_empty() {
     int j = 0;
 
     GtkWidget *table = nb_stats_all_tab->table;
+
+    /* reset background colors, images and alignments */
+    for(i = 0; i < 12; i++) {
+
+        switch(i % 4) {
+
+            case 1:
+            case 2:
+            case 3:
+
+                for(j = 0; j < 3; j++) {
+
+                    gtk_custom_table_set_cell_color_enable(table, j, i, 
+                        FALSE);
+                }
+
+                gtk_custom_table_set_cell_bg_image_enable(table, 4, i, 
+                    FALSE);
+
+                gtk_custom_table_set_cell_alignment(table, 0, i, 
+                    PANGO_ALIGN_RIGHT);
+                gtk_custom_table_set_cell_alignment(table, 1, i, 
+                    PANGO_ALIGN_RIGHT);
+                gtk_custom_table_set_cell_alignment(table, 2, i, 
+                    PANGO_ALIGN_RIGHT);
+
+                break;
+        }
+    }
 
     /* set all statistics table values */
     for(i = 0; i < 12; i++) {
@@ -247,5 +276,13 @@ void ui_fill_stats_all(State *state, int rows[]) {
               RIBBON_BRONZE);
         }
     }
+}
+
+
+int ui_fill_stats_all_update() {
+
+    ui_fill_stats_all_empty();
+
+    return 1;
 }
 

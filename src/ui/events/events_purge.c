@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (C) 2011-2013  Adrian Solumsmo
+ * Copyright (C) 2011-2014  Adrian Solumsmo
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ void menu_signal_purge(gpointer data) {
     ui_fill_lists_top_update();
     ui_fill_lists_bot_update();
     ui_fill_lists_box_update();
+    ui_fill_stats_all_update();
 
     gtk_statusbar_push(GTK_STATUSBAR(mwin->stat), 1, 
         "Downloaded lists have been purged");
