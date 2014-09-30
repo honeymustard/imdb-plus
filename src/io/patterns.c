@@ -22,15 +22,15 @@
 
 
 /* top250 regex pattern */
-char *pattern_top = "\r\
-  <td class=\"titleColumn\">\r\
-    <span name=\"ir\" data-value=\"([0-9.]{1,12})\">.{0,5}</span>\r\
-    <a href=\"/title/(tt[0-9]{1,10})/.{0,50}\"\r\
-title=\".{0,100}\".{0,5}>(.{0,100})</a>\r\
-    <span name=\"rd\" data-value=\".{0,20}\" class=\"secondaryInfo\">\\(([0-9]{4})\\)</span>\r\
-  </td>\r\
-  <td class=\"ratingColumn\">\r\
-    <strong name=\"nv\" data-value=\"(([0-9]{1,12}))\" title=\".{0,100}\">.{0,5}</strong>\r\
+char *pattern_top = "\n\
+  <td class=\"titleColumn\">\n\
+    <span name=\"ir\" data-value=\"([0-9.]{1,12})\">.{0,5}</span>\n\
+    <a href=\"/title/(tt[0-9]{1,10})/.{0,50}\"\n\
+title=\".{0,100}\".{0,5}>(.{0,100})</a>\n\
+    <span name=\"rd\" data-value=\".{0,20}\" class=\"secondaryInfo\">\\(([0-9]{4})\\)</span>\n\
+  </td>\n\
+  <td class=\"ratingColumn\">\n\
+    <strong name=\"nv\" data-value=\"(([0-9]{1,12}))\" title=\".{0,100}\">.{0,5}</strong>\n\
   </td>";
 
 /* top250 regex pattern with windows line-breaks */
@@ -46,15 +46,15 @@ title=\".{0,100}\".{0,5}>(.{0,100})</a>\r\n\
   </td>";
 
 /* bottom100 regex pattern */
-char *pattern_bot = "\r\
-  <td class=\"titleColumn\">\r\
-    <span name=\"ir\" data-value=\"([0-9.]{1,12})\">.{0,5}</span>\r\
-    <a href=\"/title/(tt[0-9]{1,10})/.{0,50}\"\r\
-title=\".{0,100}\".{0,5}>(.{0,100})</a>\r\
-    <span name=\"rd\" data-value=\".{0,20}\" class=\"secondaryInfo\">\\(([0-9]{4})\\)</span>\r\
-  </td>\r\
-  <td class=\"ratingColumn\">\r\
-    <strong name=\"nv\" data-value=\"(([0-9]{1,12}))\" title=\".{0,100}\">.{0,5}</strong>\r\
+char *pattern_bot = "\n\
+  <td class=\"titleColumn\">\n\
+    <span name=\"ir\" data-value=\"([0-9.]{1,12})\">.{0,5}</span>\n\
+    <a href=\"/title/(tt[0-9]{1,10})/.{0,50}\"\n\
+title=\".{0,100}\".{0,5}>(.{0,100})</a>\n\
+    <span name=\"rd\" data-value=\".{0,20}\" class=\"secondaryInfo\">\\(([0-9]{4})\\)</span>\n\
+  </td>\n\
+  <td class=\"ratingColumn\">\n\
+    <strong name=\"nv\" data-value=\"(([0-9]{1,12}))\" title=\".{0,100}\">.{0,5}</strong>\n\
   </td>";
 
 /* bottom100 regex pattern with windows line-breaks */

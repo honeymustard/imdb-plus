@@ -6,6 +6,7 @@
 *.csv
 *.swp
 *.swo
+*.swn
 *.exe
 *.gz
 *.7z
