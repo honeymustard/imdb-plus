@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (C) 2011-2013  Adrian Solumsmo
+ * Copyright (C) 2011-2014  Adrian Solumsmo
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,19 +21,33 @@
 #ifndef _READFILE_
 #define _READFILE_
 
-#define READ_SIZE 512
+#define READ_SIZE 1024
 #define STEP_SIZE 256
 
 #define HEX_D_OFF 0x30 /* ascii offset to 0,1,2.. */
 #define HEX_C_OFF 0x41 /* ascii offset to A,B,C.. */
 
-typedef struct result {
+typedef struct result_temp ResultTemp;
+typedef struct result_data ResultList;
 
+struct result_temp {
+
+    ResultTemp *next;
+
+    int cols;
+    int size;
+    char *data;
+
+};
+
+struct result_data {
+
+    int size;
     int rows;
     int cols;
     char ***results;
 
-} ResultList;
+};
 
 
 ResultList *readfile_new();

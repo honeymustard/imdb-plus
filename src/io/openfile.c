@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (C) 2011-2013  Adrian Solumsmo
+ * Copyright (C) 2011-2014  Adrian Solumsmo
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,9 +38,11 @@ int open_file(NotebookTab *tab, char *filename) {
         return 0;
     }
 
-    ResultList *list = calloc(1, sizeof(ResultList));
+    ResultList *list = readfile_new();
     
-    if(!readfile(list, filename) || list->cols < 10) {
+    if(!readfile(list, filename) || list->cols == 0) {
+
+        printf("Error: failed to read file\n");
         return 0;
     }
 

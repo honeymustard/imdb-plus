@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (C) 2011-2013  Adrian Solumsmo
+ * Copyright (C) 2011-2014  Adrian Solumsmo
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,10 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "io/readfile.h"
+#include "io/libcsv.h"
+
+
+ResultTemp *temp = NULL;
 
 
 /**
@@ -32,6 +36,8 @@
 ResultList *readfile_new() {
  
     ResultList *list = malloc(sizeof(ResultList));
+
+    list->size = 0;
     list->rows = 0;
     list->cols = 0;
     list->results = NULL;
@@ -70,34 +76,39 @@ void readfile_free(ResultList *list) {
 
 
 /**
- * decode entity in buffer at index i, return offset
- * @param char *buffer    string buffer with entity
- * @return char *         returns newly allocated string
+ * decode all html entities in a buffer
+ * @param char *src_data     source buffer with entities
+ * @param int src_size       source buffer length
+ * @param char *dest_data    destination buffer
+ * @param int *dest_size     destination buffer length
  */
-char * decode(char *buffer) {
+void readfile_decode(char *src_data, int src_size, char **dest_data, int *dest_size) {
 
     char *needle = "&#x";
-    int length = strlen(needle);
+    int needle_length = strlen(needle);
 
-    int len = strlen(buffer);
+    int len = src_size;
 
-    char *tmp = malloc(strlen(buffer) + 1);
-    strcpy(tmp, buffer);
+    char *tmp = malloc(src_size + 1);
+    strncpy(tmp, src_data, src_size + 1);
 
-    char *temp = buffer;
+    char *temp = src_data;
 
-    while(1) {
+    for(;;) {
 
         temp = strstr(temp, needle);
 
         if(temp == NULL) {
-            free(buffer);
-            return tmp;
+
+            *dest_data = tmp;
+            *dest_size = strlen(tmp);
+
+            return;
         }
 
         int tmp_len = len - strlen(temp);
 
-        temp = temp + length;
+        temp = temp + needle_length;
         
         if(temp[0] != '\0' && 
            temp[1] != '\0' && 
@@ -167,7 +178,7 @@ char * decode(char *buffer) {
                     strcpy(&tmp[tmp_len+1], copy);
                     len -= 5; 
 
-                    printf(" Unkown character found\n");
+                    printf("Decode: Unkown character found\n");
                 }
             }
         }
@@ -176,175 +187,166 @@ char * decode(char *buffer) {
 
 
 /**
- * parse a csv line and add values to buffer
- * @param char **container    array big enough to contain parsed values
- * @param char *buffer        line to be parsed
- * @param int cols            number of columns expected
- * @return int                returns 1 if number of cols was correct, else 0
+ * callback for when the parser has read a token
+ * @param void *buffer    string token
+ * @param size_t i        string token length
+ * @param void *data      none
  */
-int parse_line(char **container, char *buffer, int cols) {
+void readfile_tok(void *buffer, size_t i, void *data) {
 
-    char *delim = "\",\"";
+    int bytes = (int)i;
 
-    int delim_len = strlen(delim);
-    int total_len = strlen(buffer);
+    /* decode expects a null terminated string */
+    char *token = malloc(bytes + 1);
+    strncpy(token, (char *)buffer, bytes);
+    token[bytes] = '\0';
 
-    /* clip each end of original buffer */
-    char *temp = malloc(strlen(buffer));
-    strncpy(temp, &buffer[1], total_len - 3);
-    temp[total_len - 3] = '\0';
+    char *clean_data = NULL;
+    int clean_size = 0;
 
-    /* copy back into buffer */
-    strcpy(buffer, temp);
+    readfile_decode(token, bytes, &clean_data, &clean_size);
 
-    int offset = 0;
+    free(token);
 
-    int i = 0;
+    ResultTemp *curr = malloc(sizeof(ResultTemp));
+    curr->next = NULL;
+    curr->data = NULL;
+    curr->size = 0;
+    curr->cols = 0;
+    
+    /* copy string data */
+    curr->data = malloc(clean_size + 1);
+    strncpy(curr->data, clean_data, clean_size);
+    curr->data[clean_size] = '\0';
+    curr->size = clean_size;
 
-    char *found = temp;
+    free(clean_data);
 
-    for(i = 0; ; i++) {
-   
-        found = strstr(found, delim);
+    if(temp == NULL) {
+        temp = curr;
+    }
+    else {
 
-        int offset_old = offset;
+        ResultTemp *loop = temp;
 
-        offset = found == NULL ? total_len : total_len - strlen(found);
+        for(;;) {
 
-        int bytes = (offset - delim_len) - offset_old;
+            if(loop->next == NULL) {
 
-        if(bytes == 0) {
+                loop->next = curr;
+                break;
+            }
 
-            container[i] = malloc(2);
-            strcpy(container[i], "0");
+            loop = loop->next;
+        }
+    }
+
+    temp->cols++;
+}
+ 
+
+/**
+ * callback for when the parser reaches the end of a line
+ * @param int eol       symbol which caused eol
+ * @param void *data    result-list object
+ */
+void readfile_eol(int eol, void *data) {
+
+    ResultList *l = (ResultList *)data;
+
+    if(l->results == NULL) {
+
+        l->size = STEP_SIZE;
+        l->results = malloc(sizeof(char *) * STEP_SIZE);
+    }
+
+    /* expand result-list if necessary */
+    if((l->rows % STEP_SIZE) == 0) {
+
+        l->size += STEP_SIZE;
+
+        char *** expand = realloc(l->results, sizeof(char *) * l->size);
+
+        if(expand) {
+            l->results = expand;
         }
         else {
-            container[i] = malloc(bytes + 1);
-            strncpy(container[i], &buffer[offset_old], bytes);
-            container[i][bytes] = '\0';
+
+            printf("Error: failed to realloc temp array\n");
+            exit(0);
         }
-
-        container[i] = decode(container[i]);
-
-        if(found == NULL) {
-            break;
-        }
-
-        found = found + delim_len;
     }
-    
-    free(temp);
 
-    return ++i == cols;
-}
+    l->results[l->rows] = malloc(sizeof(char *) * temp->cols);
 
+    l->cols = temp->cols;
 
-/**
- * calculate number of columns in a buffer..
- * @param char *buffer    buffered line to check..
- * @return int            returns number of columns
- */
-int calc_cols(char *buffer) {
-
-    char *needle = "\",\"";
-    int length = strlen(needle);
-    
     int i = 0;
 
-    for(i = 0; ; i++) {
+    /* create a row from column data */
+    for(i = 0; temp != NULL; i++) {
 
-        buffer = strstr(buffer, needle);
+        l->results[l->rows][i] = malloc(temp->size + 1);
+        strncpy(l->results[l->rows][i], temp->data, temp->size);
+        l->results[l->rows][i][temp->size] = '\0';
 
-        if(buffer == NULL) break;
+        free(temp->data);
 
-        buffer = buffer + length;
+        ResultTemp *t = temp;
+        temp = temp->next;
+        free(t);
     }
 
-    return i+1;
+    temp = NULL;
+
+    l->rows++;
 }
 
 
 /**
- * open a file and decore html unicode point to utf8..
+ * open a file and parse it into a result list
  * @param ResultList *list    handle for saved results
  * @param char *filename      file to be opened
  * @return int                returns 1 on success, else 0
  */
 int readfile(ResultList *list, char *filename) {
 
-    FILE *fp = fopen(filename, "rb");
-        
-    if(!fp) {
+    struct csv_parser p;
+    char buf[READ_SIZE];
+    size_t bytes = 0;
+    size_t retval = 0;
+
+    if(csv_init(&p, CSV_STRICT) != 0) {
+
+        fprintf(stderr, "Failed to initialize csv parser\n");
         return 0;
     }
 
-    char buffer[READ_SIZE];
-    memset(buffer, '\0', READ_SIZE);
+    FILE *fp = fopen(filename, "rb");
+    
+    if(!fp) {
 
-    int length = STEP_SIZE;
-    char *** temp = malloc(sizeof(char *) * length);
-
-    int cols = 0;
-    int rows = 0;
-
-    /* determine amount of lines */
-    while(fgets(buffer, sizeof(buffer), fp) != NULL) {
-        
-        if(rows == 0) {
-            cols = calc_cols(buffer);
-        }
-
-        if(cols != calc_cols(buffer)) {
-
-            printf("Error: column widths didn't match\n");
-            fclose(fp);
-            return 0;
-        }
-
-        if((rows % STEP_SIZE) == 0) {
-
-            length += STEP_SIZE;
-
-            char *** expand = realloc(temp, sizeof(char *) * length);
-
-            if(expand) {
-                temp = expand;
-            }
-            else {
-
-                printf("Error: failed to realloc temp array\n");
-                exit(0);
-            }
-        }
-
-        temp[rows] = malloc(sizeof(char *) * cols);
-
-        int i = 0;
-
-        for(i = 0; i < cols; i++) {
-            temp[rows][i] = NULL;
-        }
-
-        if(!parse_line(temp[rows], buffer, cols)) {
-
-            printf("Error: failed to parse line %d\n", rows);
-            fclose(fp);
-            return 0;
-        }
-
-        rows++;
+        fprintf(stderr, "Failed to open %s\n", filename);
+        return 0;
     }
 
-    list->rows = rows;
-    list->cols = cols;
+    while((bytes = fread(buf, 1, READ_SIZE, fp)) > 0) {
 
-    /* copy temp results into result-list */
-    list->results = malloc(sizeof(char *) * list->rows);
-    memcpy(list->results, temp, sizeof(char *) * list->rows);
+        retval = csv_parse(&p, buf, bytes, readfile_tok, readfile_eol, list);
 
-    free(temp);
+        if(retval != bytes) {
+
+            printf("Error: could not process file %s\n", filename);
+            fclose(fp);
+
+            return 0;
+        }
+    }
 
     fclose(fp);
+
+    csv_fini(&p, NULL, NULL, NULL);
+    csv_free(&p);
 
     return 1;
 }

@@ -42,6 +42,7 @@ Any changes that are made at the source will break the program and render all ve
 The program will then need to be patched manually. Therefore, some current features might be 
 omitted from future versions without notice.
 
+* 30/09/14: Program now uses libcsv for parsing lists, should be more stable.
 * 29/09/14: Ratings must now be exported from your IMDb account and imported manually.
 
 ## Compilation instructions
