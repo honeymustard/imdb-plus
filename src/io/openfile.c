@@ -40,7 +40,7 @@ int open_file(NotebookTab *tab, char *filename) {
 
     ResultList *list = readfile_new();
     
-    if(!readfile(list, filename) || list->cols == 0) {
+    if(!readfile(list, filename) || list->cols < 10) {
 
         printf("Error: failed to read file\n");
         return 0;
@@ -91,7 +91,7 @@ int open_file(NotebookTab *tab, char *filename) {
 
     filename = globals_get(CONST_PATHNAME);
 
-    char *temp = malloc(strlen(filename));
+    char *temp = malloc(strlen(filename) + 1);
     strcpy(temp, filename);
 
     char *filebase = basename(temp);
