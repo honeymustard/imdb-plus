@@ -84,7 +84,16 @@ void ui_fill_lists_cmp(State *state) {
         strcpy(movie->id_str, id);
         strcpy(movie->name_str, gtk_custom_table_get_cell_text(table2, 5, i));
 
-        movie->vote = 0;
+        /* get votes from each open list */
+        int index1 = gtk_custom_table_get_indexof(table2, movie->id_str);
+        int index2 = gtk_custom_table_get_indexof(table3, movie->id_str);
+
+        char *vote1 = gtk_custom_table_get_cell_text(table2, 
+            state->tab1_vcol, index1);
+        char *vote2 = gtk_custom_table_get_cell_text(table3, 
+            state->tab2_vcol, index2);
+
+        movie->vote = (atof(vote1) + atof(vote2)) / 2;
         movie->imdb = atof(gtk_custom_table_get_cell_text(table2, 1, i));
         movie->time = atof(gtk_custom_table_get_cell_text(table2, 6, i));
         movie->year = atof(gtk_custom_table_get_cell_text(table2, 7, i));

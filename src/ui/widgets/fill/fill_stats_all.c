@@ -52,11 +52,11 @@ void ui_fill_stats_all_empty() {
                     FALSE);
 
                 gtk_custom_table_set_cell_alignment(table, 0, i, 
-                    PANGO_ALIGN_RIGHT);
+                    PANGO_ALIGN_CENTER);
                 gtk_custom_table_set_cell_alignment(table, 1, i, 
-                    PANGO_ALIGN_RIGHT);
+                    PANGO_ALIGN_CENTER);
                 gtk_custom_table_set_cell_alignment(table, 2, i, 
-                    PANGO_ALIGN_RIGHT);
+                    PANGO_ALIGN_CENTER);
 
                 break;
         }
@@ -77,17 +77,20 @@ void ui_fill_stats_all_empty() {
         }
         else {
 
-            gtk_custom_table_set_cell_text(table, 0, i, "0.00");
-            gtk_custom_table_set_cell_text(table, 1, i, "0.00");
-            gtk_custom_table_set_cell_text(table, 2, i, "0.00");
+            gtk_custom_table_set_cell_text(table, 0, i, "N/A");
+            gtk_custom_table_set_cell_text(table, 1, i, "N/A");
+            gtk_custom_table_set_cell_text(table, 2, i, "N/A");
             gtk_custom_table_set_cell_text(table, 3, i, "0");
             gtk_custom_table_set_cell_text(table, 4, i, "");
             gtk_custom_table_set_cell_text(table, 5, i, "0.00 %");
-            gtk_custom_table_set_cell_text(table, 6, i, "0 / 0");
+            gtk_custom_table_set_cell_text(table, 6, i, "0/0");
             gtk_custom_table_set_cell_text(table, 7, i, "0.00");
             gtk_custom_table_set_cell_text(table, 8, i, "0.00");
 
             /* set cell colors */
+            gtk_custom_table_set_cell_color(table, 0, i, not_app);
+            gtk_custom_table_set_cell_color(table, 1, i, not_app);
+            gtk_custom_table_set_cell_color(table, 2, i, not_app);
             gtk_custom_table_set_cell_color(table, 3, i, graph_bg);
 
             double rank[] = {0.85, 0.20, 0.30};
