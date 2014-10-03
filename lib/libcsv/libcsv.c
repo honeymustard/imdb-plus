@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #  define SIZE_MAX ((size_t)-1) /* C89 doesn't have stdint.h or SIZE_MAX */
 #endif
 
-#include "io/libcsv.h"
+#include "libcsv/libcsv.h"
 
 #define VERSION "3.0.3"
 

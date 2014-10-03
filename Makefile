@@ -21,16 +21,16 @@
 EXECUTE = imdb-plus
 VERSION = 0.1.1
 PROGRAM = $(EXECUTE)-$(VERSION)
-SOURCES = Makefile TODO.md README.md LICENSE src misc share scripts
+SOURCES = Makefile TODO.md README.md LICENSE src lib misc share scripts
 WININST = *.dll etc share LICENSE misc/setup.iss $(EXECUTE).exe
 DELFILE = *.exe *.o *.tar.gz misc/*.gz $(EXECUTE) $(OBJECTS) $(DDFILES)
-CFLAGS  = -c -Wall -Wno-unused-local-typedefs -MMD -MP -Isrc
+CFLAGS  = -c -Wall -Wno-unused-local-typedefs -MMD -MP -Isrc -Ilib
 LDFLAGS = -Wl,--as-needed
 RESFILE = resfile.o
 CC      = gcc
 
 # Program source and object files..
-CCFILES = $(shell find ./src/ -name "*.c")
+CCFILES = $(shell find ./src/ ./lib/ -name "*.c")
 OBJECTS = $(patsubst %.c,%.o,$(CCFILES))
 DDFILES = $(patsubst %.o,%.d,$(OBJECTS))
 
