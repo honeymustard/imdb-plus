@@ -25,12 +25,13 @@ SOURCES = Makefile TODO.md README.md LICENSE src lib misc share scripts
 WININST = *.dll etc share LICENSE misc/setup.iss $(EXECUTE).exe
 DELFILE = *.exe *.o *.tar.gz misc/*.gz $(EXECUTE) $(OBJECTS) $(DDFILES)
 CFLAGS  = -c -Wall -Wno-unused-local-typedefs -MMD -MP -Isrc -Ilib
+FINDDIR = src lib
 LDFLAGS = -Wl,--as-needed
 RESFILE = resfile.o
 CC      = gcc
 
 # Program source and object files..
-CCFILES = $(shell find ./src/ ./lib/ -name "*.c")
+CCFILES = $(shell find $(FINDDIR) -name "*.c")
 OBJECTS = $(patsubst %.c,%.o,$(CCFILES))
 DDFILES = $(patsubst %.o,%.d,$(OBJECTS))
 
