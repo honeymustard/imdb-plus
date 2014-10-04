@@ -1,0 +1,3 @@
+[submodule "gtk-custom-table"]
+	path = lib/gtk-custom-table
+	url = git://github.com/honeymustard/gtk-custom-table.git
