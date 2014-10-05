@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- * Copyright (C) 2011-2013  Adrian Solumsmo
+ * Copyright (C) 2011-2014  Adrian Solumsmo
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 #include "ui/widgets/widgets.h"
 #include "ui/widgets/set/set.h"
-#include "ui/table/gtk_custom_table.h"
+#include "gtk-custom-table/include/gtk_custom_table.h"
 
 
 char *nb_stats_mov_headers[COLS_STATS_MOV] = {

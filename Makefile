@@ -25,10 +25,14 @@ SOURCES = Makefile TODO.md README.md LICENSE src lib misc share scripts
 WININST = *.dll etc share LICENSE misc/setup.iss $(EXECUTE).exe
 DELFILE = *.exe *.o *.tar.gz misc/*.gz $(EXECUTE) $(OBJECTS) $(DDFILES)
 CFLAGS  = -c -Wall -Wno-unused-local-typedefs -MMD -MP -Isrc -Ilib
-FINDDIR = src lib
+FINDDIR = src lib/libcsv
 LDFLAGS = -Wl,--as-needed
 RESFILE = resfile.o
 CC      = gcc
+
+# Gtk-Custom-Table
+TABLEDIR = lib/gtk-custom-table
+TABLEDLL = gtk_custom_table.dll
 
 # Program source and object files..
 CCFILES = $(shell find $(FINDDIR) -name "*.c")
@@ -121,12 +125,23 @@ build-rpm: dist
 # MinGW release..
 mingw32-make: WINDOWS = -mwindows
 mingw32-make: CFLAGS += -O2 
+mingw32-make: table
 mingw32-make: windows
 
 # MinGW debug..
 mingw32-debug: WINDOWS = 
 mingw32-debug: CFLAGS += -g -DDEBUG
+mingw32-debug: table-debug
 mingw32-debug: windows
+
+.PHONY : table-debug table-clean
+
+table-debug:
+	$(MAKE) -C $(TABLEDIR) mingw32-debug
+	-@cp $(TABLEDIR)/$(TABLEDLL) .
+
+table-clean:
+	$(MAKE) -C $(TABLEDIR) mingw32-clean
 
 # MinGW make..
 windows: OS = WINDOWS
@@ -134,7 +149,8 @@ windows: MINGW = -IC:\MinGW\include -LC:\MinGW\lib
 windows: CURL = -IC:\Curl\include -LC:\Curl -lcurl
 windows: PCRE = -IC:\GnuWin32\pcre\include -LC:\GnuWin32\pcre\lib -lpcre
 windows: GTK3 = $(shell pkg-config.exe --libs --cflags gtk+-win32-3.0)
-windows: PACKAGES = $(MINGW) $(CURL) $(PCRE) $(GTK3)
+windows: TABLE = -L. -lgtk_custom_table
+windows: PACKAGES = $(MINGW) $(CURL) $(PCRE) $(GTK3) $(TABLE)
 windows: CFLAGS += $(PACKAGES)
 windows: $(OBJECTS) resfile.o
 	$(CC) $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES) $(WINDOWS)
@@ -144,7 +160,7 @@ mingw32-build: mingw32-make dist
 	-@sh ./scripts/build-win.sh $(EXECUTE) $(VERSION) "$(WININST)" build-win
 
 # MinGW clean..
-mingw32-clean: clean
+mingw32-clean: clean table-clean
 
 ########################################################################
 # Shared targets..

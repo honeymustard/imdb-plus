@@ -23,7 +23,7 @@
 #include "ui/widgets/fill/fill.h"
 #include "ui/widgets/set/set.h"
 #include "ui/env/colors.h"
-#include "ui/table/gtk_custom_table.h"
+#include "gtk-custom-table/include/gtk_custom_table.h"
 
 
 void ui_fill_stats_all_empty() {

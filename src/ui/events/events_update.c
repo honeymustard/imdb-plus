@@ -22,12 +22,12 @@
 #include "ui/globals/globals.h"
 #include "ui/widgets/widgets.h"
 #include "ui/widgets/fill/fill.h"
-#include "ui/table/gtk_custom_table.h"
 #include "io/readfile.h"
 #include "io/openfile.h"
 #include "io/download.h"
 #include "io/parsefile.h"
 #include "io/patterns.h"
+#include "gtk-custom-table/include/gtk_custom_table.h"
 
 
 /* update lists from internet */

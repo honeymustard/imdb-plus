@@ -21,7 +21,7 @@
 #include "ui/globals/globals.h"
 #include "ui/widgets/widgets.h"
 #include "ui/widgets/fill/fill.h"
-#include "ui/table/gtk_custom_table.h"
+#include "gtk-custom-table/include/gtk_custom_table.h"
 
 
 /* purge top files from disk and reset lists */
