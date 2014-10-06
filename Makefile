@@ -21,7 +21,8 @@
 EXECUTE = imdb-plus
 VERSION = 0.1.1
 PROGRAM = $(EXECUTE)-$(VERSION)
-SOURCES = Makefile TODO.md README.md LICENSE src lib misc share scripts
+SOURCES = Makefile .gitignore .gitmodules README.md TODO.md\
+		  LICENSE src lib etc misc share scripts
 WININST = *.dll etc share LICENSE misc/setup.iss $(EXECUTE).exe
 DELFILE = *.exe *.o *.tar.gz misc/*.gz $(EXECUTE) $(OBJECTS) $(DDFILES)
 CFLAGS  = -c -Wall -Wno-unused-local-typedefs -MMD -MP -Isrc -Ilib
