@@ -72,7 +72,9 @@ void ui_fill_stats_all_empty() {
 
                 gtk_custom_table_set_cell_text(table, j, i, 
                     nb_stats_all_headers[j]);
-                gtk_custom_table_set_row_color(table, i, rgb_header);
+
+                double header[] = {0.85, 0.85, 0.85};
+                gtk_custom_table_set_row_color(table, i, header);
             }
         }
         else {
