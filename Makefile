@@ -125,23 +125,14 @@ build-rpm: dist
 # MinGW release..
 mingw32-make: WINDOWS = -mwindows
 mingw32-make: CFLAGS += -O2 
-mingw32-make: table
+mingw32-make: table-make table-copy
 mingw32-make: windows
 
 # MinGW debug..
 mingw32-debug: WINDOWS = 
 mingw32-debug: CFLAGS += -g -DDEBUG
-mingw32-debug: table-debug
+mingw32-debug: table-debug table-copy
 mingw32-debug: windows
-
-.PHONY : table-debug table-clean
-
-table-debug:
-	$(MAKE) -C $(TABLEDIR) mingw32-debug
-	-@cp $(TABLEDIR)/$(TABLEDLL) .
-
-table-clean:
-	$(MAKE) -C $(TABLEDIR) mingw32-clean
 
 # MinGW make..
 windows: OS = WINDOWS
@@ -161,6 +152,23 @@ mingw32-build: mingw32-make dist
 
 # MinGW clean..
 mingw32-clean: clean table-clean
+
+
+.PHONY : table-copy table-make table-debug table-clean
+
+# MinGW make Gtk-Custom-Table..
+table-copy:
+	cp $(TABLEDIR)/$(TABLEDLL) .
+
+table-make:
+	$(MAKE) -C $(TABLEDIR) mingw32-make
+
+table-debug:
+	$(MAKE) -C $(TABLEDIR) mingw32-debug
+
+table-clean:
+	$(MAKE) -C $(TABLEDIR) mingw32-clean
+
 
 ########################################################################
 # Shared targets..
