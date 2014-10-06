@@ -1,10 +1,14 @@
 *.csv
 *.swo
 *.swp
+*.swn
 *.dll
+*.a
 *.o
 *.d
 *.gz
 *~
 *.fuse*
+*.git
+*.exe
 
