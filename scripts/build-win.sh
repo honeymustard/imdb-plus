@@ -75,7 +75,6 @@ fi
 
 cp $SETUP $DIR_HOST
 
-rm "$DIR_HOST/$PROGRAM.tar.gz"
 rm -Rf $DIR_TEMP
 
 echo "$PROGRAM.exe: build completed"
