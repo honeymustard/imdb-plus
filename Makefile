@@ -24,7 +24,8 @@ PROGRAM = $(EXECUTE)-$(VERSION)
 SOURCES = Makefile .gitignore .gitmodules README.md TODO.md\
 		  LICENSE src lib etc misc share scripts
 WININST = *.dll etc share LICENSE misc/setup.iss $(EXECUTE).exe
-DELFILE = *.exe *.o *.tar.gz misc/*.gz $(EXECUTE) $(OBJECTS) $(DDFILES)
+DELFILE = *.exe *.o *.tar.gz misc/*.gz\
+		  $(LINKLIB).dll $(LINKLIB).so $(EXECUTE) $(OBJECTS) $(DDFILES)
 CFLAGS  = -c -Wall -Wno-unused-local-typedefs -MMD -MP -Isrc -Ilib
 FINDDIR = src lib/libcsv
 LDFLAGS = -Wl,--as-needed
@@ -32,8 +33,8 @@ RESFILE = resfile.o
 CC      = gcc
 
 # Gtk-Custom-Table
+LINKLIB = libgtk-custom-table
 TABLEDIR = lib/gtk-custom-table
-TABLEDLL = gtk_custom_table.dll
 
 # Program source and object files..
 CCFILES = $(shell find $(FINDDIR) -name "*.c")
@@ -52,6 +53,7 @@ DDFILES = $(patsubst %.o,%.d,$(OBJECTS))
 # Install paths..
 DIR_USR = $(DESTDIR)/usr
 DIR_BIN = $(DESTDIR)/usr/bin
+DIR_LIB = $(DESTDIR)/usr/lib
 DIR_SHR = $(DESTDIR)/usr/share
 DIR_APP = $(DESTDIR)/usr/share/applications
 DIR_PIX = $(DESTDIR)/usr/share/pixmaps
@@ -60,24 +62,47 @@ DIR_MNP = $(DESTDIR)/usr/share/man/man1
 
 # Default for make..
 all: CFLAGS += -O2 -DINSTALL
+all: linux-table-make linux-table-copy
 all: linux
 
 # Make debug..
 debug: CFLAGS += -g -DDEBUG
+debug: linux-table-debug linux-table-copy
 debug: linux
 
 # Faux target..
 linux: OS = LINUX
+linux: LDFLAGS += -Wl,-rpath,$(shell pwd)
 linux: GTK3 = `pkg-config --cflags --libs gtk+-3.0`
-linux: PACKAGES = $(GTK3) -lcurl -lgthread-2.0
+linux: TABLE = -L. -lgtk-custom-table
+linux: PACKAGES = $(GTK3) $(TABLE) -lcurl -lgthread-2.0
 linux: CFLAGS += $(PACKAGES)
 linux: $(OBJECTS)
 	$(CC) $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES)
+
+# Make clean..
+clean: linux-table-clean delete
+
+.PHONY : linux-table-make linux-table-debug linux-table-clean linux-table-copy
+
+# MinGW make Gtk-Custom-Table..
+linux-table-make:
+	$(MAKE) -C $(TABLEDIR)
+
+linux-table-debug:
+	$(MAKE) -C $(TABLEDIR) debug
+
+linux-table-clean:
+	$(MAKE) -C $(TABLEDIR) clean
+
+linux-table-copy:
+	cp $(TABLEDIR)/$(LINKLIB).so .
 
 # Make install..
 install: all pack
 	-@test -d $(DIR_USR) || mkdir -p $(DIR_USR)
 	-@test -d $(DIR_BIN) || mkdir -p $(DIR_BIN)
+	-@test -d $(DIR_LIB) || mkdir -p $(DIR_LIB)
 	-@test -d $(DIR_SHR) || mkdir -p $(DIR_SHR)
 	-@test -d $(DIR_APP) || mkdir -p $(DIR_APP)
 	-@test -d $(DIR_PIX) || mkdir -p $(DIR_PIX)
@@ -87,6 +112,7 @@ install: all pack
 	-@cp ./misc/$(EXECUTE).1.gz $(DIR_MNP)
 	-@cp -R ./share/icons/imdb-plus $(DIR_PIX)
 	-@cp ./share/icons/$(EXECUTE).png $(DIR_PIX)
+	-@cp $(LINKLIB).so $(DIR_LIB)
 	-@cp $(EXECUTE) $(DIR_BIN)
 	-@echo "$(EXECUTE) installed successfully"
 
@@ -126,13 +152,13 @@ build-rpm: dist
 # MinGW release..
 mingw32-make: WINDOWS = -mwindows
 mingw32-make: CFLAGS += -O2 
-mingw32-make: table-make table-copy
+mingw32-make: win-table-make win-table-copy
 mingw32-make: windows
 
 # MinGW debug..
 mingw32-debug: WINDOWS = 
 mingw32-debug: CFLAGS += -g -DDEBUG
-mingw32-debug: table-debug table-copy
+mingw32-debug: win-table-debug win-table-copy
 mingw32-debug: windows
 
 # MinGW make..
@@ -141,7 +167,7 @@ windows: MINGW = -IC:\MinGW\include -LC:\MinGW\lib
 windows: CURL = -IC:\Curl\include -LC:\Curl -lcurl
 windows: PCRE = -IC:\GnuWin32\pcre\include -LC:\GnuWin32\pcre\lib -lpcre
 windows: GTK3 = $(shell pkg-config.exe --libs --cflags gtk+-win32-3.0)
-windows: TABLE = -L. -lgtk_custom_table
+windows: TABLE = -L. -lgtk-custom-table
 windows: PACKAGES = $(MINGW) $(CURL) $(PCRE) $(GTK3) $(TABLE)
 windows: CFLAGS += $(PACKAGES)
 windows: $(OBJECTS) resfile.o
@@ -152,31 +178,30 @@ mingw32-build: mingw32-make dist
 	-@sh ./scripts/build-win.sh $(EXECUTE) $(VERSION) "$(WININST)" build-win
 
 # MinGW clean..
-mingw32-clean: clean table-clean
+mingw32-clean: win-table-clean delete
 
 
-.PHONY : table-copy table-make table-debug table-clean
+.PHONY : win-table-make win-table-debug win-table-clean win-table-copy
 
 # MinGW make Gtk-Custom-Table..
-table-copy:
-	cp $(TABLEDIR)/$(TABLEDLL) .
-
-table-make:
+win-table-make:
 	$(MAKE) -C $(TABLEDIR) mingw32-make
 
-table-debug:
+win-table-debug:
 	$(MAKE) -C $(TABLEDIR) mingw32-debug
 
-table-clean:
+win-table-clean:
 	$(MAKE) -C $(TABLEDIR) mingw32-clean
 
+win-table-copy:
+	cp $(TABLEDIR)/$(LINKLIB).dll .
 
 ########################################################################
 # Shared targets..
 #
 ########################################################################
 
-.PHONY : dist pack clean purge
+.PHONY : dist pack delete purge
 
 dist: pack
 	-@tar -zcf $(PROGRAM).tar.gz -X ./misc/exclude $(SOURCES)
@@ -184,7 +209,7 @@ dist: pack
 pack:
 	-@gzip -f -c ./misc/$(EXECUTE).1 > ./misc/$(EXECUTE).1.gz
 
-clean:
+delete:
 	-@rm $(DELFILE) 2>/dev/null || echo "it's clean"
 
 purge:
