@@ -16,4 +16,6 @@
 
 **Known bugs**
 * tab-movement by arrow keys is buggy on linux
+* ratings tabs on linux are buggy
+* frame gap warning on linux
 
