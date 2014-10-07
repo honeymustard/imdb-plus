@@ -318,7 +318,12 @@ int readfile(ResultList *list, char *filename) {
 
     if(csv_init(&p, CSV_STRICT) != 0) {
 
+        #ifdef DEBUG
+
         fprintf(stderr, "Failed to initialize csv parser\n");
+
+        #endif
+
         return 0;
     }
 
@@ -326,7 +331,12 @@ int readfile(ResultList *list, char *filename) {
     
     if(!fp) {
 
+        #ifdef DEBUG
+
         fprintf(stderr, "Failed to open %s\n", filename);
+
+        #endif
+
         return 0;
     }
 
@@ -336,7 +346,12 @@ int readfile(ResultList *list, char *filename) {
 
         if(retval != bytes) {
 
+            #ifdef DEBUG
+
             printf("Error: could not process file %s\n", filename);
+
+            #endif
+
             fclose(fp);
 
             return 0;

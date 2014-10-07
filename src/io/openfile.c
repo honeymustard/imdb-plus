@@ -42,7 +42,12 @@ int open_file(NotebookTab *tab, char *filename) {
     
     if(!readfile(list, filename) || list->cols < 10) {
 
+        #ifdef DEBUG
+
         printf("Error: failed to read file\n");
+
+        #endif
+
         return 0;
     }
 
