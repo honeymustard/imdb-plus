@@ -3,6 +3,7 @@
 *.swp
 *.swn
 *.dll
+*.so
 *.a
 *.o
 *.d
