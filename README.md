@@ -1,3 +1,8 @@
+## Imdb-plus
+
+A cross-platform desktop application for viewing imdb statistics.
+
+## Gallery
 
 <table>
  <tr>
