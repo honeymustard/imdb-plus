@@ -80,5 +80,7 @@ omitted from future versions without notice.
     
 ## Copyright
 
-Copyright &copy; 2011-2014 Adrian Solumsmo. See [LICENSE](https://github.com/honeymustard/imdb-plus/blob/master/LICENSE) for details.
+imdb-plus is licensed under the GNU GPL3. See [LICENSE](https://github.com/honeymustard/imdb-plus/blob/master/LICENSE) for details.
+
+Copyright &copy; 2011-2014 Adrian Solumsmo.
 
