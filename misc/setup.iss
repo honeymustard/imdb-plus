@@ -4,6 +4,7 @@
 #define MyAppPublisher "Adrian Solumsmo"
 #define MyAppURL "https://github.com/honeymustard/imdb-plus"
 #define MyAppExeName "imdb-plus.exe"
+#define MyAppVersion "0.1.1"
 
 [Setup]
 ; note: appId is unique to this application

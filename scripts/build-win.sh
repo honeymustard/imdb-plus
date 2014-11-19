@@ -25,18 +25,17 @@ if [ $# -lt 4 ]; then
     exit
 fi
 
-# make sure script is run from toplevel only..
+# make sure script is run from toplevel only
 if [ "$4" != "build-win" ]; then
     echo "Error: Script should be run by toplevel Makefile!"
     exit
 fi
 
-# variables from makefile..
+# variables from makefile
 PROGRAM=$1-$2
-VERSION=$2
 INSTALL=$3
 
-# build directory..
+# build directory
 DIR_HOST="build/$PROGRAM/$PROGRAM-win"
 DIR_TEMP="build/$PROGRAM/$PROGRAM-win/$PROGRAM"
 
@@ -63,8 +62,8 @@ mv "$PROGRAM.tar.gz" $DIR_HOST
 # copy install files
 cp -R $INSTALL $DIR_TEMP
 
-# run setup script..
-iscc "$DIR_TEMP/setup.iss" /dMyAppVersion=$VERSION
+# run setup script
+iscc "$DIR_TEMP/setup.iss"
 
 SETUP="$DIR_TEMP/$PROGRAM-setup.exe"
 
