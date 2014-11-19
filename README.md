@@ -47,6 +47,7 @@ Any changes that are made at the source will break the program and render all ve
 The program will then need to be patched manually. Therefore, some current features might be 
 omitted from future versions without notice.
 
+* 19/11/14: Program now requires [Yarrow](https://github.com/honeymustard/yarrow/) to build on windows.
 * 30/09/14: Program now uses libcsv for parsing lists, should be more stable.
 * 29/09/14: Ratings must now be exported from your IMDb account and imported manually.
 
@@ -66,17 +67,18 @@ omitted from future versions without notice.
     
 **Windows:**
 
-    # Note: See Makefile for package requirements
+    # Note: all required packages are listed in .yarrow
     
-    $ mingw32-make mingw32-make     # builds imdb-plus.exe
+    $ yarrow -t make    # builds imdb-plus.exe
 
     or
 
-    $ mingw32-make mingw32-build    # builds setup archive
+    $ yarrow -t build   # builds imdb-plus-{version}-setup.exe
 
     # If MinGW complains about errors in winnt.h you should 
     # remove the 'static' bit from the offending functions.
-    # Usually: GetCurrentFiber, GetFiberData, NtCurrentTeb
+    # Usually: GetCurrentFiber, GetFiberData, NtCurrentTeb.
+    # You should probably undo your changes afterwards.
     
 ## Copyright
 

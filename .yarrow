@@ -1,38 +1,41 @@
 {
   "vars" :
-  {
-    "inno5"  : "C:/Program Files (x86)/Inno Setup 5",
-    "mingw"  : "C:/MinGW/bin",
-    "mingwi" : "C:/MinGW/include",
-    "mingwl" : "C:/MinGW/lib",
-    "msys"   : "C:/MinGW/msys/1.0/bin",
-    "gtk3"   : "C:/GTK+3/bin",
-    "curli"  : "C:/Curl/include",
-    "curll"  : "C:/Curl/lib",
-    "pcrei"  : "C:/GnuWin32/pcre/include",
-    "pcrel"  : "C:/GnuWin32/pcre/lib"
-  },
+  [
+    {"mingw"  : "C:/MinGW/bin"},
+    {"msys"   : "C:/MinGW/msys/1.0/bin"},
+    {"gtk3"   : "C:/GTK+3/bin"},
+    {"inno5"  : "C:/Program Files (x86)/Inno Setup 5"},
+    {"mingwi" : "C:/MinGW/include"},
+    {"mingwl" : "C:/MinGW/lib"},
+    {"curli"  : "C:/Curl/include"},
+    {"curll"  : "C:/Curl/lib"},
+    {"pcrei"  : "C:/GnuWin32/pcre/include"},
+    {"pcrel"  : "C:/GnuWin32/pcre/lib"},
+    {"head"   : "-I<%= mingwi %> -I<%= curli %> -I<%= pcrei %>"},
+    {"link"   : "-L<%= mingwl %> -L<%= curll %> -L<%= pcrel %>"},
+    {"libs"   : "WINLIBS=\"<%= head %> <%= link %>\""}
+  ],
   "targets" :
   {
     "debug" :
     {
       "env" : ["<%= mingw %>", "<%= msys %>", "<%= gtk3 %>"],
-      "com" : ["mingw32-make mingw32-debug"]
+      "com" : ["mingw32-make mingw32-debug <%= libs %>"]
     },
     "make" :
     {
       "env" : ["<%= mingw %>", "<%= msys %>", "<%= gtk3 %>"],
-      "com" : ["mingw32-make mingw32-make WINLIBS=\"-I<%= mingwi %> -L<%= mingwl %> -I<%= curli %> -L<%= curll %> -I<%= pcrei %> -L<%= pcrel %>"]
-    },
-    "clean" :
-    {
-      "env" : ["<%= mingw %>", "<%= msys %>", "<%= gtk3 %>"],
-      "com" : ["mingw32-make mingw32-clean"]
+      "com" : ["mingw32-make mingw32-make <%= libs %>"]
     },
     "build" :
     {
-      "env" : ["<%= msys %>", "<%= inno5 %>"],
-      "com" : ["mingw32-make mingw32-build"]
+      "env" : ["<%= mingw %>", "<%= msys %>", "<%= gtk3 %>", "<%= inno5 %>"],
+      "com" : ["mingw32-make mingw32-build <%= libs %>"]
+    },
+    "clean" :
+    {
+      "env" : ["<%= mingw %>", "<%= msys %>"],
+      "com" : ["mingw32-make mingw32-clean"]
     },
     "test" :
     {
