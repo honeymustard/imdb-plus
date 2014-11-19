@@ -1,0 +1,43 @@
+{
+  "vars" :
+  {
+    "inno5"  : "C:/Program Files (x86)/Inno Setup 5",
+    "mingw"  : "C:/MinGW/bin",
+    "mingwi" : "C:/MinGW/include",
+    "mingwl" : "C:/MinGW/lib",
+    "msys"   : "C:/MinGW/msys/1.0/bin",
+    "gtk3"   : "C:/GTK+3/bin",
+    "curli"  : "C:/Curl/include",
+    "curll"  : "C:/Curl/lib",
+    "pcrei"  : "C:/GnuWin32/pcre/include",
+    "pcrel"  : "C:/GnuWin32/pcre/lib"
+  },
+  "targets" :
+  {
+    "debug" :
+    {
+      "env" : ["<%= mingw %>", "<%= msys %>", "<%= gtk3 %>"],
+      "com" : ["mingw32-make mingw32-debug"]
+    },
+    "make" :
+    {
+      "env" : ["<%= mingw %>", "<%= msys %>", "<%= gtk3 %>"],
+      "com" : ["mingw32-make mingw32-make WINLIBS=\"-I<%= mingwi %> -L<%= mingwl %> -I<%= curli %> -L<%= curll %> -I<%= pcrei %> -L<%= pcrel %>"]
+    },
+    "clean" :
+    {
+      "env" : ["<%= mingw %>", "<%= msys %>", "<%= gtk3 %>"],
+      "com" : ["mingw32-make mingw32-clean"]
+    },
+    "build" :
+    {
+      "env" : ["<%= msys %>", "<%= inno5 %>"],
+      "com" : ["mingw32-make mingw32-build"]
+    },
+    "test" :
+    {
+      "env" : ["C:/Windows/system32"],
+      "com" : ["imdb-plus.exe"]
+    }
+  }
+}

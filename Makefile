@@ -163,12 +163,8 @@ mingw32-debug: windows
 
 # MinGW make..
 windows: OS = WINDOWS
-windows: MINGW = -IC:\MinGW\include -LC:\MinGW\lib
-windows: CURL = -IC:\Curl\include -LC:\Curl -lcurl
-windows: PCRE = -IC:\GnuWin32\pcre\include -LC:\GnuWin32\pcre\lib -lpcre
 windows: GTK3 = $(shell pkg-config.exe --libs --cflags gtk+-win32-3.0)
-windows: TABLE = -L. -lgtk-custom-table
-windows: PACKAGES = $(MINGW) $(CURL) $(PCRE) $(GTK3) $(TABLE)
+windows: PACKAGES += $(WINLIBS) $(GTK3) -lcurl -lpcre -L. -lgtk-custom-table
 windows: CFLAGS += $(PACKAGES)
 windows: $(OBJECTS) resfile.o
 	$(CC) $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES) $(WINDOWS)
