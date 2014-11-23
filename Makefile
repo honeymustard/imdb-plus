@@ -170,7 +170,7 @@ windows: $(OBJECTS) resfile.o
 	$(CC) $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES) $(WINDOWS)
 
 # MinGW build..
-mingw32-build: mingw32-make dist
+mingw32-build: mingw32-clean mingw32-make dist
 	-@sh ./scripts/build-win.sh $(EXECUTE) $(VERSION) "$(WININST)" build-win
 
 # MinGW clean..
