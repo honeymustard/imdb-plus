@@ -166,8 +166,8 @@ windows: OS = WINDOWS
 windows: GTK3 = $(shell pkg-config.exe --libs --cflags gtk+-win32-3.0)
 windows: PACKAGES += $(WINLIBS) $(GTK3) -lcurl -lpcre -L. -lgtk-custom-table
 windows: CFLAGS += $(PACKAGES)
-windows: $(OBJECTS) resfile.o
-	$(CC) $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(PACKAGES) $(WINDOWS)
+windows: $(OBJECTS) $(RESFILE)
+	$(CC) $(LDFLAGS) -o $(EXECUTE) $(OBJECTS) $(RESFILE) $(PACKAGES) $(WINDOWS)
 
 # MinGW build..
 mingw32-build: mingw32-clean mingw32-make dist
